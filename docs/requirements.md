@@ -1,8 +1,9 @@
 # Requirements — Soucean Game
 
-**Status:** Seed (M0). Incomplete — the sections marked **Pending plan import**
-below are filled from `docs/plans/soucean-game-plan.md` once that file is copied
-into this repository (task GAM-20, deliverable 5). Owner: the Board, through
+**Status:** Seed (M0), complete. The plan-derived sections are filled from
+[`plans/soucean-game-plan.md`](plans/soucean-game-plan.md), which was moved into
+this repository by task GAM-20 (deliverable 5). Where this document and the plan
+disagree, the plan wins and this document is corrected. Owner: the Board, through
 `project-manager`. Last updated: 2026-11-04.
 
 Soucean Game is the studio's multi-game website: one site that lists the studio's
@@ -38,22 +39,27 @@ corrected.
 
 ## 2. Pages
 
-**Pending plan import.** The page list, the route for each page and the
-acceptance criteria per page come from the approved plan. The M1 design tasks
-treat the site as **eight pages** (task GAM-24, wireframes at desktop and mobile
-width); confirm that count and the page names against the plan when it is
-imported.
+From the plan, §2. Routes are **proposed** there; M2 confirms them. Items marked
+**[GAM-16]** wait on the game platform contract.
 
-The structure below is the frame they drop into; it is not a substitute for the
-plan.
+| Page | Route | Content | Acceptance |
+| --- | --- | --- | --- |
+| Home / game list | `/` | A card per game, built from **each game's manifest** **[GAM-16]**: thumbnail, title, short description, controls, a "Play" button, and this week's top 3 | The list is generated from the manifests at build time. Adding a game is adding its manifest and building — no hand-edited list. |
+| Play page | `/games/<game_id>` | The game frame (mounted or iframe **[GAM-16]**), title, controls, a weekly leaderboard beside or below it, and the ad slots of §5 | The game fills its container and letterboxes. The page never overlaps the frame. |
+| Leaderboards | `/leaderboards`, `/leaderboards/<game_id>` | This week's board per game, last week's final board, and the player's own rank and personal best | The week starts **Monday 00:00 UTC+7** (GAM-16 recommends this; GAM-16 confirms it). |
+| Account and profile | `/account` | Display name (editable, moderated), the anonymous id state, "Link Google or email" to keep scores across devices, sign out, and delete my data | Linking keeps the same player id (OQ-036). Delete removes the scores and the profile. |
+| Privacy policy | `/privacy` | What is stored, why, for how long, who processes it (backend, hosting, ad network), the player's rights, and contact | Written with legal input (OQ-039). Covers Decree 13/2023, and GDPR if EU players are expected. |
+| About | `/about` | Studio info and contact | Ad networks usually expect this page (OQ-038). |
+| Terms | `/terms` | Terms of use | Ad networks usually expect this page (OQ-038). |
 
-| Page | Purpose | Status |
-| --- | --- | --- |
-| Home / game list | lists the studio's games | pending plan import |
-| Game page | hosts one game in a frame, per the contract | pending plan import |
-| Leaderboard | shows server-granted scores | pending plan import |
-| Account / profile | the player's own data, and deletion | pending plan import |
-| Legal: privacy, cookies, terms | required by §4 | pending plan import |
+Plus one surface that is not a page of its own:
+
+| Surface | Where | Content | Acceptance |
+| --- | --- | --- | --- |
+| Cookie consent | A banner on first visit, plus a `/privacy#cookies` settings link in the footer | Accept / Reject / Settings | **No ad script loads before consent.** Essential storage only (session, consent choice). "Reject" carries equal weight to "Accept". A certified consent tool may be required for EU/UK visitors (OQ-038). |
+
+That is **seven routed pages and the consent banner** — the eight design surfaces
+the M1 wireframe task (GAM-24) covers at desktop and mobile width.
 
 Requirements that apply to **every** page, plan or no plan:
 
@@ -70,13 +76,28 @@ Requirements that apply to **every** page, plan or no plan:
 
 ## 3. Player identity
 
+- **No sign-up to play.** A visitor plays immediately; identity is created for
+  them, not demanded of them.
 - A player signs in before anything is stored against them.
 - Session handling, sign-in and sign-out live in server-side code. Paths under
   `AGENTS.md` §4 are security-sensitive.
 - A player can see everything stored about them, and can delete their account and
   the data listed in §4.
 
-Exact sign-in methods: **pending plan import.**
+**Sign-in methods** (plan §3):
+
+| Method | When | Note |
+| --- | --- | --- |
+| Anonymous sign-in | On first visit, automatically | The player gets an id without typing anything. Scores are tied to it. |
+| Link **Google** | Optional, from `/account` | Keeps scores across devices. |
+| Link **email (magic link)** | Optional, from `/account` | Same purpose; no password. |
+
+Linking **keeps the same player id** — it upgrades the existing identity rather
+than creating a second one, so no score is orphaned (OQ-036, `UNVERIFIED`).
+
+The provider is not settled here. The plan recommends Supabase Auth, with
+Firebase Auth as the alternative; the stack is chosen in M2 and the backend is
+not built before M4 (§6). The behaviour above is what any provider must deliver.
 
 ---
 
@@ -88,15 +109,45 @@ requested through `project-manager`.
 
 ### 4.1 Fields
 
-**Pending plan import.** The approved plan names the stored fields. Until it is
-imported, no field list is authoritative and no table may be created — which is
-consistent with §6: there is no backend before M4.
+From the plan, §3 ("Data model sketch"). This is the **complete** list. The final
+schema follows GAM-16; no table is created before M4 (§6).
 
-The shape the list must take:
+**`players`**
 
-| Table | Field | Why it is needed | Retention |
-| --- | --- | --- | --- |
-| _(pending plan import)_ | | | |
+| Field | Why it is needed | Retention |
+| --- | --- | --- |
+| `id` | The auth user id. Ties scores to a player. | Until the player deletes their account. |
+| `display_name` | Shown on the leaderboards. Editable, moderated. | Until the player deletes their account. |
+| `created_at` | Account age, for moderation and abuse handling. | Until the player deletes their account. |
+
+**`scores`**
+
+| Field | Why it is needed | Retention |
+| --- | --- | --- |
+| `player_id` | Whose score it is. | Until the player deletes their data. |
+| `game_id` | Which game it belongs to. | Until the player deletes their data. |
+| `week` | Which weekly board it counts for, and the weekly reset. | Until the player deletes their data. |
+| `score` | The ranked value. | Until the player deletes their data. |
+| `time_survived_ms` | Plausibility check in `submit_score` (a maximum score for the time survived). | Until the player deletes their data. |
+| `seed` | Plausibility check: the run matches a real seed. | Until the player deletes their data. |
+| `game_version` | Plausibility check, and invalidating boards after a balance change. | Until the player deletes their data. |
+| `created_at` | Rate limiting and abuse handling. | Until the player deletes their data. |
+
+Unique on `(player_id, game_id, week)`, keeping the best score. The weekly board
+and the personal best are **views or functions** over these two tables, not
+stored copies.
+
+**Explicitly not stored** (plan §3):
+
+- No copy of the player's email. The auth provider holds it, and only if the
+  player links an email.
+- No IP addresses in any table.
+- No analytics or telemetry of any kind.
+
+**Retention periods.** The plan ties retention to deletion by the player, not to
+a fixed clock, and names no fixed period for any field. Whether a weekly board
+is also pruned after N weeks is open question 3 (§8) and is a Board decision.
+Nothing here may be read as permission to keep data after a deletion request.
 
 ### 4.2 Rules that do not depend on the plan
 
@@ -128,10 +179,68 @@ The shape the list must take:
 - An ad slot is not focusable ahead of the page's own content and does not trap
   keyboard focus.
 
-Allowed positions and the exact margin: **pending plan import.** The ad-slot
-layout spec — clearance from the game frame, fixed sizes, no sticky slots, mobile
-stacking — is produced by `ui-designer` in task GAM-23. Take the numbers from
-that spec, and consult `ui-designer` on slot geometry before implementing one.
+### 5.1 Allowed positions
+
+From the plan, §4. **Revenue comes from ads on the website page only, never
+inside a game.** Any slot not listed here is a defect.
+
+**Desktop**
+
+| Slot | Position | Size |
+| --- | --- | --- |
+| Leaderboard banner | Top of the page, above the fold, in the header | 728×90 |
+| Sidebar | Beside the game frame, in the right-hand column above the weekly board. **Not sticky.** | 300×250 |
+| In-content banner | Below the game info, **never directly under the frame** | Fixed, reserved |
+
+**Mobile**
+
+| Slot | Position |
+| --- | --- |
+| Banner | Above the frame |
+| Banner | After the game info |
+
+No sidebar on mobile.
+
+```text
+┌──────────────────────────── header ───────────────────────────┐
+│ [ad: leaderboard banner 728×90, top of page, above the fold]   │
+├───────────────────────────────────────────────────────────────┤
+│                                    ≥ 24 px     ┌────────────┐ │
+│  ┌──────────── game frame ─────────┐  margin   │ ad: 300×250│ │
+│  │                                 │◄────────►│ sidebar     │ │
+│  │   game (letterboxed 16:9)        │           │ (sticky off)│ │
+│  │                                 │           └────────────┘ │
+│  └─────────────────────────────────┘           weekly board   │
+│        ≥ 24 px margin below                                    │
+│  controls · how to play · this week's board                    │
+│ [ad: in-content banner, below the game info, never directly    │
+│  under the frame]                                              │
+└───────────────────────────────────────────────────────────────┘
+Mobile: no sidebar. One banner above the frame, one after the game info.
+```
+
+### 5.2 The margin
+
+**At least 24 px** of empty space between any ad and the game frame — on **every
+side**, at **every breakpoint**. More is better; 24 px is the floor, not the
+target. No ad is directly adjacent to the game's controls area.
+
+### 5.3 Rules
+
+- An ad never overlaps, covers or sits inside the frame. **No pop-ups, no
+  interstitials, no sticky ad over the game.**
+- While a game is playing the page does not reflow — ad slots reserve fixed
+  sizes — so the frame never jumps.
+- Clicks and keyboard input go to the game only while it has focus. This is a
+  game-side guarantee **[GAM-16]**.
+- Ad scripts load **only after consent**. With consent rejected, a slot shows
+  nothing, or a house promotion for another game.
+- Ad-network placement policies are checked in OQ-038 before the ads milestone
+  (M6).
+
+The ad-slot layout spec — clearance, fixed sizes, no sticky slots, mobile
+stacking — is produced by `ui-designer` in task GAM-23 and must honour the
+numbers above. Consult `ui-designer` on slot geometry before implementing one.
 
 ---
 
@@ -173,6 +282,13 @@ A change is done when:
 
 | # | Question | Owner |
 | --- | --- | --- |
-| 1 | The page list, stored fields, ad positions and ad margin — all **pending plan import** (GAM-20 deliverable 5). | Board |
-| 2 | Sign-in methods. | Board, via `project-manager` |
-| 3 | Retention periods per field. | Board, via `project-manager` |
+| 1 | ~~The page list, stored fields, ad positions and ad margin.~~ **Resolved** by the plan import (GAM-20 deliverable 5), 2026-11-04. | — |
+| 2 | ~~Sign-in methods.~~ **Resolved** by plan §3: anonymous first, optional Google or email link. The *provider* is chosen in M2. | — |
+| 3 | Retention periods per field. The plan ties retention to player deletion and names no fixed period; whether weekly boards are pruned after N weeks is still open. | Board, via `project-manager` |
+| 4 | Routes in §2 are the plan's **proposed** routes. M2 confirms them. | `web-engineer`, at M2 |
+| 5 | The weekly reset boundary (Monday 00:00 UTC+7) is GAM-16's recommendation and GAM-16 confirms it. | `game-director`, via `project-manager` |
+
+Upstream open questions the plan depends on — OQ-036 (identity and free tier),
+OQ-037 (hosting), OQ-038 (ads and consent), OQ-039 (legal) — live in the
+framework repository's
+[`open-questions.md`](https://github.com/datpham02/game-studio/blob/main/docs/architecture/open-questions.md).

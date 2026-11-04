@@ -1,9 +1,11 @@
 # Architecture — Soucean Game
 
-**Status:** Seed (M0). The stack is **not chosen** — that happens in M2. Sections
-marked **Pending plan import** are filled from `docs/plans/soucean-game-plan.md`
-once that file is copied into this repository (task GAM-20, deliverable 5).
-Owner: the Board, through `project-manager`. Last updated: 2026-11-04.
+**Status:** Seed (M0), complete. The stack is **not chosen** — that happens in M2,
+so §2 records the plan's *recommendations* and nothing is pinned. The
+plan-derived sections are filled from
+[`plans/soucean-game-plan.md`](plans/soucean-game-plan.md), moved into this
+repository by task GAM-20 (deliverable 5). Owner: the Board, through
+`project-manager`. Last updated: 2026-11-04.
 
 This document says **how** the platform is built.
 [`requirements.md`](requirements.md) says **what** it must do; where the two
@@ -41,7 +43,27 @@ Until that entry exists:
 - no backend, hosting, analytics or ad-network configuration is added;
 - no framework is pinned in documentation, CI or tooling config.
 
-Already fixed, independent of the framework choice:
+### 2.1 Recommendations from the plan (not decisions)
+
+The plan, §3, recommends the following. **None of it is chosen, pinned or
+installed.** M2 decides, may depart from any row, and records the outcome in §8.
+Rows marked `UNVERIFIED` rest on an open question that is still open.
+
+| Layer | Recommendation | Alternative |
+| --- | --- | --- |
+| Frontend | TypeScript, static-first — e.g. **Astro** with small interactive islands, or Vite + React | Next.js (static export) |
+| Identity | **Supabase Auth** — anonymous sign-in, optional Google or email magic-link linking (`UNVERIFIED`, OQ-036) | Firebase Auth |
+| Data | **Supabase Postgres**, row-level security on every table | Firebase Firestore |
+| Server logic | **Supabase Edge Functions** or Postgres functions, for `submit_score` | — |
+| Hosting (M6) | **Cloudflare Pages**, preview deploys per branch (`UNVERIFIED`, OQ-037) | GitHub Pages (no previews), Netlify, Vercel |
+| Ads (M6) | Google AdSense, evaluated against alternatives (`UNVERIFIED`, OQ-038) | Ezoic, Media.net, game-portal networks |
+| Tests | Vitest (unit), pgTAP or SQL tests for RLS, Playwright end-to-end | — |
+
+The reasoning: static pages are fast, help SEO and ease ad approval, and the game
+page needs only one interactive island. RLS is the main security boundary, so it
+gets its own tests.
+
+### 2.2 Already fixed, independent of the framework choice
 
 | Concern | Choice | Why |
 | --- | --- | --- |
@@ -54,9 +76,30 @@ Already fixed, independent of the framework choice:
 
 ## 3. Data model
 
-**Pending plan import.** The tables and fields follow `requirements.md` §4.1,
-which is itself pending the plan. Nothing is created before that list is
-authoritative and before M4 (§5).
+The tables and fields are listed in [`requirements.md`](requirements.md) §4.1 —
+that list is authoritative and this section does not repeat it. The plan's sketch
+is two tables:
+
+- **`players`** — `id` (the auth user id), `display_name`, `created_at`.
+- **`scores`** — `player_id`, `game_id`, `week`, `score`, `time_survived_ms`,
+  `seed`, `game_version`, `created_at`. **Unique on
+  `(player_id, game_id, week)`**, keeping the best score.
+- The weekly board and the personal best are **views or functions** over these
+  two tables, never stored copies that can drift.
+
+The final schema follows GAM-16. Nothing is created before M4 (§5).
+
+**Score submission.** A client never writes to `scores`. Submission goes through
+one server function, `submit_score`, which applies *moderate* anti-cheat:
+
+| Check | What it does |
+| --- | --- |
+| Maximum score for time survived | Rejects a score impossible for the run's duration |
+| Rate limit | Caps submissions per player over time |
+| Seed, week, duration, game version | Confirms the run is internally consistent and belongs to the week claimed |
+
+Replay verification is explicitly **out of scope**. The plan accepts moderate
+anti-cheat over a perfect one.
 
 Rules the model must satisfy when it lands:
 
@@ -121,6 +164,17 @@ review in addition to `qa`.
 | **M4 onward** | the **dev project only** | agents, via the provider CLI against dev |
 | **any** | **production** | the **Board Operator** only |
 
+From the plan, §3, once M4 creates them:
+
+- **`soucean-game-dev`** — a backend project holding **fake data only**. Its keys
+  are bound to `web-engineer` and `qa`, and to nobody else.
+- **Preview deploys** use the dev project. A preview never touches production.
+- **Production** is a *separate* project. The Board Operator alone holds its
+  keys, applies its migrations and controls its deploys.
+- No personal access token belonging to a human's provider account is ever bound
+  to an agent — such a token can reach every project that account owns, including
+  production (`UNVERIFIED`, OQ-036).
+
 - Dev configuration never points at production.
 - An agent never asks for, reads, stores or uses a production credential, and
   never reads or exports production player data.
@@ -174,4 +228,6 @@ from here.
 | Date | Decision | Where |
 | --- | --- | --- |
 | _(M2)_ | Web framework and toolchain | pending |
+| 2026-11-04 | Design and build the website first; hosting, the production backend and the domain come last (M6) | plan §5, Board revision |
+| 2026-11-04 | The approved plan and the M0 checklist live in this repository, not the framework | [`plans/`](plans/), task GAM-20 |
 | 2026-11-04 | Soucean Game is a platform project | framework `docs/decisions/ADR-014-platform-project-type.md` |

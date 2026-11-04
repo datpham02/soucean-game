@@ -202,7 +202,8 @@ build: …  lint: …  unit: …  e2e: …
 | [`docs/requirements.md`](docs/requirements.md) | pages, data rules, ad rules, environments |
 | [`docs/architecture.md`](docs/architecture.md) | structure, stack decision, data model, security posture |
 | [`docs/game-platform-contract.md`](docs/game-platform-contract.md) | pointer to the framework contract |
-| `docs/plans/` | the approved plan and the M0 checklist |
+| [`docs/plans/soucean-game-plan.md`](docs/plans/soucean-game-plan.md) | the approved plan: goals, pages, stack recommendations, ad slots, milestones |
+| [`docs/plans/soucean-game-m0-setup.md`](docs/plans/soucean-game-m0-setup.md) | the M0 checklist of Board steps |
 
 Authoritative sources that live in the framework repository `datpham02/game-studio`
 (`main` branch) and are **not** copied here:

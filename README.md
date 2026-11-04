@@ -14,6 +14,8 @@ change anything here.
 | [`docs/requirements.md`](docs/requirements.md) | what the platform must do — pages, data rules, ad rules, environments |
 | [`docs/architecture.md`](docs/architecture.md) | how it is built |
 | [`docs/game-platform-contract.md`](docs/game-platform-contract.md) | pointer to the contract, which lives in the framework repository |
+| [`docs/plans/soucean-game-plan.md`](docs/plans/soucean-game-plan.md) | the approved plan: goals, pages, stack recommendations, ad slots, milestones |
+| [`docs/plans/soucean-game-m0-setup.md`](docs/plans/soucean-game-m0-setup.md) | the M0 checklist of Board steps |
 
 Two rules worth knowing before you read any of it:
 
