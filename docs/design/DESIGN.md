@@ -234,9 +234,16 @@ is the foundation Task of milestone M1: every later M1 prototype imports
 later Task redefines a colour, a type step, a spacing step or a breakpoint.
 
 **Scope.** This document fixes the foundations: colour, typography, spacing,
-shape, elevation, motion, the two M1 breakpoints, and a named component
-inventory. The component *designs* are drawn in M1-04; the inventory below only
-names them and fixes their tokens.
+shape, elevation, motion, the M1 breakpoints, and a named component inventory.
+The component *designs* are drawn in M1-04; the inventory below only names them
+and fixes their tokens.
+
+**Amendments.** This document may only be changed by a recorded Board decision.
+There is one, logged in "Layout & Spacing":
+
+| Date | Amendment | Decided by | Raised from |
+| --- | --- | --- | --- |
+| 2026-11-04 | Added a second switch, **`wide` = 1024px**, for the play-page side rail | Board | GAM-23 (M1-02) §4.4 |
 
 ---
 
@@ -529,7 +536,7 @@ These are not stylistic preferences — breaking them clips or collides glyphs.
 
 ## Layout & Spacing
 
-### The two M1 breakpoints — fixed here
+### The M1 breakpoints — fixed here
 
 These are **the only two widths any M1 Task designs at.** A later Task may not
 introduce a third, and may not move these.
@@ -539,16 +546,61 @@ introduce a third, and may not move these.
 | **Mobile** | **375px** | The mobile design width for every M1 wireframe and prototype. |
 | **Desktop** | **1280px** | The desktop design width for every M1 wireframe and prototype. |
 
-There is exactly one CSS switch point between them, also fixed here so that no
-Task invents one:
+There are exactly two CSS switch points, also fixed here so that no Task invents
+one:
 
 | Name | Value | Meaning |
 | --- | --- | --- |
 | **Switch** | **768px** | `min-width: 768px` turns on the desktop type scale and the desktop layout. Below it, the mobile scale applies. |
+| **Wide** | **1024px** | `min-width: 1024px` turns on the play-page **side rail**. Between 768px and 1023px the page uses the desktop type scale and gutters but stays single-column, and the game frame takes the full content width. |
 
-So: two design widths (375, 1280), one media query (768). That is the complete
-set. Layout is mobile-first — the mobile rules are the unconditional defaults
-and the 768px query only adds.
+So: two design widths (375, 1280), two media queries (768, 1024). That is the
+complete set. Layout is mobile-first — the mobile rules are the unconditional
+defaults and the two queries only add.
+
+Three layout bands follow from the two switches. Name them this way everywhere:
+
+| Band | Range | Play page |
+| --- | --- | --- |
+| **mobile** | < 768px | single column, mobile type scale, 16px gutter |
+| **compact** | 768–1023px | single column, desktop type scale, 32px gutter |
+| **wide** | ≥ 1024px | two columns: game frame + 300px side rail |
+
+#### Why `wide` is 1024px — Board amendment of 2026-11-04
+
+The original single switch put the side rail beside the game frame from 768px
+up. GAM-23 §4.4 did the arithmetic and reported the result: at 768px the frame
+is **372 × 209** next to a **300 × 250** ad, so the ad is taller than the game
+and 81% of its width. **The game is the centre of this site; that inverts it.**
+The Board's decision was to add the switch rather than accept the band.
+
+The value is derived, not chosen by taste. With the rail present:
+
+```text
+main column = viewport − 2×32 (gutters) − 300 (rail) − 32 (column gap)
+            = viewport − 396
+game frame  = main column at 16:9
+```
+
+Two conditions make a rail worth having, and both are about the frame keeping
+its place as the largest thing on the page:
+
+| Condition | Arithmetic | Floor |
+| --- | --- | --- |
+| The frame is **taller** than the rail ad, so the ad sits wholly beside it | `main × 9/16 ≥ 250` → `main ≥ 445` | **841px** |
+| The frame is at least **twice the ad's width**, so it still dominates | `main ≥ 2 × 300 = 600` | **996px** |
+
+The binding floor is **996px**. The breakpoint is set at **1024px**: the nearest
+standard viewport width above the floor — tablet landscape, and the most common
+third breakpoint on the web, so the boundary falls *between* device classes
+instead of inside one. At 1024px the main column is **628px** and the frame is
+**628 × 353** — 2.09× the ad's width and 1.41× its height. Both conditions hold
+with margin at every width where the rail exists, which was the point.
+
+Below 1024px the 300 × 250 rectangle is not deleted — it moves below the game
+info, the position `requirements.md` §5.1 already names for mobile. Ad inventory
+per page is unchanged in every band. The geometry is in
+[`ad-slots.md`](ad-slots.md) §4; this document fixes only the breakpoint.
 
 ### Spacing scale
 
@@ -576,7 +628,7 @@ rhythm. `docs/requirements.md` §5 requires a minimum margin between an ad slot
 and the game frame, and the layout in that section shows **≥ 24px**.
 
 - **`--space-ad-clearance` is the minimum separation between any ad slot and the
-  game frame, on every side, at both breakpoints.** It is a floor, not a target:
+  game frame, on every side, in every band.** It is a floor, not a target:
   M1-02 may use more, never less.
 - An ad never sits inside or overlapping a game frame (`AGENTS.md` §5.3).
 - An ad slot reserves its own box so the page does not shift when it fills.
@@ -585,12 +637,16 @@ and the game frame, and the layout in that section shows **≥ 24px**.
 
 ### Containers and gutters
 
-| | Mobile (375) | Desktop (1280) |
-| --- | --- | --- |
-| Page gutter | `lg` (16px) | `2xl` (32px) |
-| Max content width | 100% | 1200px, centred |
-| Game grid | 1 column | 3 columns, `2xl` gap |
-| Vertical rhythm between sections | `3xl` (40px) | `4xl` (48px) |
+| | Mobile (375) | Compact (768–1023) | Desktop (1280) |
+| --- | --- | --- | --- |
+| Page gutter | `lg` (16px) | `2xl` (32px) | `2xl` (32px) |
+| Max content width | 100% | 100% | 1200px, centred |
+| Game grid | 1 column | 3 columns, `2xl` gap | 3 columns, `2xl` gap |
+| Play page | 1 column | 1 column, **no side rail** | frame + 300px rail |
+| Vertical rhythm between sections | `3xl` (40px) | `4xl` (48px) | `4xl` (48px) |
+
+Only the **play page** changes at `wide` (1024px); every other page is governed
+by `switch` (768px) alone, as before.
 
 ### Touch and target size
 
@@ -775,10 +831,13 @@ weight, no ad script before consent)
 **Layout and motion**
 
 - **Do** design at 375px and 1280px, and only at those widths.
+- **Do** check the play page at 768px and 1024px as well — the `compact` band is
+  verified, not designed. Its layout follows from the single-column rules.
 - **Do** keep at least `ad-clearance` (24px) between any ad and the game frame.
 - **Do** honour `prefers-reduced-motion`.
 - **Don't** invent a breakpoint, a spacing value, or a corner radius outside the
-  scales above.
+  scales above. The breakpoints are 768 and 1024; a third needs a Board decision
+  recorded in the amendments table at the top of this document.
 - **Don't** put an ad inside, overlapping, or above the game in the focus order.
 - **Don't** animate layout properties, or move more than one or two things at
   once.

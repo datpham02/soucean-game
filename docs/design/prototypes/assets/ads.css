@@ -1,0 +1,317 @@
+/* ==========================================================================
+   Soucean Game — ad slot reserved boxes
+   --------------------------------------------------------------------------
+   Source of truth: docs/design/ad-slots.md (Task GAM-23, milestone M1-02).
+
+   SCOPE RULE — read before editing.
+
+   This file reserves the BOX for every ad slot, and nothing else.
+
+     * Every colour, radius, font size, line height and margin below is read
+       from tokens.css. There is not one colour literal and not one
+       spacing-scale literal in this file.
+     * The only literals are the ad format dimensions in section 1, plus the
+       768px and 1024px media conditions in section 4. The formats are
+       industry creative sizes (728x90, 300x250, 320x100): they are not
+       design-system values, so there is no token for them and there must not
+       be one — putting an ad format on the spacing scale would invite a later
+       Task to "round it to the grid". The two breakpoint literals are
+       unavoidable: a custom property is not valid inside a media condition,
+       so `--bp-switch` and `--bp-wide` cannot be read there. They must stay
+       equal to `--bp-switch` (768px) and `--bp-wide` (1024px) in tokens.css.
+     * No ad network, tag, script, iframe, tracker, pixel or third-party
+       request appears here, and none may appear in a prototype that uses
+       this file. M1 is design, not integration. Every slot is an empty
+       placeholder box. Integration is M6, behind cookie consent.
+     * No page layout. Which column a slot sits in, and how wide that column
+       is, belongs to the page (M1-03). This file only guarantees the box and
+       the clearance the box can enforce on its own.
+
+   Import order on a prototype page:
+
+     <link rel="stylesheet" href="assets/tokens.css">
+     <link rel="stylesheet" href="assets/base.css">
+     <link rel="stylesheet" href="assets/ads.css">
+
+   The @import below states the dependency on tokens.css explicitly, so this
+   file is never applied without the tokens it reads. It is a same-directory,
+   same-origin import — not a CDN, not a third party. When the page has also
+   linked tokens.css, the second copy re-declares identical values and
+   changes nothing.
+
+   Do not "optimise" that duplication away by dropping the @import: the Task
+   requires ads.css to import tokens.css, and the declared dependency is the
+   point. If the duplicate fetch ever matters in production, remove the
+   <link> and keep the @import, never the other way round.
+   ========================================================================== */
+
+@import url('tokens.css');
+
+/* --------------------------------------------------------------------------
+   1. Ad format dimensions.
+
+   Three formats cover all five slots. See ad-slots.md section 3 for which
+   slot uses which, and why these three.
+   -------------------------------------------------------------------------- */
+
+:root {
+  /* IAB "leaderboard" — the desktop header and in-content banners. */
+  --ad-format-leaderboard-inline: 728px;
+  --ad-format-leaderboard-block: 90px;
+
+  /* IAB "medium rectangle" — the desktop rail and the mobile lower banner. */
+  --ad-format-rectangle-inline: 300px;
+  --ad-format-rectangle-block: 250px;
+
+  /* IAB "large mobile banner" — the mobile banner above the game frame. */
+  --ad-format-mobile-banner-inline: 320px;
+  --ad-format-mobile-banner-block: 100px;
+}
+
+/* --------------------------------------------------------------------------
+   2. The reserved box.
+
+   Every slot is `.ad-slot` plus exactly one modifier from section 3. The
+   modifier supplies the two size variables; everything else is here.
+   -------------------------------------------------------------------------- */
+
+.ad-slot {
+  /* Defaults, so a slot that is missing its modifier still reserves a sane
+     box instead of collapsing to zero height. Always add a modifier. */
+  --ad-slot-inline: var(--ad-format-mobile-banner-inline);
+  --ad-slot-block: var(--ad-format-mobile-banner-block);
+
+  /* --- Reservation ------------------------------------------------------
+     The BLOCK size is literal, explicit and unconditional. That is the
+     whole mechanism: the box is its final height from the first paint,
+     before anything loads into it, with consent accepted or rejected, so
+     nothing below it ever moves. The slot's contribution to Cumulative
+     Layout Shift is exactly zero.
+
+     The INLINE size is capped at 100% so the box can never overflow a
+     narrow viewport and force a horizontal scrollbar. Width is safe to
+     shrink: narrowing a box does not move the content below it, so it
+     causes no layout shift. At integration (M6) a slot whose measured box
+     is narrower than its format width requests no creative.
+
+     `flex: none` is what makes "unconditional" true rather than merely
+     intended. Section 4.3 of ad-slots.md requires every page column to be a
+     flex column, where the BLOCK axis is the flex main axis — and a flex
+     item defaults to `flex-shrink: 1`. So an ancestor column with a definite
+     height smaller than its content (a play view at `height: 100dvh`, say)
+     would compress the slot below its reserved height, and from then on the
+     slot's height would track its siblings' — exactly the reflow this file
+     exists to prevent. `flex: none` is `flex-grow: 0; flex-shrink: 0;
+     flex-basis: auto`, so the used main size stays `block-size`. It is inert
+     when the slot is a grid item or an ordinary block, and no page should
+     ever want an ad slot to flex. Do not remove it. */
+  box-sizing: border-box;
+  inline-size: min(var(--ad-slot-inline), 100%);
+  block-size: var(--ad-slot-block);
+  flex: none; /* the reservation is not negotiable: never shrink, never grow */
+
+  /* --- Normal flow, always ----------------------------------------------
+     HARD PRODUCT RULE (docs/requirements.md section 5.3, AGENTS.md 5.3):
+     no ad is ever sticky, fixed, floated or lifted over the game frame.
+     These four declarations are the rule written as CSS. Do not override
+     them, and do not add `position: sticky`, `position: fixed`, `float`,
+     a `z-index` or a `transform` to any ad rule in any file. A sticky ad
+     would also break WCAG 2.2 "focus not obscured" by covering a focused
+     control in the page behind it. */
+  position: static;
+  float: none;
+  z-index: auto;
+  transform: none;
+
+  /* --- Clearance ---------------------------------------------------------
+     --space-ad-clearance (24px, fixed in M1-01) on the block axis, on both
+     sides of every slot. This is the clearance ads.css can guarantee by
+     itself, in any page layout, which is why it is on the slot and not on
+     the page.
+
+     Vertical margins are safe here: a margin on the block axis cannot
+     overflow a column. An inline margin can, so in the `wide` band — the
+     only band with a rail — the rail slot overrides margin-inline to 0 in
+     section 4 and takes its horizontal clearance from the page grid's
+     column gap instead. ad-slots.md section 5 explains the split and states
+     the measured value for each slot.
+
+     If a parent container ever lets these margins collapse with a
+     sibling's, collapsing takes the LARGER of the two — so the 24px floor
+     survives collapsing. It can only ever be exceeded, never reduced. */
+  margin-block: var(--space-ad-clearance);
+  margin-inline: auto; /* centre the box in its column */
+
+  /* --- Placeholder appearance -------------------------------------------
+     DESIGN.md fixes the `ad-slot` component as: reserves its box, `sunken`
+     fill, `caption` label. Quiet on purpose — the ads must not compete with
+     the games any more than the chrome does. Nothing here animates.
+
+     The edge is an inset OUTLINE, not a border, and that is deliberate. With
+     `box-sizing: border-box` a 1px border would be subtracted from the
+     reserved box, leaving a 726 x 88 content box for a 728 x 90 creative,
+     which would then be clipped by `overflow: hidden`. An outline is drawn
+     outside the layout model, so the content box stays exactly the format
+     size; `outline-offset: -1px` pulls it inside the box so it does not
+     encroach on the 24px clearance either. Outlines follow border-radius.
+     Never change this back to `border` without also enlarging the box. */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: var(--color-sunken);
+  outline: 1px solid var(--color-border);
+  outline-offset: -1px;
+  border-radius: var(--radius-md);
+}
+
+/* The placeholder caption. In production the slot is empty until a creative
+   loads; this label exists so a prototype reads as a reserved ad box rather
+   than an unexplained grey rectangle. */
+.ad-slot__label {
+  font-size: var(--text-caption);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+/* --------------------------------------------------------------------------
+   3. The five slots.
+
+   Ids, pages and bands are in ad-slots.md section 3. Any slot that is not
+   one of these five is a defect (docs/requirements.md section 5.1).
+
+   Three layout bands, from the two M1-01 switches (DESIGN.md, "Layout &
+   Spacing"):
+
+     mobile   < 768px    single column, mobile type scale
+     compact  768-1023   single column, desktop type scale, NO side rail
+     wide     >= 1024    game frame + 300px side rail
+
+   Only the 300x250 rectangle differs between `compact` and `wide`, and it
+   is not removed: below 1024px it sits after the game info instead of in
+   the rail. So `compact` and `wide` carry an identical ad inventory — three
+   slots on the play page, one on every other page — and `mobile` carries
+   two on the play page and none elsewhere. Section 4 does the gating.
+   -------------------------------------------------------------------------- */
+
+/* ad-header-leaderboard — 728x90, in the site header, every page.
+   Bands: compact + wide. */
+.ad-slot--header-leaderboard {
+  --ad-slot-inline: var(--ad-format-leaderboard-inline);
+  --ad-slot-block: var(--ad-format-leaderboard-block);
+}
+
+/* ad-incontent-banner — 728x90, after the game info, play page only.
+   Never directly under the frame: the game-meta block always sits between.
+   Bands: compact + wide. See ad-slots.md section 4. */
+.ad-slot--incontent-banner {
+  --ad-slot-inline: var(--ad-format-leaderboard-inline);
+  --ad-slot-block: var(--ad-format-leaderboard-block);
+}
+
+/* ad-rail-rectangle — 300x250, top of the right-hand rail, play page only.
+   Band: wide ONLY. This is the one slot that is side by side with the game
+   frame, and it exists only at the widths where the frame stays the larger
+   element: at 1024px the frame is 628 x 353 against this 300 x 250 box.
+   Below 1024px this slot is absent and ad-after-info-rectangle carries the
+   same format below the game info instead. */
+.ad-slot--rail-rectangle {
+  --ad-slot-inline: var(--ad-format-rectangle-inline);
+  --ad-slot-block: var(--ad-format-rectangle-block);
+}
+
+/* ad-after-info-rectangle — 300x250, after the game info, play page.
+   Bands: mobile + compact. The position docs/requirements.md section 5.1
+   names for mobile; in the compact band it is also where the rail
+   rectangle goes, by Board decision of 2026-11-04. */
+.ad-slot--after-info-rectangle {
+  --ad-slot-inline: var(--ad-format-rectangle-inline);
+  --ad-slot-block: var(--ad-format-rectangle-block);
+}
+
+/* ad-mobile-top — 320x100, immediately above the game frame, play page.
+   Band: mobile ONLY. In the compact and wide bands the header leaderboard
+   is the banner above the frame, so this one would be a second one. */
+.ad-slot--mobile-top {
+  --ad-slot-inline: var(--ad-format-mobile-banner-inline);
+  --ad-slot-block: var(--ad-format-mobile-banner-block);
+}
+
+/* --------------------------------------------------------------------------
+   4. Band gating.
+
+   Mobile-first, matching M1-01: the mobile rules are the unconditional
+   defaults and the queries layer on top of them. These two breakpoints are
+   the complete set and no Task may add a third without a Board decision
+   recorded in the DESIGN.md amendments table.
+
+   A slot that does not exist in a band is `display: none` — it reserves
+   nothing, because it is not on the page at that width. This does not cause
+   layout shift: a band can only change when the viewport is resized or the
+   device rotated, and shift caused by a viewport resize is excluded from
+   the Cumulative Layout Shift metric.
+
+   Every selector below repeats the base class (`.ad-slot.ad-slot--x`) so it
+   outranks section 2 on specificity rather than on source order. Gating
+   that depended on the order of rules inside this file would silently break
+   the first time somebody reorganised it — and so would the rail's
+   margin-inline override, which is why that one is written the same way.
+
+   The 768px and 1024px literals are explained in the scope comment at the
+   top: they must equal `--bp-switch` and `--bp-wide` in tokens.css.
+   -------------------------------------------------------------------------- */
+
+/* --- mobile: < 768px -----------------------------------------------------
+   Visible: ad-mobile-top, ad-after-info-rectangle. Exactly two slots on the
+   play page, no sidebar. docs/requirements.md section 5.1. */
+
+.ad-slot.ad-slot--header-leaderboard,
+.ad-slot.ad-slot--incontent-banner,
+.ad-slot.ad-slot--rail-rectangle {
+  display: none;
+}
+
+/* --- compact: >= 768px ---------------------------------------------------
+   Adds the header leaderboard and the in-content banner; drops the mobile
+   top banner. The rectangle stays where it is, after the game info. Still
+   no rail: the play page is one column. */
+
+@media (min-width: 768px) {
+  .ad-slot.ad-slot--header-leaderboard,
+  .ad-slot.ad-slot--incontent-banner {
+    display: flex;
+  }
+
+  .ad-slot.ad-slot--mobile-top {
+    display: none;
+  }
+}
+
+/* --- wide: >= 1024px -----------------------------------------------------
+   The rail appears and the rectangle moves into it: the rail slot turns on
+   and the after-info slot turns off, so the play page still carries exactly
+   three slots and exactly one 300x250. */
+
+@media (min-width: 1024px) {
+  .ad-slot.ad-slot--rail-rectangle {
+    display: flex;
+
+    /* The rail column is exactly 300px wide, so this slot must NOT carry an
+       inline margin here: 300 + 24 would overflow the column and push the
+       layout. Its horizontal clearance from the frame is the play-page
+       grid's column gap, which ad-slots.md section 5.3 fixes at
+       --space-ad-clearance minimum. This override belongs to the wide band
+       only — in no other band is this slot on the page at all. */
+    margin-inline: 0;
+
+    /* It is the first thing in the rail and aligns with the top of the game
+       frame, so it needs no clearance above it. The bottom margin stays,
+       keeping it clear of the weekly leaderboard below. */
+    margin-block-start: 0;
+  }
+
+  .ad-slot.ad-slot--after-info-rectangle {
+    display: none;
+  }
+}
