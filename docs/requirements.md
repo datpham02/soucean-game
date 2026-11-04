@@ -39,7 +39,10 @@ corrected.
 ## 2. Pages
 
 **Pending plan import.** The page list, the route for each page and the
-acceptance criteria per page come from the approved plan.
+acceptance criteria per page come from the approved plan. The M1 design tasks
+treat the site as **eight pages** (task GAM-24, wireframes at desktop and mobile
+width); confirm that count and the page names against the plan when it is
+imported.
 
 The structure below is the frame they drop into; it is not a substitute for the
 plan.
@@ -125,8 +128,10 @@ The shape the list must take:
 - An ad slot is not focusable ahead of the page's own content and does not trap
   keyboard focus.
 
-Allowed positions and the exact margin: **pending plan import.** Consult
-`ui-designer` on the slot geometry before implementing one.
+Allowed positions and the exact margin: **pending plan import.** The ad-slot
+layout spec — clearance from the game frame, fixed sizes, no sticky slots, mobile
+stacking — is produced by `ui-designer` in task GAM-23. Take the numbers from
+that spec, and consult `ui-designer` on slot geometry before implementing one.
 
 ---
 
