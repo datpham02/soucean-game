@@ -10,11 +10,14 @@
      * Every colour, radius, font size, line height and margin below is read
        from tokens.css. There is not one colour literal and not one
        spacing-scale literal in this file.
-     * The ONLY literals are the ad format dimensions in section 1. Those are
-       industry creative sizes (728x90, 300x250, 320x100). They are not
-       design-system values, so there is no token for them and there must not
-       be one — putting an ad format on the spacing scale would invite a
-       later Task to "round it to the grid".
+     * The only literals are the ad format dimensions in section 1, plus the
+       768px media condition in section 4. The formats are industry creative
+       sizes (728x90, 300x250, 320x100): they are not design-system values,
+       so there is no token for them and there must not be one — putting an
+       ad format on the spacing scale would invite a later Task to "round it
+       to the grid". The 768px literal is unavoidable: a custom property is
+       not valid inside a media condition, so `--bp-switch` cannot be read
+       there. It must stay equal to `--bp-switch` in tokens.css.
      * No ad network, tag, script, iframe, tracker, pixel or third-party
        request appears here, and none may appear in a prototype that uses
        this file. M1 is design, not integration. Every slot is an empty
@@ -34,6 +37,11 @@
    same-origin import — not a CDN, not a third party. When the page has also
    linked tokens.css, the second copy re-declares identical values and
    changes nothing.
+
+   Do not "optimise" that duplication away by dropping the @import: the Task
+   requires ads.css to import tokens.css, and the declared dependency is the
+   point. If the duplicate fetch ever matters in production, remove the
+   <link> and keep the @import, never the other way round.
    ========================================================================== */
 
 @import url('tokens.css');
@@ -83,10 +91,23 @@
      narrow viewport and force a horizontal scrollbar. Width is safe to
      shrink: narrowing a box does not move the content below it, so it
      causes no layout shift. At integration (M6) a slot whose measured box
-     is narrower than its format width requests no creative. */
+     is narrower than its format width requests no creative.
+
+     `flex: none` is what makes "unconditional" true rather than merely
+     intended. Section 4.3 of ad-slots.md requires every page column to be a
+     flex column, where the BLOCK axis is the flex main axis — and a flex
+     item defaults to `flex-shrink: 1`. So an ancestor column with a definite
+     height smaller than its content (a play view at `height: 100dvh`, say)
+     would compress the slot below its reserved height, and from then on the
+     slot's height would track its siblings' — exactly the reflow this file
+     exists to prevent. `flex: none` is `flex-grow: 0; flex-shrink: 0;
+     flex-basis: auto`, so the used main size stays `block-size`. It is inert
+     when the slot is a grid item or an ordinary block, and no page should
+     ever want an ad slot to flex. Do not remove it. */
   box-sizing: border-box;
   inline-size: min(var(--ad-slot-inline), 100%);
   block-size: var(--ad-slot-block);
+  flex: none; /* the reservation is not negotiable: never shrink, never grow */
 
   /* --- Normal flow, always ----------------------------------------------
      HARD PRODUCT RULE (docs/requirements.md section 5.3, AGENTS.md 5.3):
@@ -122,13 +143,23 @@
   /* --- Placeholder appearance -------------------------------------------
      DESIGN.md fixes the `ad-slot` component as: reserves its box, `sunken`
      fill, `caption` label. Quiet on purpose — the ads must not compete with
-     the games any more than the chrome does. Nothing here animates. */
+     the games any more than the chrome does. Nothing here animates.
+
+     The edge is an inset OUTLINE, not a border, and that is deliberate. With
+     `box-sizing: border-box` a 1px border would be subtracted from the
+     reserved box, leaving a 726 x 88 content box for a 728 x 90 creative,
+     which would then be clipped by `overflow: hidden`. An outline is drawn
+     outside the layout model, so the content box stays exactly the format
+     size; `outline-offset: -1px` pulls it inside the box so it does not
+     encroach on the 24px clearance either. Outlines follow border-radius.
+     Never change this back to `border` without also enlarging the box. */
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   background-color: var(--color-sunken);
-  border: 1px solid var(--color-border);
+  outline: 1px solid var(--color-border);
+  outline-offset: -1px;
   border-radius: var(--radius-md);
 }
 
@@ -210,26 +241,33 @@
    not cause layout shift: the breakpoint can only change when the viewport
    is resized or the device rotated, and shift caused by a viewport resize
    is excluded from the Cumulative Layout Shift metric.
+
+   The selectors below are written with the base class repeated
+   (`.ad-slot.ad-slot--x`) so they outrank the `display: flex` in section 2
+   on specificity rather than on source order. Gating that depended on the
+   order of rules inside this file would silently break the first time
+   somebody reorganised it. The 768px literal is explained in the scope
+   comment at the top: it must equal `--bp-switch` in tokens.css.
    -------------------------------------------------------------------------- */
 
-.ad-slot--header-leaderboard,
-.ad-slot--rail-rectangle,
-.ad-slot--incontent-banner {
+.ad-slot.ad-slot--header-leaderboard,
+.ad-slot.ad-slot--rail-rectangle,
+.ad-slot.ad-slot--incontent-banner {
   display: none;
 }
 
 @media (min-width: 768px) {
-  .ad-slot--header-leaderboard,
-  .ad-slot--rail-rectangle,
-  .ad-slot--incontent-banner {
+  .ad-slot.ad-slot--header-leaderboard,
+  .ad-slot.ad-slot--rail-rectangle,
+  .ad-slot.ad-slot--incontent-banner {
     display: flex;
   }
 
   /* No sidebar on mobile, and no mobile banners on desktop: the two sets are
      mutually exclusive, so the play page has exactly three slots at desktop
      and exactly two at mobile. docs/requirements.md section 5.1. */
-  .ad-slot--mobile-top,
-  .ad-slot--mobile-after-info {
+  .ad-slot.ad-slot--mobile-top,
+  .ad-slot.ad-slot--mobile-after-info {
     display: none;
   }
 }

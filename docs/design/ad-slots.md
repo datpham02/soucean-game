@@ -187,6 +187,43 @@ would survive, because margin collapsing takes the **larger** of two margins,
 never the smaller — but then the measured totals in §5 would be `max()` rather
 than sums, and the spec prefers numbers a reviewer can add up.)
 
+A flex column has one side effect this rule has to pay for: the block axis
+becomes the flex main axis, where items shrink by default. `ads.css` pays it
+with `flex: none` on every slot, so the reserved height holds however the column
+is sized. See §8.1 — it is the declaration that makes the reservation real.
+
+### 4.4 The desktop boundary — geometry at exactly 768 px
+
+M1-01 fixes two breakpoints and this Task adds none, so the desktop layout —
+including the rail — switches on at exactly 768 px. That is the worst case for
+the play page and the number belongs on the record rather than in a reviewer's
+head:
+
+| Measure | At 768 px | How |
+| --- | --- | --- |
+| Shell content | 704 px | 768 − 2 × 32 (`--layout-gutter`, desktop) |
+| Rail column | 300 px | the rectangle format |
+| Grid column gap | 32 px | `--space-2xl` |
+| Main column | **372 px** | 704 − 300 − 32 |
+| Game frame | **372 × 209** | main column at 16:9 |
+| `ad-rail-rectangle` | 300 × 250 | **81 % of the frame's width, and taller than the frame** |
+| `ad-header-leaderboard` | 704 × 90 | `min(728px, 100%)` — narrower than its format |
+| `ad-incontent-banner` | 372 × 90 | `min(728px, 100%)` — narrower than its format |
+
+**This is not a §5.2 failure.** The clearance is still 32 px, above the 24 px
+floor, and the `min(…, 100%)` cap means no slot forces a horizontal scrollbar.
+Nothing here shifts. It is a *proportion* problem: `requirements.md` §5.2 says
+24 px is "the floor, not the target", and a rectangle that out-measures the game
+it sits beside is not the intent, however legal the geometry is.
+
+There is no fix inside this Task's remit. Dropping the rail at, say, 1024 px
+would be a third breakpoint, which M1-01 fixed at two and `ads.css` §4 forbids
+adding. **For the Board, alongside the open item in §11:** either accept this
+layout between 768 and ~1000 px, or amend M1-01 to add a breakpoint — in which
+case this spec and `ads.css` §4 follow it. Until then M1-03 inherits the table
+above. The last two rows also tell M6 what to expect: at this width two slots
+measure narrower than their format and therefore request no creative at all.
+
 ---
 
 ## 5. Clearance — the 24 px rule
@@ -301,6 +338,7 @@ and the computed-style check that catch it if they do.
   box-sizing: border-box;
   inline-size: min(var(--ad-slot-inline), 100%);
   block-size: var(--ad-slot-block);   /* literal, explicit, unconditional */
+  flex: none;                         /* ...and unconditional under §4.3 */
 }
 ```
 
@@ -309,6 +347,26 @@ and the computed-style check that catch it if they do.
   any consent decision, before any network request. There is nothing to load and
   therefore nothing to resize. Everything below the slot is already in its final
   position.
+- **`flex: none` is what makes that unconditional rather than merely intended.**
+  §4.3 requires every page column to be a flex column, and in a column flex
+  container the block axis *is* the main axis, where a flex item defaults to
+  `flex-shrink: 1`. So a `block-size` alone is only a *preferred* height: give an
+  ancestor column a definite height smaller than its content — a play view at
+  `height: 100dvh`, or a rail matched to the 488 px frame — and the browser
+  compresses the slot below its reservation, after which the slot's height tracks
+  its siblings' heights. That is precisely the reflow this document exists to
+  prevent, and it is invited by the structure this document itself mandates.
+  `flex: none` is `flex-grow: 0; flex-shrink: 0; flex-basis: auto`, so the used
+  main size stays `block-size` whatever the free space is. It is inert when the
+  slot is a grid item or an ordinary block. No page should ever want an ad slot
+  to flex; **M1-03 must not remove it.**
+- **The 1 px edge is an outline, not a border.** With `box-sizing: border-box` a
+  border is subtracted from the reserved box, so a 728 × 90 slot would offer a
+  726 × 88 content box and clip the creative by a pixel a side. An outline is
+  drawn outside the layout model, so the content box equals the format size
+  exactly; `outline-offset: -1px` keeps it inside the box so it does not eat into
+  the clearance either. Neither choice can shift the page — the outer box is
+  identical — but the outline is the one that is still correct at M6.
 - **`aspect-ratio` is deliberately not used.** It is the right tool for a box
   whose height follows a fluid width, and it reserves height just as well. These
   are fixed-size creatives: their height must not change when the column width
@@ -487,6 +545,17 @@ slot.insertAdjacentHTML('beforeend',
 Nothing on the page may move, and the CLS figure must stay `0`. That is the same
 event an ad creative would cause at M6.
 
+Finally, prove the reservation survives a squeezed flex column — the failure
+`flex: none` exists to stop (§8.1). In the Console:
+
+```js
+document.querySelector('.play-rail').style.height = '300px';  // < the rail's content
+console.log(document.getElementById('ad-rail-rectangle').getBoundingClientRect().height);
+```
+
+Expected: **`250`**. Without `flex: none` the slot compresses to roughly 210 and
+its height then follows its siblings'. Reset with `.style.height = ''`.
+
 ### 10.4 Confirm the rules are not quietly broken
 
 Run from the repository root:
@@ -539,10 +608,20 @@ and never resizes it; a slot narrower than its format width requests no
 creative; no script loads before consent; with consent rejected the box stays
 reserved and empty.
 
-**Open item for the Board.** Mobile currently carries ads on the play page only
-(§3). If a mobile slot is wanted on the home page or the leaderboards,
-`requirements.md` §5.1 has to name it first — this spec will not add a position
-that document does not allow. Raised through `project-manager`.
+**For M1-03 again, explicitly:** `flex: none` on `.ad-slot` is load-bearing, not
+housekeeping. The wireframe may give the play view any height it likes *because*
+of it (§8.1).
+
+**Open items for the Board.** Two, both raised through `project-manager`:
+
+1. **Mobile carries ads on the play page only** (§3). If a mobile slot is wanted
+   on the home page or the leaderboards, `requirements.md` §5.1 has to name it
+   first — this spec will not add a position that document does not allow.
+2. **The layout between 768 px and roughly 1000 px** (§4.4). The rail ad is
+   taller than the game frame there. Every rule in this document still holds; it
+   is the proportion that is unattractive, and the only fix is a third
+   breakpoint, which M1-01 fixed at two. Accept it, or amend M1-01 and this spec
+   follows.
 
 **A note on the check page.** GAM-23 owns exactly two files, this one and
 `ads.css`, and the Task says the PR touches only those. The runnable
