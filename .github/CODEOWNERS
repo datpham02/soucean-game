@@ -1,0 +1,54 @@
+# CODEOWNERS — soucean-game
+#
+# Every path listed here needs a review from its owner before a pull request can
+# merge. The second block covers the security-sensitive paths of AGENTS.md §4:
+# a change to any of them needs Board review in addition to `qa`, and its pull
+# request must say `Security-sensitive: yes` and list the paths it touches.
+#
+# Most of these paths do not exist yet. They are listed now so the rule is in
+# force before the first line of code lands. Keep this file and AGENTS.md §4 in
+# step — they are two views of one list.
+#
+# The last matching pattern wins, so order matters: general first, sensitive last.
+
+# --- Default ------------------------------------------------------------------
+*                                   @datpham02
+
+# --- Documents and the rules themselves ---------------------------------------
+/AGENTS.md                          @datpham02
+/CLAUDE.md                          @datpham02
+/docs/                              @datpham02
+
+# --- Security-sensitive: database schema and row-level security ---------------
+/supabase/migrations/               @datpham02
+/db/migrations/                     @datpham02
+**/policies/                        @datpham02
+**/*.policy.sql                     @datpham02
+
+# --- Security-sensitive: authentication ---------------------------------------
+**/auth/                            @datpham02
+
+# --- Security-sensitive: server code that grants scores, rewards, entitlements -
+/supabase/functions/                @datpham02
+/src/server/                        @datpham02
+**/leaderboard/                     @datpham02
+**/entitlements/                    @datpham02
+**/rewards/                         @datpham02
+
+# --- Security-sensitive: payments ---------------------------------------------
+**/payments/                        @datpham02
+**/billing/                         @datpham02
+
+# --- Security-sensitive: request security headers ------------------------------
+**/middleware.*                     @datpham02
+
+# --- Security-sensitive: secret configuration ---------------------------------
+/.env.example                       @datpham02
+**/config/secrets*                  @datpham02
+
+# --- Security-sensitive: supply chain and CI (security-architecture §11) ------
+/.github/                           @datpham02
+/.github/workflows/                 @datpham02
+/.github/CODEOWNERS                 @datpham02
+/package.json                       @datpham02
+/package-lock.json                  @datpham02

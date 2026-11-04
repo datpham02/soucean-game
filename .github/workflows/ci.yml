@@ -1,0 +1,70 @@
+# CI — install, lint, test. Nothing else.
+#
+# No deploy step, no publish step, no secret, no environment. Production is the
+# Board Operator's (AGENTS.md section 3).
+#
+# The stack is chosen in M2, so this repository has no package manifest yet. Every
+# step below is a no-op until one appears: the job is green through M0-M1 and
+# starts enforcing the moment `package.json` and its scripts land.
+#
+# A failing check is fixed or reported. It is never disabled or deleted to make a
+# build pass.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: install, lint, test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Detect package manifest
+        id: manifest
+        run: |
+          if [ -f package.json ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "No package.json yet — the stack is chosen in M2. Skipping install, lint and test."
+          fi
+
+      - name: Set up Node
+        if: steps.manifest.outputs.present == 'true'
+        uses: actions/setup-node@v4
+        with:
+          # Pin an exact version here once the stack is chosen in M2.
+          node-version: lts/*
+
+      - name: Install
+        if: steps.manifest.outputs.present == 'true'
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            echo "No package-lock.json — commit one so CI installs a pinned tree."
+            npm install --no-audit --no-fund
+          fi
+
+      - name: Lint
+        if: steps.manifest.outputs.present == 'true'
+        run: npm run lint --if-present
+
+      - name: Test
+        if: steps.manifest.outputs.present == 'true'
+        run: npm test --if-present
