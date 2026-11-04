@@ -1,0 +1,337 @@
+/* ==========================================================================
+   Soucean Game — reset and element defaults
+   --------------------------------------------------------------------------
+   Source of truth: docs/design/DESIGN.md (Task GAM-22, milestone M1-01).
+
+   Import AFTER tokens.css:
+     <link rel="stylesheet" href="assets/tokens.css">
+     <link rel="stylesheet" href="assets/base.css">
+
+   SCOPE RULE — read before editing.
+   This file contains ONLY a reset and defaults for bare HTML elements. Every
+   colour, font size, line height, spacing, radius and duration below is read
+   from tokens.css — there is not one literal value of those kinds here. The
+   only literals are hairline border widths (1px), the reading measure (70ch)
+   and a handful of reset constants; none of them belong to a token scale.
+
+   It must NOT contain component classes. Components are named in DESIGN.md and
+   designed in M1-04 — a .card, .button or .game-tile rule does not belong
+   here.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Reset
+   -------------------------------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%; /* never auto-inflate text on rotate */
+  text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100dvh;
+  font-family: var(--font-sans);
+  font-size: var(--text-body-md);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--leading-body);
+  letter-spacing: var(--tracking-normal);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* --------------------------------------------------------------------------
+   2. Typography defaults
+   -------------------------------------------------------------------------- */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: var(--font-weight-semibold);
+  /* Vietnamese stacks marks above the cap height and below the baseline, so
+     headings never get tighter leading than this. */
+  line-height: var(--leading-headline);
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--text-headline-lg);
+  letter-spacing: var(--tracking-tight);
+}
+
+h2 {
+  font-size: var(--text-headline-md);
+  letter-spacing: var(--tracking-normal);
+}
+
+h3 {
+  font-size: var(--text-headline-sm);
+  line-height: var(--leading-headline-sm);
+}
+
+h4,
+h5,
+h6 {
+  font-size: var(--text-body-md);
+  line-height: var(--leading-headline-sm);
+}
+
+p,
+ul,
+ol,
+dl,
+blockquote,
+figure,
+table {
+  margin-block-end: var(--space-lg);
+}
+
+p {
+  text-wrap: pretty;
+  /* Keep the measure readable; DESIGN.md asks for 60-75 characters. */
+  max-width: 70ch;
+}
+
+small {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+}
+
+strong,
+b {
+  font-weight: var(--font-weight-semibold);
+}
+
+/* URLs, player names and game ids must reflow rather than overflow. */
+code,
+kbd,
+samp,
+pre {
+  font-family: ui-monospace, 'Cascadia Mono', 'Segoe UI Mono', 'SF Mono',
+    Menlo, Consolas, monospace;
+  font-size: var(--text-body-sm);
+}
+
+pre {
+  overflow-x: auto;
+  padding: var(--space-lg);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-sunken);
+}
+
+/* --------------------------------------------------------------------------
+   3. Links
+   -------------------------------------------------------------------------- */
+
+a {
+  color: var(--color-primary);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  transition: color var(--duration-state) var(--ease-out);
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+/* --------------------------------------------------------------------------
+   4. Focus — mandatory, visible, and never drawn on top of a primary fill.
+
+   The offset is load-bearing: the focus blue and the primary teal measure
+   1.01:1 against each other, so a ring without an offset would be invisible
+   on a primary-filled control. The offset puts the ring on the surface
+   behind, where it measures at least 3:1. See DESIGN.md -> Keyboard focus.
+   -------------------------------------------------------------------------- */
+
+:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus);
+  outline-offset: var(--focus-ring-offset);
+  border-radius: var(--radius-sm);
+}
+
+/* Pointer users do not get a ring on click, but keyboard users always do. */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* --------------------------------------------------------------------------
+   5. Forms and controls
+   -------------------------------------------------------------------------- */
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+}
+
+button,
+[type='button'],
+[type='submit'],
+[type='reset'] {
+  cursor: pointer;
+  /* Minimum touch target at every breakpoint. */
+  min-height: var(--target-min);
+  background: none;
+  border: 0;
+}
+
+input,
+select,
+textarea {
+  min-height: var(--target-min);
+  padding: var(--space-sm) var(--space-md);
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  /* A control boundary is non-decorative, so it uses border-strong, which is
+     measured at or above 3:1 on every surface. */
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+}
+
+textarea {
+  min-height: calc(var(--target-min) * 2);
+  resize: vertical;
+}
+
+:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+::placeholder {
+  color: var(--color-text-muted);
+  opacity: 1; /* Firefox dims placeholders by default; keep them measurable. */
+}
+
+label {
+  display: block;
+  font-size: var(--text-label-md);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+}
+
+fieldset {
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+}
+
+/* --------------------------------------------------------------------------
+   6. Media and embedded content
+   -------------------------------------------------------------------------- */
+
+img,
+picture,
+video,
+canvas,
+svg,
+iframe {
+  display: block;
+  max-width: 100%;
+}
+
+img,
+video {
+  height: auto;
+}
+
+/* Icons inherit the text colour and keep one stroke width. */
+svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--icon-stroke);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* --------------------------------------------------------------------------
+   7. Tables — used by the leaderboards
+   -------------------------------------------------------------------------- */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  /* Ranks and scores are columns of figures: stop them jittering. */
+  font-variant-numeric: tabular-nums;
+}
+
+th {
+  font-size: var(--text-label-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+  text-align: start;
+}
+
+th,
+td {
+  padding: var(--space-md) var(--space-sm);
+  border-block-end: 1px solid var(--color-border);
+}
+
+caption {
+  font-size: var(--text-caption);
+  color: var(--color-text-muted);
+  text-align: start;
+}
+
+/* --------------------------------------------------------------------------
+   8. Misc elements
+   -------------------------------------------------------------------------- */
+
+hr {
+  height: 1px;
+  margin-block: var(--space-2xl);
+  border: 0;
+  background-color: var(--color-border);
+}
+
+::selection {
+  color: var(--color-on-primary);
+  background-color: var(--color-primary);
+}
+
+:target {
+  scroll-margin-block-start: var(--space-4xl);
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/* --------------------------------------------------------------------------
+   9. Reduced motion.
+
+   tokens.css already collapses the duration tokens; this is the backstop for
+   any rule that hard-codes a duration or uses an animation.
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}
