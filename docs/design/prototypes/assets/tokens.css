@@ -230,7 +230,7 @@
   --space-xl: 20px;
 
   /* HARD PRODUCT RULE, not rhythm. Minimum separation between any ad slot and
-     the game frame, on every side, at both breakpoints. A floor, never a
+     the game frame, on every side, in every layout band. A floor, never a
      target. docs/requirements.md §5; consumed by M1-02, which must not
      redefine it. */
   --space-ad-clearance: 24px;
@@ -275,13 +275,21 @@
 
   /* The M1 breakpoints, recorded for reference. CSS cannot use a custom
      property inside a media query, so the literal values are repeated in the
-     @media rules below and in base.css. These three numbers are the complete
-     set for M1: two design widths and one switch. Do not invent a fourth.
+     @media rules below, in base.css and in ads.css. These four numbers are the
+     complete set for M1: two design widths and two switches. Do not invent a
+     fifth — a new breakpoint needs a Board decision recorded in the amendments
+     table of DESIGN.md.
        design width, mobile  :  375px
-       switch                :  768px
-       design width, desktop : 1280px */
+       switch                :  768px   type scale, gutters, desktop layout
+       wide                  : 1024px   the play-page side rail only
+       design width, desktop : 1280px
+
+     --bp-wide was added by Board decision of 2026-11-04, raised from GAM-23
+     (M1-02) section 4.4: with the rail on from 768px the game frame was
+     372 x 209 beside a 300 x 250 ad. See DESIGN.md, "Why wide is 1024px". */
   --bp-mobile: 375px;
   --bp-switch: 768px;
+  --bp-wide: 1024px;
   --bp-desktop: 1280px;
 }
 
