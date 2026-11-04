@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wireframe 7 — Giới thiệu · Soucean Game (M1-03)</title>
+<link rel="stylesheet" href="../assets/tokens.css">
+<link rel="stylesheet" href="../assets/base.css">
+<link rel="stylesheet" href="../assets/ads.css">
+<link rel="stylesheet" href="wireframe.css">
+</head>
+<body class="wf-doc">
+
+<header class="wf-doc-head">
+  <p class="wf-kicker">Soucean Game · M1 · GAM-24 (M1-03) · wireframe, độ chi tiết thấp</p>
+  <h1>7. Giới thiệu — <code>/about</code></h1>
+  <p class="wf-prose">Trang ngắn nhất của site: studio là ai và liên hệ ở đâu. Nó có mặt vì
+     requirements.md §2 yêu cầu, và vì mạng quảng cáo thường đòi một trang như vậy (OQ-038).
+     Dùng chung khuôn văn bản dài với <a href="05-privacy.html">Quyền riêng tư</a> và
+     <a href="08-terms.html">Điều khoản</a>, bỏ mục lục vì chỉ có ba mục.</p>
+  <p><a href="index.html">← Mục lục wireframe</a> · <a href="../../wireframes.md">wireframes.md</a></p>
+  <ul class="wf-legend">
+    <li>Hộp xám = chỗ dành cho nội dung</li>
+    <li>Viền đứt = ranh giới một vùng</li>
+    <li>Số tròn = thứ tự đọc</li>
+    <li>“Trạng thái: …” = nơi đặt trạng thái tải · trống · lỗi (thiết kế ở M1-04)</li>
+  </ul>
+</header>
+
+<!-- ======================================================================
+     VIEW 1 — Mobile, 375 px.
+     ====================================================================== -->
+<section class="wf-view-block">
+  <h2>7.1 Mobile · 375 px</h2>
+  <p class="wf-prose">Một cột, ba mục, không mục lục.</p>
+
+  <div class="wf-scroll">
+    <div class="wf-view wf-view--mobile">
+
+      <div class="wf-shell">
+        <p class="wf-skip"><span class="wf-order">1</span> skip-link → <code>#main</code></p>
+      </div>
+
+      <header class="wf-header">
+        <div class="wf-shell">
+          <div class="wf-headbar">
+            <span class="wf-mark"><span class="wf-order">2</span> Soucean Game</span>
+            <nav class="wf-nav" aria-label="Điều hướng chính (wireframe)">
+              <span class="wf-chip"><span class="wf-order">3</span> Menu</span>
+              <span class="wf-chip"><span class="wf-order">4</span> Giao diện</span>
+            </nav>
+          </div>
+        </div>
+      </header>
+
+      <main class="wf-main">
+        <div class="wf-shell">
+          <p class="wf-h wf-h1"><span class="wf-order">5</span> H1 · Giới thiệu</p>
+          <p class="wf-note"><span class="wf-order">6</span> Cập nhật lần cuối · ngày</p>
+          <p class="wf-states">Nội dung tĩnh: không có trạng thái đang tải hay trống.
+             Lỗi duy nhất là ở mức trang (404/500) → Task của trang</p>
+
+          <section class="wf-region wf-doc-section" aria-label="Về studio (wireframe)">
+            <p class="wf-label"><span class="wf-order">7</span> Mục 1 · Về studio</p>
+            <p class="wf-h wf-h2">H2 · Về studio</p>
+            <span class="wf-line wf-line--full"></span>
+            <span class="wf-line wf-line--3q"></span>
+            <span class="wf-line wf-line--half"></span>
+          </section>
+
+          <section class="wf-region wf-doc-section" aria-label="Trò chơi của chúng tôi (wireframe)">
+            <p class="wf-label"><span class="wf-order">8</span> Mục 2 · Trò chơi của chúng tôi</p>
+            <p class="wf-h wf-h2">H2 · Trò chơi của chúng tôi</p>
+            <div class="wf-box">Một đoạn ngắn + liên kết về trang chủ. Không nhân bản lưới trò chơi ở đây —
+              danh sách thật chỉ có một chỗ, là <code>/</code>.</div>
+          </section>
+
+          <section class="wf-region wf-doc-section" aria-label="Liên hệ (wireframe)">
+            <p class="wf-label"><span class="wf-order">9</span> Mục 3 · Liên hệ</p>
+            <p class="wf-h wf-h2">H2 · Liên hệ</p>
+            <div class="wf-box">Địa chỉ liên hệ của studio. Cùng một địa chỉ xuất hiện ở
+              <code>/privacy</code> mục 7 — một nguồn, hai chỗ dẫn tới.</div>
+          </section>
+
+        </div>
+      </main>
+
+      <footer class="wf-footer">
+        <div class="wf-shell">
+          <nav class="wf-nav" aria-label="Điều hướng chân trang (wireframe)">
+            <span class="wf-chip wf-chip--current"><span class="wf-order">10</span> Giới thiệu</span>
+            <span class="wf-chip">Điều khoản</span>
+            <span class="wf-chip">Quyền riêng tư</span>
+            <span class="wf-chip">Cài đặt cookie</span>
+          </nav>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+  <dl class="wf-measures">
+    <dt>Cột nội dung</dt><dd>343 px (375 − 2 × 16)</dd>
+    <dt>Bố cục</dt><dd>1 cột · 3 mục · không mục lục (quá ngắn để cần)</dd>
+    <dt>Ô quảng cáo</dt><dd>0 ở dải mobile</dd>
+  </dl>
+</section>
+
+<!-- ======================================================================
+     VIEW 2 — Desktop, 1280 px.
+     ====================================================================== -->
+<section class="wf-view-block">
+  <h2>7.2 Desktop · 1280 px</h2>
+  <p class="wf-prose">Cùng ba mục, cột văn bản chặn ở 70ch.</p>
+
+  <div class="wf-scroll">
+    <div class="wf-view wf-view--wide">
+
+      <div class="wf-shell">
+        <p class="wf-skip"><span class="wf-order">1</span> skip-link → <code>#main</code></p>
+      </div>
+
+      <header class="wf-header">
+        <div class="wf-shell">
+          <div class="wf-headbar">
+            <span class="wf-mark"><span class="wf-order">2</span> Soucean Game</span>
+            <nav class="wf-nav" aria-label="Điều hướng chính (wireframe)">
+              <span class="wf-chip"><span class="wf-order">3</span> Trang chủ</span>
+              <span class="wf-chip">Bảng xếp hạng</span>
+              <span class="wf-chip">Tài khoản</span>
+              <span class="wf-chip"><span class="wf-order">4</span> Giao diện</span>
+            </nav>
+          </div>
+          <aside class="ad-slot ad-slot--header-leaderboard" aria-label="Quảng cáo">
+            <span class="ad-slot__label">5 · Quảng cáo · ad-header-leaderboard · 728 × 90</span>
+          </aside>
+        </div>
+      </header>
+
+      <main class="wf-main">
+        <div class="wf-shell wf-shell--text">
+          <p class="wf-h wf-h1"><span class="wf-order">6</span> H1 · Giới thiệu</p>
+          <p class="wf-note"><span class="wf-order">7</span> Cập nhật lần cuối · ngày</p>
+          <p class="wf-states">Nội dung tĩnh: không có trạng thái tải/trống; lỗi ở mức trang</p>
+
+          <section class="wf-region wf-doc-section" aria-label="Về studio (wireframe)">
+            <p class="wf-label"><span class="wf-order">8</span> Mục 1 · Về studio</p>
+            <p class="wf-h wf-h2">H2 · Về studio</p>
+            <span class="wf-line wf-line--full"></span>
+            <span class="wf-line wf-line--3q"></span>
+          </section>
+
+          <section class="wf-region wf-doc-section" aria-label="Trò chơi của chúng tôi (wireframe)">
+            <p class="wf-label"><span class="wf-order">9</span> Mục 2 · Trò chơi của chúng tôi</p>
+            <p class="wf-h wf-h2">H2 · Trò chơi của chúng tôi</p>
+            <div class="wf-box">Đoạn ngắn + liên kết về <code>/</code></div>
+          </section>
+
+          <section class="wf-region wf-doc-section" aria-label="Liên hệ (wireframe)">
+            <p class="wf-label"><span class="wf-order">10</span> Mục 3 · Liên hệ</p>
+            <p class="wf-h wf-h2">H2 · Liên hệ</p>
+            <div class="wf-box">Địa chỉ liên hệ của studio</div>
+          </section>
+
+        </div>
+      </main>
+
+      <footer class="wf-footer">
+        <div class="wf-shell">
+          <nav class="wf-nav" aria-label="Điều hướng chân trang (wireframe)">
+            <span class="wf-chip wf-chip--current"><span class="wf-order">11</span> Giới thiệu</span>
+            <span class="wf-chip">Điều khoản</span>
+            <span class="wf-chip">Quyền riêng tư</span>
+            <span class="wf-chip">Cài đặt cookie</span>
+          </nav>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+  <dl class="wf-measures">
+    <dt>Cột nội dung</dt><dd>1200 px · cột văn bản chặn ở 70ch</dd>
+    <dt><code>ad-header-leaderboard</code></dt><dd>728 × 90 · trang này không có khung trò chơi</dd>
+    <dt>Số ô quảng cáo</dt><dd>1</dd>
+  </dl>
+</section>
+
+</body>
+</html>

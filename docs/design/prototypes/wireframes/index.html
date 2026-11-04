@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wireframes — Soucean Game (M1-03, GAM-24)</title>
+<link rel="stylesheet" href="../assets/tokens.css">
+<link rel="stylesheet" href="../assets/base.css">
+<link rel="stylesheet" href="../assets/ads.css">
+<link rel="stylesheet" href="wireframe.css">
+</head>
+<body class="wf-doc">
+
+<header class="wf-doc-head">
+  <p class="wf-kicker">Soucean Game · M1 (Thiết kế) · GAM-24 (M1-03)</p>
+  <h1>Wireframes — tám trang, hai chiều rộng</h1>
+  <p class="wf-prose">Mười sáu khung nhìn: mỗi trang một lần ở <strong>375 px</strong> và một lần ở
+     <strong>1280 px</strong> — hai chiều rộng thiết kế mà
+     <a href="../../DESIGN.md">DESIGN.md</a> (M1-01) ấn định. Trang chơi có thêm một khung
+     <em>kiểm tra</em> ở 768 px vì <a href="../../ad-slots.md">ad-slots.md</a> §11 yêu cầu,
+     nên tất cả là 17 khung.</p>
+  <p class="wf-prose">Đây là wireframe <strong>độ chi tiết thấp</strong>: chỉ cấu trúc, thứ bậc và
+     vị trí các vùng. Không màu thương hiệu, không ảnh, không nội dung cuối. Các thành phần được
+     thiết kế ở M1-04; trạng thái trống/đang tải/lỗi cũng vậy — ở đây chỉ <em>đánh dấu chỗ</em> của chúng.</p>
+  <p class="wf-prose"><strong>Cách xem:</strong> mở thẳng một tệp <code>.html</code> bằng trình duyệt.
+     Không máy chủ, không bước build, không phụ thuộc, không yêu cầu mạng nào. Mỗi khung nhìn là một
+     hộp có chiều rộng cố định, nên bạn thấy bố cục mobile thật trên màn hình desktop mà không cần
+     device toolbar. Cả hai giao diện sáng/tối đều dùng được: đặt
+     <code>data-theme="dark"</code> trên <code>&lt;html&gt;</code>.</p>
+  <p><a href="../../wireframes.md">wireframes.md — chỉ mục, vùng và thứ tự đọc</a></p>
+</header>
+
+<section class="wf-view-block">
+  <h2>Tám trang</h2>
+  <ol class="wf-prose">
+    <li><a href="01-home.html">Trang chủ / danh sách trò chơi</a> — <code>/</code> · 2 khung nhìn ·
+        thẻ trò chơi và các trường lấy từ manifest</li>
+    <li><a href="02-play.html">Trang chơi</a> — <code>/games/&lt;game_id&gt;</code> · 3 khung nhìn ·
+        khung trò chơi, điều khiển, bảng tuần, ô quảng cáo</li>
+    <li><a href="03-leaderboards.html">Bảng xếp hạng</a> — <code>/leaderboards</code> · 2 khung nhìn ·
+        tuần này, tuần trước, hạng của bạn, kỷ lục cá nhân</li>
+    <li><a href="04-account.html">Tài khoản và hồ sơ</a> — <code>/account</code> · 2 khung nhìn ·
+        tên hiển thị, liên kết Google/email, xóa dữ liệu của tôi</li>
+    <li><a href="05-privacy.html">Chính sách quyền riêng tư</a> — <code>/privacy</code> · 2 khung nhìn ·
+        kèm mục <code>#cookies</code></li>
+    <li><a href="06-cookie-consent.html">Banner và cài đặt cookie</a> — bề mặt, không phải route ·
+        2 khung nhìn</li>
+    <li><a href="07-about.html">Giới thiệu</a> — <code>/about</code> · 2 khung nhìn</li>
+    <li><a href="08-terms.html">Điều khoản sử dụng</a> — <code>/terms</code> · 2 khung nhìn</li>
+  </ol>
+</section>
+
+<section class="wf-view-block">
+  <h2>Quy ước đọc một tờ</h2>
+  <ul class="wf-legend">
+    <li>Hộp xám = chỗ dành cho nội dung</li>
+    <li>Viền đứt = ranh giới một vùng</li>
+    <li>Số tròn = thứ tự đọc (trùng với thứ tự DOM và thứ tự tab)</li>
+    <li>“Trạng thái: …” = nơi đặt trạng thái tải · trống · lỗi (thiết kế ở M1-04)</li>
+    <li><span class="wf-src">manifest</span> = lấy từ manifest trò chơi (GAM-16, ngoài phạm vi M1)</li>
+    <li>Bảng “đo đạc” dưới mỗi khung = số thật, đo được trên chính khung đó</li>
+  </ul>
+  <p class="wf-prose">Thanh xám thay cho chữ là cố ý: một wireframe có nội dung thật sẽ bị
+     đem ra duyệt nội dung. Chữ chỉ xuất hiện khi nó <em>là</em> cấu trúc — tên vùng, nhãn trường,
+     nhãn nút.</p>
+</section>
+
+<section class="wf-view-block">
+  <h2>Những gì các tờ này thừa hưởng, không phát minh lại</h2>
+  <ul class="wf-prose">
+    <li><strong>Token</strong> — màu, bậc chữ, bậc khoảng cách, bo góc, điểm ngắt:
+        <a href="../assets/tokens.css">assets/tokens.css</a> (M1-01). Không có giá trị nào của các
+        thang đó được viết lại trong thư mục này.</li>
+    <li><strong>Nền tảng HTML</strong> — reset, kiểu chữ mặc định, vòng focus, bảng:
+        <a href="../assets/base.css">assets/base.css</a> (M1-01).</li>
+    <li><strong>Ô quảng cáo</strong> — kích thước, hộp đặt chỗ, khoảng trống 24 px, luật không dính:
+        <a href="../assets/ads.css">assets/ads.css</a> (M1-02). Mọi ô trên các tờ này là
+        <code>.ad-slot</code> thật, không phải hình vẽ lại. <code>wireframe.css</code> chỉ quyết định
+        mỗi khung nhìn thuộc dải nào; nó không đổi một kích thước hay một lề nào.</li>
+  </ul>
+</section>
+
+</body>
+</html>

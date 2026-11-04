@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wireframe 3 — Bảng xếp hạng · Soucean Game (M1-03)</title>
+<link rel="stylesheet" href="../assets/tokens.css">
+<link rel="stylesheet" href="../assets/base.css">
+<link rel="stylesheet" href="../assets/ads.css">
+<link rel="stylesheet" href="wireframe.css">
+</head>
+<body class="wf-doc">
+
+<header class="wf-doc-head">
+  <p class="wf-kicker">Soucean Game · M1 · GAM-24 (M1-03) · wireframe, độ chi tiết thấp</p>
+  <h1>3. Bảng xếp hạng — <code>/leaderboards</code>, <code>/leaderboards/&lt;game_id&gt;</code></h1>
+  <p class="wf-prose">Bốn thứ phải có mặt: <strong>tuần này</strong>, <strong>tuần trước</strong>
+     (bảng đã chốt), <strong>hạng của chính người chơi</strong> và <strong>kỷ lục cá nhân</strong>.
+     Hai cái sau đứng cùng một khối, đặt phía trên bảng, để người chơi không phải cuộn tìm mình.</p>
+  <p><a href="index.html">← Mục lục wireframe</a> · <a href="../../wireframes.md">wireframes.md</a></p>
+  <ul class="wf-legend">
+    <li>Hộp xám = chỗ dành cho nội dung</li>
+    <li>Viền đứt = ranh giới một vùng</li>
+    <li>Số tròn = thứ tự đọc</li>
+    <li>“Trạng thái: …” = nơi đặt trạng thái tải · trống · lỗi (thiết kế ở M1-04)</li>
+  </ul>
+</header>
+
+<!-- ======================================================================
+     VIEW 1 — Mobile, 375 px.
+     ====================================================================== -->
+<section class="wf-view-block">
+  <h2>3.1 Mobile · 375 px</h2>
+  <p class="wf-prose">Một cột: hai bảng xếp chồng, tuần này trước. Bộ chọn trò chơi là một
+     <code>select</code> có nhãn hiện rõ, không phải dãy tab cuộn ngang.</p>
+
+  <div class="wf-scroll">
+    <div class="wf-view wf-view--mobile">
+
+      <div class="wf-shell">
+        <p class="wf-skip"><span class="wf-order">1</span> skip-link → <code>#main</code></p>
+      </div>
+
+      <header class="wf-header">
+        <div class="wf-shell">
+          <div class="wf-headbar">
+            <span class="wf-mark"><span class="wf-order">2</span> Soucean Game</span>
+            <nav class="wf-nav" aria-label="Điều hướng chính (wireframe)">
+              <span class="wf-chip"><span class="wf-order">3</span> Menu</span>
+              <span class="wf-chip"><span class="wf-order">4</span> Giao diện</span>
+            </nav>
+          </div>
+        </div>
+      </header>
+
+      <main class="wf-main">
+        <div class="wf-shell">
+          <p class="wf-h wf-h1 wf-page-title"><span class="wf-order">5</span> H1 · Bảng xếp hạng</p>
+
+          <section class="wf-region" aria-label="Chọn trò chơi (wireframe)">
+            <p class="wf-label"><span class="wf-order">6</span> Chọn trò chơi · route <code>/leaderboards/&lt;game_id&gt;</code></p>
+            <div class="wf-field">
+              <p class="wf-label">Trò chơi</p>
+              <span class="wf-input">select · tên trò chơi ▾</span>
+            </div>
+            <p class="wf-note">Tuần bắt đầu Thứ Hai 00:00 UTC+7 (requirements.md §2 · GAM-16 xác nhận).</p>
+          </section>
+
+          <section class="wf-region" aria-label="Kết quả của bạn (wireframe)">
+            <p class="wf-label"><span class="wf-order">7</span> Của bạn · own-rank + personal best</p>
+            <div class="wf-rank wf-rank--own"><span>Hạng</span><span>Bạn · tuần này</span><span>—</span></div>
+            <p class="wf-h wf-h3">Kỷ lục cá nhân</p>
+            <span class="wf-line wf-line--half"></span>
+            <p class="wf-states">Trạng thái: đang tải · <strong>trống</strong> (chưa chơi tuần này —
+               kèm liên kết “Chơi ngay”) · <strong>chưa đăng nhập</strong> · lỗi → M1-04</p>
+          </section>
+
+          <div class="wf-two-up">
+
+            <section class="wf-region" aria-label="Bảng tuần này (wireframe)">
+              <p class="wf-label"><span class="wf-order">8</span> Tuần này · leaderboard-table</p>
+              <p class="wf-h wf-h2">H2 · Tuần này</p>
+              <div class="wf-rank"><span>Hạng</span><span>Người chơi</span><span>Điểm</span></div>
+              <div class="wf-rank"><span>1</span><span class="wf-line wf-line--half"></span><span>—</span></div>
+              <div class="wf-rank"><span>2</span><span class="wf-line wf-line--half"></span><span>—</span></div>
+              <div class="wf-rank"><span>3</span><span class="wf-line wf-line--half"></span><span>—</span></div>
+              <div class="wf-rank wf-rank--own"><span>12</span><span>Bạn</span><span>—</span></div>
+              <div class="wf-rank"><span>13</span><span class="wf-line wf-line--half"></span><span>—</span></div>
+              <p class="wf-note">Hàng của bạn được đánh dấu bằng viền đậm <strong>và chữ “Bạn”</strong>,
+                 không bao giờ chỉ bằng màu.</p>
+              <span class="wf-btn wf-btn--block">Xem thêm · pagination</span>
+              <p class="wf-states">Trạng thái: đang tải (skeleton hàng) · trống (chưa ai có điểm tuần này) · lỗi → M1-04</p>
+            </section>
+
+            <section class="wf-region" aria-label="Bảng tuần trước (wireframe)">
+              <p class="wf-label"><span class="wf-order">9</span> Tuần trước · bảng đã chốt</p>
+              <p class="wf-h wf-h2">H2 · Tuần trước <span class="wf-src">đã chốt</span></p>
+              <div class="wf-rank"><span>1</span><span class="wf-line wf-line--half"></span><span>—</span></div>
+              <div class="wf-rank"><span>2</span><span class="wf-line wf-line--half"></span><span>—</span></div>
+              <div class="wf-rank"><span>3</span><span class="wf-line wf-line--half"></span><span>—</span></div>
+              <p class="wf-states">Trạng thái: đang tải · trống (tuần trước không có điểm) · lỗi → M1-04</p>
+            </section>
+
+          </div>
+        </div>
+      </main>
+
+      <footer class="wf-footer">
+        <div class="wf-shell">
+          <nav class="wf-nav" aria-label="Điều hướng chân trang (wireframe)">
+            <span class="wf-chip"><span class="wf-order">10</span> Giới thiệu</span>
+            <span class="wf-chip">Điều khoản</span>
+            <span class="wf-chip">Quyền riêng tư</span>
+            <span class="wf-chip">Cài đặt cookie</span>
+          </nav>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+  <dl class="wf-measures">
+    <dt>Cột nội dung</dt><dd>343 px (375 − 2 × 16)</dd>
+    <dt>Bố cục</dt><dd>1 cột · hai bảng xếp chồng, tuần này trước</dd>
+    <dt>Hàng xếp hạng</dt><dd>hạng · tên · điểm — chữ số dùng <code>tabular-nums</code> (base.css)</dd>
+    <dt>Ô quảng cáo</dt><dd>0 ở dải mobile</dd>
+  </dl>
+</section>
+
+<!-- ======================================================================
+     VIEW 2 — Desktop, 1280 px.
+     ====================================================================== -->
+<section class="wf-view-block">
+  <h2>3.2 Desktop · 1280 px</h2>
+  <p class="wf-prose">Từ 768 px trở lên, hai bảng nằm cạnh nhau trong cột nội dung 1200 px.
+     Khối “Của bạn” vẫn chiếm trọn chiều rộng và vẫn đứng trên cả hai bảng.</p>
+
+  <div class="wf-scroll">
+    <div class="wf-view wf-view--wide">
+
+      <div class="wf-shell">
+        <p class="wf-skip"><span class="wf-order">1</span> skip-link → <code>#main</code></p>
+      </div>
+
+      <header class="wf-header">
+        <div class="wf-shell">
+          <div class="wf-headbar">
+            <span class="wf-mark"><span class="wf-order">2</span> Soucean Game</span>
+            <nav class="wf-nav" aria-label="Điều hướng chính (wireframe)">
+              <span class="wf-chip"><span class="wf-order">3</span> Trang chủ</span>
+              <span class="wf-chip wf-chip--current">Bảng xếp hạng</span>
+              <span class="wf-chip">Tài khoản</span>
+              <span class="wf-chip"><span class="wf-order">4</span> Giao diện</span>
+            </nav>
+          </div>
+          <aside class="ad-slot ad-slot--header-leaderboard" aria-label="Quảng cáo">
+            <span class="ad-slot__label">5 · Quảng cáo · ad-header-leaderboard · 728 × 90</span>
+          </aside>
+        </div>
+      </header>
+
+      <main class="wf-main">
+        <div class="wf-shell">
+          <p class="wf-h wf-h1 wf-page-title"><span class="wf-order">6</span> H1 · Bảng xếp hạng</p>
+
+          <section class="wf-region" aria-label="Chọn trò chơi (wireframe)">
+            <p class="wf-label"><span class="wf-order">7</span> Chọn trò chơi · route <code>/leaderboards/&lt;game_id&gt;</code></p>
+            <div class="wf-row">
+              <span class="wf-chip wf-chip--current">Trò chơi A</span>
+              <span class="wf-chip">Trò chơi B</span>
+              <span class="wf-chip">Trò chơi C</span>
+            </div>
+            <p class="wf-note">Tuần bắt đầu Thứ Hai 00:00 UTC+7. Mỗi mục là một liên kết thật tới
+               route của trò chơi đó, không phải tab chỉ chạy bằng JS.</p>
+          </section>
+
+          <section class="wf-region" aria-label="Kết quả của bạn (wireframe)">
+            <p class="wf-label"><span class="wf-order">8</span> Của bạn · own-rank + personal best</p>
+            <div class="wf-two-up">
+              <div>
+                <p class="wf-h wf-h3">Hạng của bạn · tuần này</p>
+                <div class="wf-rank wf-rank--own"><span>12</span><span>Bạn</span><span>—</span></div>
+              </div>
+              <div>
+                <p class="wf-h wf-h3">Kỷ lục cá nhân</p>
+                <span class="wf-line wf-line--half"></span>
+              </div>
+            </div>
+            <p class="wf-states">Trạng thái: đang tải · <strong>trống</strong> (chưa chơi tuần này) ·
+               <strong>chưa đăng nhập</strong> · lỗi → M1-04</p>
+          </section>
+
+          <div class="wf-two-up">
+
+            <section class="wf-region" aria-label="Bảng tuần này (wireframe)">
+              <p class="wf-label"><span class="wf-order">9</span> Tuần này · leaderboard-table</p>
+              <p class="wf-h wf-h2">H2 · Tuần này</p>
+              <div class="wf-rank"><span>Hạng</span><span>Người chơi</span><span>Điểm</span></div>
+              <div class="wf-rank"><span>1</span><span class="wf-line wf-line--half"></span><span>—</span></div>
+              <div class="wf-rank"><span>2</span><span class="wf-line wf-line--half"></span><span>—</span></div>
+              <div class="wf-rank"><span>3</span><span class="wf-line wf-line--half"></span><span>—</span></div>
+              <div class="wf-rank"><span>4</span><span class="wf-line wf-line--half"></span><span>—</span></div>
+              <div class="wf-rank wf-rank--own"><span>12</span><span>Bạn</span><span>—</span></div>
+              <span class="wf-btn">Xem thêm · pagination</span>
+              <p class="wf-states">Trạng thái: đang tải · trống · lỗi → M1-04</p>
+            </section>
+
+            <section class="wf-region" aria-label="Bảng tuần trước (wireframe)">
+              <p class="wf-label"><span class="wf-order">10</span> Tuần trước · bảng đã chốt</p>
+              <p class="wf-h wf-h2">H2 · Tuần trước <span class="wf-src">đã chốt</span></p>
+              <div class="wf-rank"><span>Hạng</span><span>Người chơi</span><span>Điểm</span></div>
+              <div class="wf-rank"><span>1</span><span class="wf-line wf-line--half"></span><span>—</span></div>
+              <div class="wf-rank"><span>2</span><span class="wf-line wf-line--half"></span><span>—</span></div>
+              <div class="wf-rank"><span>3</span><span class="wf-line wf-line--half"></span><span>—</span></div>
+              <p class="wf-states">Trạng thái: đang tải · trống · lỗi → M1-04</p>
+            </section>
+
+          </div>
+        </div>
+      </main>
+
+      <footer class="wf-footer">
+        <div class="wf-shell">
+          <nav class="wf-nav" aria-label="Điều hướng chân trang (wireframe)">
+            <span class="wf-chip"><span class="wf-order">11</span> Giới thiệu</span>
+            <span class="wf-chip">Điều khoản</span>
+            <span class="wf-chip">Quyền riêng tư</span>
+            <span class="wf-chip">Cài đặt cookie</span>
+          </nav>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+  <dl class="wf-measures">
+    <dt>Cột nội dung</dt><dd>1200 px (1280 − 2 × 40)</dd>
+    <dt>Bố cục</dt><dd>2 cột cho hai bảng · khoảng cách 32 px · khối “Của bạn” chiếm trọn chiều rộng</dd>
+    <dt><code>ad-header-leaderboard</code></dt><dd>728 × 90 · trang này không có khung trò chơi</dd>
+    <dt>Số ô quảng cáo</dt><dd>1</dd>
+  </dl>
+</section>
+
+<footer class="wf-view-block">
+  <h2>Ghi chú về trang này</h2>
+  <ul class="wf-prose">
+    <li><strong>Hạng của bạn đứng trên bảng, không nằm trong bảng.</strong> Nó cũng được
+        đánh dấu lại <em>trong</em> bảng khi người chơi có mặt ở trang đang xem. Nhờ vậy câu hỏi
+        “tôi đang ở đâu” được trả lời mà không cần cuộn, và không cần một hàng dính
+        (<em>sticky</em>) — trang này không có phần tử dính nào.</li>
+    <li><strong>Hai route, một bố cục.</strong> <code>/leaderboards</code> và
+        <code>/leaderboards/&lt;game_id&gt;</code> dùng chung bố cục này; cái đầu mở ở trò chơi
+        đầu tiên trong danh sách. Route cuối cùng do M2 chốt (requirements.md §8, câu hỏi 4).</li>
+    <li><strong>Trạng thái “chưa đăng nhập”</strong> là trạng thái thứ tư của khối “Của bạn”,
+        ngoài tải/trống/lỗi: người chơi ẩn danh vẫn có hạng, nhưng một người chơi chưa có
+        điểm nào thì không. M1-04 thiết kế cả bốn.</li>
+  </ul>
+</footer>
+
+</body>
+</html>

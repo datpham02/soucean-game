@@ -1,0 +1,827 @@
+/* ==========================================================================
+   Soucean Game — wireframe sheet
+   --------------------------------------------------------------------------
+   Source of truth: docs/design/wireframes.md (Task GAM-24, milestone M1-03).
+
+   SCOPE RULE — read before editing.
+
+   This file styles LOW-FIDELITY WIREFRAMES and nothing else. A wireframe
+   shows structure, hierarchy and region placement. It is deliberately not a
+   mockup: there is no brand colour in it, no imagery, no final copy.
+
+     * Every colour, spacing step, radius, type size and duration below is
+       read from tokens.css. There is not one colour literal and not one
+       spacing-scale literal here.
+     * The accent colours are deliberately NOT used. A wireframe that is
+       already teal has made M1-05..M1-09's decisions for them. Boxes are
+       `surface` and `sunken`, edges are `border` and `border-strong`, text
+       is `text` and `text-muted`. That is the whole palette of this file.
+     * No component is designed here. `.wf-btn`, `.wf-card` and friends are
+       grey stand-ins that say "a button goes here", not button designs.
+       The components are designed in M1-04 and the page Tasks.
+     * No ad geometry is defined here. Every ad slot on these sheets is the
+       real `.ad-slot` from ads.css (M1-02), at its real size, with its real
+       24px clearance. This file only decides which band each view is pinned
+       to — see section 4, which is the one place it touches an ad rule, and
+       says exactly why.
+     * No script, no font file, no image, no third-party or CDN request, in
+       this file or in any sheet that links it. M1 adds no runtime
+       dependency and makes no network request.
+
+   Import order on a wireframe sheet:
+
+     <link rel="stylesheet" href="../assets/tokens.css">
+     <link rel="stylesheet" href="../assets/base.css">
+     <link rel="stylesheet" href="../assets/ads.css">
+     <link rel="stylesheet" href="wireframe.css">
+
+   --------------------------------------------------------------------------
+   HOW A SHEET IS BUILT, AND WHY IT IS BUILT THAT WAY
+
+   One sheet per page. Each sheet carries every view of that page, stacked:
+   `Mobile · 375` and `Desktop · 1280`, plus `Compact · 768` on the play page
+   only (ad-slots.md section 11 requires that third state).
+
+   A view is a fixed-width box: `.wf-view--mobile` is exactly 375px wide,
+   `.wf-view--wide` is exactly 1280px. The layout band is therefore a
+   property of the VIEW, not of the window the sheet is being read in — a
+   reviewer sees the real mobile layout on a desktop monitor, with no device
+   toolbar, no resizing and no server.
+
+   That is the one thing this file does that production will not: in the real
+   product the band comes from a viewport media query. Here it comes from the
+   view's class. Section 4 restates the band gating on that basis and
+   restates nothing else. Every size, margin and clearance still comes from
+   ads.css and tokens.css untouched, so the geometry a reviewer measures on
+   these sheets is the geometry the product will have.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. The sheet around the views.
+
+   Everything in this section is chrome for the wireframe document itself —
+   its title, its legend, its notes. None of it is part of a page design.
+   -------------------------------------------------------------------------- */
+
+.wf-doc {
+  max-inline-size: 1360px;
+  margin-inline: auto;
+  padding-inline: var(--space-lg);
+  padding-block: var(--space-2xl) var(--space-6xl);
+}
+
+.wf-kicker {
+  font-size: var(--text-label-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+.wf-doc-head p {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--color-text-muted);
+}
+
+.wf-doc-head h1 {
+  margin-block: var(--space-xs) var(--space-md);
+}
+
+/* The legend. Printed on every sheet so a view is readable on its own. */
+.wf-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-block: var(--space-lg) var(--space-2xl);
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-label-sm);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+.wf-legend li {
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+/* One block = one view, plus its title, its note and its measurements. */
+.wf-view-block {
+  margin-block-start: var(--space-5xl);
+  padding-block-start: var(--space-2xl);
+  border-block-start: 1px solid var(--color-border);
+}
+
+.wf-view-block > p {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--color-text-muted);
+}
+
+/* A 1280px view does not fit every reader's window. Scroll the view, never
+   the page, and never scale it — a scaled wireframe cannot be measured. */
+.wf-scroll {
+  overflow-x: auto;
+  padding-block: var(--space-lg);
+}
+
+/* The measurements under a view. These are annotations: they are deliberately
+   OUTSIDE the view box, because an annotation in the flow would add height
+   between two blocks and change the very clearance it claims to describe. */
+.wf-measures {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--space-xs) var(--space-md);
+  margin-block: 0 var(--space-lg);
+  padding: var(--space-md) var(--space-lg);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.wf-measures dt {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-muted);
+}
+
+.wf-measures dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --------------------------------------------------------------------------
+   2. A view — one page at one design width.
+
+   The edge of the view is an OUTLINE, not a border: an outline is drawn
+   outside the layout model, so a 375px view is exactly 375px of content box
+   and the arithmetic in wireframes.md adds up.
+   -------------------------------------------------------------------------- */
+
+.wf-view {
+  /* The page gutter for this band. DESIGN.md -> "Containers and gutters":
+     16px below the switch, 32px above it. These are the spacing tokens, not
+     --layout-gutter, because --layout-gutter follows the reader's VIEWPORT
+     and a view's band must not. */
+  --wf-gutter: var(--space-lg);
+
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  outline: 1px solid var(--color-border-strong);
+  outline-offset: 0;
+}
+
+.wf-view--mobile {
+  inline-size: 375px;
+}
+
+.wf-view--compact {
+  inline-size: 768px;
+  --wf-gutter: var(--space-2xl);
+}
+
+.wf-view--wide {
+  inline-size: 1280px;
+  --wf-gutter: var(--space-2xl);
+}
+
+/* The content column. At 1280 the shell is 1200 + 2x32 and centred, which is
+   the 40px outer margin drawn in ad-slots.md section 4.1 (8 outside the shell
+   + 32 of gutter). */
+.wf-shell {
+  padding-inline: var(--wf-gutter);
+}
+
+.wf-view--wide .wf-shell {
+  max-inline-size: calc(var(--layout-max-width) + 2 * var(--space-2xl));
+  margin-inline: auto;
+}
+
+.wf-main {
+  padding-block: var(--space-3xl);
+}
+
+.wf-view--compact .wf-main,
+.wf-view--wide .wf-main {
+  padding-block: var(--space-4xl);
+}
+
+/* --------------------------------------------------------------------------
+   3. Wireframe vocabulary.
+
+   Grey boxes and labels. Nothing here is a component design.
+   -------------------------------------------------------------------------- */
+
+/* A named region. The dashed edge is the wireframe convention for "this is a
+   region boundary", and it is never a visual design. */
+.wf-region {
+  padding: var(--space-md);
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-md);
+}
+
+/* The rhythm between sections, from DESIGN.md -> "Containers and gutters":
+   40px below the switch, 48px above it. Two blocks in the play view override
+   this in section 6, where the rhythm is measured against the game frame
+   rather than against another region. */
+.wf-region + .wf-region {
+  margin-block-start: var(--space-3xl);
+}
+
+.wf-view--compact .wf-region + .wf-region,
+.wf-view--wide .wf-region + .wf-region {
+  margin-block-start: var(--space-4xl);
+}
+
+/* The region's name, and its place in the reading order. */
+.wf-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-block-end: var(--space-sm);
+  font-size: var(--text-label-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+.wf-order {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--icon-lg);
+  block-size: var(--icon-lg);
+  font-size: var(--text-label-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  background-color: var(--color-sunken);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-full);
+}
+
+/* A note, and the states marker. The states marker is required on every
+   region that will have an empty, loading or error state: the states
+   themselves are designed in M1-04 and the page Tasks, so the wireframe
+   marks the place and names the owner. */
+.wf-note,
+.wf-states {
+  font-size: var(--text-label-sm);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+  max-inline-size: none;
+}
+
+.wf-states {
+  margin-block-start: var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
+  background-color: var(--color-sunken);
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-sm);
+}
+
+/* Heading stand-ins. A wireframe sheet carries many views, so a view must not
+   contain real h1/h2 elements — that would give the SHEET a broken outline.
+   The level is written into the stand-in instead, and wireframes.md records
+   the heading each one becomes. */
+.wf-h {
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--leading-headline);
+  color: var(--color-text);
+}
+
+.wf-h1 {
+  font-size: var(--text-headline-sm);
+}
+
+.wf-h2 {
+  font-size: var(--text-body-md);
+}
+
+.wf-h3 {
+  font-size: var(--text-body-sm);
+}
+
+/* The page title block on a content page. 32px below it, matching the
+   reference skeleton in ad-slots.md section 12. */
+.wf-page-title {
+  margin-block-end: var(--space-2xl);
+}
+
+/* Generic stand-in box, and the media variant for a thumbnail or a frame. */
+.wf-box {
+  padding: var(--space-sm);
+  font-size: var(--text-label-sm);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+  background-color: var(--color-sunken);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.wf-box--media {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 9;
+  text-align: center;
+}
+
+/* Placeholder text. Bars, not lorem ipsum: a wireframe that carries copy
+   invites a reviewer to review the copy. */
+.wf-line {
+  display: block;
+  block-size: var(--space-sm);
+  margin-block: var(--space-sm);
+  background-color: var(--color-border);
+  border-radius: var(--radius-full);
+}
+
+.wf-line--full { inline-size: 100%; }
+.wf-line--3q { inline-size: 75%; }
+.wf-line--half { inline-size: 50%; }
+.wf-line--third { inline-size: 33%; }
+
+/* Controls. Every one of them is at least the 44px minimum target, because a
+   wireframe that draws a 28px button has already designed a failure. */
+.wf-btn {
+  display: inline-grid;
+  place-items: center;
+  min-block-size: var(--target-min);
+  padding-inline: var(--space-lg);
+  font-size: var(--text-label-md);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+/* "This is the primary action" — shown as a filled grey box, never as the
+   brand colour. DESIGN.md allows one primary action per view; which control
+   gets it is M1-04's decision, and this mark is what M1-04 reads. */
+.wf-btn--primary {
+  color: var(--color-text);
+  background-color: var(--color-sunken);
+  border: 2px solid var(--color-border-strong);
+}
+
+.wf-btn--block {
+  display: grid;
+  inline-size: 100%;
+}
+
+.wf-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  /* DESIGN.md -> "Touch and target size": at least 8px between adjacent
+     targets, at every breakpoint. */
+  gap: var(--space-sm);
+}
+
+.wf-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* A form field: visible label above, control below. Never placeholder-only. */
+.wf-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.wf-field > .wf-label {
+  margin-block-end: 0;
+}
+
+.wf-input {
+  display: block;
+  min-block-size: var(--target-min);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--text-label-sm);
+  line-height: var(--target-min);
+  color: var(--color-text-muted);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+}
+
+/* --------------------------------------------------------------------------
+   4. Band gating for the ad slots — the simulation shim.
+
+   THIS IS THE ONLY PLACE THIS FILE TOUCHES AN AD RULE, AND IT CHANGES NO
+   GEOMETRY.
+
+   ads.css decides which slots exist in which band with VIEWPORT media
+   queries. On a wireframe sheet the band belongs to the view, not to the
+   reader's window, so the same three bands are restated here against the
+   view's class. Specificity does the work: these selectors are
+   `.wf-view--x .ad-slot.ad-slot--y` (0,3,0) and beat ads.css's
+   `.ad-slot.ad-slot--y` (0,2,0) in every band, whatever width the sheet is
+   read at. Nothing depends on source order.
+
+   What is restated: `display`, for five slots in three bands, and the rail
+   slot's two margin overrides, which ads.css applies inside its own
+   `min-width: 1024px` block and which the wide VIEW needs regardless of the
+   window. The rail column is exactly 300px, so a 24px inline margin there
+   would make the box 324px and push the layout out of the column — see
+   ad-slots.md section 5.3.
+
+   What is NOT restated, and must never be: every size, every block margin,
+   `flex: none`, `position: static`, and the 24px clearance. Those stay in
+   ads.css, which is why a reviewer measuring these sheets is measuring
+   M1-02's geometry and not a copy of it.
+
+   ONE DEPENDENCY TO KNOW ABOUT: the "on" value below is written `display:
+   flex` in three places, because that is the display type ads.css section 2
+   gives `.ad-slot`. If ads.css ever changes it, these sheets will silently
+   keep `flex` and stop matching the product. Any change to `.ad-slot`'s
+   display type in ads.css must be mirrored here. (The cross-reference can
+   only be one-way from this file: ads.css is M1-02's and not ours to edit.)
+
+   Inventory, from ad-slots.md section 3:
+     mobile  (375) : ad-mobile-top, ad-after-info-rectangle           — 2 slots
+     compact (768) : header-leaderboard, after-info, incontent-banner — 3 slots
+     wide   (1280) : header-leaderboard, rail-rectangle, incontent    — 3 slots
+   Exactly one 300x250 box exists at every width.
+   -------------------------------------------------------------------------- */
+
+/* --- mobile view: < 768px. No sidebar, exactly two banners. --------------- */
+
+.wf-view--mobile .ad-slot.ad-slot--mobile-top,
+.wf-view--mobile .ad-slot.ad-slot--after-info-rectangle {
+  display: flex;
+}
+
+.wf-view--mobile .ad-slot.ad-slot--header-leaderboard,
+.wf-view--mobile .ad-slot.ad-slot--incontent-banner,
+.wf-view--mobile .ad-slot.ad-slot--rail-rectangle {
+  display: none;
+}
+
+/* --- compact view: 768-1023px. Still one column, still no rail. ---------- */
+
+.wf-view--compact .ad-slot.ad-slot--header-leaderboard,
+.wf-view--compact .ad-slot.ad-slot--after-info-rectangle,
+.wf-view--compact .ad-slot.ad-slot--incontent-banner {
+  display: flex;
+}
+
+.wf-view--compact .ad-slot.ad-slot--mobile-top,
+.wf-view--compact .ad-slot.ad-slot--rail-rectangle {
+  display: none;
+}
+
+/* --- wide view: >= 1024px. The rail appears; the rectangle moves into it. - */
+
+.wf-view--wide .ad-slot.ad-slot--header-leaderboard,
+.wf-view--wide .ad-slot.ad-slot--incontent-banner {
+  display: flex;
+}
+
+.wf-view--wide .ad-slot.ad-slot--rail-rectangle {
+  display: flex;
+
+  /* Mirrors ads.css section 4 exactly. The rail column is 300px wide — the
+     width of the creative — so the slot carries no inline margin here and
+     takes its horizontal clearance from the play grid's 32px column gap.
+     It is the first thing in the rail and aligns with the top of the frame,
+     so it needs no clearance above it either. */
+  margin-inline: 0;
+  margin-block-start: 0;
+}
+
+.wf-view--wide .ad-slot.ad-slot--mobile-top,
+.wf-view--wide .ad-slot.ad-slot--after-info-rectangle {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   5. Page chrome — the header and the footer every page carries.
+   -------------------------------------------------------------------------- */
+
+.wf-skip {
+  display: block;
+  margin-block-end: var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
+  font-size: var(--text-label-sm);
+  line-height: var(--leading-label);
+  color: var(--color-text-muted);
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-sm);
+}
+
+.wf-header {
+  padding-block: var(--space-lg);
+  background-color: var(--color-surface);
+  border-block-end: 1px solid var(--color-border);
+}
+
+.wf-headbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  min-block-size: var(--target-min);
+}
+
+.wf-mark {
+  font-size: var(--text-body-md);
+  font-weight: var(--font-weight-semibold);
+}
+
+.wf-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+/* A navigation item, a chip or an icon control. 44px target in every case. */
+.wf-chip {
+  display: inline-grid;
+  place-items: center;
+  min-block-size: var(--target-min);
+  min-inline-size: var(--target-min);
+  padding-inline: var(--space-md);
+  font-size: var(--text-label-md);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  text-align: center;
+}
+
+/* The current page in the navigation. Marked by weight and an underline, not
+   by colour alone. */
+.wf-chip--current {
+  color: var(--color-text);
+  font-weight: var(--font-weight-semibold);
+  border-color: var(--color-border-strong);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.wf-footer {
+  margin-block-start: var(--space-5xl);
+  padding-block: var(--space-2xl);
+  background-color: var(--color-surface);
+  border-block-start: 1px solid var(--color-border);
+}
+
+/* --------------------------------------------------------------------------
+   6. Play page.
+
+   The structure is ad-slots.md sections 4.3 and 9, unchanged: each column is
+   a FLEX COLUMN WITH NO GAP, so every block's own margin is added and the ad
+   slot's 24px clearance can never be absorbed into a container gap. The grid
+   is two columns only in the wide band, with a column gap of 32px — never
+   below the 24px floor.
+   -------------------------------------------------------------------------- */
+
+.wf-play-grid {
+  display: block;
+}
+
+.wf-view--wide .wf-play-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  /* At least var(--space-ad-clearance). ad-slots.md section 5.3. */
+  column-gap: var(--space-2xl);
+}
+
+.wf-play-main,
+.wf-play-rail {
+  display: flex;
+  flex-direction: column;
+}
+
+/* The game frame. 16:9, and the ad slots are its SIBLINGS — never its
+   descendants, never overlapping it.
+
+   `overflow: hidden` is load-bearing, not tidiness: with `height: auto` the
+   automatic minimum size of a grid box is content-based, so a long label
+   inside would push the frame taller than 16:9 and every clearance measured
+   below it would be a number this sheet invented. A scroll container's
+   automatic minimum size is 0, so the box stays exactly `width x 9/16`. */
+.wf-frame {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  padding: var(--space-md);
+  text-align: center;
+  background-color: var(--color-sunken);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+}
+
+/* Vertical rhythm below the frame. 40px mobile, 48px from the switch up —
+   DESIGN.md -> "Containers and gutters". The `.wf-view` prefix is there so
+   these outrank the generic `.wf-region + .wf-region` rhythm in section 3
+   whatever the two blocks happen to be adjacent to. */
+.wf-view .wf-game-meta {
+  margin-block-start: var(--space-3xl);
+}
+
+.wf-view--compact .wf-game-meta,
+.wf-view--wide .wf-game-meta {
+  margin-block-start: var(--space-4xl);
+}
+
+.wf-view .wf-weekly {
+  margin-block-start: var(--space-3xl);
+}
+
+/* --------------------------------------------------------------------------
+   7. Home — the game grid.
+   -------------------------------------------------------------------------- */
+
+.wf-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-2xl);
+}
+
+.wf-view--compact .wf-grid,
+.wf-view--wide .wf-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.wf-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-lg);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.wf-view--compact .wf-card,
+.wf-view--wide .wf-card {
+  padding: var(--space-xl);
+}
+
+/* The tag that says "this value comes from the game's manifest". The manifest
+   FORMAT is GAM-16 and out of M1 scope — these names are illustrative. */
+.wf-src {
+  display: inline-block;
+  padding-inline: var(--space-sm);
+  font-size: var(--text-label-sm);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+  background-color: var(--color-sunken);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+}
+
+/* --------------------------------------------------------------------------
+   8. Leaderboards, and any other two-up block above the switch.
+   -------------------------------------------------------------------------- */
+
+.wf-two-up {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-2xl);
+}
+
+.wf-view--compact .wf-two-up,
+.wf-view--wide .wf-two-up {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.wf-rank {
+  display: grid;
+  grid-template-columns: var(--space-4xl) 1fr max-content;
+  gap: var(--space-sm);
+  align-items: center;
+  padding-block: var(--space-md);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  border-block-end: 1px solid var(--color-border);
+}
+
+/* The player's own row. Marked by a heavier edge AND the word "Bạn" — never
+   by colour alone. DESIGN.md -> "Status is never colour alone". */
+.wf-rank--own {
+  padding-inline: var(--space-sm);
+  font-weight: var(--font-weight-semibold);
+  background-color: var(--color-sunken);
+  border: 2px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+}
+
+/* --------------------------------------------------------------------------
+   9. Cookie consent — banner and settings dialog.
+
+   The banner is the site's one justified sticky surface (ad-slots.md section
+   7). On a sheet it is drawn in place at the foot of the view rather than
+   stuck to the reader's window, so the view stays measurable; the note on
+   the sheet says where it really sits.
+   -------------------------------------------------------------------------- */
+
+.wf-banner {
+  padding: var(--space-lg);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+}
+
+.wf-dialog {
+  padding: var(--space-lg);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+}
+
+.wf-view--compact .wf-dialog,
+.wf-view--wide .wf-dialog {
+  max-inline-size: 560px;
+  margin-inline: auto;
+  padding: var(--space-xl);
+}
+
+/* A consent category row: name, description, and the control. */
+.wf-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding-block: var(--space-md);
+  border-block-end: 1px solid var(--color-border);
+}
+
+.wf-toggle {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  min-block-size: var(--target-min);
+  min-inline-size: calc(var(--target-min) + var(--space-lg));
+  padding-inline: var(--space-sm);
+  font-size: var(--text-label-sm);
+  line-height: var(--leading-label);
+  color: var(--color-text-muted);
+  background-color: var(--color-sunken);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-full);
+  text-align: center;
+}
+
+/* --------------------------------------------------------------------------
+   10. Long-form document pages — privacy, terms, about.
+   -------------------------------------------------------------------------- */
+
+.wf-toc {
+  padding: var(--space-lg);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.wf-toc ol {
+  margin: 0;
+  padding-inline-start: var(--space-xl);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+}
+
+/* `.wf-doc-section` is a semantic hook only — it marks a numbered section of a
+   long-form page. It deliberately carries no spacing of its own: the section
+   rhythm is the one in section 3, so a document page and a product page are
+   spaced by the same rule rather than by two that can drift apart. */
+
+/* The measure rule from DESIGN.md: 35-60 characters on mobile, 60-75 on
+   desktop. Drawn as a capped text column so a reviewer can see it is capped. */
+.wf-prose {
+  max-inline-size: 70ch;
+}
+
+/* A long-form page caps its whole content column, not just its paragraphs: a
+   privacy policy stretched across 1200px is unreadable whatever base.css does
+   to the <p> inside it.
+
+   The `.wf-view` prefix and the position of this rule are both deliberate.
+   `.wf-view--wide .wf-shell` in section 2 is also (0,2,0), so this has to be a
+   two-class selector to tie, and it has to come later in the file to win the
+   tie. A plain `.wf-shell--text` would silently lose and the cap would do
+   nothing — which is exactly the bug this rule was written to fix. */
+.wf-view .wf-shell--text {
+  max-inline-size: 70ch;
+}

@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wireframe 6 — Banner và cài đặt cookie · Soucean Game (M1-03)</title>
+<link rel="stylesheet" href="../assets/tokens.css">
+<link rel="stylesheet" href="../assets/base.css">
+<link rel="stylesheet" href="../assets/ads.css">
+<link rel="stylesheet" href="wireframe.css">
+</head>
+<body class="wf-doc">
+
+<header class="wf-doc-head">
+  <p class="wf-kicker">Soucean Game · M1 · GAM-24 (M1-03) · wireframe, độ chi tiết thấp</p>
+  <h1>6. Banner đồng ý cookie và hộp thoại cài đặt</h1>
+  <p class="wf-prose">Đây là <strong>một bề mặt, không phải một route</strong> (requirements.md §2):
+     banner hiện ở lần ghé đầu tiên trên bất kỳ trang nào, và hộp thoại cài đặt mở từ banner hoặc
+     từ <code>/privacy#cookies</code>. Ba hành động <strong>cùng trọng số</strong>: Chấp nhận,
+     Từ chối, Cài đặt. <strong>Không script quảng cáo nào chạy trước khi có đồng ý.</strong></p>
+  <p><a href="index.html">← Mục lục wireframe</a> · <a href="../../wireframes.md">wireframes.md</a></p>
+  <ul class="wf-legend">
+    <li>Hộp xám = chỗ dành cho nội dung</li>
+    <li>Viền đứt = ranh giới một vùng</li>
+    <li>Số tròn = thứ tự đọc</li>
+    <li>“Trạng thái: …” = nơi đặt trạng thái tải · trống · lỗi (thiết kế ở M1-04)</li>
+    <li>Banner được vẽ tại chỗ ở đáy khung, không dính vào cửa sổ người xem</li>
+  </ul>
+</header>
+
+<!-- ======================================================================
+     VIEW 1 — Mobile, 375 px.
+     ====================================================================== -->
+<section class="wf-view-block">
+  <h2>6.1 Mobile · 375 px</h2>
+  <p class="wf-prose">Banner là một tấm ở đáy màn hình, chiếm trọn chiều rộng. Ba nút xếp dọc,
+     mỗi nút cao tối thiểu 44 px và cách nhau 8 px — ở 343 px không đủ chỗ cho ba nút một hàng
+     mà vẫn đọc được tiếng Việt.</p>
+
+  <div class="wf-scroll">
+    <div class="wf-view wf-view--mobile">
+
+      <div class="wf-shell">
+        <p class="wf-skip"><span class="wf-order">1</span> skip-link → <code>#main</code></p>
+      </div>
+
+      <header class="wf-header">
+        <div class="wf-shell">
+          <div class="wf-headbar">
+            <span class="wf-mark"><span class="wf-order">2</span> Soucean Game</span>
+            <nav class="wf-nav" aria-label="Điều hướng chính (wireframe)">
+              <span class="wf-chip"><span class="wf-order">3</span> Menu</span>
+              <span class="wf-chip"><span class="wf-order">4</span> Giao diện</span>
+            </nav>
+          </div>
+        </div>
+      </header>
+
+      <main class="wf-main">
+        <div class="wf-shell">
+          <p class="wf-h wf-h1 wf-page-title"><span class="wf-order">5</span> Trang bất kỳ bên dưới banner</p>
+          <div class="wf-box">Nội dung trang vẫn đọc được và vẫn dùng được bằng bàn phím.
+            Banner <strong>không</strong> là modal và <strong>không</strong> chặn trang.</div>
+          <span class="wf-line wf-line--full"></span>
+          <span class="wf-line wf-line--3q"></span>
+        </div>
+      </main>
+
+      <div class="wf-shell">
+        <section class="wf-region" aria-label="Banner cookie (wireframe)">
+          <p class="wf-label"><span class="wf-order">6</span> Banner cookie · cuối <code>&lt;body&gt;</code>,
+             dính ở đáy khung nhìn</p>
+          <div class="wf-banner">
+            <p class="wf-h wf-h3">Cookie</p>
+            <span class="wf-line wf-line--full"></span>
+            <p class="wf-note">Một câu: site chỉ dùng lưu trữ thiết yếu cho tới khi bạn chọn khác ·
+               liên kết “Tìm hiểu thêm” → <code>/privacy#cookies</code></p>
+            <div class="wf-stack">
+              <span class="wf-btn wf-btn--block">Chấp nhận</span>
+              <span class="wf-btn wf-btn--block">Từ chối</span>
+              <span class="wf-btn wf-btn--block">Cài đặt</span>
+            </div>
+            <p class="wf-note"><strong>Ba nút cùng trọng số.</strong> “Từ chối” không được nhỏ hơn,
+               mờ hơn hay nằm xa hơn “Chấp nhận”. Không nút nào được tô màu chính trong khi nút kia
+               chỉ là chữ.</p>
+          </div>
+          <p class="wf-states">Trạng thái: <strong>lần ghé đầu</strong> (hiện) ·
+             <strong>đã chọn rồi</strong> (không hiện, mở lại từ chân trang) ·
+             đang lưu lựa chọn · lỗi lưu → M1-04</p>
+        </section>
+
+        <section class="wf-region" aria-label="Hộp thoại cài đặt cookie (wireframe)">
+          <p class="wf-label"><span class="wf-order">7</span> Hộp thoại cài đặt · modal</p>
+          <div class="wf-dialog">
+            <p class="wf-h wf-h3">Cài đặt cookie</p>
+            <div class="wf-toggle-row">
+              <div>
+                <p class="wf-h wf-h3">Thiết yếu</p>
+                <p class="wf-note">Phiên đăng nhập và chính lựa chọn đồng ý. Không tắt được.</p>
+              </div>
+              <span class="wf-toggle">Luôn bật</span>
+            </div>
+            <div class="wf-toggle-row">
+              <div>
+                <p class="wf-h wf-h3">Quảng cáo</p>
+                <p class="wf-note">Mặc định tắt. Bật thì script quảng cáo mới được tải (M6).</p>
+              </div>
+              <span class="wf-toggle">Tắt</span>
+            </div>
+            <div class="wf-stack">
+              <span class="wf-btn wf-btn--primary wf-btn--block">Lưu lựa chọn</span>
+              <span class="wf-btn wf-btn--block">Huỷ</span>
+            </div>
+          </div>
+          <p class="wf-note">Không có nhóm “phân tích”: site không đo đạc gì cả
+             (requirements.md §4.2). Đừng thêm một nhóm cho thứ không tồn tại.</p>
+          <p class="wf-states">Trạng thái: đang lưu · lỗi lưu → M1-04</p>
+        </section>
+      </div>
+
+      <footer class="wf-footer">
+        <div class="wf-shell">
+          <nav class="wf-nav" aria-label="Điều hướng chân trang (wireframe)">
+            <span class="wf-chip"><span class="wf-order">8</span> Giới thiệu</span>
+            <span class="wf-chip">Điều khoản</span>
+            <span class="wf-chip">Quyền riêng tư</span>
+            <span class="wf-chip wf-chip--current">Cài đặt cookie</span>
+          </nav>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+  <dl class="wf-measures">
+    <dt>Banner</dt><dd>chiếm trọn 375 px · đệm 16 px · ba nút xếp dọc, mỗi nút ≥ 44 px, cách nhau 8 px</dd>
+    <dt>Vị trí thật</dt><dd><code>position: sticky</code> ở đáy khung nhìn — bề mặt dính <em>duy nhất</em> của site</dd>
+    <dt>Hộp thoại</dt><dd>chiếm trọn chiều rộng trừ gutter · modal, bẫy focus, Esc để đóng</dd>
+    <dt>Ô quảng cáo</dt><dd>0 — và không ô nào gọi script trước khi có đồng ý</dd>
+  </dl>
+</section>
+
+<!-- ======================================================================
+     VIEW 2 — Desktop, 1280 px.
+     ====================================================================== -->
+<section class="wf-view-block">
+  <h2>6.2 Desktop · 1280 px</h2>
+  <p class="wf-prose">Banner trải theo cột nội dung ở đáy khung nhìn; ba nút nằm một hàng,
+     vẫn cùng trọng số. Hộp thoại cài đặt chặn ở 560 px và căn giữa.</p>
+
+  <div class="wf-scroll">
+    <div class="wf-view wf-view--wide">
+
+      <div class="wf-shell">
+        <p class="wf-skip"><span class="wf-order">1</span> skip-link → <code>#main</code></p>
+      </div>
+
+      <header class="wf-header">
+        <div class="wf-shell">
+          <div class="wf-headbar">
+            <span class="wf-mark"><span class="wf-order">2</span> Soucean Game</span>
+            <nav class="wf-nav" aria-label="Điều hướng chính (wireframe)">
+              <span class="wf-chip"><span class="wf-order">3</span> Trang chủ</span>
+              <span class="wf-chip">Bảng xếp hạng</span>
+              <span class="wf-chip">Tài khoản</span>
+              <span class="wf-chip"><span class="wf-order">4</span> Giao diện</span>
+            </nav>
+          </div>
+          <aside class="ad-slot ad-slot--header-leaderboard" aria-label="Quảng cáo">
+            <span class="ad-slot__label">5 · Quảng cáo · ad-header-leaderboard · 728 × 90 ·
+              <strong>hộp đã được đặt chỗ, chưa gọi creative nào</strong></span>
+          </aside>
+        </div>
+      </header>
+
+      <main class="wf-main">
+        <div class="wf-shell">
+          <p class="wf-h wf-h1 wf-page-title"><span class="wf-order">6</span> Trang bất kỳ bên dưới banner</p>
+          <div class="wf-box">Ô quảng cáo phía trên đã giữ đúng 728 × 90 <em>trước</em> khi người chơi
+            chọn gì. Từ chối cũng không làm trang xê dịch: hộp vẫn được đặt chỗ và để trống
+            (ad-slots.md §8.2).</div>
+          <span class="wf-line wf-line--half"></span>
+        </div>
+      </main>
+
+      <div class="wf-shell">
+        <section class="wf-region" aria-label="Banner cookie (wireframe)">
+          <p class="wf-label"><span class="wf-order">7</span> Banner cookie · dính ở đáy khung nhìn</p>
+          <div class="wf-banner">
+            <p class="wf-h wf-h3">Cookie</p>
+            <span class="wf-line wf-line--half"></span>
+            <p class="wf-note">Một câu + liên kết “Tìm hiểu thêm” → <code>/privacy#cookies</code></p>
+            <div class="wf-row">
+              <span class="wf-btn">Chấp nhận</span>
+              <span class="wf-btn">Từ chối</span>
+              <span class="wf-btn">Cài đặt</span>
+            </div>
+            <p class="wf-note"><strong>Ba nút cùng trọng số</strong>, cùng kích thước, cùng kiểu, cạnh nhau.</p>
+          </div>
+          <p class="wf-states">Trạng thái: lần ghé đầu (hiện) · đã chọn rồi (không hiện) ·
+             đang lưu · lỗi lưu → M1-04</p>
+        </section>
+
+        <section class="wf-region" aria-label="Hộp thoại cài đặt cookie (wireframe)">
+          <p class="wf-label"><span class="wf-order">8</span> Hộp thoại cài đặt · modal, rộng tối đa 560 px</p>
+          <div class="wf-dialog">
+            <p class="wf-h wf-h3">Cài đặt cookie</p>
+            <div class="wf-toggle-row">
+              <div>
+                <p class="wf-h wf-h3">Thiết yếu</p>
+                <p class="wf-note">Phiên và lựa chọn đồng ý. Không tắt được.</p>
+              </div>
+              <span class="wf-toggle">Luôn bật</span>
+            </div>
+            <div class="wf-toggle-row">
+              <div>
+                <p class="wf-h wf-h3">Quảng cáo</p>
+                <p class="wf-note">Mặc định tắt.</p>
+              </div>
+              <span class="wf-toggle">Tắt</span>
+            </div>
+            <div class="wf-row">
+              <span class="wf-btn wf-btn--primary">Lưu lựa chọn</span>
+              <span class="wf-btn">Huỷ</span>
+            </div>
+          </div>
+          <p class="wf-states">Trạng thái: đang lưu · lỗi lưu → M1-04</p>
+        </section>
+      </div>
+
+      <footer class="wf-footer">
+        <div class="wf-shell">
+          <nav class="wf-nav" aria-label="Điều hướng chân trang (wireframe)">
+            <span class="wf-chip"><span class="wf-order">9</span> Giới thiệu</span>
+            <span class="wf-chip">Điều khoản</span>
+            <span class="wf-chip">Quyền riêng tư</span>
+            <span class="wf-chip wf-chip--current">Cài đặt cookie</span>
+          </nav>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+  <dl class="wf-measures">
+    <dt>Banner</dt><dd>trải theo cột nội dung 1200 px · ba nút một hàng, cách nhau 8 px</dd>
+    <dt>Hộp thoại</dt><dd>rộng tối đa 560 px, căn giữa · đệm 20 px</dd>
+    <dt><code>ad-header-leaderboard</code></dt><dd>728 × 90 — đặt chỗ sẵn, trống cho tới khi có đồng ý</dd>
+    <dt>Số ô quảng cáo</dt><dd>1 hộp, 0 script</dd>
+  </dl>
+</section>
+
+<footer class="wf-view-block">
+  <h2>Ghi chú về trang này</h2>
+  <ul class="wf-prose">
+    <li><strong>Banner là bề mặt dính duy nhất của site.</strong> ad-slots.md §7 nêu điều này để
+        giải thích vì sao <em>không ô quảng cáo nào</em> được dính: chỗ dính duy nhất đã có chủ.
+        Trên các tờ này banner được vẽ tại chỗ ở đáy khung thay vì dính vào cửa sổ người xem,
+        để khung vẫn đo được.</li>
+    <li><strong>Focus không bị che (WCAG 2.2).</strong> Banner không bao giờ được phủ lên phần tử
+        đang có focus. Nó không bẫy focus; hộp thoại cài đặt thì có, vì nó là modal.
+        Thứ tự: banner nằm cuối <code>&lt;body&gt;</code>, và ở lần ghé đầu focus được chuyển vào nó.</li>
+    <li><strong>Không ô quảng cáo nào xê dịch theo lựa chọn.</strong> Hộp được đặt chỗ bởi
+        stylesheet của chính trang, không phải sau câu trả lời của mạng quảng cáo — nên “Từ chối”
+        để lại một hộp trống đúng kích thước, không phải một trang nhảy.</li>
+    <li><strong>Mở để Board quyết (OQ-038).</strong> Khách EU/UK có thể cần một công cụ đồng ý
+        được chứng nhận. Nếu có, nó thay phần <em>cơ chế</em> của bề mặt này, nhưng bố cục,
+        trọng số ngang nhau giữa Chấp nhận và Từ chối, và quy tắc “không script trước đồng ý”
+        vẫn giữ nguyên.</li>
+  </ul>
+</footer>
+
+</body>
+</html>
