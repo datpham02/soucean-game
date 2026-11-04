@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wireframe 5 — Chính sách quyền riêng tư · Soucean Game (M1-03)</title>
+<link rel="stylesheet" href="../assets/tokens.css">
+<link rel="stylesheet" href="../assets/base.css">
+<link rel="stylesheet" href="../assets/ads.css">
+<link rel="stylesheet" href="wireframe.css">
+</head>
+<body class="wf-doc">
+
+<header class="wf-doc-head">
+  <p class="wf-kicker">Soucean Game · M1 · GAM-24 (M1-03) · wireframe, độ chi tiết thấp</p>
+  <h1>5. Chính sách quyền riêng tư — <code>/privacy</code></h1>
+  <p class="wf-prose">Trang văn bản dài. Bố cục của nó dùng chung với
+     <a href="08-terms.html">Điều khoản</a> và <a href="07-about.html">Giới thiệu</a>:
+     H1, ngày cập nhật, mục lục trong trang, rồi các mục đánh số. Mục
+     <strong>Cookie</strong> mang neo <code>#cookies</code> mà chân trang liên kết tới, và là nơi
+     người chơi mở lại hộp thoại cài đặt cookie.</p>
+  <p><a href="index.html">← Mục lục wireframe</a> · <a href="../../wireframes.md">wireframes.md</a></p>
+  <ul class="wf-legend">
+    <li>Hộp xám = chỗ dành cho nội dung</li>
+    <li>Viền đứt = ranh giới một vùng</li>
+    <li>Số tròn = thứ tự đọc</li>
+    <li>“Trạng thái: …” = nơi đặt trạng thái tải · trống · lỗi (thiết kế ở M1-04)</li>
+    <li>Nội dung pháp lý thật do OQ-039 cung cấp, không phải Task này</li>
+  </ul>
+</header>
+
+<!-- ======================================================================
+     VIEW 1 — Mobile, 375 px.
+     ====================================================================== -->
+<section class="wf-view-block">
+  <h2>5.1 Mobile · 375 px</h2>
+  <p class="wf-prose">Một cột. Mục lục là một khối ngay dưới tiêu đề, không phải cột bên —
+     trang này không có cột bên ở bất kỳ chiều rộng nào.</p>
+
+  <div class="wf-scroll">
+    <div class="wf-view wf-view--mobile">
+
+      <div class="wf-shell">
+        <p class="wf-skip"><span class="wf-order">1</span> skip-link → <code>#main</code></p>
+      </div>
+
+      <header class="wf-header">
+        <div class="wf-shell">
+          <div class="wf-headbar">
+            <span class="wf-mark"><span class="wf-order">2</span> Soucean Game</span>
+            <nav class="wf-nav" aria-label="Điều hướng chính (wireframe)">
+              <span class="wf-chip"><span class="wf-order">3</span> Menu</span>
+              <span class="wf-chip"><span class="wf-order">4</span> Giao diện</span>
+            </nav>
+          </div>
+        </div>
+      </header>
+
+      <main class="wf-main">
+        <div class="wf-shell">
+          <p class="wf-h wf-h1"><span class="wf-order">5</span> H1 · Chính sách quyền riêng tư</p>
+          <p class="wf-note"><span class="wf-order">6</span> Cập nhật lần cuối · ngày</p>
+          <p class="wf-states">Nội dung tĩnh: không có trạng thái đang tải hay trống.
+             Lỗi duy nhất có thể xảy ra là ở mức trang (404/500) và do Task của trang xử lý.
+             Riêng nút “Mở cài đặt cookie” ở mục 6 có trạng thái đang lưu · lỗi → M1-04</p>
+
+          <nav class="wf-toc" aria-label="Mục lục trong trang (wireframe)">
+            <p class="wf-label"><span class="wf-order">7</span> Mục lục trong trang</p>
+            <ol>
+              <li>Chúng tôi lưu những gì</li>
+              <li>Vì sao lưu</li>
+              <li>Lưu trong bao lâu</li>
+              <li>Ai xử lý dữ liệu</li>
+              <li>Quyền của bạn</li>
+              <li>Cookie và lựa chọn của bạn</li>
+              <li>Liên hệ</li>
+            </ol>
+          </nav>
+
+          <section class="wf-region wf-doc-section" aria-label="Mục 1 (wireframe)">
+            <p class="wf-label"><span class="wf-order">8</span> Mục 1 · Chúng tôi lưu những gì</p>
+            <p class="wf-h wf-h2">H2 · Chúng tôi lưu những gì</p>
+            <span class="wf-line wf-line--full"></span>
+            <span class="wf-line wf-line--3q"></span>
+            <div class="wf-box">Bảng: trường · vì sao cần · lưu bao lâu (requirements.md §4.1)</div>
+            <p class="wf-note">Nói rõ cả những gì <strong>không</strong> lưu: không email, không địa chỉ IP,
+               không đo đạc hành vi.</p>
+          </section>
+
+          <section class="wf-region wf-doc-section" aria-label="Mục 2 đến 5 (wireframe)">
+            <p class="wf-label"><span class="wf-order">9</span> Mục 2–5 · vì sao · bao lâu · ai xử lý · quyền của bạn</p>
+            <p class="wf-h wf-h2">H2 · mỗi mục một tiêu đề</p>
+            <span class="wf-line wf-line--full"></span>
+            <span class="wf-line wf-line--half"></span>
+            <div class="wf-box">Mục 4 liệt kê bên xử lý: nền tảng backend · hosting · mạng quảng cáo</div>
+            <div class="wf-box">Mục 5 “Quyền của bạn” liên kết thẳng tới
+              <strong>/account → Xóa dữ liệu của tôi</strong></div>
+          </section>
+
+          <section class="wf-region wf-doc-section" aria-label="Mục 6 cookie (wireframe)">
+            <p class="wf-label"><span class="wf-order">10</span> Mục 6 · Cookie · neo <code>#cookies</code></p>
+            <p class="wf-h wf-h2">H2 · Cookie và lựa chọn của bạn</p>
+            <span class="wf-line wf-line--full"></span>
+            <div class="wf-box">Bảng nhóm cookie: thiết yếu (phiên, lựa chọn đồng ý) · quảng cáo (chỉ sau khi đồng ý)</div>
+            <span class="wf-btn wf-btn--block">Mở cài đặt cookie</span>
+            <p class="wf-note">Đây là đích của liên kết “Cài đặt cookie” ở chân trang mọi trang.
+               Nút mở đúng hộp thoại ở <a href="06-cookie-consent.html">wireframe 6</a>.</p>
+            <p class="wf-states">Trạng thái: đang lưu lựa chọn · lỗi lưu → M1-04</p>
+          </section>
+
+          <section class="wf-region wf-doc-section" aria-label="Mục 7 liên hệ (wireframe)">
+            <p class="wf-label"><span class="wf-order">11</span> Mục 7 · Liên hệ</p>
+            <p class="wf-h wf-h2">H2 · Liên hệ</p>
+            <div class="wf-box">Địa chỉ liên hệ về dữ liệu (nội dung thật: OQ-039)</div>
+          </section>
+
+        </div>
+      </main>
+
+      <footer class="wf-footer">
+        <div class="wf-shell">
+          <nav class="wf-nav" aria-label="Điều hướng chân trang (wireframe)">
+            <span class="wf-chip"><span class="wf-order">12</span> Giới thiệu</span>
+            <span class="wf-chip">Điều khoản</span>
+            <span class="wf-chip wf-chip--current">Quyền riêng tư</span>
+            <span class="wf-chip">Cài đặt cookie</span>
+          </nav>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+  <dl class="wf-measures">
+    <dt>Cột nội dung</dt><dd>343 px (375 − 2 × 16)</dd>
+    <dt>Độ dài dòng</dt><dd>35–60 ký tự (DESIGN.md) — cột hẹp tự lo việc này ở mobile</dd>
+    <dt>Neo</dt><dd><code>#cookies</code> · <code>:target</code> có <code>scroll-margin</code> 48 px (base.css)</dd>
+    <dt>Ô quảng cáo</dt><dd>0 ở dải mobile</dd>
+  </dl>
+</section>
+
+<!-- ======================================================================
+     VIEW 2 — Desktop, 1280 px.
+     ====================================================================== -->
+<section class="wf-view-block">
+  <h2>5.2 Desktop · 1280 px</h2>
+  <p class="wf-prose">Cùng một cột, nhưng cột văn bản bị chặn ở 70ch bên trong cột nội dung
+     1200 px. Một trang chính sách giãn hết 1200 px là không đọc được.</p>
+
+  <div class="wf-scroll">
+    <div class="wf-view wf-view--wide">
+
+      <div class="wf-shell">
+        <p class="wf-skip"><span class="wf-order">1</span> skip-link → <code>#main</code></p>
+      </div>
+
+      <header class="wf-header">
+        <div class="wf-shell">
+          <div class="wf-headbar">
+            <span class="wf-mark"><span class="wf-order">2</span> Soucean Game</span>
+            <nav class="wf-nav" aria-label="Điều hướng chính (wireframe)">
+              <span class="wf-chip"><span class="wf-order">3</span> Trang chủ</span>
+              <span class="wf-chip">Bảng xếp hạng</span>
+              <span class="wf-chip">Tài khoản</span>
+              <span class="wf-chip"><span class="wf-order">4</span> Giao diện</span>
+            </nav>
+          </div>
+          <aside class="ad-slot ad-slot--header-leaderboard" aria-label="Quảng cáo">
+            <span class="ad-slot__label">5 · Quảng cáo · ad-header-leaderboard · 728 × 90</span>
+          </aside>
+        </div>
+      </header>
+
+      <main class="wf-main">
+        <div class="wf-shell wf-shell--text">
+          <p class="wf-h wf-h1"><span class="wf-order">6</span> H1 · Chính sách quyền riêng tư</p>
+          <p class="wf-note"><span class="wf-order">7</span> Cập nhật lần cuối · ngày</p>
+          <p class="wf-states">Nội dung tĩnh: không có trạng thái tải/trống; lỗi ở mức trang.
+             Nút “Mở cài đặt cookie” có trạng thái đang lưu · lỗi → M1-04</p>
+
+          <nav class="wf-toc" aria-label="Mục lục trong trang (wireframe)">
+            <p class="wf-label"><span class="wf-order">8</span> Mục lục trong trang</p>
+            <ol>
+              <li>Chúng tôi lưu những gì</li>
+              <li>Vì sao lưu</li>
+              <li>Lưu trong bao lâu</li>
+              <li>Ai xử lý dữ liệu</li>
+              <li>Quyền của bạn</li>
+              <li>Cookie và lựa chọn của bạn</li>
+              <li>Liên hệ</li>
+            </ol>
+          </nav>
+
+          <section class="wf-region wf-doc-section" aria-label="Mục 1 (wireframe)">
+            <p class="wf-label"><span class="wf-order">9</span> Mục 1 · Chúng tôi lưu những gì</p>
+            <p class="wf-h wf-h2">H2 · Chúng tôi lưu những gì</p>
+            <span class="wf-line wf-line--full"></span>
+            <span class="wf-line wf-line--3q"></span>
+            <div class="wf-box">Bảng: trường · vì sao cần · lưu bao lâu — và danh sách những gì KHÔNG lưu</div>
+          </section>
+
+          <section class="wf-region wf-doc-section" aria-label="Mục 2 đến 5 (wireframe)">
+            <p class="wf-label"><span class="wf-order">10</span> Mục 2–5</p>
+            <p class="wf-h wf-h2">H2 · mỗi mục một tiêu đề</p>
+            <span class="wf-line wf-line--full"></span>
+            <span class="wf-line wf-line--half"></span>
+            <div class="wf-box">Mục 4: nền tảng backend · hosting · mạng quảng cáo</div>
+            <div class="wf-box">Mục 5: liên kết thẳng tới <strong>/account → Xóa dữ liệu của tôi</strong></div>
+          </section>
+
+          <section class="wf-region wf-doc-section" aria-label="Mục 6 cookie (wireframe)">
+            <p class="wf-label"><span class="wf-order">11</span> Mục 6 · Cookie · neo <code>#cookies</code></p>
+            <p class="wf-h wf-h2">H2 · Cookie và lựa chọn của bạn</p>
+            <div class="wf-box">Bảng nhóm cookie: thiết yếu · quảng cáo (chỉ sau khi đồng ý)</div>
+            <div class="wf-row"><span class="wf-btn">Mở cài đặt cookie</span></div>
+            <p class="wf-states">Trạng thái: đang lưu lựa chọn · lỗi lưu → M1-04</p>
+          </section>
+
+          <section class="wf-region wf-doc-section" aria-label="Mục 7 liên hệ (wireframe)">
+            <p class="wf-label"><span class="wf-order">12</span> Mục 7 · Liên hệ</p>
+            <p class="wf-h wf-h2">H2 · Liên hệ</p>
+            <div class="wf-box">Địa chỉ liên hệ về dữ liệu</div>
+          </section>
+
+        </div>
+      </main>
+
+      <footer class="wf-footer">
+        <div class="wf-shell">
+          <nav class="wf-nav" aria-label="Điều hướng chân trang (wireframe)">
+            <span class="wf-chip"><span class="wf-order">13</span> Giới thiệu</span>
+            <span class="wf-chip">Điều khoản</span>
+            <span class="wf-chip wf-chip--current">Quyền riêng tư</span>
+            <span class="wf-chip">Cài đặt cookie</span>
+          </nav>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+  <dl class="wf-measures">
+    <dt>Cột nội dung</dt><dd>1200 px · cột văn bản chặn ở 70ch</dd>
+    <dt>Độ dài dòng</dt><dd>60–75 ký tự (DESIGN.md → Typography)</dd>
+    <dt><code>ad-header-leaderboard</code></dt><dd>728 × 90 · trang này không có khung trò chơi</dd>
+    <dt>Số ô quảng cáo</dt><dd>1</dd>
+  </dl>
+</section>
+
+<footer class="wf-view-block">
+  <h2>Ghi chú về trang này</h2>
+  <ul class="wf-prose">
+    <li><strong>Một bố cục cho ba trang văn bản.</strong> Privacy, Terms và About dùng chung
+        khuôn này. Khác nhau ở danh sách mục, không ở cấu trúc — nên M1-04 chỉ phải thiết kế
+        một khuôn văn bản dài.</li>
+    <li><strong><code>#cookies</code> là một mục, không phải một trang.</strong>
+        requirements.md §2 đặt liên kết cài đặt ở <code>/privacy#cookies</code>, nên mục 6 vừa
+        giải thích vừa chứa nút mở lại hộp thoại — chỗ duy nhất người chơi đổi ý sau khi banner
+        đã tắt.</li>
+    <li><strong>Nội dung pháp lý không thuộc Task này.</strong> Mọi dòng chữ ở đây là chỗ dành sẵn;
+        bản thật đến từ OQ-039 và phải phủ Nghị định 13/2023, cùng GDPR nếu có người chơi EU.</li>
+  </ul>
+</footer>
+
+</body>
+</html>

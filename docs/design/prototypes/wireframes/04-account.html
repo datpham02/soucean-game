@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wireframe 4 — Tài khoản và hồ sơ · Soucean Game (M1-03)</title>
+<link rel="stylesheet" href="../assets/tokens.css">
+<link rel="stylesheet" href="../assets/base.css">
+<link rel="stylesheet" href="../assets/ads.css">
+<link rel="stylesheet" href="wireframe.css">
+</head>
+<body class="wf-doc">
+
+<header class="wf-doc-head">
+  <p class="wf-kicker">Soucean Game · M1 · GAM-24 (M1-03) · wireframe, độ chi tiết thấp</p>
+  <h1>4. Tài khoản và hồ sơ — <code>/account</code></h1>
+  <p class="wf-prose">Ba khối ngang hàng: <strong>Hồ sơ</strong>, <strong>Đăng nhập</strong> và
+     <strong>Dữ liệu của tôi</strong>. Khối thứ ba chứa “Xóa dữ liệu của tôi” và là một mục
+     ngang hàng với hai khối kia — không nằm trong một khối gập, không nằm sau một liên kết
+     “nâng cao”, và có mặt trong dãy liên kết đầu trang nên tới được bằng một thao tác.</p>
+  <p><a href="index.html">← Mục lục wireframe</a> · <a href="../../wireframes.md">wireframes.md</a></p>
+  <ul class="wf-legend">
+    <li>Hộp xám = chỗ dành cho nội dung</li>
+    <li>Viền đứt = ranh giới một vùng</li>
+    <li>Số tròn = thứ tự đọc</li>
+    <li>“Trạng thái: …” = nơi đặt trạng thái tải · trống · lỗi (thiết kế ở M1-04)</li>
+  </ul>
+</header>
+
+<!-- ======================================================================
+     VIEW 1 — Mobile, 375 px.
+     ====================================================================== -->
+<section class="wf-view-block">
+  <h2>4.1 Mobile · 375 px</h2>
+  <p class="wf-prose">Một cột. Dãy liên kết trong trang nằm ngay dưới H1 để “Dữ liệu của tôi”
+     cách tiêu đề đúng một thao tác, dù nó là khối cuối cùng.</p>
+
+  <div class="wf-scroll">
+    <div class="wf-view wf-view--mobile">
+
+      <div class="wf-shell">
+        <p class="wf-skip"><span class="wf-order">1</span> skip-link → <code>#main</code></p>
+      </div>
+
+      <header class="wf-header">
+        <div class="wf-shell">
+          <div class="wf-headbar">
+            <span class="wf-mark"><span class="wf-order">2</span> Soucean Game</span>
+            <nav class="wf-nav" aria-label="Điều hướng chính (wireframe)">
+              <span class="wf-chip"><span class="wf-order">3</span> Menu</span>
+              <span class="wf-chip"><span class="wf-order">4</span> Giao diện</span>
+            </nav>
+          </div>
+        </div>
+      </header>
+
+      <main class="wf-main">
+        <div class="wf-shell">
+          <p class="wf-h wf-h1 wf-page-title"><span class="wf-order">5</span> H1 · Tài khoản</p>
+
+          <nav class="wf-region" aria-label="Mục lục trong trang (wireframe)">
+            <p class="wf-label"><span class="wf-order">6</span> Mục lục trong trang</p>
+            <div class="wf-row">
+              <span class="wf-chip">Hồ sơ</span>
+              <span class="wf-chip">Đăng nhập</span>
+              <span class="wf-chip">Dữ liệu của tôi</span>
+            </div>
+          </nav>
+
+          <section class="wf-region" aria-label="Hồ sơ (wireframe)">
+            <p class="wf-label"><span class="wf-order">7</span> Hồ sơ · <code>#ho-so</code></p>
+            <p class="wf-h wf-h2">H2 · Hồ sơ</p>
+            <div class="wf-field">
+              <p class="wf-label">Tên hiển thị</p>
+              <span class="wf-input">input · tên hiện tại</span>
+              <p class="wf-note">Nhãn luôn hiện, không dùng placeholder thay nhãn.
+                 Thông báo lỗi nằm ngay dưới ô và nối bằng <code>aria-describedby</code>.</p>
+            </div>
+            <div class="wf-row">
+              <span class="wf-btn wf-btn--primary">Lưu</span>
+            </div>
+            <p class="wf-states">Trạng thái: đang tải hồ sơ · đang lưu · lỗi kiểm duyệt tên (lỗi trong dòng) ·
+               lưu xong (toast) → M1-04</p>
+          </section>
+
+          <section class="wf-region" aria-label="Đăng nhập (wireframe)">
+            <p class="wf-label"><span class="wf-order">8</span> Đăng nhập · <code>#dang-nhap</code></p>
+            <p class="wf-h wf-h2">H2 · Đăng nhập</p>
+            <div class="wf-box">
+              Trạng thái danh tính: <strong>đang chơi ẩn danh</strong> · liên kết để giữ điểm khi đổi máy
+              <p class="wf-note">Liên kết giữ nguyên player id — không tạo danh tính thứ hai,
+                 nên không điểm nào bị mồ côi (requirements.md §3, OQ-036).</p>
+            </div>
+            <div class="wf-stack">
+              <span class="wf-btn wf-btn--block">Liên kết Google</span>
+              <div class="wf-field">
+                <p class="wf-label">Email</p>
+                <span class="wf-input">input · email</span>
+              </div>
+              <span class="wf-btn wf-btn--block">Gửi liên kết đăng nhập</span>
+              <span class="wf-btn wf-btn--block">Đăng xuất</span>
+            </div>
+            <p class="wf-states">Trạng thái: đã liên kết · chưa liên kết · đang gửi · lỗi nhà cung cấp → M1-04</p>
+          </section>
+
+          <section class="wf-region" aria-label="Dữ liệu của tôi (wireframe)">
+            <p class="wf-label"><span class="wf-order">9</span> Dữ liệu của tôi · <code>#du-lieu</code></p>
+            <p class="wf-h wf-h2">H2 · Dữ liệu của tôi</p>
+            <div class="wf-box">
+              Những gì được lưu về bạn: tên hiển thị, ngày tạo, điểm theo tuần.
+              <p class="wf-note">Danh sách đầy đủ ở requirements.md §4.1 · liên kết tới /privacy</p>
+            </div>
+            <div class="wf-stack">
+              <span class="wf-btn wf-btn--block">Xem dữ liệu đã lưu</span>
+              <span class="wf-btn wf-btn--block"><strong>Xóa dữ liệu của tôi</strong></span>
+            </div>
+            <p class="wf-note">Hành động hạng nhất: nằm trong một khối riêng, ngang hàng với hai khối trên,
+               có trong mục lục đầu trang. Không giấu trong khối gập, không đặt sau “cài đặt nâng cao”.</p>
+            <p class="wf-states">Trạng thái: đang xoá · xoá xong (đã đăng xuất) · lỗi → M1-04</p>
+          </section>
+
+          <section class="wf-region" aria-label="Hộp thoại xác nhận xoá (wireframe)">
+            <p class="wf-label"><span class="wf-order">10</span> Lớp phủ · hộp thoại xác nhận xoá (vẽ tại chỗ)</p>
+            <div class="wf-dialog">
+              <p class="wf-h wf-h3">Xóa dữ liệu của bạn?</p>
+              <span class="wf-line wf-line--full"></span>
+              <span class="wf-line wf-line--3q"></span>
+              <p class="wf-note">Nói rõ cái gì bị xoá (hồ sơ và toàn bộ điểm) và rằng việc này không hoàn tác được.</p>
+              <div class="wf-stack">
+                <span class="wf-btn wf-btn--block">Xóa vĩnh viễn</span>
+                <span class="wf-btn wf-btn--block">Huỷ</span>
+              </div>
+            </div>
+            <p class="wf-note">Hộp thoại là modal: bẫy focus trong lúc mở, đóng bằng Esc, focus quay lại
+               nút đã mở nó. Đây là chỗ duy nhất trên site có bẫy focus hợp lệ ngoài hộp thoại cookie.</p>
+          </section>
+
+        </div>
+      </main>
+
+      <footer class="wf-footer">
+        <div class="wf-shell">
+          <nav class="wf-nav" aria-label="Điều hướng chân trang (wireframe)">
+            <span class="wf-chip"><span class="wf-order">11</span> Giới thiệu</span>
+            <span class="wf-chip">Điều khoản</span>
+            <span class="wf-chip">Quyền riêng tư</span>
+            <span class="wf-chip">Cài đặt cookie</span>
+          </nav>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+  <dl class="wf-measures">
+    <dt>Cột nội dung</dt><dd>343 px (375 − 2 × 16)</dd>
+    <dt>Bố cục</dt><dd>1 cột · ba khối ngang hàng · mục lục trong trang ngay dưới H1</dd>
+    <dt>Ô nhập và nút</dt><dd>cao tối thiểu 44 px · cách nhau tối thiểu 8 px</dd>
+    <dt>Ô quảng cáo</dt><dd>0 ở dải mobile</dd>
+  </dl>
+</section>
+
+<!-- ======================================================================
+     VIEW 2 — Desktop, 1280 px.
+     ====================================================================== -->
+<section class="wf-view-block">
+  <h2>4.2 Desktop · 1280 px</h2>
+  <p class="wf-prose">Cùng ba khối, cùng thứ tự. Cột văn bản bị chặn ở 70ch để dòng không dài quá
+     khoảng 60–75 ký tự mà DESIGN.md yêu cầu; biểu mẫu không giãn ra hết 1200 px.</p>
+
+  <div class="wf-scroll">
+    <div class="wf-view wf-view--wide">
+
+      <div class="wf-shell">
+        <p class="wf-skip"><span class="wf-order">1</span> skip-link → <code>#main</code></p>
+      </div>
+
+      <header class="wf-header">
+        <div class="wf-shell">
+          <div class="wf-headbar">
+            <span class="wf-mark"><span class="wf-order">2</span> Soucean Game</span>
+            <nav class="wf-nav" aria-label="Điều hướng chính (wireframe)">
+              <span class="wf-chip"><span class="wf-order">3</span> Trang chủ</span>
+              <span class="wf-chip">Bảng xếp hạng</span>
+              <span class="wf-chip wf-chip--current">Tài khoản</span>
+              <span class="wf-chip"><span class="wf-order">4</span> Giao diện</span>
+            </nav>
+          </div>
+          <aside class="ad-slot ad-slot--header-leaderboard" aria-label="Quảng cáo">
+            <span class="ad-slot__label">5 · Quảng cáo · ad-header-leaderboard · 728 × 90</span>
+          </aside>
+        </div>
+      </header>
+
+      <main class="wf-main">
+        <div class="wf-shell wf-shell--text">
+          <p class="wf-h wf-h1 wf-page-title"><span class="wf-order">6</span> H1 · Tài khoản</p>
+
+          <nav class="wf-region" aria-label="Mục lục trong trang (wireframe)">
+            <p class="wf-label"><span class="wf-order">7</span> Mục lục trong trang</p>
+            <div class="wf-row">
+              <span class="wf-chip">Hồ sơ</span>
+              <span class="wf-chip">Đăng nhập</span>
+              <span class="wf-chip">Dữ liệu của tôi</span>
+            </div>
+          </nav>
+
+          <section class="wf-region" aria-label="Hồ sơ (wireframe)">
+            <p class="wf-label"><span class="wf-order">8</span> Hồ sơ · <code>#ho-so</code></p>
+            <p class="wf-h wf-h2">H2 · Hồ sơ</p>
+            <div class="wf-field">
+              <p class="wf-label">Tên hiển thị</p>
+              <span class="wf-input">input · tên hiện tại</span>
+              <p class="wf-note">Tên hiển thị được kiểm duyệt (requirements.md §4.1).</p>
+            </div>
+            <div class="wf-row"><span class="wf-btn wf-btn--primary">Lưu</span></div>
+            <p class="wf-states">Trạng thái: đang tải hồ sơ · đang lưu · lỗi kiểm duyệt · lưu xong → M1-04</p>
+          </section>
+
+          <section class="wf-region" aria-label="Đăng nhập (wireframe)">
+            <p class="wf-label"><span class="wf-order">9</span> Đăng nhập · <code>#dang-nhap</code></p>
+            <p class="wf-h wf-h2">H2 · Đăng nhập</p>
+            <div class="wf-box">Trạng thái danh tính: <strong>đang chơi ẩn danh</strong> · liên kết giữ nguyên player id</div>
+            <div class="wf-row">
+              <span class="wf-btn">Liên kết Google</span>
+              <span class="wf-btn">Liên kết email</span>
+              <span class="wf-btn">Đăng xuất</span>
+            </div>
+            <p class="wf-states">Trạng thái: đã liên kết · chưa liên kết · đang gửi · lỗi nhà cung cấp → M1-04</p>
+          </section>
+
+          <section class="wf-region" aria-label="Dữ liệu của tôi (wireframe)">
+            <p class="wf-label"><span class="wf-order">10</span> Dữ liệu của tôi · <code>#du-lieu</code></p>
+            <p class="wf-h wf-h2">H2 · Dữ liệu của tôi</p>
+            <div class="wf-box">Những gì được lưu về bạn · liên kết tới /privacy</div>
+            <div class="wf-row">
+              <span class="wf-btn">Xem dữ liệu đã lưu</span>
+              <span class="wf-btn"><strong>Xóa dữ liệu của tôi</strong></span>
+            </div>
+            <p class="wf-note">Ngang hàng với hai khối trên và có trong mục lục đầu trang —
+               không bị chôn ở cuối một danh sách cài đặt.</p>
+            <p class="wf-states">Trạng thái: đang xoá · xoá xong · lỗi → M1-04</p>
+          </section>
+
+          <section class="wf-region" aria-label="Hộp thoại xác nhận xoá (wireframe)">
+            <p class="wf-label"><span class="wf-order">11</span> Lớp phủ · hộp thoại xác nhận xoá (vẽ tại chỗ)</p>
+            <div class="wf-dialog">
+              <p class="wf-h wf-h3">Xóa dữ liệu của bạn?</p>
+              <span class="wf-line wf-line--3q"></span>
+              <div class="wf-row">
+                <span class="wf-btn">Xóa vĩnh viễn</span>
+                <span class="wf-btn">Huỷ</span>
+              </div>
+            </div>
+            <p class="wf-note">Modal: bẫy focus khi mở, Esc để đóng, focus quay về nút đã mở nó.</p>
+          </section>
+
+        </div>
+      </main>
+
+      <footer class="wf-footer">
+        <div class="wf-shell">
+          <nav class="wf-nav" aria-label="Điều hướng chân trang (wireframe)">
+            <span class="wf-chip"><span class="wf-order">12</span> Giới thiệu</span>
+            <span class="wf-chip">Điều khoản</span>
+            <span class="wf-chip">Quyền riêng tư</span>
+            <span class="wf-chip">Cài đặt cookie</span>
+          </nav>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+  <dl class="wf-measures">
+    <dt>Cột nội dung</dt><dd>1200 px (1280 − 2 × 40) · cột văn bản chặn ở 70ch</dd>
+    <dt>Bố cục</dt><dd>1 cột · ba khối ngang hàng, cùng thứ tự như ở mobile</dd>
+    <dt><code>ad-header-leaderboard</code></dt><dd>728 × 90 · trang này không có khung trò chơi</dd>
+    <dt>Số ô quảng cáo</dt><dd>1</dd>
+  </dl>
+</section>
+
+<footer class="wf-view-block">
+  <h2>Ghi chú về trang này</h2>
+  <ul class="wf-prose">
+    <li><strong>“Xóa dữ liệu của tôi” không bị chôn.</strong> Ba dấu hiệu, không phải một:
+        nó là một trong ba khối H2 ngang hàng; nó có mặt trong mục lục ngay dưới H1; và nhãn của
+        nó nói thẳng việc nó làm. Nó vẫn phải đi qua một hộp thoại xác nhận, vì không hoàn tác được —
+        xác nhận là để tránh nhầm, không phải để làm nản lòng.</li>
+    <li><strong>Hành động chính của trang là “Lưu”</strong> ở khối Hồ sơ. “Xóa vĩnh viễn” là hành
+        động phá huỷ và được M1-04 thiết kế riêng; DESIGN.md chưa có kiểu dáng cho nút phá huỷ,
+        và wireframe này không phát minh một màu mới — <strong>đó là câu hỏi mở gửi M1-04</strong>
+        (bảng màu chỉ có <code>error</code>, và nó dành cho trạng thái lỗi).</li>
+    <li><strong>Không hiển thị player id.</strong> Trang chỉ nói trạng thái danh tính
+        (“đang chơi ẩn danh” / “đã liên kết”). requirements.md §4.1 không có trường nào cần in ra ở đây.</li>
+  </ul>
+</footer>
+
+</body>
+</html>

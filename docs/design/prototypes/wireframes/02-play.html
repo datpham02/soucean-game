@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wireframe 2 — Trang chơi · Soucean Game (M1-03)</title>
+<link rel="stylesheet" href="../assets/tokens.css">
+<link rel="stylesheet" href="../assets/base.css">
+<link rel="stylesheet" href="../assets/ads.css">
+<link rel="stylesheet" href="wireframe.css">
+</head>
+<body class="wf-doc">
+
+<header class="wf-doc-head">
+  <p class="wf-kicker">Soucean Game · M1 · GAM-24 (M1-03) · wireframe, độ chi tiết thấp</p>
+  <h1>2. Trang chơi — <code>/games/&lt;game_id&gt;</code></h1>
+  <p class="wf-prose">Khung trò chơi, điều khiển, bảng xếp hạng tuần và các ô quảng cáo.
+     Hình học quảng cáo trên trang này là của
+     <a href="../../ad-slots.md">ad-slots.md</a> (M1-02) — các ô bên dưới là
+     <code>.ad-slot</code> thật, lấy kích thước và khoảng trống 24 px từ
+     <code>assets/ads.css</code>, không phải bản vẽ lại.</p>
+  <p><a href="index.html">← Mục lục wireframe</a> · <a href="../../wireframes.md">wireframes.md</a></p>
+  <ul class="wf-legend">
+    <li>Hộp xám = chỗ dành cho nội dung</li>
+    <li>Viền đứt = ranh giới một vùng</li>
+    <li>Số tròn = thứ tự đọc</li>
+    <li>“Trạng thái: …” = nơi đặt trạng thái tải · trống · lỗi (thiết kế ở M1-04)</li>
+    <li>Không màu thương hiệu, không ảnh, không nội dung cuối</li>
+  </ul>
+</header>
+
+<!-- ======================================================================
+     VIEW 1 — Mobile, 375 px. Band: mobile (< 768 px).
+     ad-slots.md §9.3: đúng hai biểu ngữ, không có cột bên.
+     ====================================================================== -->
+<section class="wf-view-block">
+  <h2>2.1 Mobile · 375 px</h2>
+  <p class="wf-prose">Một cột. Đúng <strong>hai</strong> ô quảng cáo: một trên khung,
+     một sau thông tin trò chơi. Không có cột bên, không có biểu ngữ trong header.</p>
+
+  <div class="wf-scroll">
+    <div class="wf-view wf-view--mobile">
+
+      <div class="wf-shell">
+        <p class="wf-skip"><span class="wf-order">1</span> skip-link → <code>#main</code> (chỉ hiện khi có focus)</p>
+      </div>
+
+      <header class="wf-header">
+        <div class="wf-shell">
+          <div class="wf-headbar">
+            <span class="wf-mark"><span class="wf-order">2</span> Soucean Game</span>
+            <nav class="wf-nav" aria-label="Điều hướng chính (wireframe)">
+              <span class="wf-chip"><span class="wf-order">3</span> Menu</span>
+              <span class="wf-chip"><span class="wf-order">4</span> Giao diện</span>
+            </nav>
+          </div>
+          <p class="wf-note">Không có ô quảng cáo nào trong header ở dải mobile.</p>
+        </div>
+      </header>
+
+      <main class="wf-main">
+        <div class="wf-shell">
+          <p class="wf-h wf-h1 wf-page-title"><span class="wf-order">5</span> H1 · Tên trò chơi</p>
+
+          <!-- Một DOM cho cả ba dải: chỉ display đổi. ad-slots.md §9. -->
+          <div class="wf-play-grid">
+            <div class="wf-play-main">
+
+              <aside class="ad-slot ad-slot--mobile-top" aria-label="Quảng cáo">
+                <span class="ad-slot__label">6 · Quảng cáo · ad-mobile-top · 320 × 100</span>
+              </aside>
+
+              <!-- Ô quảng cáo là ANH EM của khung, không bao giờ nằm trong khung. -->
+              <div class="wf-frame">
+                <div>
+                  <p class="wf-h wf-h3"><span class="wf-order">7</span> Khung trò chơi · 16:9</p>
+                  <p class="wf-states">Trạng thái: đang tải · lỗi · thiếu JS → M1-04</p>
+                </div>
+              </div>
+
+              <section class="wf-region wf-game-meta" aria-label="Thông tin trò chơi (wireframe)">
+                <p class="wf-label"><span class="wf-order">8</span> Thông tin trò chơi · game-meta</p>
+                <p class="wf-h wf-h3">Điều khiển</p>
+                <span class="wf-line wf-line--3q"></span>
+                <p class="wf-h wf-h3">Cách chơi</p>
+                <span class="wf-line wf-line--full"></span>
+                <span class="wf-line wf-line--half"></span>
+                <p class="wf-note">Khối này luôn nằm giữa khung và ô quảng cáo bên dưới
+                   (requirements.md §5.2: không ô nào kề vùng điều khiển).</p>
+              </section>
+
+              <aside class="ad-slot ad-slot--after-info-rectangle" aria-label="Quảng cáo">
+                <span class="ad-slot__label">9 · Quảng cáo · ad-after-info-rectangle · 300 × 250</span>
+              </aside>
+
+              <aside class="ad-slot ad-slot--incontent-banner" aria-label="Quảng cáo">
+                <span class="ad-slot__label">Quảng cáo · ad-incontent-banner · 728 × 90</span>
+              </aside>
+
+            </div>
+
+            <div class="wf-play-rail">
+              <aside class="ad-slot ad-slot--rail-rectangle" aria-label="Quảng cáo">
+                <span class="ad-slot__label">Quảng cáo · ad-rail-rectangle · 300 × 250</span>
+              </aside>
+
+              <section class="wf-region wf-weekly" aria-label="Bảng xếp hạng tuần (wireframe)">
+                <p class="wf-label"><span class="wf-order">10</span> Bảng xếp hạng tuần · weekly board</p>
+                <div class="wf-rank"><span>1</span><span class="wf-line wf-line--half"></span><span>—</span></div>
+                <div class="wf-rank"><span>2</span><span class="wf-line wf-line--half"></span><span>—</span></div>
+                <div class="wf-rank wf-rank--own"><span>12</span><span>Bạn</span><span>—</span></div>
+                <p class="wf-note">Tuần bắt đầu Thứ Hai 00:00 UTC+7 · liên kết tới /leaderboards</p>
+                <p class="wf-states">Trạng thái: đang tải · chưa có điểm nào · lỗi → M1-04</p>
+              </section>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer class="wf-footer">
+        <div class="wf-shell">
+          <nav class="wf-nav" aria-label="Điều hướng chân trang (wireframe)">
+            <span class="wf-chip"><span class="wf-order">11</span> Giới thiệu</span>
+            <span class="wf-chip">Điều khoản</span>
+            <span class="wf-chip">Quyền riêng tư</span>
+            <span class="wf-chip">Cài đặt cookie</span>
+          </nav>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+  <dl class="wf-measures">
+    <dt>Cột nội dung</dt><dd>343 px (375 − 2 × 16)</dd>
+    <dt>Khung trò chơi</dt><dd>343 × 193 (16:9)</dd>
+    <dt><code>ad-mobile-top</code></dt><dd>320 × 100 · cách khung <strong>đúng 24 px</strong> (sàn khoảng trống)</dd>
+    <dt><code>ad-after-info-rectangle</code></dt><dd>300 × 250 · cách khung ≥ 64 px (40 + 24 + chiều cao game-meta)</dd>
+    <dt>Số ô quảng cáo</dt><dd>2 · không có cột bên · không có ô trong header</dd>
+  </dl>
+</section>
+
+<!-- ======================================================================
+     VIEW 2 — Compact, 768 px. Band: compact (768–1023 px).
+     Không phải một chiều rộng thiết kế thứ ba: DESIGN.md chỉ thiết kế ở 375
+     và 1280. Khung này là trạng thái KIỂM TRA mà ad-slots.md §11 yêu cầu.
+     ====================================================================== -->
+<section class="wf-view-block">
+  <h2>2.2 Compact · 768 px <span class="wf-kicker">(khung kiểm tra, không phải chiều rộng thiết kế)</span></h2>
+  <p class="wf-prose">DESIGN.md chỉ thiết kế ở 375 px và 1280 px; dải compact được
+     <em>kiểm tra</em>, không được thiết kế. <a href="../../ad-slots.md">ad-slots.md</a> §11
+     yêu cầu trang chơi có ba trạng thái, nên dải này được vẽ ở 768 px — mép dưới của
+     dải, và là điểm hỏng cũ mà Board đã sửa ngày 2026-11-04. Vẫn một cột, vẫn không có
+     cột bên; khung trò chơi chiếm toàn bộ cột nội dung.</p>
+
+  <div class="wf-scroll">
+    <div class="wf-view wf-view--compact">
+
+      <div class="wf-shell">
+        <p class="wf-skip"><span class="wf-order">1</span> skip-link → <code>#main</code></p>
+      </div>
+
+      <header class="wf-header">
+        <div class="wf-shell">
+          <div class="wf-headbar">
+            <span class="wf-mark"><span class="wf-order">2</span> Soucean Game</span>
+            <nav class="wf-nav" aria-label="Điều hướng chính (wireframe)">
+              <span class="wf-chip"><span class="wf-order">3</span> Trang chủ</span>
+              <span class="wf-chip">Bảng xếp hạng</span>
+              <span class="wf-chip">Tài khoản</span>
+              <span class="wf-chip"><span class="wf-order">4</span> Giao diện</span>
+            </nav>
+          </div>
+          <aside class="ad-slot ad-slot--header-leaderboard" aria-label="Quảng cáo">
+            <span class="ad-slot__label">5 · Quảng cáo · ad-header-leaderboard · 704 × 90 (min(728, 100%))</span>
+          </aside>
+        </div>
+      </header>
+
+      <main class="wf-main">
+        <div class="wf-shell">
+          <p class="wf-h wf-h1 wf-page-title"><span class="wf-order">6</span> H1 · Tên trò chơi</p>
+
+          <div class="wf-play-grid">
+            <div class="wf-play-main">
+
+              <aside class="ad-slot ad-slot--mobile-top" aria-label="Quảng cáo">
+                <span class="ad-slot__label">Quảng cáo · ad-mobile-top · 320 × 100</span>
+              </aside>
+
+              <div class="wf-frame">
+                <div>
+                  <p class="wf-h wf-h3"><span class="wf-order">7</span> Khung trò chơi · 704 × 396 · 16:9</p>
+                  <p class="wf-states">Trạng thái: đang tải · lỗi · thiếu JS → M1-04</p>
+                </div>
+              </div>
+
+              <section class="wf-region wf-game-meta" aria-label="Thông tin trò chơi (wireframe)">
+                <p class="wf-label"><span class="wf-order">8</span> Thông tin trò chơi · game-meta</p>
+                <p class="wf-h wf-h3">Điều khiển</p>
+                <span class="wf-line wf-line--half"></span>
+                <p class="wf-h wf-h3">Cách chơi</p>
+                <span class="wf-line wf-line--3q"></span>
+                <span class="wf-line wf-line--half"></span>
+              </section>
+
+              <aside class="ad-slot ad-slot--after-info-rectangle" aria-label="Quảng cáo">
+                <span class="ad-slot__label">9 · Quảng cáo · ad-after-info-rectangle · 300 × 250</span>
+              </aside>
+
+              <aside class="ad-slot ad-slot--incontent-banner" aria-label="Quảng cáo">
+                <span class="ad-slot__label">10 · Quảng cáo · ad-incontent-banner · 704 × 90</span>
+              </aside>
+
+            </div>
+
+            <div class="wf-play-rail">
+              <aside class="ad-slot ad-slot--rail-rectangle" aria-label="Quảng cáo">
+                <span class="ad-slot__label">Quảng cáo · ad-rail-rectangle · 300 × 250</span>
+              </aside>
+
+              <section class="wf-region wf-weekly" aria-label="Bảng xếp hạng tuần (wireframe)">
+                <p class="wf-label"><span class="wf-order">11</span> Bảng xếp hạng tuần · weekly board</p>
+                <div class="wf-rank"><span>1</span><span class="wf-line wf-line--third"></span><span>—</span></div>
+                <div class="wf-rank"><span>2</span><span class="wf-line wf-line--third"></span><span>—</span></div>
+                <div class="wf-rank wf-rank--own"><span>12</span><span>Bạn</span><span>—</span></div>
+                <p class="wf-states">Trạng thái: đang tải · chưa có điểm nào · lỗi → M1-04</p>
+              </section>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer class="wf-footer">
+        <div class="wf-shell">
+          <nav class="wf-nav" aria-label="Điều hướng chân trang (wireframe)">
+            <span class="wf-chip"><span class="wf-order">12</span> Giới thiệu</span>
+            <span class="wf-chip">Điều khoản</span>
+            <span class="wf-chip">Quyền riêng tư</span>
+            <span class="wf-chip">Cài đặt cookie</span>
+          </nav>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+  <dl class="wf-measures">
+    <dt>Cột nội dung</dt><dd>704 px (768 − 2 × 32) · không trừ cột bên</dd>
+    <dt>Khung trò chơi</dt><dd>704 × 396 (16:9) — so với 372 × 209 của bố cục bị thay thế</dd>
+    <dt><code>ad-header-leaderboard</code></dt><dd>704 × 90 · cách khung ≥ 120 px · dưới 792 px chưa đạt khổ 728 → M6 không gọi creative</dd>
+    <dt><code>ad-after-info-rectangle</code></dt><dd>300 × 250 · cách khung ≥ 72 px</dd>
+    <dt><code>ad-incontent-banner</code></dt><dd>704 × 90 · cách khung ≥ 370 px · cách ô 300 × 250 là 48 px (24 + 24)</dd>
+    <dt>Số ô quảng cáo</dt><dd>3 · đúng một ô 300 × 250 · không có cột bên</dd>
+  </dl>
+</section>
+
+<!-- ======================================================================
+     VIEW 3 — Desktop, 1280 px. Band: wide (>= 1024 px).
+     ad-slots.md §4.1 và §9.1.
+     ====================================================================== -->
+<section class="wf-view-block">
+  <h2>2.3 Desktop · 1280 px</h2>
+  <p class="wf-prose">Hai cột: khung trò chơi 868 px và cột bên 300 px, cách nhau 32 px.
+     Ô 300 × 250 nằm trên cùng cột bên, thẳng mép trên của khung, phía trên bảng xếp hạng tuần.
+     Không dính (<em>not sticky</em>), không chồng lên khung.</p>
+
+  <div class="wf-scroll">
+    <div class="wf-view wf-view--wide">
+
+      <div class="wf-shell">
+        <p class="wf-skip"><span class="wf-order">1</span> skip-link → <code>#main</code> (đi trước ô quảng cáo trong header)</p>
+      </div>
+
+      <header class="wf-header">
+        <div class="wf-shell">
+          <div class="wf-headbar">
+            <span class="wf-mark"><span class="wf-order">2</span> Soucean Game</span>
+            <nav class="wf-nav" aria-label="Điều hướng chính (wireframe)">
+              <span class="wf-chip"><span class="wf-order">3</span> Trang chủ</span>
+              <span class="wf-chip">Bảng xếp hạng</span>
+              <span class="wf-chip">Tài khoản</span>
+              <span class="wf-chip"><span class="wf-order">4</span> Giao diện</span>
+            </nav>
+          </div>
+          <aside class="ad-slot ad-slot--header-leaderboard" aria-label="Quảng cáo">
+            <span class="ad-slot__label">5 · Quảng cáo · ad-header-leaderboard · 728 × 90</span>
+          </aside>
+        </div>
+      </header>
+
+      <main class="wf-main">
+        <div class="wf-shell">
+          <p class="wf-h wf-h1 wf-page-title"><span class="wf-order">6</span> H1 · Tên trò chơi</p>
+
+          <div class="wf-play-grid">
+            <div class="wf-play-main">
+
+              <aside class="ad-slot ad-slot--mobile-top" aria-label="Quảng cáo">
+                <span class="ad-slot__label">Quảng cáo · ad-mobile-top · 320 × 100</span>
+              </aside>
+
+              <div class="wf-frame">
+                <div>
+                  <p class="wf-h wf-h3"><span class="wf-order">7</span> Khung trò chơi · 868 × 488 · 16:9, letterbox</p>
+                  <p class="wf-states">Trạng thái: đang tải · lỗi · thiếu JS → M1-04</p>
+                </div>
+              </div>
+
+              <section class="wf-region wf-game-meta" aria-label="Thông tin trò chơi (wireframe)">
+                <p class="wf-label"><span class="wf-order">8</span> Thông tin trò chơi · game-meta</p>
+                <p class="wf-h wf-h3">Điều khiển</p>
+                <span class="wf-line wf-line--third"></span>
+                <p class="wf-h wf-h3">Cách chơi</p>
+                <span class="wf-line wf-line--half"></span>
+                <span class="wf-line wf-line--third"></span>
+              </section>
+
+              <aside class="ad-slot ad-slot--after-info-rectangle" aria-label="Quảng cáo">
+                <span class="ad-slot__label">Quảng cáo · ad-after-info-rectangle · 300 × 250</span>
+              </aside>
+
+              <aside class="ad-slot ad-slot--incontent-banner" aria-label="Quảng cáo">
+                <span class="ad-slot__label">9 · Quảng cáo · ad-incontent-banner · 728 × 90</span>
+              </aside>
+
+            </div>
+
+            <div class="wf-play-rail">
+              <!-- Cột bên đứng SAU toàn bộ cột chính trong DOM (ad-slots.md §9.1),
+                   nên nó cũng đứng sau trong thứ tự đọc và thứ tự tab. -->
+              <aside class="ad-slot ad-slot--rail-rectangle" aria-label="Quảng cáo">
+                <span class="ad-slot__label">10 · Quảng cáo · ad-rail-rectangle · 300 × 250</span>
+              </aside>
+
+              <section class="wf-region wf-weekly" aria-label="Bảng xếp hạng tuần (wireframe)">
+                <p class="wf-label"><span class="wf-order">11</span> Bảng xếp hạng tuần · weekly board</p>
+                <div class="wf-rank"><span>1</span><span class="wf-line wf-line--half"></span><span>—</span></div>
+                <div class="wf-rank"><span>2</span><span class="wf-line wf-line--half"></span><span>—</span></div>
+                <div class="wf-rank"><span>3</span><span class="wf-line wf-line--half"></span><span>—</span></div>
+                <div class="wf-rank wf-rank--own"><span>12</span><span>Bạn</span><span>—</span></div>
+                <p class="wf-note">Tuần bắt đầu Thứ Hai 00:00 UTC+7 · liên kết tới /leaderboards</p>
+                <p class="wf-states">Trạng thái: đang tải · chưa có điểm nào · lỗi → M1-04</p>
+              </section>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer class="wf-footer">
+        <div class="wf-shell">
+          <nav class="wf-nav" aria-label="Điều hướng chân trang (wireframe)">
+            <span class="wf-chip"><span class="wf-order">12</span> Giới thiệu</span>
+            <span class="wf-chip">Điều khoản</span>
+            <span class="wf-chip">Quyền riêng tư</span>
+            <span class="wf-chip">Cài đặt cookie</span>
+          </nav>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+  <dl class="wf-measures">
+    <dt>Cột nội dung</dt><dd>1200 px (1280 − 2 × 40; 40 = 8 ngoài shell + 32 gutter)</dd>
+    <dt>Cột chính</dt><dd>868 px (1200 − 300 − 32)</dd>
+    <dt>Khung trò chơi</dt><dd>868 × 488 (16:9)</dd>
+    <dt>Khoảng cách hai cột</dt><dd>32 px — tối thiểu cho phép là 24 px (<code>--space-ad-clearance</code>)</dd>
+    <dt><code>ad-header-leaderboard</code></dt><dd>728 × 90 · cách khung ≥ 120 px</dd>
+    <dt><code>ad-rail-rectangle</code></dt><dd>300 × 250 · cách khung <strong>32 px theo chiều ngang</strong> · cao 250 &lt; 488 nên nằm trọn trong chiều cao khung</dd>
+    <dt><code>ad-incontent-banner</code></dt><dd>728 × 90 · cách khung ≥ 72 px, luôn có game-meta ở giữa</dd>
+    <dt>Số ô quảng cáo</dt><dd>3 · đúng một ô 300 × 250 · không ô nào dính, chồng hay nằm trong khung</dd>
+  </dl>
+</section>
+
+<footer class="wf-view-block">
+  <h2>Ghi chú về trang này</h2>
+  <ul class="wf-prose">
+    <li><strong>Một DOM, ba dải.</strong> Cả ba khung trên dùng đúng một cấu trúc markup;
+        chỉ thuộc tính <code>display</code> của năm ô quảng cáo thay đổi. Không phần tử nào
+        bị đổi chỗ, đổi cha hay sắp xếp lại — nên thứ tự đọc và thứ tự nhìn trùng nhau ở
+        mọi chiều rộng (ad-slots.md §9).</li>
+    <li><strong>Ô quảng cáo là anh em của khung.</strong> Không ô nào là con cháu của
+        <code>.wf-frame</code>; <code>.wf-frame .ad-slot</code> không khớp gì cả.</li>
+    <li><strong>Mỗi cột là flex column không có <code>gap</code></strong> (ad-slots.md §4.3),
+        nên khoảng trống 24 px của mỗi ô luôn được cộng thêm, không bao giờ bị nuốt.</li>
+    <li><strong>Trạng thái</strong> của khung trò chơi và bảng xếp hạng tuần được đánh dấu
+        tại chỗ; chúng được thiết kế ở M1-04 và trong Task của từng trang.</li>
+  </ul>
+</footer>
+
+</body>
+</html>

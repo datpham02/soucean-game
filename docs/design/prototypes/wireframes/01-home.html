@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wireframe 1 — Trang chủ · Soucean Game (M1-03)</title>
+<link rel="stylesheet" href="../assets/tokens.css">
+<link rel="stylesheet" href="../assets/base.css">
+<link rel="stylesheet" href="../assets/ads.css">
+<link rel="stylesheet" href="wireframe.css">
+</head>
+<body class="wf-doc">
+
+<header class="wf-doc-head">
+  <p class="wf-kicker">Soucean Game · M1 · GAM-24 (M1-03) · wireframe, độ chi tiết thấp</p>
+  <h1>1. Trang chủ / danh sách trò chơi — <code>/</code></h1>
+  <p class="wf-prose">Mỗi trò chơi một thẻ. Các trường có nhãn <span class="wf-src">manifest</span>
+     được lấy từ manifest của chính trò chơi đó. <strong>Định dạng manifest không thuộc M1</strong> —
+     đó là GAM-16; tên trường dưới đây chỉ để minh hoạ nguồn dữ liệu, không phải đề xuất lược đồ.</p>
+  <p><a href="index.html">← Mục lục wireframe</a> · <a href="../../wireframes.md">wireframes.md</a></p>
+  <ul class="wf-legend">
+    <li>Hộp xám = chỗ dành cho nội dung</li>
+    <li>Viền đứt = ranh giới một vùng</li>
+    <li>Số tròn = thứ tự đọc</li>
+    <li>“Trạng thái: …” = nơi đặt trạng thái tải · trống · lỗi (thiết kế ở M1-04)</li>
+    <li><span class="wf-src">manifest</span> = lấy từ manifest trò chơi (GAM-16)</li>
+  </ul>
+</header>
+
+<!-- ======================================================================
+     VIEW 1 — Mobile, 375 px.
+     ====================================================================== -->
+<section class="wf-view-block">
+  <h2>1.1 Mobile · 375 px</h2>
+  <p class="wf-prose">Lưới một cột, thẻ chiếm trọn chiều rộng cột nội dung (343 px).
+     Không có ô quảng cáo nào ở dải mobile ngoài trang chơi (ad-slots.md §3).</p>
+
+  <div class="wf-scroll">
+    <div class="wf-view wf-view--mobile">
+
+      <div class="wf-shell">
+        <p class="wf-skip"><span class="wf-order">1</span> skip-link → <code>#main</code> (chỉ hiện khi có focus)</p>
+      </div>
+
+      <header class="wf-header">
+        <div class="wf-shell">
+          <div class="wf-headbar">
+            <span class="wf-mark"><span class="wf-order">2</span> Soucean Game</span>
+            <nav class="wf-nav" aria-label="Điều hướng chính (wireframe)">
+              <span class="wf-chip"><span class="wf-order">3</span> Menu</span>
+              <span class="wf-chip"><span class="wf-order">4</span> Giao diện</span>
+            </nav>
+          </div>
+        </div>
+      </header>
+
+      <main class="wf-main">
+        <div class="wf-shell">
+
+          <section class="wf-region" aria-label="Khối mở đầu (wireframe)">
+            <p class="wf-label"><span class="wf-order">5</span> Khối mở đầu · hero</p>
+            <p class="wf-h wf-h1">H1 · display · Soucean Game</p>
+            <span class="wf-line wf-line--full"></span>
+            <p class="wf-note">Một câu giới thiệu. Không ảnh, không slogan cuối ở bước này.</p>
+          </section>
+
+          <section class="wf-region" aria-label="Lưới trò chơi (wireframe)">
+            <p class="wf-label"><span class="wf-order">6</span> Lưới trò chơi · game-grid · 1 cột</p>
+            <p class="wf-h wf-h2">H2 · Trò chơi</p>
+
+            <div class="wf-grid">
+
+              <article class="wf-card">
+                <p class="wf-label"><span class="wf-order">7</span> Thẻ trò chơi · game-card</p>
+                <div class="wf-box wf-box--media">a · Ảnh đại diện 16:9 · <span class="wf-src">manifest: art</span></div>
+                <p class="wf-h wf-h3">b · H3 · Tên trò chơi <span class="wf-src">manifest: title</span></p>
+                <span class="wf-line wf-line--full"></span>
+                <span class="wf-line wf-line--3q"></span>
+                <p class="wf-note">c · Mô tả ngắn <span class="wf-src">manifest: short description</span></p>
+                <p class="wf-note">d · Điều khiển <span class="wf-src">manifest: controls</span></p>
+                <div class="wf-box">
+                  e · Top 3 tuần này — <strong>dữ liệu nền tảng</strong>, không phải manifest
+                  <p class="wf-states">Trạng thái: đang tải · chưa có điểm · lỗi → M1-04</p>
+                </div>
+                <span class="wf-btn wf-btn--primary wf-btn--block">f · Chơi <span class="wf-src">manifest: play link</span></span>
+              </article>
+
+              <article class="wf-card">
+                <div class="wf-box wf-box--media">Ảnh đại diện · <span class="wf-src">manifest: art</span></div>
+                <p class="wf-h wf-h3">H3 · Tên trò chơi</p>
+                <span class="wf-line wf-line--full"></span>
+                <span class="wf-line wf-line--half"></span>
+                <div class="wf-box">Top 3 tuần này</div>
+                <span class="wf-btn wf-btn--primary wf-btn--block">Chơi</span>
+              </article>
+
+            </div>
+
+            <p class="wf-states">Trạng thái của lưới: <strong>trống</strong> (chưa có trò chơi nào) ·
+               <strong>lỗi</strong> (không dựng được danh sách). Danh sách sinh từ manifest lúc build,
+               nên không có trạng thái “đang tải” cho chính lưới — chỉ dải top 3 trong mỗi thẻ mới
+               tải động. → M1-04</p>
+          </section>
+
+        </div>
+      </main>
+
+      <footer class="wf-footer">
+        <div class="wf-shell">
+          <nav class="wf-nav" aria-label="Điều hướng chân trang (wireframe)">
+            <span class="wf-chip"><span class="wf-order">8</span> Giới thiệu</span>
+            <span class="wf-chip">Điều khoản</span>
+            <span class="wf-chip">Quyền riêng tư</span>
+            <span class="wf-chip">Cài đặt cookie</span>
+          </nav>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+  <dl class="wf-measures">
+    <dt>Cột nội dung</dt><dd>343 px (375 − 2 × 16)</dd>
+    <dt>Lưới</dt><dd>1 cột · khoảng cách 32 px</dd>
+    <dt>Ảnh thẻ</dt><dd>tỉ lệ 16:9, chiếm trọn chiều rộng thẻ</dd>
+    <dt>Nút “Chơi”</dt><dd>cao tối thiểu 44 px, chiếm trọn chiều rộng thẻ</dd>
+    <dt>Ô quảng cáo</dt><dd>0 — dải mobile không có ô nào ngoài trang chơi</dd>
+  </dl>
+</section>
+
+<!-- ======================================================================
+     VIEW 2 — Desktop, 1280 px.
+     ====================================================================== -->
+<section class="wf-view-block">
+  <h2>1.2 Desktop · 1280 px</h2>
+  <p class="wf-prose">Lưới ba cột trong cột nội dung 1200 px. Một ô quảng cáo duy nhất:
+     biểu ngữ 728 × 90 trong header, như mọi trang khác từ 768 px trở lên.</p>
+
+  <div class="wf-scroll">
+    <div class="wf-view wf-view--wide">
+
+      <div class="wf-shell">
+        <p class="wf-skip"><span class="wf-order">1</span> skip-link → <code>#main</code> (đi trước ô quảng cáo trong header)</p>
+      </div>
+
+      <header class="wf-header">
+        <div class="wf-shell">
+          <div class="wf-headbar">
+            <span class="wf-mark"><span class="wf-order">2</span> Soucean Game</span>
+            <nav class="wf-nav" aria-label="Điều hướng chính (wireframe)">
+              <span class="wf-chip wf-chip--current"><span class="wf-order">3</span> Trang chủ</span>
+              <span class="wf-chip">Bảng xếp hạng</span>
+              <span class="wf-chip">Tài khoản</span>
+              <span class="wf-chip"><span class="wf-order">4</span> Giao diện</span>
+            </nav>
+          </div>
+          <aside class="ad-slot ad-slot--header-leaderboard" aria-label="Quảng cáo">
+            <span class="ad-slot__label">5 · Quảng cáo · ad-header-leaderboard · 728 × 90</span>
+          </aside>
+        </div>
+      </header>
+
+      <main class="wf-main">
+        <div class="wf-shell">
+
+          <section class="wf-region" aria-label="Khối mở đầu (wireframe)">
+            <p class="wf-label"><span class="wf-order">6</span> Khối mở đầu · hero</p>
+            <p class="wf-h wf-h1">H1 · display · Soucean Game</p>
+            <span class="wf-line wf-line--half"></span>
+          </section>
+
+          <section class="wf-region" aria-label="Lưới trò chơi (wireframe)">
+            <p class="wf-label"><span class="wf-order">7</span> Lưới trò chơi · game-grid · 3 cột, khoảng cách 32 px</p>
+            <p class="wf-h wf-h2">H2 · Trò chơi</p>
+
+            <div class="wf-grid">
+
+              <article class="wf-card">
+                <p class="wf-label"><span class="wf-order">8</span> Thẻ trò chơi · game-card</p>
+                <div class="wf-box wf-box--media">a · Ảnh đại diện 16:9 · <span class="wf-src">manifest: art</span></div>
+                <p class="wf-h wf-h3">b · H3 · Tên trò chơi <span class="wf-src">manifest: title</span></p>
+                <span class="wf-line wf-line--full"></span>
+                <span class="wf-line wf-line--3q"></span>
+                <p class="wf-note">c · Mô tả ngắn <span class="wf-src">manifest: short description</span></p>
+                <p class="wf-note">d · Điều khiển <span class="wf-src">manifest: controls</span></p>
+                <div class="wf-box">
+                  e · Top 3 tuần này — <strong>dữ liệu nền tảng</strong>
+                  <p class="wf-states">Trạng thái: đang tải · chưa có điểm · lỗi → M1-04</p>
+                </div>
+                <span class="wf-btn wf-btn--primary wf-btn--block">f · Chơi <span class="wf-src">manifest: play link</span></span>
+              </article>
+
+              <article class="wf-card">
+                <div class="wf-box wf-box--media">Ảnh đại diện · <span class="wf-src">manifest: art</span></div>
+                <p class="wf-h wf-h3">H3 · Tên trò chơi</p>
+                <span class="wf-line wf-line--full"></span>
+                <span class="wf-line wf-line--half"></span>
+                <div class="wf-box">Top 3 tuần này</div>
+                <span class="wf-btn wf-btn--primary wf-btn--block">Chơi</span>
+              </article>
+
+              <article class="wf-card">
+                <div class="wf-box wf-box--media">Ảnh đại diện · <span class="wf-src">manifest: art</span></div>
+                <p class="wf-h wf-h3">H3 · Tên trò chơi</p>
+                <span class="wf-line wf-line--full"></span>
+                <span class="wf-line wf-line--half"></span>
+                <div class="wf-box">Top 3 tuần này</div>
+                <span class="wf-btn wf-btn--primary wf-btn--block">Chơi</span>
+              </article>
+
+            </div>
+
+            <p class="wf-states">Trạng thái của lưới: <strong>trống</strong> (chưa có trò chơi nào) ·
+               <strong>lỗi</strong> (không dựng được danh sách). Lưới sinh từ manifest lúc build nên
+               không có trạng thái “đang tải”; dải top 3 trong thẻ thì có. → M1-04</p>
+          </section>
+
+        </div>
+      </main>
+
+      <footer class="wf-footer">
+        <div class="wf-shell">
+          <nav class="wf-nav" aria-label="Điều hướng chân trang (wireframe)">
+            <span class="wf-chip"><span class="wf-order">9</span> Giới thiệu</span>
+            <span class="wf-chip">Điều khoản</span>
+            <span class="wf-chip">Quyền riêng tư</span>
+            <span class="wf-chip">Cài đặt cookie</span>
+          </nav>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+  <dl class="wf-measures">
+    <dt>Cột nội dung</dt><dd>1200 px (1280 − 2 × 40)</dd>
+    <dt>Lưới</dt><dd>3 cột · khoảng cách 32 px · mỗi thẻ ≈ 378 px</dd>
+    <dt><code>ad-header-leaderboard</code></dt><dd>728 × 90, căn giữa cột nội dung · không có khung trò chơi trên trang này nên quy tắc 24 px không áp dụng</dd>
+    <dt>Số ô quảng cáo</dt><dd>1</dd>
+  </dl>
+</section>
+
+<footer class="wf-view-block">
+  <h2>Ghi chú về trang này</h2>
+  <ul class="wf-prose">
+    <li><strong>Sáu trường trên một thẻ, bốn trường từ manifest.</strong>
+        <span class="wf-src">art</span>, <span class="wf-src">title</span>,
+        <span class="wf-src">short description</span> và
+        <span class="wf-src">play link</span> là bốn trường mà đề bài yêu cầu chỉ rõ;
+        <span class="wf-src">controls</span> được requirements.md §2 thêm vào.
+        Dải <strong>top 3 tuần này</strong> <em>không</em> đến từ manifest — đó là dữ liệu
+        bảng xếp hạng của nền tảng, và vì thế nó có trạng thái tải/trống/lỗi riêng
+        trong khi phần còn lại của thẻ thì không.</li>
+    <li><strong>Một câu hỏi để lại cho M1-04/M1-05.</strong> DESIGN.md yêu cầu “một hành động
+        chính cho mỗi khung nhìn”, nhưng một lưới có N thẻ thì có N nút “Chơi”. Wireframe đánh dấu
+        nút “Chơi” là hành động chính <em>của thẻ</em>. M1-04 quyết định điều đó được thể hiện thế nào:
+        <code>button-primary</code> trong thẻ, <code>button-secondary</code>, hay cả thẻ là một liên kết.
+        Đây là câu hỏi về thành phần, không phải về bố cục, nên nó không chặn wireframe này.</li>
+  </ul>
+</footer>
+
+</body>
+</html>
