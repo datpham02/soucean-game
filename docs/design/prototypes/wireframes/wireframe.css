@@ -443,6 +443,13 @@
    ads.css, which is why a reviewer measuring these sheets is measuring
    M1-02's geometry and not a copy of it.
 
+   ONE DEPENDENCY TO KNOW ABOUT: the "on" value below is written `display:
+   flex` in three places, because that is the display type ads.css section 2
+   gives `.ad-slot`. If ads.css ever changes it, these sheets will silently
+   keep `flex` and stop matching the product. Any change to `.ad-slot`'s
+   display type in ads.css must be mirrored here. (The cross-reference can
+   only be one-way from this file: ads.css is M1-02's and not ours to edit.)
+
    Inventory, from ad-slots.md section 3:
      mobile  (375) : ad-mobile-top, ad-after-info-rectangle           — 2 slots
      compact (768) : header-leaderboard, after-info, incontent-banner — 3 slots

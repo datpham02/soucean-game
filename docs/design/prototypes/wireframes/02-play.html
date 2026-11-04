@@ -378,8 +378,16 @@
   <ul class="wf-prose">
     <li><strong>Một DOM, ba dải.</strong> Cả ba khung trên dùng đúng một cấu trúc markup;
         chỉ thuộc tính <code>display</code> của năm ô quảng cáo thay đổi. Không phần tử nào
-        bị đổi chỗ, đổi cha hay sắp xếp lại — nên thứ tự đọc và thứ tự nhìn trùng nhau ở
-        mọi chiều rộng (ad-slots.md §9).</li>
+        bị đổi chỗ, đổi cha hay sắp xếp lại, và không dùng thuộc tính <code>order</code> —
+        nên <strong>thứ tự DOM = thứ tự tab = dãy số</strong> ở mọi chiều rộng
+        (ad-slots.md §9).</li>
+    <li><strong>Ở dải 1280, thứ tự nhìn khác dãy số — và đó là chủ ý.</strong> Cột phải
+        (ô quảng cáo 10 và bảng tuần 11) nằm ngang tầm khung trò chơi (7), nên mắt gặp
+        10 và 11 <em>trước</em> băng quảng cáo trong nội dung (9) ở cuối cột chính. Cột
+        phải được đọc và tab qua <strong>sau</strong> toàn bộ cột chính: đó là thứ tự DOM
+        mà ad-slots.md §9.1 ấn định, và cũng là thứ tự nên muốn — nội dung trước cột phải
+        (WCAG 1.3.2 và 2.4.3). Dãy số là thứ tự DOM và tab, không phải thứ tự nhìn
+        từ trên xuống.</li>
     <li><strong>Ô quảng cáo là anh em của khung.</strong> Không ô nào là con cháu của
         <code>.wf-frame</code>; <code>.wf-frame .ad-slot</code> không khớp gì cả.</li>
     <li><strong>Mỗi cột là flex column không có <code>gap</code></strong> (ad-slots.md §4.3),

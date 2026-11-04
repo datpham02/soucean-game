@@ -90,6 +90,31 @@ the 24 px clearance stay in `ads.css`. That is the point: the geometry a
 reviewer measures on these sheets is M1-02's geometry, not a copy of it that
 can drift from it.
 
+#### The one exception, stated: the type scale is not view-bound
+
+`tokens.css` §7 steps five type tokens — `--text-display`, `--text-headline-lg`,
+`--text-headline-md`, `--text-headline-sm` and `--text-body-lg` — in a
+**viewport** `@media (min-width: 768px)` on `:root`. The shim does not restate
+that step, so **in any window ≥ 768 px wide the eight mobile views render those
+five tokens at their desktop sizes** — the visible case is `.wf-h1`, 18 px on a
+phone and 20 px on a sheet read on a desktop monitor. It is 2 px on one element
+per view and it changes no layout, no region and no reading order, so it does
+not affect anything these wireframes decide. But it is a real exception to
+"a view's band is a property of the view", and the next reader should know it
+is there rather than discover it.
+
+It is left as an exception on purpose. Restating `18px` on `.wf-view--mobile`
+would put a type-scale literal into `wireframes/`, which the inherit table below
+forbids precisely because such a literal can drift from `tokens.css`. The
+type-accurate way to read a mobile view at its own type scale is a narrow
+window; M2 gets it for free, because there the band comes from the viewport.
+
+**`--layout-gutter` has the same viewport dependency and *is* handled**, which
+is the deliberate half of the same problem: `wireframe.css` §2 gives each view
+its own `--wf-gutter` from the spacing tokens rather than reading
+`--layout-gutter`, because the gutter moves the layout and the type step does
+not.
+
 ### What the sheets inherit
 
 | Inherited | From | Rule |
@@ -236,9 +261,11 @@ sequence after the game info:
 
 Note orders 9 and 10 at 1280: **the rail comes after the whole main column in
 DOM order** (`ad-slots.md` §9.1), so the in-content banner is read, and tabbed
-past, before the rail. Visually the rail sits in column 2 beside the frame.
-That is the standard agreement between reading order and visual order for a
-two-column page, and it is why the page needs no `order` property anywhere.
+past, before the rail. Visually the rail sits in column 2 beside the frame, so
+a sighted reader meets 10 and 11 **before** 9: on this one view the numbered
+sequence is the DOM and tab order but not the top-to-bottom visual order, and
+that is the intended trade (§6). It is also why the page needs no `order`
+property anywhere — the DOM is already in the order we want read.
 
 **States.** The frame marks loading · error · "needs JavaScript"; the weekly
 board marks loading · empty (nobody has scored this week) · error. `game-meta`
@@ -471,8 +498,18 @@ Accessibility is in the acceptance criteria, not a follow-up (`AGENTS.md` §6).
 What a wireframe can settle, it settles here:
 
 - **Landmarks and order.** Every page is skip link → header → `main` → footer.
-  Reading order, DOM order and tab order are the same sequence, at every width,
-  on every sheet. The numbered circles *are* that order.
+  **DOM order = tab order = the numbered sequence, at every width, on every
+  sheet**, and no view reorders anything: one DOM per page, bands differ only in
+  the `display` of five ad slots, and no `order` property is used anywhere.
+- **Visual order matches that sequence everywhere except the wide play page,
+  deliberately.** At 1280 the rail — the rail ad (10) and the weekly board (11)
+  — sits top-right, level with the frame (7), so a sighted reader *sees* it
+  before the in-content banner (9) at the foot of the main column. The rail is
+  read, and tabbed past, **after** the whole main column. That is the DOM order
+  `ad-slots.md` §9.1 fixes, and it is also the order to want: content before
+  rail is what keeps the meaningful sequence meaningful (WCAG 1.3.2) and the
+  focus order sensible (WCAG 2.4.3). The numbered circles are the DOM and tab
+  order; on that one view they are not the top-to-bottom visual order.
 - **The skip link comes before the header ad**, so one keystroke passes the
   banner (`ad-slots.md` §9.4).
 - **One `h1` per page**, then `h2` sections, then `h3` within them. No level is
@@ -647,3 +684,25 @@ is on the page.
    the old failure point. `ad-slots.md` §10 asks a reviewer to check the real
    product at 900, 1000 and 1024 as well; that is a prototype check against
    `ads.css`, not a wireframe, and it is unchanged by this Task.
+
+Three things the compact sheet is simply the first place anyone can *see*.
+None is a defect in these wireframes — each is drawn exactly as its spec says —
+but each is now visible, so it is recorded rather than left to be rediscovered.
+
+4. **Ad density in the compact band.** At 768 px `ad-after-info-rectangle`
+   (300 × 250) and `ad-incontent-banner` (728 × 90, drawn 704 wide) stack in
+   direct sequence 48 px apart — roughly 388 px of ad between the game info and
+   the footer. Both slots are in `requirements.md` §5.1 and the inventory is the
+   Board's 2026-11-04 decision, so this Task drew what it was told to draw. It
+   is what an ad-network placement policy (OQ-038) will have to answer.
+5. **The compact header reserves a box no creative can fill.**
+   `min(728px, 100%)` shrinks the header leaderboard to 704 px at 768, so the
+   band holds 90 px of height a 728-wide creative will never occupy — `ads.css`'s
+   documented "requests no creative" behaviour, correctly drawn, but in practice
+   a permanently empty strip at the top of every page in that band. Worth
+   settling before M6.
+6. **The sheets hard-code `display: flex` as the ad slot's "on" value**
+   (`wireframe.css` §4, three places), because that is what `ads.css` §2 sets.
+   If `ads.css` ever changes that display type the sheets keep `flex` silently.
+   The comment in `wireframe.css` §4 says so; the cross-reference can only be
+   one-way, because `ads.css` belongs to M1-02 and this Task does not edit it.
