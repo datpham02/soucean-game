@@ -644,10 +644,17 @@
   <h2>4. Trạng thái của màn hình cài đặt</h2>
   <p>
     Bốn biến thể dưới đây là nội dung của <em>cùng một hộp thoại</em> đã dựng đủ
-    bốn lần ở §3; hai bản dựng ở đây phủ cả hai bề ngang và cả hai giao diện.
-    Thứ tự trong mỗi bản dựng: <strong>đang lưu</strong> ·
+    bốn lần ở §3; <strong>bốn bản dựng</strong> ở đây phủ đủ bốn ô chiều rộng ×
+    giao diện. Thứ tự trong mỗi bản dựng: <strong>đang lưu</strong> ·
     <strong>lưu thất bại</strong> · <strong>đang đọc lựa chọn đã lưu</strong> ·
     <strong>không đọc được lựa chọn đã lưu</strong>.
+  </p>
+  <p>
+    Trước đây mục này chỉ có hai bản dựng — <em>sáng 375</em> và
+    <em>tối 1280</em> — nên hai ô chéo nhau còn trống; đó là phát hiện
+    <strong>A-08</strong> của <code>accessibility-report.md</code>. Nay
+    <em>tối 375</em> và <em>sáng 1280</em> cũng được vẽ, bằng đúng bốn biến thể
+    ấy: không thành phần mới, không CSS mới, không một token nào đổi.
   </p>
   <p>
     <strong>Trạng thái rỗng thì không có, và đó là một khẳng định chứ không phải
@@ -756,6 +763,198 @@
         </div>
       </div>
       <span class="mk-tag">Khi lỗi là <strong>việc người dùng vừa làm</strong> (bấm Lưu) thì thông báo mang <code>role="alert"</code> — cắt ngang là đúng, vì đó chính là câu trả lời họ đang đợi. Khi lỗi là một tải nền (đọc lựa chọn cũ) thì khối mang <code>role="status"</code> — lịch sự.</span>
+    </section>
+
+    <section>
+      <h3 class="mk-cap">Tối · 375 px</h3>
+      <div class="mk-view mk-view--mobile" data-theme="dark">
+        <div class="mk-stack">
+
+          <div class="dialog" role="dialog" aria-label="Mẫu tĩnh: đang lưu · tối 375">
+            <div class="dialog__body">
+              <ul class="consent-cats">
+                <li class="consent-cat">
+                  <div class="choice">
+                    <input id="se-c1" type="checkbox" checked disabled aria-describedby="se-d1">
+                    <label for="se-c1">Cần thiết</label>
+                    <span class="consent-cat__always">Luôn bật</span>
+                  </div>
+                  <p class="consent-cat__desc" id="se-d1">Giữ phiên, nhớ lựa chọn cookie và giao diện bạn chọn.</p>
+                </li>
+                <li class="consent-cat">
+                  <div class="choice">
+                    <input id="se-c2" type="checkbox" disabled aria-describedby="se-d2">
+                    <label for="se-c2">Quảng cáo</label>
+                  </div>
+                  <p class="consent-cat__desc" id="se-d2">Cookie cho quảng cáo trên trang web. Mặc định tắt.</p>
+                </li>
+              </ul>
+            </div>
+            <div class="dialog__actions">
+              <button class="btn btn--secondary" type="button" disabled>Hủy</button>
+              <button class="btn btn--primary" type="button" disabled>Đang lưu…</button>
+            </div>
+          </div>
+
+          <div class="dialog" role="dialog" aria-label="Mẫu tĩnh: lưu thất bại · tối 375">
+            <div class="dialog__body">
+              <div class="notice notice--error" role="alert"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg><div class="notice__body"><p class="notice__title">Lỗi</p><p class="notice__text">Không lưu được lựa chọn của bạn. Lựa chọn cũ vẫn giữ nguyên — chưa có cookie quảng cáo nào được đặt. Kiểm tra kết nối rồi bấm “Lưu lựa chọn” lần nữa.</p></div></div>
+              <ul class="consent-cats">
+                <li class="consent-cat">
+                  <div class="choice">
+                    <input id="sf-c1" type="checkbox" checked disabled aria-describedby="sf-d1">
+                    <label for="sf-c1">Cần thiết</label>
+                    <span class="consent-cat__always">Luôn bật</span>
+                  </div>
+                  <p class="consent-cat__desc" id="sf-d1">Giữ phiên, nhớ lựa chọn cookie và giao diện bạn chọn.</p>
+                </li>
+                <li class="consent-cat">
+                  <div class="choice">
+                    <input id="sf-c2" type="checkbox" checked aria-describedby="sf-d2">
+                    <label for="sf-c2">Quảng cáo</label>
+                  </div>
+                  <p class="consent-cat__desc" id="sf-d2">Cookie cho quảng cáo trên trang web. Mặc định tắt.</p>
+                </li>
+              </ul>
+            </div>
+            <div class="dialog__actions">
+              <button class="btn btn--secondary" type="button">Hủy</button>
+              <button class="btn btn--primary" type="button">Lưu lựa chọn</button>
+            </div>
+          </div>
+
+          <div class="dialog" role="dialog" aria-label="Mẫu tĩnh: đang đọc lựa chọn · tối 375">
+            <div class="dialog__body">
+              <div class="u-visually-hidden" role="status">Đang đọc lựa chọn cookie đã lưu…</div>
+              <div class="state state--loading state--reserve-sm" aria-busy="true">
+                <div class="skeleton" aria-hidden="true">
+                  <span class="skeleton__bar skeleton__bar--title"></span>
+                  <span class="skeleton__bar skeleton__bar--most"></span>
+                  <span class="skeleton__bar skeleton__bar--half"></span>
+                </div>
+              </div>
+            </div>
+            <div class="dialog__actions">
+              <button class="btn btn--secondary" type="button">Hủy</button>
+              <button class="btn btn--primary" type="button" disabled>Lưu lựa chọn</button>
+            </div>
+          </div>
+
+          <div class="dialog" role="dialog" aria-label="Mẫu tĩnh: không đọc được lựa chọn · tối 375">
+            <div class="dialog__body">
+              <div class="state state--error state--reserve-sm" role="status">
+                <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+                <p class="state__label">Lỗi</p>
+                <p class="state__title">Không đọc được lựa chọn của bạn</p>
+                <p class="state__text">Trong lúc chờ, chỉ cookie cần thiết được dùng.</p>
+                <button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Thử lại</button>
+              </div>
+            </div>
+            <div class="dialog__actions">
+              <button class="btn btn--secondary" type="button">Hủy</button>
+              <button class="btn btn--primary" type="button" disabled>Lưu lựa chọn</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <span class="mk-tag">Ô mà <strong>A-08</strong> ghi là còn thiếu. Đặt cạnh bản dựng sáng ngay trên: cùng bốn biến thể, cùng thứ tự, cùng hình học — hai khối trạng thái vẫn giữ chiều cao đặt trước của <code>.state--reserve-sm</code>, và nút Lưu vẫn bị tắt ở đúng hai biến thể chưa đọc được lựa chọn. Thứ duy nhất đổi là giá trị của token màu.</span>
+    </section>
+
+    <section>
+      <h3 class="mk-cap">Sáng · 1280 px</h3>
+      <div class="mk-scroll"><div class="mk-view mk-view--desktop">
+        <div class="mk-stack">
+
+          <div class="dialog" role="dialog" aria-label="Mẫu tĩnh: đang lưu · sáng 1280">
+            <div class="dialog__body">
+              <ul class="consent-cats">
+                <li class="consent-cat">
+                  <div class="choice">
+                    <input id="sg-c1" type="checkbox" checked disabled aria-describedby="sg-d1">
+                    <label for="sg-c1">Cần thiết</label>
+                    <span class="consent-cat__always">Luôn bật</span>
+                  </div>
+                  <p class="consent-cat__desc" id="sg-d1">Giữ phiên, nhớ lựa chọn cookie và giao diện bạn chọn.</p>
+                </li>
+                <li class="consent-cat">
+                  <div class="choice">
+                    <input id="sg-c2" type="checkbox" disabled aria-describedby="sg-d2">
+                    <label for="sg-c2">Quảng cáo</label>
+                  </div>
+                  <p class="consent-cat__desc" id="sg-d2">Cookie cho quảng cáo trên trang web. Mặc định tắt.</p>
+                </li>
+              </ul>
+            </div>
+            <div class="dialog__actions">
+              <button class="btn btn--secondary" type="button" disabled>Hủy</button>
+              <button class="btn btn--primary" type="button" disabled>Đang lưu…</button>
+            </div>
+          </div>
+
+          <div class="dialog" role="dialog" aria-label="Mẫu tĩnh: lưu thất bại · sáng 1280">
+            <div class="dialog__body">
+              <div class="notice notice--error" role="alert"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg><div class="notice__body"><p class="notice__title">Lỗi</p><p class="notice__text">Không lưu được lựa chọn của bạn. Lựa chọn cũ vẫn giữ nguyên — chưa có cookie quảng cáo nào được đặt. Kiểm tra kết nối rồi bấm “Lưu lựa chọn” lần nữa.</p></div></div>
+              <ul class="consent-cats">
+                <li class="consent-cat">
+                  <div class="choice">
+                    <input id="sh-c1" type="checkbox" checked disabled aria-describedby="sh-d1">
+                    <label for="sh-c1">Cần thiết</label>
+                    <span class="consent-cat__always">Luôn bật</span>
+                  </div>
+                  <p class="consent-cat__desc" id="sh-d1">Giữ phiên, nhớ lựa chọn cookie và giao diện bạn chọn.</p>
+                </li>
+                <li class="consent-cat">
+                  <div class="choice">
+                    <input id="sh-c2" type="checkbox" checked aria-describedby="sh-d2">
+                    <label for="sh-c2">Quảng cáo</label>
+                  </div>
+                  <p class="consent-cat__desc" id="sh-d2">Cookie cho quảng cáo trên trang web. Mặc định tắt.</p>
+                </li>
+              </ul>
+            </div>
+            <div class="dialog__actions">
+              <button class="btn btn--secondary" type="button">Hủy</button>
+              <button class="btn btn--primary" type="button">Lưu lựa chọn</button>
+            </div>
+          </div>
+
+          <div class="dialog" role="dialog" aria-label="Mẫu tĩnh: đang đọc lựa chọn · sáng 1280">
+            <div class="dialog__body">
+              <div class="u-visually-hidden" role="status">Đang đọc lựa chọn cookie đã lưu…</div>
+              <div class="state state--loading state--reserve-sm" aria-busy="true">
+                <div class="skeleton" aria-hidden="true">
+                  <span class="skeleton__bar skeleton__bar--title"></span>
+                  <span class="skeleton__bar skeleton__bar--most"></span>
+                  <span class="skeleton__bar skeleton__bar--half"></span>
+                </div>
+              </div>
+            </div>
+            <div class="dialog__actions">
+              <button class="btn btn--secondary" type="button">Hủy</button>
+              <button class="btn btn--primary" type="button" disabled>Lưu lựa chọn</button>
+            </div>
+          </div>
+
+          <div class="dialog" role="dialog" aria-label="Mẫu tĩnh: không đọc được lựa chọn · sáng 1280">
+            <div class="dialog__body">
+              <div class="state state--error state--reserve-sm" role="status">
+                <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+                <p class="state__label">Lỗi</p>
+                <p class="state__title">Không đọc được lựa chọn của bạn</p>
+                <p class="state__text">Trong lúc chờ, chỉ cookie cần thiết được dùng.</p>
+                <button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Thử lại</button>
+              </div>
+            </div>
+            <div class="dialog__actions">
+              <button class="btn btn--secondary" type="button">Hủy</button>
+              <button class="btn btn--primary" type="button" disabled>Lưu lựa chọn</button>
+            </div>
+          </div>
+
+        </div>
+      </div></div>
+      <span class="mk-tag">Ô còn lại của <strong>A-08</strong>. Hộp thoại <strong>không</strong> rộng ra theo cửa sổ: <code>.dialog</code> bị chặn ở <code>70ch</code>, nên ở 1280 px nó vẫn đúng chiều rộng ấy. Thứ duy nhất chiều rộng đổi là đệm trong — <code>space-lg</code> ở dải mobile thành <code>space-xl</code> ở dải desktop, đúng một dòng trong <code>consent.css</code>. Đó là lý do bốn ô của mục này giống nhau đến thế, và là lý do kiểm toán viên gọi chỗ thiếu này là <em>khoảng trống trưng bày</em> chứ không phải một lỗi.</span>
     </section>
 
     <section>

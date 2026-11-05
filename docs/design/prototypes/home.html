@@ -582,7 +582,7 @@
     </section>
 
     <section>
-      <h3 class="mk-cap">Tối · 1280 px — trống và lỗi, cùng một hộp</h3>
+      <h3 class="mk-cap">Tối · 1280 px — cả ba, trống và lỗi cùng một hộp</h3>
       <div class="mk-scroll"><div class="mk-view mk-view--desktop" data-theme="dark">
         <div class="mk-stack">
           <div class="state state--empty state--reserve-lg grid-state">
@@ -597,9 +597,47 @@
             <p class="state__text">Kiểm tra kết nối rồi thử lại.</p>
             <button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Thử lại</button>
           </div>
+          <div class="u-visually-hidden" role="status">Đang tải danh sách trò chơi…</div>
+          <div aria-busy="true">
+            <ul class="game-grid" aria-hidden="true">
+              <li class="game-card">
+                <div class="skeleton">
+                  <div class="skeleton__block skeleton__block--media"></div>
+                  <span class="skeleton__bar sk-reserve--title skeleton__bar--most"></span>
+                  <span class="skeleton__bar sk-reserve--line"></span>
+                  <span class="skeleton__bar sk-reserve--line skeleton__bar--half"></span>
+                  <span class="skeleton__bar sk-reserve--meta skeleton__bar--most"></span>
+                  <span class="skeleton__block sk-reserve--top3"></span>
+                  <span class="skeleton__block sk-reserve--action"></span>
+                </div>
+              </li>
+              <li class="game-card">
+                <div class="skeleton">
+                  <div class="skeleton__block skeleton__block--media"></div>
+                  <span class="skeleton__bar sk-reserve--title skeleton__bar--half"></span>
+                  <span class="skeleton__bar sk-reserve--line"></span>
+                  <span class="skeleton__bar sk-reserve--line skeleton__bar--most"></span>
+                  <span class="skeleton__bar sk-reserve--meta skeleton__bar--half"></span>
+                  <span class="skeleton__block sk-reserve--top3"></span>
+                  <span class="skeleton__block sk-reserve--action"></span>
+                </div>
+              </li>
+              <li class="game-card">
+                <div class="skeleton">
+                  <div class="skeleton__block skeleton__block--media"></div>
+                  <span class="skeleton__bar sk-reserve--title skeleton__bar--most"></span>
+                  <span class="skeleton__bar sk-reserve--line"></span>
+                  <span class="skeleton__bar sk-reserve--line skeleton__bar--half"></span>
+                  <span class="skeleton__bar sk-reserve--meta skeleton__bar--short"></span>
+                  <span class="skeleton__block sk-reserve--top3"></span>
+                  <span class="skeleton__block sk-reserve--action"></span>
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
       </div></div>
-      <span class="mk-tag">Hai khối xếp cạnh nhau để thấy chúng cao bằng nhau. Đo <code>getBoundingClientRect().height</code> của cả hai — phải ra cùng một số.</span>
+      <span class="mk-tag">Hai khối đầu xếp cạnh nhau để thấy chúng cao bằng nhau. Đo <code>getBoundingClientRect().height</code> của cả hai — phải ra cùng một số. Khối thứ ba là trạng thái <em>đang tải</em> ở giao diện tối: <strong>đây là ô duy nhất của lưới mang đủ cả ba</strong>, điều mà <code>accessibility-report.md</code> ghi là còn thiếu ở <strong>A-08</strong>. Nó là lưới thật với thẻ thật, không phải khối <code>.state</code> — lý do ở ngay đoạn mở §3.</span>
     </section>
   </div>
 </section>
@@ -622,6 +660,13 @@
     trong tờ này thẻ trò chơi đã nằm ở <code>h6</code> và không còn mức nào bên
     dưới. Trên trang thật tiêu đề thẻ là <code>h3</code>, nên khối này không gặp
     vấn đề đó — xem <a class="link" href="../pages/home.md">home.md</a> §3.
+  </p>
+  <p>
+    Trước đây dải top 3 chỉ được vẽ ở hai ô 375, và <strong>cả hai ô 1280</strong>
+    còn trống — đó là phát hiện <strong>A-08</strong> của
+    <code>accessibility-report.md</code>. Nay chúng được vẽ, mỗi ô mang đủ ba
+    trạng thái trong lưới ba cột thật, bằng đúng những khối chuẩn đã dùng ở 375:
+    không thành phần mới, không CSS mới.
   </p>
 
   <div class="mk-specs mk-specs--row">
@@ -682,6 +727,104 @@
         </div>
       </div>
       <span class="mk-tag">Dải top 3 hỏng <strong>không</strong> làm hỏng thẻ: ảnh, tên, mô tả và nút “Chơi” vẫn ở đó và vẫn dùng được. Luôn có một đường đi tiếp.</span>
+    </section>
+  </div>
+
+  <div class="mk-specs">
+    <section>
+      <h3 class="mk-cap">Sáng · 1280 px — cả ba, trong lưới ba cột</h3>
+      <div class="mk-scroll"><div class="mk-view mk-view--desktop">
+        <div class="shell main">
+          <ul class="game-grid">
+            <li class="game-card">
+              <div class="game-card__art"></div>
+              <h4 class="game-card__title">Xếp gạch cổ điển</h4>
+              <p class="game-card__desc">Xoay và xếp khối rơi cho kín hàng.</p>
+              <div class="state state--empty state--reserve-sm">
+                <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-empty"/></svg>
+                <p class="state__title">Chưa có điểm tuần này</p>
+                <p class="state__text">Hãy là người đầu tiên.</p>
+              </div>
+              <p class="game-card__action"><a class="btn btn--secondary btn--block" href="#s4"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-play"/></svg>Chơi<span class="u-visually-hidden"> Xếp gạch cổ điển</span></a></p>
+            </li>
+            <li class="game-card">
+              <div class="game-card__art"></div>
+              <h4 class="game-card__title">Đố chữ mỗi ngày</h4>
+              <p class="game-card__desc">Một câu đố mới mỗi sáng.</p>
+              <div class="u-visually-hidden" role="status">Đang tải bảng tuần…</div>
+              <div class="state state--loading state--reserve-sm" aria-busy="true">
+                <div class="skeleton" aria-hidden="true">
+                  <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--most"></span><span class="skeleton__bar"></span></div>
+                  <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--half"></span><span class="skeleton__bar"></span></div>
+                  <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--most"></span><span class="skeleton__bar"></span></div>
+                </div>
+              </div>
+              <p class="game-card__action"><a class="btn btn--secondary btn--block" href="#s4"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-play"/></svg>Chơi<span class="u-visually-hidden"> Đố chữ mỗi ngày</span></a></p>
+            </li>
+            <li class="game-card">
+              <div class="game-card__art"></div>
+              <h4 class="game-card__title">Dò mìn</h4>
+              <p class="game-card__desc">Cẩn thận từng ô một.</p>
+              <div class="state state--error state--reserve-sm" role="status">
+                <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+                <div class="state__label">Lỗi</div>
+                <p class="state__title">Không tải được bảng tuần</p>
+                <button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Thử lại</button>
+              </div>
+              <p class="game-card__action"><a class="btn btn--secondary btn--block" href="#s4"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-play"/></svg>Chơi<span class="u-visually-hidden"> Dò mìn</span></a></p>
+            </li>
+          </ul>
+        </div>
+      </div></div>
+      <span class="mk-tag">Ba thẻ cạnh nhau trong lưới thật — đây là chỗ duy nhất đọc được điều mà một ô 375 không nói: <strong>ba thẻ cao bằng nhau dù dải bên trong ở ba trạng thái khác nhau</strong>, vì <code>.state--reserve-sm</code> đặt trước đúng chiều cao của dải đã tải. Đo <code>getBoundingClientRect().height</code> của cả ba <code>.game-card</code> — phải ra cùng một số.</span>
+    </section>
+
+    <section>
+      <h3 class="mk-cap">Tối · 1280 px — cả ba</h3>
+      <div class="mk-scroll"><div class="mk-view mk-view--desktop" data-theme="dark">
+        <div class="shell main">
+          <ul class="game-grid">
+            <li class="game-card">
+              <div class="game-card__art"></div>
+              <h4 class="game-card__title">Xếp gạch cổ điển</h4>
+              <p class="game-card__desc">Xoay và xếp khối rơi cho kín hàng.</p>
+              <div class="state state--empty state--reserve-sm">
+                <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-empty"/></svg>
+                <p class="state__title">Chưa có điểm tuần này</p>
+                <p class="state__text">Hãy là người đầu tiên.</p>
+              </div>
+              <p class="game-card__action"><a class="btn btn--secondary btn--block" href="#s4"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-play"/></svg>Chơi<span class="u-visually-hidden"> Xếp gạch cổ điển</span></a></p>
+            </li>
+            <li class="game-card">
+              <div class="game-card__art"></div>
+              <h4 class="game-card__title">Đố chữ mỗi ngày</h4>
+              <p class="game-card__desc">Một câu đố mới mỗi sáng.</p>
+              <div class="u-visually-hidden" role="status">Đang tải bảng tuần…</div>
+              <div class="state state--loading state--reserve-sm" aria-busy="true">
+                <div class="skeleton" aria-hidden="true">
+                  <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--most"></span><span class="skeleton__bar"></span></div>
+                  <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--half"></span><span class="skeleton__bar"></span></div>
+                  <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--most"></span><span class="skeleton__bar"></span></div>
+                </div>
+              </div>
+              <p class="game-card__action"><a class="btn btn--secondary btn--block" href="#s4"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-play"/></svg>Chơi<span class="u-visually-hidden"> Đố chữ mỗi ngày</span></a></p>
+            </li>
+            <li class="game-card">
+              <div class="game-card__art"></div>
+              <h4 class="game-card__title">Dò mìn</h4>
+              <p class="game-card__desc">Cẩn thận từng ô một.</p>
+              <div class="state state--error state--reserve-sm" role="status">
+                <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+                <div class="state__label">Lỗi</div>
+                <p class="state__title">Không tải được bảng tuần</p>
+                <button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Thử lại</button>
+              </div>
+              <p class="game-card__action"><a class="btn btn--secondary btn--block" href="#s4"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-play"/></svg>Chơi<span class="u-visually-hidden"> Dò mìn</span></a></p>
+            </li>
+          </ul>
+        </div>
+      </div></div>
+      <span class="mk-tag">Ô thứ hai mà <strong>A-08</strong> ghi là còn thiếu. Quy tắc bề mặt vẫn đọc được ở giao diện tối: khối trạng thái tự cấp nền <code>bg</code> của nó ngay bên trong thẻ nền <code>surface</code>, nên nó <em>lõm xuống</em> khỏi thẻ chứ không nổi lên — và biên giữa hai nền là <code>border-strong</code>, không phải một sắc độ.</span>
     </section>
   </div>
 </section>

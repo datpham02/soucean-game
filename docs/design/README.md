@@ -102,10 +102,11 @@ is a separate question and is answered in §3.
 | About | ✓ | ✓ | ✓ ᵃ | ✓ ᵃ | ✓ ᵃ | ✓ | ✓ | ✓ | ✓ |
 | Terms | ✓ | ✓ | ✓ ᵃ | ✓ ᵃ | ✓ ᵃ | ✓ | ✓ | ✓ | ✓ |
 
-- **ᵃ** The state is designed and demonstrated, but **not in every one of the
-  four width × theme cells**. The missing cells are listed page by page in §3 and
-  are finding **A-08** (Minor, open). Nothing is claimed here that §3 does not
-  repeat.
+- **ᵃ** The state is designed and demonstrated. When the audit ran it was **not
+  in every one of the four width × theme cells**, which was finding **A-08**
+  (Minor). SOU-25 drew the missing cells; §3 now records every cell the audit
+  listed as covered, and names the three by-design absences that are stated
+  rather than drawn. Nothing is claimed here that §3 does not repeat.
 - **ᵇ** The play wireframe carries **three** views, not two: 375, 768 and 1280.
   The 768 px view is the compact-band check that `ad-slots.md` §11 requires.
 - **ᶜ** **The game frame has no empty state, by design.** Its four displays are
@@ -130,33 +131,85 @@ filled with.
 
 ---
 
-## 3. The state × width × theme gap, in full
+## 3. The state × width × theme gap, and how it was closed
 
 The acceptance criterion asked for empty / loading / error at **both** widths in
-**both** themes. Three pages deliver the complete cross-product; five demonstrate
-their state blocks in only some of the four cells. This is the audit's own table
-(`accessibility-report.md` §3.2), reproduced so that the gap is visible on the
-page the Board approves from, not one link away.
+**both** themes. When the audit ran, three pages delivered the complete
+cross-product and five demonstrated their state blocks in only some of the four
+cells. That was finding **A-08** (Minor). **SOU-25 drew the missing cells**, using
+the canonical state blocks the component library already defines — no new
+component, no new CSS, and no colour, token, breakpoint or layout change.
 
-| Page / block | Demonstrated | Missing cells |
-| --- | --- | --- |
-| Leaderboards | all three states × all four cells, twice (own-rank block and main board) | — |
-| Account | all four cells, §2–§5 | — |
-| Privacy | all four cells | — |
-| Home — grid | L375 empty · D375 error · L1280 loading · D1280 empty + error | no single cell shows all three |
-| Home — top-3 strip | L375 empty + loading · D375 error | both 1280 cells |
-| Play — frame | L375 all four · D375 all four · L1280 loading + error | dark 1280 |
-| Play — weekly board | L375 · D375 · L1280 | dark 1280 |
-| About | L375 all three · D375 all three · L1280 | dark 1280 |
-| Terms | L375 all three · D375 all three | both 1280 cells |
-| Cookie settings | L375 · D1280 | dark 375, light 1280 |
+The first two columns are the audit's own table (`accessibility-report.md` §3.2),
+reproduced unchanged so that the gap is visible on the page the Board approves
+from, not one link away. The third column is what SOU-25 added.
 
-**How serious this is, stated by the auditor and not softened here:** it is a
+| Page / block | Demonstrated when the audit ran | Added by SOU-25 | Missing cells |
+| --- | --- | --- | --- |
+| Leaderboards | all three states × all four cells, twice (own-rank block and main board) | — | — |
+| Account | all four cells, §2–§5 | — | — |
+| Privacy | all four cells | — | — |
+| Home — grid | L375 empty · D375 error · L1280 loading · D1280 empty + error | loading added to D1280, as the real grid with three skeleton cards — that cell now shows all three | — ᵉ |
+| Home — top-3 strip | L375 empty + loading · D375 error | L1280 and D1280, each with all three states in the real three-column grid | — |
+| Play — frame | L375 all four · D375 all four · L1280 loading + error | D1280, with the same two state displays as L1280 | — ᶠ |
+| Play — weekly board | L375 · D375 · L1280 | D1280, with all three states in the real 300 px rail | — ᵍ |
+| About | L375 all three · D375 all three · L1280 | L1280 and D1280, each with all three inside `.shell--text` | — |
+| Terms | L375 all three · D375 all three | L1280 and D1280, each with all three inside `.shell--text` | — |
+| Cookie settings | L375 · D1280 | D375 and L1280, each with the same four dialog variants | — ʰ |
+
+Every cell the audit listed under "Missing cells" is now drawn. Four rows carry a
+note, because a dash there would claim more than the sheet shows:
+
+- **ᵉ** The home grid's two 375 cells and its light 1280 cell still show one
+  state each, exactly as the audit recorded them. A-08's entry for this row was
+  *"no single cell shows all three"*, and the dark 1280 cell now does; the other
+  three cells were not part of the finding and are unchanged.
+- **ᶠ** **The game frame has no empty state, by design** (footnote ᶜ in §2). Its
+  four displays are ready / loading / error / "JavaScript required"; all four are
+  drawn in both 375 cells, and the two *state* displays — loading and error — in
+  both 1280 cells. Ready and "JavaScript required" are 375-only in both themes,
+  as they were before.
+- **ᵍ** The light 1280 cell shows the weekly board **with data** in the rail,
+  which is what the audit counted; the three state displays at that width are now
+  drawn in the dark 1280 cell, in the same 300 px rail, so the two can be read
+  against each other.
+- **ʰ** **The cookie settings screen has no empty state, by design** (footnote ᵈ
+  in §2). Its four cells each carry the same four variants: saving · save failed ·
+  reading the stored choice · the stored choice could not be read.
+
+**How serious this was, stated by the auditor and not softened here:** it was a
 *demonstration* gap, not a proven defect — state blocks read their colours from
-tokens and their geometry is width-driven, so a missing cell is unlikely to hold
-a surprise. It is nevertheless recorded as finding **A-08** (Minor, open),
-because the criterion asked for the cross-product and the Board asked for gaps to
-be visible rather than silent.
+tokens and their geometry is width-driven, so a missing cell was unlikely to hold
+a surprise. It was nevertheless recorded as **A-08**, because the criterion asked
+for the cross-product and the Board asked for gaps to be visible rather than
+silent.
+
+**What the new cells are, and what has not been checked.** Every block SOU-25
+added is a verbatim copy of a canonical state block already on the same sheet,
+placed in the container the real page puts it in — so by construction the only
+things that differ between a new cell and the cell it was copied from are the
+`data-theme` attribute and the width of the view.
+
+That is a statement about the markup, and the markup was checked. In each of the
+five sheets: the `<div>`, `<section>`, `<ul>` and `<li>` open and close counts
+balance; no `id` occurs twice; every class the new blocks use is one the sheet's
+own stylesheet already defines, because every block is a copy of one already on
+that sheet; and each of the sixteen new `for` and `aria-describedby` references
+has exactly one matching `id`, with every `<use href="#…">` resolving to a
+`<symbol>` defined in the same document. The checks are `grep`-shaped rather
+than a parser or a test run, because M1 has neither — `AGENTS.md` §2 puts the
+test runner in M2.
+
+**None of that is a rendered check.** No browser was available in the authoring
+environment, so the new cells have not been looked at, and the auditor's
+prediction — that nothing moves but a colour value and a box width — is still a
+prediction. Confirming it by eye is the reviewer's step, and it is the same
+standing limitation §5.3 already records for the component sheet.
+
+**This Task does not close A-08 on its own authority.** It records the cells as
+drawn; whether the finding is closed is the auditor's call, on the same footing
+as the four Major fixes in §4.1. §5.1 still lists A-08 under "Minor — open" and
+is left for that decision.
 
 ---
 

@@ -385,6 +385,13 @@
     chúng dùng chung một hộp nên chuyển giữa hai khối bất kỳ không làm trang dịch
     một pixel.
   </p>
+  <p>
+    Cả ba được vẽ ở <strong>cả bốn ô</strong> chiều rộng × giao diện — 375 và
+    1280, sáng và tối — vì tiêu chí nghiệm thu hỏi đúng tích chéo ấy. Trước đây ô
+    <em>tối 1280</em> còn trống và đó là phát hiện <strong>A-08</strong> của
+    <code>accessibility-report.md</code>; nay nó được vẽ, bằng đúng những khối
+    chuẩn đã dùng ở hai ô 375, không thêm thành phần và không thêm CSS nào.
+  </p>
 
   <div class="mk-specs mk-specs--row">
     <section>
@@ -449,6 +456,84 @@
         </div>
       </div>
       <span class="mk-tag">Thanh xương là <code>border</code> trên <code>bg</code> — cặp <code>DESIGN.md</code> ghi là <strong>trang trí</strong>, 1.32 sáng / 1.49 tối, <code>aria-hidden</code>. Tín hiệu thật là dòng chữ trong vùng live. Không gì chuyển động.</span>
+    </section>
+  </div>
+
+  <div class="mk-specs">
+    <section>
+      <h3 class="mk-cap">Sáng · 1280 px — cả ba, trong khổ đọc</h3>
+      <div class="mk-scroll"><div class="mk-view mk-view--desktop">
+        <div class="mk-stack">
+          <div class="shell shell--text">
+            <div class="state state--empty state--reserve-md">
+              <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-empty"/></svg>
+              <h4 class="state__title">Trang này chưa có nội dung</h4>
+              <p class="state__text">Chúng tôi đang viết. Mời bạn quay lại sau.</p>
+              <a class="btn btn--secondary" href="home.html">Về trang chủ</a>
+            </div>
+          </div>
+          <div class="shell shell--text">
+            <div class="u-visually-hidden" role="status">Đang tải nội dung trang…</div>
+            <div class="state state--loading state--reserve-md" aria-busy="true">
+              <div class="skeleton" aria-hidden="true">
+                <span class="skeleton__bar skeleton__bar--title"></span>
+                <span class="skeleton__bar sk-reserve--body"></span>
+                <span class="skeleton__bar sk-reserve--body"></span>
+                <span class="skeleton__bar sk-reserve--body skeleton__bar--most"></span>
+                <span class="skeleton__bar sk-reserve--body skeleton__bar--half"></span>
+              </div>
+            </div>
+          </div>
+          <div class="shell shell--text">
+            <div class="state state--error state--reserve-md" role="status">
+              <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+              <div class="state__label">Lỗi</div>
+              <h4 class="state__title">Không tải được trang</h4>
+              <p class="state__text">Kiểm tra kết nối rồi thử lại.</p>
+              <button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Thử lại</button>
+            </div>
+          </div>
+        </div>
+      </div></div>
+      <span class="mk-tag">Mỗi khối nằm trong chính <code>.shell--text</code> mà trang thật đặt nó vào, nên ở 1280 px nó rộng đúng bằng cột văn bản — <strong>không</strong> trải hết 1200 px. Đó là điều duy nhất chiều rộng làm đổi: hộp rộng ra, chiều cao đặt trước và mọi màu giữ nguyên.</span>
+    </section>
+
+    <section>
+      <h3 class="mk-cap">Tối · 1280 px — cả ba</h3>
+      <div class="mk-scroll"><div class="mk-view mk-view--desktop" data-theme="dark">
+        <div class="mk-stack">
+          <div class="shell shell--text">
+            <div class="state state--empty state--reserve-md">
+              <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-empty"/></svg>
+              <h4 class="state__title">Trang này chưa có nội dung</h4>
+              <p class="state__text">Chúng tôi đang viết. Mời bạn quay lại sau.</p>
+              <a class="btn btn--secondary" href="home.html">Về trang chủ</a>
+            </div>
+          </div>
+          <div class="shell shell--text">
+            <div class="u-visually-hidden" role="status">Đang tải nội dung trang…</div>
+            <div class="state state--loading state--reserve-md" aria-busy="true">
+              <div class="skeleton" aria-hidden="true">
+                <span class="skeleton__bar skeleton__bar--title"></span>
+                <span class="skeleton__bar sk-reserve--body"></span>
+                <span class="skeleton__bar sk-reserve--body"></span>
+                <span class="skeleton__bar sk-reserve--body skeleton__bar--most"></span>
+                <span class="skeleton__bar sk-reserve--body skeleton__bar--half"></span>
+              </div>
+            </div>
+          </div>
+          <div class="shell shell--text">
+            <div class="state state--error state--reserve-md" role="status">
+              <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+              <div class="state__label">Lỗi</div>
+              <h4 class="state__title">Không tải được trang</h4>
+              <p class="state__text">Kiểm tra kết nối rồi thử lại.</p>
+              <button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Thử lại</button>
+            </div>
+          </div>
+        </div>
+      </div></div>
+      <span class="mk-tag">Ô còn thiếu của <strong>A-08</strong>, nay đã vẽ. Đặt cạnh bản dựng sáng ngay trên: cùng hình học, cùng chiều cao đặt trước, chỉ các token màu đổi giá trị — đúng điều kiểm toán viên dự đoán, và giờ thì nhìn thấy được chứ không phải tin.</span>
     </section>
   </div>
 

@@ -783,6 +783,33 @@
       </div></div>
       <span class="mk-tag">Hai khối này luôn đúng 16:9 và luôn đúng bằng nhau, ở mọi chiều rộng. Chúng rộng bằng khung chứa của §3 chứ không bằng cột chính của trang thật — kích thước thật 868 × 488 ở 1280 px nằm trong bản dựng đầy đủ ở §1, và cách đo bằng một dòng Console nằm ở <a class="link" href="../pages/play.md">play.md</a> §10.</span>
     </section>
+
+    <section>
+      <h3 class="mk-cap">Tối · 1280 px — cùng hai khối, cùng một hộp</h3>
+      <div class="mk-scroll"><div class="mk-view mk-view--desktop" data-theme="dark">
+        <div class="mk-stack">
+          <p class="mk-cap">Đang tải — hộp đã ở đúng kích thước cuối cùng</p>
+          <div class="u-visually-hidden" role="status">Đang tải trò chơi…</div>
+          <div class="game-frame state state--frame state--loading" aria-busy="true">
+            <div class="skeleton" aria-hidden="true">
+              <span class="skeleton__bar skeleton__bar--title"></span>
+              <span class="skeleton__bar skeleton__bar--most"></span>
+              <span class="skeleton__bar skeleton__bar--half"></span>
+            </div>
+          </div>
+
+          <p class="mk-cap">Lỗi — cùng hộp, cùng kích thước</p>
+          <div class="game-frame state state--frame state--error" role="status">
+            <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+            <div class="state__label">Lỗi</div>
+            <h4 class="state__title">Không tải được trò chơi</h4>
+            <p class="state__text">Kiểm tra kết nối rồi thử lại.</p>
+            <button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Thử lại</button>
+          </div>
+        </div>
+      </div></div>
+      <span class="mk-tag">Ô mà <strong>A-08</strong> ghi là còn thiếu, nay đã vẽ: đúng hai khối của bản dựng sáng ngay trên, cùng tỉ lệ 16:9, cùng kích thước. Thứ duy nhất đổi là giá trị của token màu — biểu tượng và chữ “Lỗi” vẫn là <code>error</code> trên <code>bg</code>, 7.45:1 ở giao diện tối, và viền khung vẫn là <code>border-strong</code>.</span>
+    </section>
   </div>
 
   <p>
@@ -1004,6 +1031,62 @@
         </div>
       </div></div>
       <span class="mk-tag">Cột bên rộng đúng bằng khổ 300 × 250, và chiều rộng ấy đọc từ chính biến khổ của <code>ads.css</code> chứ không viết lại thành số — nên cột và ô không thể lệch nhau. Ô quảng cáo nằm <strong>trên</strong> bảng tuần, đúng <code>requirements.md</code> §5.1.</span>
+    </section>
+
+    <section>
+      <h3 class="mk-cap">Tối · 1280 px — ba trạng thái trong cùng cột bên 300 px</h3>
+      <div class="mk-scroll"><div class="mk-view mk-view--desktop" data-theme="dark">
+        <div class="mk-stack">
+          <div class="play-grid">
+            <div class="play-main">
+              <div class="game-frame game-frame--mounted" tabindex="0" role="group" aria-label="Khung trò chơi — Xếp gạch cổ điển">
+                <p class="game-frame__placeholder">Khung trò chơi · 16:9</p>
+              </div>
+            </div>
+            <div class="play-rail">
+              <aside class="ad-slot ad-slot--rail-rectangle" aria-label="Quảng cáo">
+                <span class="ad-slot__label">Quảng cáo · 300 × 250</span>
+              </aside>
+              <section class="weekly-board card">
+                <h4 class="weekly-board__title">Bảng xếp hạng tuần này</h4>
+                <p class="weekly-board__week"><span class="badge">Tuần · UTC+7</span></p>
+                <div class="u-visually-hidden" role="status">Đang tải bảng xếp hạng tuần…</div>
+                <div class="state state--loading weekly-board__state" aria-busy="true">
+                  <div class="skeleton" aria-hidden="true">
+                    <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--most"></span><span class="skeleton__bar"></span></div>
+                    <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--half"></span><span class="skeleton__bar"></span></div>
+                    <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--most"></span><span class="skeleton__bar"></span></div>
+                  </div>
+                </div>
+                <p class="weekly-board__more"><a class="link" href="#s5">Xem bảng xếp hạng đầy đủ</a></p>
+              </section>
+              <section class="weekly-board card">
+                <h4 class="weekly-board__title">Bảng xếp hạng tuần này</h4>
+                <p class="weekly-board__week"><span class="badge">Tuần · UTC+7</span></p>
+                <div class="state state--empty weekly-board__state">
+                  <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-empty"/></svg>
+                  <h5 class="state__title">Chưa có ai ghi điểm tuần này</h5>
+                  <p class="state__text">Hãy là người đầu tiên — ván của bạn lên bảng ngay khi chơi xong.</p>
+                </div>
+                <p class="weekly-board__more"><a class="link" href="#s5">Xem bảng xếp hạng đầy đủ</a></p>
+              </section>
+              <section class="weekly-board card">
+                <h4 class="weekly-board__title">Bảng xếp hạng tuần này</h4>
+                <p class="weekly-board__week"><span class="badge">Tuần · UTC+7</span></p>
+                <div class="state state--error weekly-board__state" role="status">
+                  <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+                  <div class="state__label">Lỗi</div>
+                  <h5 class="state__title">Không tải được bảng xếp hạng</h5>
+                  <p class="state__text">Kiểm tra kết nối rồi thử lại.</p>
+                  <button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Thử lại</button>
+                </div>
+                <p class="weekly-board__more"><a class="link" href="#s5">Xem bảng xếp hạng đầy đủ</a></p>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div></div>
+      <span class="mk-tag">Ô mà <strong>A-08</strong> ghi là còn thiếu. Ba khối nằm trong <em>đúng</em> cột bên 300 px mà bản dựng sáng ngay trên vẽ bảng có dữ liệu, nên so được trực tiếp: ở chiều rộng hẹp nhất của trang, cả ba vẫn cao bằng bảng đã tải và không khối nào tràn. Ô quảng cáo vẫn nằm trên cùng, và trạng thái của bảng không chạm tới nó.</span>
     </section>
   </div>
 </section>
