@@ -1,0 +1,1304 @@
+<!doctype html>
+<html lang="vi" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup — Trang chơi · Soucean Game (SOU-4, M1-06)</title>
+<link rel="stylesheet" href="assets/play.css">
+</head>
+<body class="mk-sheet">
+
+<!-- ==========================================================================
+     Icon set. Line icons on a 24x24 grid at the single 1.5px stroke base.css
+     sets — original geometry (circles, chevrons, straight segments), so there
+     is no third-party asset and no licence to record. The first seven are
+     M1-04's, copied; `i-expand` and `i-warn` are drawn in this Task to the
+     same grid and the same stroke.
+
+     They are COPIED into this document rather than referenced across files on
+     purpose: a cross-document <use> would be a network request, and this
+     Task's rules allow none. Every <use> below is same-document (#id).
+     ========================================================================== -->
+<svg class="u-visually-hidden" aria-hidden="true" focusable="false"><defs>
+  <symbol id="i-error" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6"/><path d="m15 9-6 6"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-.7 4.3"/><path d="M20 5v6h-6"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2"/><path d="M12 19.5v2"/><path d="m4.5 4.5 1.4 1.4"/><path d="m18.1 18.1 1.4 1.4"/><path d="M2.5 12h2"/><path d="M19.5 12h2"/><path d="m4.5 19.5 1.4-1.4"/><path d="m18.1 5.9 1.4-1.4"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.4A8.5 8.5 0 0 1 9.6 4 8.5 8.5 0 1 0 20 14.4Z"/></symbol>
+  <symbol id="i-empty" viewBox="0 0 24 24"><path d="M5.5 5.5h13l2.5 8v5h-18v-5Z"/><path d="M3 13.5h4.5l1.5 3h6l1.5-3H21"/></symbol>
+  <symbol id="i-expand" viewBox="0 0 24 24"><path d="M9.5 4H4v5.5"/><path d="M14.5 20H20v-5.5"/><path d="m4 4 6 6"/><path d="m20 20-6-6"/></symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3.6 2.3 20.4h19.4Z"/><path d="M12 10v4.4"/><path d="M12 17.6h.01"/></symbol>
+</defs></svg>
+
+<header>
+  <p class="mk-sheet__kicker">Soucean Game · M1 · SOU-4 (M1-06) · mockup, độ chi tiết cao</p>
+  <h1>Trang chơi — <code>/games/&lt;game_id&gt;</code></h1>
+  <p class="mk-sheet__lede">
+    Trang quan trọng nhất của M1: nơi trò chơi được chơi và nơi quảng cáo nằm.
+    Tờ này vẽ trang ở cả hai chiều rộng thiết kế (375 px và 1280 px), ở cả hai
+    giao diện (sáng và tối), cộng thêm dải <strong>compact</strong> ở 768 px mà
+    <a class="link" href="../ad-slots.md">ad-slots.md</a> §11 yêu cầu — và vẽ đủ
+    các trạng thái của khung trò chơi và của bảng xếp hạng tuần.
+  </p>
+  <p class="mk-sheet__lede">
+    Mọi thành phần đều lấy từ thư viện M1-04
+    (<a class="link" href="components.html">components.html</a>); Task này không
+    thêm thành phần dùng chung nào và <strong>không tạo kiểu lại ô quảng cáo</strong>
+    — <code>ads.css</code> là chủ sở hữu duy nhất của <code>.ad-slot</code>. Cấu
+    trúc và thứ tự đọc là của
+    <a class="link" href="wireframes/02-play.html">wireframe M1-03</a> và hình học
+    quảng cáo là của <code>ad-slots.md</code> §4; không điều nào bị thay đổi ở đây.
+  </p>
+  <p class="mk-sheet__lede">
+    Mở tệp này bằng trình duyệt là xong — không máy chủ, không bước build, không
+    phụ thuộc, không một yêu cầu mạng nào. Không mã quảng cáo, không thẻ quảng
+    cáo, không khung nhúng, không bộ theo dõi. Khung trò chơi cũng chỉ là một ô
+    giữ chỗ: hợp đồng nền tảng trò chơi (GAM-16) nằm ngoài phạm vi M1.
+  </p>
+  <nav class="mk-sheet__lede" aria-label="Mục lục trang mockup">
+    <ol>
+      <li><a class="link" href="#s1">Trang đầy đủ · bốn bản dựng</a></li>
+      <li><a class="link" href="#s2">Dải compact · 768 px</a></li>
+      <li><a class="link" href="#s3">Khung trò chơi · bốn hiển thị</a></li>
+      <li><a class="link" href="#s4">Điều khiển và khối thông tin trò chơi</a></li>
+      <li><a class="link" href="#s5">Bảng xếp hạng tuần · bốn hiển thị</a></li>
+      <li><a class="link" href="#s6">Ô quảng cáo và khoảng cách đo được</a></li>
+      <li><a class="link" href="#s7">Bàn phím, tiêu điểm và thứ tự đọc</a></li>
+      <li><a class="link" href="#s8">Tương phản</a></li>
+      <li><a class="link" href="#s9">Cách đọc tờ này</a></li>
+    </ol>
+  </nav>
+</header>
+
+<!-- ==========================================================================
+     1. THE FULL PAGE — four renders at the two design widths.
+     ========================================================================== -->
+<section class="mk-section" id="s1">
+  <h2>1. Trang đầy đủ · bốn bản dựng</h2>
+  <p>
+    Sáng và tối, 375 px và 1280 px. Ở 375 px: một cột, <strong>đúng hai</strong> ô
+    quảng cáo (một trên khung, một sau khối thông tin), không có cột bên.
+    Ở 1280 px: khung trò chơi 868 × 488 cộng một cột bên 300 px, cách nhau
+    <strong>32 px</strong>, và <strong>đúng ba</strong> ô quảng cáo.
+  </p>
+
+  <div class="mk-specs mk-specs--row">
+    <section>
+      <h3 class="mk-cap">Sáng · 375 px</h3>
+      <div class="mk-view mk-view--mobile">
+        <div class="site-header">
+          <a class="skip-link" href="#pm-a">Tới nội dung chính</a>
+          <div class="shell site-header__bar">
+            <a class="wordmark" href="home.html">Soucean Game</a>
+            <div class="site-header__actions">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="th-a" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="th-a"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+            </div>
+          </div>
+          <nav class="shell" aria-label="Chính · sáng 375">
+            <button class="btn btn--quiet site-nav__toggle" type="button" aria-expanded="false" aria-controls="nav-a"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-menu"/></svg>Menu</button>
+            <ul class="site-nav__list" id="nav-a">
+              <li><a class="site-nav__link" href="home.html">Trò chơi</a></li>
+              <li><a class="site-nav__link" href="#s1">Bảng xếp hạng</a></li>
+              <li><a class="site-nav__link" href="#s1">Tài khoản</a></li>
+            </ul>
+          </nav>
+          <!-- In the DOM at every width; `display: none` below 768px. The slot
+               is not removed by the band, it is switched off by it. -->
+          <div class="shell">
+            <aside class="ad-slot ad-slot--header-leaderboard" aria-label="Quảng cáo">
+              <span class="ad-slot__label">Quảng cáo · 728 × 90</span>
+            </aside>
+          </div>
+        </div>
+
+        <div class="shell main" id="pm-a">
+          <h4 class="play-title">Xếp gạch cổ điển</h4>
+
+          <div class="play-grid">
+            <div class="play-main">
+              <aside class="ad-slot ad-slot--mobile-top" aria-label="Quảng cáo">
+                <span class="ad-slot__label">Quảng cáo · 320 × 100</span>
+              </aside>
+
+              <div class="game-frame game-frame--mounted" id="gf-a" tabindex="0" role="group" aria-label="Khung trò chơi — Xếp gạch cổ điển" aria-describedby="gh-a">
+                <p class="game-frame__placeholder">Khung trò chơi · 16:9 · 343 × 193</p>
+              </div>
+
+              <section class="game-meta card">
+                <p class="game-meta__hint" id="gh-a">Khung trò chơi là một điểm dừng Tab. Nhấn Tab thêm một lần là rời khỏi khung — khung không giữ tiêu điểm.</p>
+                <h5 class="game-meta__title">Cách chơi</h5>
+                <div class="game-meta__controls">
+                  <button class="btn btn--primary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-expand"/></svg>Toàn màn hình</button>
+                  <button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Tải lại trò chơi</button>
+                </div>
+                <dl class="game-meta__facts">
+                  <dt>Điều khiển</dt><dd>Phím mũi tên · chạm</dd>
+                  <dt>Số người chơi</dt><dd>1</dd>
+                  <dt>Một ván</dt><dd>Khoảng 3 phút</dd>
+                </dl>
+                <div class="game-meta__how">
+                  <p>Xoay và xếp các khối rơi xuống cho kín một hàng. Hàng kín sẽ biến mất và bạn được điểm. Ván kết thúc khi khối chạm nóc.</p>
+                </div>
+              </section>
+
+              <aside class="ad-slot ad-slot--after-info-rectangle" aria-label="Quảng cáo">
+                <span class="ad-slot__label">Quảng cáo · 300 × 250</span>
+              </aside>
+
+              <aside class="ad-slot ad-slot--incontent-banner" aria-label="Quảng cáo">
+                <span class="ad-slot__label">Quảng cáo · 728 × 90</span>
+              </aside>
+            </div>
+
+            <div class="play-rail">
+              <aside class="ad-slot ad-slot--rail-rectangle" aria-label="Quảng cáo">
+                <span class="ad-slot__label">Quảng cáo · 300 × 250</span>
+              </aside>
+
+              <section class="weekly-board card">
+                <h5 class="weekly-board__title">Bảng xếp hạng tuần này</h5>
+                <p class="weekly-board__week"><span class="badge">Tuần bắt đầu 00:00 thứ Hai · UTC+7</span></p>
+                <table class="board">
+                  <caption>Ba điểm cao nhất tuần này</caption>
+                  <thead><tr><th class="board__rank" scope="col">#</th><th scope="col">Người chơi</th><th class="board__score" scope="col">Điểm</th></tr></thead>
+                  <tbody>
+                    <tr><td class="board__rank">1</td><td>Minh</td><td class="board__score">12.480</td></tr>
+                    <tr class="board__row--own"><td class="board__rank">2</td><td>Hà<span class="board__you">Bạn</span></td><td class="board__score">11.905</td></tr>
+                    <tr><td class="board__rank">3</td><td>Quân</td><td class="board__score">10.740</td></tr>
+                  </tbody>
+                </table>
+                <p class="weekly-board__more"><a class="link" href="#s5">Xem bảng xếp hạng đầy đủ</a></p>
+              </section>
+            </div>
+          </div>
+        </div>
+
+        <footer class="site-footer">
+          <div class="shell">
+            <ul class="site-footer__links">
+              <li><a class="link" href="about.html">Giới thiệu</a></li>
+              <li><a class="link" href="terms.html">Điều khoản</a></li>
+              <li><a class="link" href="#s1">Quyền riêng tư</a></li>
+              <li><a class="link" href="#s1">Cài đặt cookie</a></li>
+            </ul>
+            <p class="site-footer__fine">© 2026 Soucean Game</p>
+          </div>
+        </footer>
+      </div>
+      <span class="mk-tag">Dải mobile: header <strong>không</strong> có ô quảng cáo, không có cột bên, và ô 300 × 250 nằm sau khối thông tin. Ô 320 × 100 cách khung đúng 24 px — đúng mức sàn.</span>
+    </section>
+
+    <section>
+      <h3 class="mk-cap">Tối · 375 px</h3>
+      <div class="mk-view mk-view--mobile" data-theme="dark">
+        <div class="site-header">
+          <a class="skip-link" href="#pm-b">Tới nội dung chính</a>
+          <div class="shell site-header__bar">
+            <a class="wordmark" href="home.html">Soucean Game</a>
+            <div class="site-header__actions">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="th-b"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="th-b" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+            </div>
+          </div>
+          <nav class="shell" aria-label="Chính · tối 375">
+            <button class="btn btn--quiet site-nav__toggle" type="button" aria-expanded="true" aria-controls="nav-b"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-menu"/></svg>Menu</button>
+            <ul class="site-nav__list" id="nav-b">
+              <li><a class="site-nav__link" href="home.html">Trò chơi</a></li>
+              <li><a class="site-nav__link" href="#s1">Bảng xếp hạng</a></li>
+              <li><a class="site-nav__link" href="#s1">Tài khoản</a></li>
+            </ul>
+          </nav>
+          <div class="shell">
+            <aside class="ad-slot ad-slot--header-leaderboard" aria-label="Quảng cáo">
+              <span class="ad-slot__label">Quảng cáo · 728 × 90</span>
+            </aside>
+          </div>
+        </div>
+
+        <div class="shell main" id="pm-b">
+          <h4 class="play-title">Xếp gạch cổ điển</h4>
+
+          <div class="play-grid">
+            <div class="play-main">
+              <aside class="ad-slot ad-slot--mobile-top" aria-label="Quảng cáo">
+                <span class="ad-slot__label">Quảng cáo · 320 × 100</span>
+              </aside>
+
+              <div class="game-frame game-frame--mounted" id="gf-b" tabindex="0" role="group" aria-label="Khung trò chơi — Xếp gạch cổ điển" aria-describedby="gh-b">
+                <p class="game-frame__placeholder">Khung trò chơi · 16:9 · 343 × 193</p>
+              </div>
+
+              <section class="game-meta card">
+                <p class="game-meta__hint" id="gh-b">Khung trò chơi là một điểm dừng Tab. Nhấn Tab thêm một lần là rời khỏi khung — khung không giữ tiêu điểm.</p>
+                <h5 class="game-meta__title">Cách chơi</h5>
+                <div class="game-meta__controls">
+                  <button class="btn btn--primary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-expand"/></svg>Toàn màn hình</button>
+                  <button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Tải lại trò chơi</button>
+                </div>
+                <dl class="game-meta__facts">
+                  <dt>Điều khiển</dt><dd>Phím mũi tên · chạm</dd>
+                  <dt>Số người chơi</dt><dd>1</dd>
+                  <dt>Một ván</dt><dd>Khoảng 3 phút</dd>
+                </dl>
+                <div class="game-meta__how">
+                  <p>Xoay và xếp các khối rơi xuống cho kín một hàng. Hàng kín sẽ biến mất và bạn được điểm. Ván kết thúc khi khối chạm nóc.</p>
+                </div>
+              </section>
+
+              <aside class="ad-slot ad-slot--after-info-rectangle" aria-label="Quảng cáo">
+                <span class="ad-slot__label">Quảng cáo · 300 × 250</span>
+              </aside>
+
+              <aside class="ad-slot ad-slot--incontent-banner" aria-label="Quảng cáo">
+                <span class="ad-slot__label">Quảng cáo · 728 × 90</span>
+              </aside>
+            </div>
+
+            <div class="play-rail">
+              <aside class="ad-slot ad-slot--rail-rectangle" aria-label="Quảng cáo">
+                <span class="ad-slot__label">Quảng cáo · 300 × 250</span>
+              </aside>
+
+              <section class="weekly-board card">
+                <h5 class="weekly-board__title">Bảng xếp hạng tuần này</h5>
+                <p class="weekly-board__week"><span class="badge">Tuần bắt đầu 00:00 thứ Hai · UTC+7</span></p>
+                <table class="board">
+                  <caption>Ba điểm cao nhất tuần này</caption>
+                  <thead><tr><th class="board__rank" scope="col">#</th><th scope="col">Người chơi</th><th class="board__score" scope="col">Điểm</th></tr></thead>
+                  <tbody>
+                    <tr><td class="board__rank">1</td><td>Minh</td><td class="board__score">12.480</td></tr>
+                    <tr class="board__row--own"><td class="board__rank">2</td><td>Hà<span class="board__you">Bạn</span></td><td class="board__score">11.905</td></tr>
+                    <tr><td class="board__rank">3</td><td>Quân</td><td class="board__score">10.740</td></tr>
+                  </tbody>
+                </table>
+                <p class="weekly-board__more"><a class="link" href="#s5">Xem bảng xếp hạng đầy đủ</a></p>
+              </section>
+            </div>
+          </div>
+        </div>
+
+        <footer class="site-footer">
+          <div class="shell">
+            <ul class="site-footer__links">
+              <li><a class="link" href="about.html">Giới thiệu</a></li>
+              <li><a class="link" href="terms.html">Điều khoản</a></li>
+              <li><a class="link" href="#s1">Quyền riêng tư</a></li>
+              <li><a class="link" href="#s1">Cài đặt cookie</a></li>
+            </ul>
+            <p class="site-footer__fine">© 2026 Soucean Game</p>
+          </div>
+        </footer>
+      </div>
+      <span class="mk-tag">Cùng một trang, giao diện tối, điều hướng đang mở. Không đổ bóng ở giao diện tối — độ sâu đến từ tông nền và viền.</span>
+    </section>
+  </div>
+
+  <div class="mk-specs">
+    <section>
+      <h3 class="mk-cap">Sáng · 1280 px</h3>
+      <div class="mk-scroll"><div class="mk-view mk-view--desktop">
+        <div class="site-header">
+          <a class="skip-link" href="#pm-c">Tới nội dung chính</a>
+          <div class="shell site-header__bar">
+            <a class="wordmark" href="home.html">Soucean Game</a>
+            <nav aria-label="Chính · sáng 1280">
+              <button class="btn btn--quiet site-nav__toggle" type="button" aria-expanded="false" aria-controls="nav-c"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-menu"/></svg>Menu</button>
+              <ul class="site-nav__list" id="nav-c">
+                <li><a class="site-nav__link" href="home.html">Trò chơi</a></li>
+                <li><a class="site-nav__link" href="#s1">Bảng xếp hạng</a></li>
+                <li><a class="site-nav__link" href="#s1">Tài khoản</a></li>
+              </ul>
+            </nav>
+            <div class="site-header__actions">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="th-c" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="th-c"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+            </div>
+          </div>
+          <div class="shell">
+            <aside class="ad-slot ad-slot--header-leaderboard" aria-label="Quảng cáo">
+              <span class="ad-slot__label">Quảng cáo · 728 × 90</span>
+            </aside>
+          </div>
+        </div>
+
+        <div class="shell main" id="pm-c">
+          <h4 class="play-title">Xếp gạch cổ điển</h4>
+
+          <div class="play-grid">
+            <div class="play-main">
+              <aside class="ad-slot ad-slot--mobile-top" aria-label="Quảng cáo">
+                <span class="ad-slot__label">Quảng cáo · 320 × 100</span>
+              </aside>
+
+              <div class="game-frame game-frame--mounted" id="gf-c" tabindex="0" role="group" aria-label="Khung trò chơi — Xếp gạch cổ điển" aria-describedby="gh-c">
+                <p class="game-frame__placeholder">Khung trò chơi · 16:9 · 868 × 488</p>
+              </div>
+
+              <section class="game-meta card">
+                <p class="game-meta__hint" id="gh-c">Khung trò chơi là một điểm dừng Tab. Nhấn Tab thêm một lần là rời khỏi khung — khung không giữ tiêu điểm.</p>
+                <h5 class="game-meta__title">Cách chơi</h5>
+                <div class="game-meta__controls">
+                  <button class="btn btn--primary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-expand"/></svg>Toàn màn hình</button>
+                  <button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Tải lại trò chơi</button>
+                </div>
+                <dl class="game-meta__facts">
+                  <dt>Điều khiển</dt><dd>Phím mũi tên · chạm</dd>
+                  <dt>Số người chơi</dt><dd>1</dd>
+                  <dt>Một ván</dt><dd>Khoảng 3 phút</dd>
+                </dl>
+                <div class="game-meta__how">
+                  <p>Xoay và xếp các khối rơi xuống cho kín một hàng. Hàng kín sẽ biến mất và bạn được điểm. Ván kết thúc khi khối chạm nóc.</p>
+                </div>
+              </section>
+
+              <aside class="ad-slot ad-slot--after-info-rectangle" aria-label="Quảng cáo">
+                <span class="ad-slot__label">Quảng cáo · 300 × 250</span>
+              </aside>
+
+              <aside class="ad-slot ad-slot--incontent-banner" aria-label="Quảng cáo">
+                <span class="ad-slot__label">Quảng cáo · 728 × 90</span>
+              </aside>
+            </div>
+
+            <div class="play-rail">
+              <aside class="ad-slot ad-slot--rail-rectangle" aria-label="Quảng cáo">
+                <span class="ad-slot__label">Quảng cáo · 300 × 250</span>
+              </aside>
+
+              <section class="weekly-board card">
+                <h5 class="weekly-board__title">Bảng xếp hạng tuần này</h5>
+                <p class="weekly-board__week"><span class="badge">Tuần bắt đầu 00:00 thứ Hai · UTC+7</span></p>
+                <table class="board">
+                  <caption>Ba điểm cao nhất tuần này</caption>
+                  <thead><tr><th class="board__rank" scope="col">#</th><th scope="col">Người chơi</th><th class="board__score" scope="col">Điểm</th></tr></thead>
+                  <tbody>
+                    <tr><td class="board__rank">1</td><td>Minh</td><td class="board__score">12.480</td></tr>
+                    <tr class="board__row--own"><td class="board__rank">2</td><td>Hà<span class="board__you">Bạn</span></td><td class="board__score">11.905</td></tr>
+                    <tr><td class="board__rank">3</td><td>Quân</td><td class="board__score">10.740</td></tr>
+                  </tbody>
+                </table>
+                <p class="weekly-board__more"><a class="link" href="#s5">Xem bảng xếp hạng đầy đủ</a></p>
+              </section>
+            </div>
+          </div>
+        </div>
+
+        <footer class="site-footer">
+          <div class="shell">
+            <ul class="site-footer__links">
+              <li><a class="link" href="about.html">Giới thiệu</a></li>
+              <li><a class="link" href="terms.html">Điều khoản</a></li>
+              <li><a class="link" href="#s1">Quyền riêng tư</a></li>
+              <li><a class="link" href="#s1">Cài đặt cookie</a></li>
+            </ul>
+            <p class="site-footer__fine">© 2026 Soucean Game</p>
+          </div>
+        </footer>
+      </div></div>
+      <span class="mk-tag">Dải wide: cột bên 300 px, khoảng cách lưới <strong>32 px</strong> — đó chính là khoảng cách ngang của ô 300 × 250 tới khung. Ô 300 × 250 sau khối thông tin <strong>vắng mặt</strong> ở đây: đúng một hộp 300 × 250 trên trang ở mọi chiều rộng.</span>
+    </section>
+
+    <section>
+      <h3 class="mk-cap">Tối · 1280 px</h3>
+      <div class="mk-scroll"><div class="mk-view mk-view--desktop" data-theme="dark">
+        <div class="site-header">
+          <a class="skip-link" href="#pm-d">Tới nội dung chính</a>
+          <div class="shell site-header__bar">
+            <a class="wordmark" href="home.html">Soucean Game</a>
+            <nav aria-label="Chính · tối 1280">
+              <button class="btn btn--quiet site-nav__toggle" type="button" aria-expanded="false" aria-controls="nav-d"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-menu"/></svg>Menu</button>
+              <ul class="site-nav__list" id="nav-d">
+                <li><a class="site-nav__link" href="home.html">Trò chơi</a></li>
+                <li><a class="site-nav__link" href="#s1">Bảng xếp hạng</a></li>
+                <li><a class="site-nav__link" href="#s1">Tài khoản</a></li>
+              </ul>
+            </nav>
+            <div class="site-header__actions">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="th-d"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="th-d" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+            </div>
+          </div>
+          <div class="shell">
+            <aside class="ad-slot ad-slot--header-leaderboard" aria-label="Quảng cáo">
+              <span class="ad-slot__label">Quảng cáo · 728 × 90</span>
+            </aside>
+          </div>
+        </div>
+
+        <div class="shell main" id="pm-d">
+          <h4 class="play-title">Xếp gạch cổ điển</h4>
+
+          <div class="play-grid">
+            <div class="play-main">
+              <aside class="ad-slot ad-slot--mobile-top" aria-label="Quảng cáo">
+                <span class="ad-slot__label">Quảng cáo · 320 × 100</span>
+              </aside>
+
+              <div class="game-frame game-frame--mounted" id="gf-d" tabindex="0" role="group" aria-label="Khung trò chơi — Xếp gạch cổ điển" aria-describedby="gh-d">
+                <p class="game-frame__placeholder">Khung trò chơi · 16:9 · 868 × 488</p>
+              </div>
+
+              <section class="game-meta card">
+                <p class="game-meta__hint" id="gh-d">Khung trò chơi là một điểm dừng Tab. Nhấn Tab thêm một lần là rời khỏi khung — khung không giữ tiêu điểm.</p>
+                <h5 class="game-meta__title">Cách chơi</h5>
+                <div class="game-meta__controls">
+                  <button class="btn btn--primary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-expand"/></svg>Toàn màn hình</button>
+                  <button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Tải lại trò chơi</button>
+                </div>
+                <dl class="game-meta__facts">
+                  <dt>Điều khiển</dt><dd>Phím mũi tên · chạm</dd>
+                  <dt>Số người chơi</dt><dd>1</dd>
+                  <dt>Một ván</dt><dd>Khoảng 3 phút</dd>
+                </dl>
+                <div class="game-meta__how">
+                  <p>Xoay và xếp các khối rơi xuống cho kín một hàng. Hàng kín sẽ biến mất và bạn được điểm. Ván kết thúc khi khối chạm nóc.</p>
+                </div>
+              </section>
+
+              <aside class="ad-slot ad-slot--after-info-rectangle" aria-label="Quảng cáo">
+                <span class="ad-slot__label">Quảng cáo · 300 × 250</span>
+              </aside>
+
+              <aside class="ad-slot ad-slot--incontent-banner" aria-label="Quảng cáo">
+                <span class="ad-slot__label">Quảng cáo · 728 × 90</span>
+              </aside>
+            </div>
+
+            <div class="play-rail">
+              <aside class="ad-slot ad-slot--rail-rectangle" aria-label="Quảng cáo">
+                <span class="ad-slot__label">Quảng cáo · 300 × 250</span>
+              </aside>
+
+              <section class="weekly-board card">
+                <h5 class="weekly-board__title">Bảng xếp hạng tuần này</h5>
+                <p class="weekly-board__week"><span class="badge">Tuần bắt đầu 00:00 thứ Hai · UTC+7</span></p>
+                <table class="board">
+                  <caption>Ba điểm cao nhất tuần này</caption>
+                  <thead><tr><th class="board__rank" scope="col">#</th><th scope="col">Người chơi</th><th class="board__score" scope="col">Điểm</th></tr></thead>
+                  <tbody>
+                    <tr><td class="board__rank">1</td><td>Minh</td><td class="board__score">12.480</td></tr>
+                    <tr class="board__row--own"><td class="board__rank">2</td><td>Hà<span class="board__you">Bạn</span></td><td class="board__score">11.905</td></tr>
+                    <tr><td class="board__rank">3</td><td>Quân</td><td class="board__score">10.740</td></tr>
+                  </tbody>
+                </table>
+                <p class="weekly-board__more"><a class="link" href="#s5">Xem bảng xếp hạng đầy đủ</a></p>
+              </section>
+            </div>
+          </div>
+        </div>
+
+        <footer class="site-footer">
+          <div class="shell">
+            <ul class="site-footer__links">
+              <li><a class="link" href="about.html">Giới thiệu</a></li>
+              <li><a class="link" href="terms.html">Điều khoản</a></li>
+              <li><a class="link" href="#s1">Quyền riêng tư</a></li>
+              <li><a class="link" href="#s1">Cài đặt cookie</a></li>
+            </ul>
+            <p class="site-footer__fine">© 2026 Soucean Game</p>
+          </div>
+        </footer>
+      </div></div>
+      <span class="mk-tag">Giao diện tối, cùng hình học. Không một kích thước nào đổi khi đổi giao diện — đó là lý do ô quảng cáo không bao giờ xê dịch vì một lựa chọn giao diện.</span>
+    </section>
+  </div>
+
+  <p>
+    <strong>Cả năm ô quảng cáo đều có mặt trong DOM của mọi bản dựng.</strong> Dải
+    chỉ đổi <code>display</code>, không đổi thứ tự, không chuyển cha, không di
+    chuyển phần tử nào — nên thứ tự đọc và thứ tự nhìn khớp nhau ở mọi chiều rộng
+    và không chỗ nào cần thuộc tính <code>order</code> (<code>ad-slots.md</code> §9).
+  </p>
+</section>
+
+<!-- ==========================================================================
+     2. THE COMPACT BAND — the verification view.
+     ========================================================================== -->
+<section class="mk-section" id="s2">
+  <h2>2. Dải compact · 768 px</h2>
+  <p>
+    Đây là bản dựng kiểm chứng mà <code>ad-slots.md</code> §11 yêu cầu, vẽ ở
+    <strong>mép dưới</strong> của dải — nơi hình học dễ sai nhất: đó là chiều rộng
+    mà khổ 728 px gặp cột nội dung 704 px. Một cột, <strong>không có cột bên</strong>,
+    và <strong>hai ô quảng cáo nối tiếp nhau</strong> sau khối thông tin.
+  </p>
+  <div class="mk-specs">
+    <section>
+      <h3 class="mk-cap">Sáng · 768 px — dải compact</h3>
+      <div class="mk-scroll"><div class="mk-view mk-view--compact">
+        <div class="site-header">
+          <a class="skip-link" href="#pm-e">Tới nội dung chính</a>
+          <div class="shell site-header__bar">
+            <a class="wordmark" href="home.html">Soucean Game</a>
+            <nav aria-label="Chính · compact 768">
+              <button class="btn btn--quiet site-nav__toggle" type="button" aria-expanded="false" aria-controls="nav-e"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-menu"/></svg>Menu</button>
+              <ul class="site-nav__list" id="nav-e">
+                <li><a class="site-nav__link" href="home.html">Trò chơi</a></li>
+                <li><a class="site-nav__link" href="#s2">Bảng xếp hạng</a></li>
+                <li><a class="site-nav__link" href="#s2">Tài khoản</a></li>
+              </ul>
+            </nav>
+            <div class="site-header__actions">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="th-e" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="th-e"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+            </div>
+          </div>
+          <div class="shell">
+            <aside class="ad-slot ad-slot--header-leaderboard" aria-label="Quảng cáo">
+              <span class="ad-slot__label">Quảng cáo · 704 × 90</span>
+            </aside>
+          </div>
+        </div>
+
+        <div class="shell main" id="pm-e">
+          <h4 class="play-title">Xếp gạch cổ điển</h4>
+
+          <div class="play-grid">
+            <div class="play-main">
+              <aside class="ad-slot ad-slot--mobile-top" aria-label="Quảng cáo">
+                <span class="ad-slot__label">Quảng cáo · 320 × 100</span>
+              </aside>
+
+              <div class="game-frame game-frame--mounted" id="gf-e" tabindex="0" role="group" aria-label="Khung trò chơi — Xếp gạch cổ điển" aria-describedby="gh-e">
+                <p class="game-frame__placeholder">Khung trò chơi · 16:9 · 704 × 396</p>
+              </div>
+
+              <section class="game-meta card">
+                <p class="game-meta__hint" id="gh-e">Khung trò chơi là một điểm dừng Tab. Nhấn Tab thêm một lần là rời khỏi khung — khung không giữ tiêu điểm.</p>
+                <h5 class="game-meta__title">Cách chơi</h5>
+                <div class="game-meta__controls">
+                  <button class="btn btn--primary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-expand"/></svg>Toàn màn hình</button>
+                  <button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Tải lại trò chơi</button>
+                </div>
+                <dl class="game-meta__facts">
+                  <dt>Điều khiển</dt><dd>Phím mũi tên · chạm</dd>
+                  <dt>Số người chơi</dt><dd>1</dd>
+                  <dt>Một ván</dt><dd>Khoảng 3 phút</dd>
+                </dl>
+                <div class="game-meta__how">
+                  <p>Xoay và xếp các khối rơi xuống cho kín một hàng. Hàng kín sẽ biến mất và bạn được điểm. Ván kết thúc khi khối chạm nóc.</p>
+                </div>
+              </section>
+
+              <aside class="ad-slot ad-slot--after-info-rectangle" aria-label="Quảng cáo">
+                <span class="ad-slot__label">Quảng cáo · 300 × 250</span>
+              </aside>
+
+              <aside class="ad-slot ad-slot--incontent-banner" aria-label="Quảng cáo">
+                <span class="ad-slot__label">Quảng cáo · 704 × 90</span>
+              </aside>
+            </div>
+
+            <div class="play-rail">
+              <aside class="ad-slot ad-slot--rail-rectangle" aria-label="Quảng cáo">
+                <span class="ad-slot__label">Quảng cáo · 300 × 250</span>
+              </aside>
+
+              <section class="weekly-board card">
+                <h5 class="weekly-board__title">Bảng xếp hạng tuần này</h5>
+                <p class="weekly-board__week"><span class="badge">Tuần bắt đầu 00:00 thứ Hai · UTC+7</span></p>
+                <table class="board">
+                  <caption>Ba điểm cao nhất tuần này</caption>
+                  <thead><tr><th class="board__rank" scope="col">#</th><th scope="col">Người chơi</th><th class="board__score" scope="col">Điểm</th></tr></thead>
+                  <tbody>
+                    <tr><td class="board__rank">1</td><td>Minh</td><td class="board__score">12.480</td></tr>
+                    <tr class="board__row--own"><td class="board__rank">2</td><td>Hà<span class="board__you">Bạn</span></td><td class="board__score">11.905</td></tr>
+                    <tr><td class="board__rank">3</td><td>Quân</td><td class="board__score">10.740</td></tr>
+                  </tbody>
+                </table>
+                <p class="weekly-board__more"><a class="link" href="#s5">Xem bảng xếp hạng đầy đủ</a></p>
+              </section>
+            </div>
+          </div>
+        </div>
+
+        <footer class="site-footer">
+          <div class="shell">
+            <ul class="site-footer__links">
+              <li><a class="link" href="about.html">Giới thiệu</a></li>
+              <li><a class="link" href="terms.html">Điều khoản</a></li>
+              <li><a class="link" href="#s2">Quyền riêng tư</a></li>
+              <li><a class="link" href="#s2">Cài đặt cookie</a></li>
+            </ul>
+            <p class="site-footer__fine">© 2026 Soucean Game</p>
+          </div>
+        </footer>
+      </div></div>
+      <span class="mk-tag">Khung 704 × 396 — gấp 1,9 lần chiều rộng và 3,6 lần diện tích so với bố cục 372 × 209 mà quyết định ngày 04/11/2026 của Board đã loại bỏ, với <em>cùng</em> ba ô quảng cáo trên trang. Hai ô nối tiếp nhau cách nhau 48 px (24 + 24, và vì cột là flex nên hai lề cộng vào nhau chứ không nuốt nhau).</span>
+    </section>
+  </div>
+  <p>
+    Dải này chỉ vẽ ở giao diện sáng. Giao diện tối không đổi một kích thước nào —
+    §1 chứng minh điều đó ở hai chiều rộng còn lại, và mọi con số hình học trong
+    §6 là giống hệt nhau ở hai giao diện.
+  </p>
+</section>
+
+<!-- ==========================================================================
+     3. THE GAME FRAME — four displays.
+     ========================================================================== -->
+<section class="mk-section" id="s3">
+  <h2>3. Khung trò chơi · bốn hiển thị</h2>
+  <p>
+    <strong>Một hộp, bốn hiển thị.</strong> Sẵn sàng, đang tải, lỗi và “cần
+    JavaScript” đều là <em>cùng</em> phần tử <code>.game-frame</code> với danh sách
+    lớp khác nhau. Hộp luôn đúng tỉ lệ 16:9, nên khi trò chơi tải xong thì không gì
+    xê dịch, và mọi khoảng cách tới ô quảng cáo trong §6 được đo trên đúng hộp đó
+    ở cả bốn hiển thị.
+  </p>
+  <p>
+    <strong>“Cần JavaScript” không phải lỗi</strong> — không có gì hỏng cả — nên nó
+    là một <code>notice--warning</code>, đúng như <code>components.md</code> §4.4
+    quy định, chứ không phải khối lỗi.
+  </p>
+
+  <div class="mk-specs mk-specs--row">
+    <section>
+      <h3 class="mk-cap">Sáng · 375 px</h3>
+      <div class="mk-view mk-view--mobile">
+        <div class="mk-stack">
+          <p class="mk-cap">1 · Sẵn sàng</p>
+          <div class="game-frame game-frame--mounted" tabindex="0" role="group" aria-label="Khung trò chơi — Xếp gạch cổ điển">
+            <p class="game-frame__placeholder">Khung trò chơi · 16:9</p>
+          </div>
+
+          <p class="mk-cap">2 · Đang tải</p>
+          <div class="game-frame state state--frame state--loading" role="status" aria-busy="true">
+            <span class="u-visually-hidden">Đang tải trò chơi…</span>
+            <div class="skeleton" aria-hidden="true">
+              <span class="skeleton__bar skeleton__bar--title"></span>
+              <span class="skeleton__bar skeleton__bar--most"></span>
+              <span class="skeleton__bar skeleton__bar--half"></span>
+            </div>
+          </div>
+
+          <p class="mk-cap">3 · Lỗi</p>
+          <div class="game-frame state state--frame state--error" role="status">
+            <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+            <div class="state__label">Lỗi</div>
+            <h4 class="state__title">Không tải được trò chơi</h4>
+            <p class="state__text">Kiểm tra kết nối rồi thử lại.</p>
+            <button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Thử lại</button>
+          </div>
+
+          <p class="mk-cap">4 · Cần JavaScript</p>
+          <div class="game-frame state state--frame">
+            <div class="notice notice--warning">
+              <svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-warn"/></svg>
+              <div class="notice__body">
+                <p class="notice__title">Cảnh báo · Cần bật JavaScript</p>
+                <p class="notice__text">Phần còn lại của trang vẫn đọc được bình thường.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span class="mk-tag">Ở 375 px hộp chỉ cao 193 px. Khối lỗi được phép cao hơn tỉ lệ thay vì bị cắt — xem <a class="link" href="../pages/play.md">play.md</a> §6. Khối <em>đang tải</em> thì không bao giờ được phép, vì chính nó là khối phải giữ đúng kích thước cuối cùng của khung.</span>
+    </section>
+
+    <section>
+      <h3 class="mk-cap">Tối · 375 px</h3>
+      <div class="mk-view mk-view--mobile" data-theme="dark">
+        <div class="mk-stack">
+          <p class="mk-cap">1 · Sẵn sàng</p>
+          <div class="game-frame game-frame--mounted" tabindex="0" role="group" aria-label="Khung trò chơi — Xếp gạch cổ điển">
+            <p class="game-frame__placeholder">Khung trò chơi · 16:9</p>
+          </div>
+
+          <p class="mk-cap">2 · Đang tải</p>
+          <div class="game-frame state state--frame state--loading" role="status" aria-busy="true">
+            <span class="u-visually-hidden">Đang tải trò chơi…</span>
+            <div class="skeleton" aria-hidden="true">
+              <span class="skeleton__bar skeleton__bar--title"></span>
+              <span class="skeleton__bar skeleton__bar--most"></span>
+              <span class="skeleton__bar skeleton__bar--half"></span>
+            </div>
+          </div>
+
+          <p class="mk-cap">3 · Lỗi</p>
+          <div class="game-frame state state--frame state--error" role="status">
+            <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+            <div class="state__label">Lỗi</div>
+            <h4 class="state__title">Không tải được trò chơi</h4>
+            <p class="state__text">Kiểm tra kết nối rồi thử lại.</p>
+            <button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Thử lại</button>
+          </div>
+
+          <p class="mk-cap">4 · Cần JavaScript</p>
+          <div class="game-frame state state--frame">
+            <div class="notice notice--warning">
+              <svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-warn"/></svg>
+              <div class="notice__body">
+                <p class="notice__title">Cảnh báo · Cần bật JavaScript</p>
+                <p class="notice__text">Phần còn lại của trang vẫn đọc được bình thường.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span class="mk-tag">Biểu tượng lỗi là <code>error</code> trên <code>bg</code> — 7.46:1 ở giao diện tối. Trạng thái không bao giờ chỉ là màu: luôn có biểu tượng <em>và</em> chữ (“Lỗi”, “Cảnh báo”).</span>
+    </section>
+  </div>
+
+  <div class="mk-specs">
+    <section>
+      <h3 class="mk-cap">Sáng · 1280 px — hai khối trạng thái, cùng một hộp</h3>
+      <div class="mk-scroll"><div class="mk-view mk-view--desktop">
+        <div class="mk-stack">
+          <p class="mk-cap">Đang tải — hộp đã ở đúng kích thước cuối cùng</p>
+          <div class="game-frame state state--frame state--loading" role="status" aria-busy="true">
+            <span class="u-visually-hidden">Đang tải trò chơi…</span>
+            <div class="skeleton" aria-hidden="true">
+              <span class="skeleton__bar skeleton__bar--title"></span>
+              <span class="skeleton__bar skeleton__bar--most"></span>
+              <span class="skeleton__bar skeleton__bar--half"></span>
+            </div>
+          </div>
+
+          <p class="mk-cap">Lỗi — cùng hộp, cùng kích thước</p>
+          <div class="game-frame state state--frame state--error" role="status">
+            <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+            <div class="state__label">Lỗi</div>
+            <h4 class="state__title">Không tải được trò chơi</h4>
+            <p class="state__text">Kiểm tra kết nối rồi thử lại.</p>
+            <button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Thử lại</button>
+          </div>
+        </div>
+      </div></div>
+      <span class="mk-tag">Hai khối này luôn đúng 16:9 và luôn đúng bằng nhau, ở mọi chiều rộng. Chúng rộng bằng khung chứa của §3 chứ không bằng cột chính của trang thật — kích thước thật 868 × 488 ở 1280 px nằm trong bản dựng đầy đủ ở §1, và cách đo bằng một dòng Console nằm ở <a class="link" href="../pages/play.md">play.md</a> §10.</span>
+    </section>
+  </div>
+
+  <p>
+    <strong>Không gì chuyển động.</strong> Không quét sáng, không nhấp nháy, không
+    vòng xoay. Tín hiệu “đang tải” là dòng chữ trong vùng <code>role="status"</code>,
+    vì một hiệu ứng quét sáng không nói gì với trình đọc màn hình. Các thanh xương là
+    <code>aria-hidden</code>. Bật <code>prefers-reduced-motion: reduce</code> thì
+    không có gì đổi, vì không có gì từng chuyển động.
+  </p>
+</section>
+
+<!-- ==========================================================================
+     4. CONTROLS AND THE GAME INFO BLOCK.
+     ========================================================================== -->
+<section class="mk-section" id="s4">
+  <h2>4. Điều khiển và khối thông tin trò chơi</h2>
+  <p>
+    Khối <code>game-meta</code> nằm <strong>luôn luôn</strong> giữa khung trò chơi và
+    biểu ngữ bên dưới. Đó không phải trang trí: nó là thứ giữ cho không ô quảng cáo
+    nào nằm ngay dưới khung và không ô nào kề vùng điều khiển
+    (<code>requirements.md</code> §5.1 và §5.2). Không được chèn gì vào giữa nó và
+    khung.
+  </p>
+  <p>
+    Khối gồm bốn phần, theo thứ tự đọc: <strong>dòng hợp đồng bàn phím</strong> (khung
+    là một điểm dừng Tab và không giữ tiêu điểm) · <strong>hàng điều khiển</strong> ·
+    <strong>danh sách thông tin</strong> · <strong>cách chơi</strong>. Mặt nền, viền,
+    bo góc và đệm là <code>.card</code> của thư viện; Task này không thêm mặt nền nào.
+  </p>
+  <p>
+    <strong>Hàng điều khiển chỉ chứa những gì trang tự làm được.</strong> Chơi, tạm
+    dừng, chơi lại một ván, tắt tiếng, gửi điểm — mỗi thứ đều cần hợp đồng nền tảng
+    trò chơi (GAM-16), và SOU-4 nói rõ hợp đồng đó nằm ngoài phạm vi M1. Hai điều
+    khiển ở đây không cần nó: “Toàn màn hình” là Fullscreen API của trình duyệt đặt
+    trên chính hộp khung, “Tải lại trò chơi” là gắn lại nội dung của hộp. Đây là câu
+    hỏi khả thi rõ nhất cho người review — xem
+    <a class="link" href="../pages/play.md">play.md</a> §9.
+  </p>
+  <p>
+    <strong>Trang này có đúng một hành động chính</strong> (<code>.btn--primary</code>),
+    và đó là “Toàn màn hình”. <code>components.md</code> §5.5 đã xếp trang chơi vào
+    nhóm trang có hành động chính; đây là hành động ấy.
+  </p>
+
+  <div class="mk-specs mk-specs--row">
+    <section>
+      <h3 class="mk-cap">Sáng · 375 px — hàng điều khiển xuống dòng</h3>
+      <div class="mk-view mk-view--mobile">
+        <div class="mk-stack">
+          <section class="game-meta card">
+            <p class="game-meta__hint">Khung trò chơi là một điểm dừng Tab. Nhấn Tab thêm một lần là rời khỏi khung — khung không giữ tiêu điểm.</p>
+            <h4 class="game-meta__title">Cách chơi</h4>
+            <div class="game-meta__controls">
+              <button class="btn btn--primary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-expand"/></svg>Toàn màn hình</button>
+              <button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Tải lại trò chơi</button>
+            </div>
+            <dl class="game-meta__facts">
+              <dt>Điều khiển</dt><dd>Phím mũi tên · chạm</dd>
+              <dt>Số người chơi</dt><dd>1</dd>
+              <dt>Một ván</dt><dd>Khoảng 3 phút</dd>
+            </dl>
+            <div class="game-meta__how">
+              <p>Xoay và xếp các khối rơi xuống cho kín một hàng. Hàng kín sẽ biến mất và bạn được điểm. Ván kết thúc khi khối chạm nóc.</p>
+            </div>
+          </section>
+        </div>
+      </div>
+      <span class="mk-tag">Hàng điều khiển xuống dòng chứ không bóp nhỏ đích bấm: mỗi nút vẫn cao 44 px và cách nhau 8 px, ở mọi chiều rộng.</span>
+    </section>
+
+    <section>
+      <h3 class="mk-cap">Tối · 375 px — hover, tiêu điểm, vô hiệu</h3>
+      <div class="mk-view mk-view--mobile" data-theme="dark">
+        <div class="mk-stack">
+          <section class="game-meta card">
+            <h4 class="game-meta__title">Năm trạng thái của hàng điều khiển</h4>
+            <div class="game-meta__controls">
+              <button class="btn btn--primary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-expand"/></svg>Mặc định</button>
+              <button class="btn btn--primary is-hover" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-expand"/></svg>Hover</button>
+              <button class="btn btn--primary is-focus" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-expand"/></svg>Tiêu điểm</button>
+              <button class="btn btn--primary is-active" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-expand"/></svg>Đang nhấn</button>
+              <button class="btn btn--secondary" type="button" disabled><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Đang tải lại…</button>
+            </div>
+          </section>
+        </div>
+      </div>
+      <span class="mk-tag"><code>.is-hover</code>, <code>.is-focus</code> và <code>.is-active</code> là quy ước ép trạng thái của M1-04 (<code>components.md</code> §1.2): chúng đi qua đúng khối khai báo mà pseudo-class thật đi qua. Chúng chỉ tồn tại trên tờ mockup. Nút vô hiệu luôn nói <em>đang xảy ra chuyện gì</em> (“Đang tải lại…”), không bao giờ là một nhãn bình thường bị làm mờ.</span>
+    </section>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     5. THE WEEKLY BOARD.
+     ========================================================================== -->
+<section class="mk-section" id="s5">
+  <h2>5. Bảng xếp hạng tuần · bốn hiển thị</h2>
+  <p>
+    <strong>Đây là một khung nhìn, không phải một thiết kế mới.</strong> Bảng là
+    <code>.board</code> của thư viện, hàng là hàng của nó, và cách đánh dấu hàng của
+    chính người chơi — viền dày hơn, chữ đậm hơn, nền <code>sunken</code> và
+    <strong>chữ “Bạn”</strong> trong hàng — cũng là của nó. Bốn tín hiệu, không tín
+    hiệu nào là màu.
+  </p>
+  <p>
+    Bảng đầy đủ, bộ chuyển kỳ và khối “kết quả của bạn” thuộc về
+    <strong>trang bảng xếp hạng (M1-07)</strong>. Bảng tuần ở đây liên kết tới trang
+    đó và không thiết kế gì của nó. Người chơi không nằm trong ba hạng đầu sẽ tìm
+    thấy vị trí của mình ở đó, chứ không phải ở đây.
+  </p>
+  <p>
+    <strong>Cả bốn hiển thị cao bằng nhau.</strong> Ba khối trạng thái nhận chiều cao
+    đặt trước tính từ đúng những token mà bảng thật đọc, nên
+    <em>đang tải → trống</em>, <em>đang tải → lỗi</em> và <em>đang tải → có dữ liệu</em>
+    đều không làm gì xê dịch.
+  </p>
+
+  <div class="mk-specs mk-specs--row">
+    <section>
+      <h3 class="mk-cap">Sáng · 375 px — có dữ liệu, đang tải</h3>
+      <div class="mk-view mk-view--mobile">
+        <div class="mk-stack">
+          <section class="weekly-board card">
+            <h4 class="weekly-board__title">Bảng xếp hạng tuần này</h4>
+            <p class="weekly-board__week"><span class="badge">Tuần bắt đầu 00:00 thứ Hai · UTC+7</span></p>
+            <table class="board">
+              <caption>Ba điểm cao nhất tuần này</caption>
+              <thead><tr><th class="board__rank" scope="col">#</th><th scope="col">Người chơi</th><th class="board__score" scope="col">Điểm</th></tr></thead>
+              <tbody>
+                <tr><td class="board__rank">1</td><td>Minh</td><td class="board__score">12.480</td></tr>
+                <tr class="board__row--own"><td class="board__rank">2</td><td>Hà<span class="board__you">Bạn</span></td><td class="board__score">11.905</td></tr>
+                <tr><td class="board__rank">3</td><td>Quân</td><td class="board__score">10.740</td></tr>
+              </tbody>
+            </table>
+            <p class="weekly-board__more"><a class="link" href="#s5">Xem bảng xếp hạng đầy đủ</a></p>
+          </section>
+
+          <section class="weekly-board card">
+            <h4 class="weekly-board__title">Bảng xếp hạng tuần này</h4>
+            <p class="weekly-board__week"><span class="badge">Tuần bắt đầu 00:00 thứ Hai · UTC+7</span></p>
+            <div class="state state--loading weekly-board__state" role="status" aria-busy="true">
+              <span class="u-visually-hidden">Đang tải bảng xếp hạng tuần…</span>
+              <div class="skeleton" aria-hidden="true">
+                <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--most"></span><span class="skeleton__bar"></span></div>
+                <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--half"></span><span class="skeleton__bar"></span></div>
+                <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--most"></span><span class="skeleton__bar"></span></div>
+              </div>
+            </div>
+            <p class="weekly-board__more"><a class="link" href="#s5">Xem bảng xếp hạng đầy đủ</a></p>
+          </section>
+        </div>
+      </div>
+      <span class="mk-tag">Hàng của chính người chơi mang bốn tín hiệu và chữ “Bạn”. Chuyển sang thang xám vẫn đọc được.</span>
+    </section>
+
+    <section>
+      <h3 class="mk-cap">Tối · 375 px — trống, lỗi</h3>
+      <div class="mk-view mk-view--mobile" data-theme="dark">
+        <div class="mk-stack">
+          <section class="weekly-board card">
+            <h4 class="weekly-board__title">Bảng xếp hạng tuần này</h4>
+            <p class="weekly-board__week"><span class="badge">Tuần bắt đầu 00:00 thứ Hai · UTC+7</span></p>
+            <div class="state state--empty weekly-board__state">
+              <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-empty"/></svg>
+              <h5 class="state__title">Chưa có ai ghi điểm tuần này</h5>
+              <p class="state__text">Hãy là người đầu tiên — ván của bạn lên bảng ngay khi chơi xong.</p>
+            </div>
+            <p class="weekly-board__more"><a class="link" href="#s5">Xem bảng xếp hạng đầy đủ</a></p>
+          </section>
+
+          <section class="weekly-board card">
+            <h4 class="weekly-board__title">Bảng xếp hạng tuần này</h4>
+            <p class="weekly-board__week"><span class="badge">Tuần bắt đầu 00:00 thứ Hai · UTC+7</span></p>
+            <div class="state state--error weekly-board__state" role="status">
+              <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+              <div class="state__label">Lỗi</div>
+              <h5 class="state__title">Không tải được bảng xếp hạng</h5>
+              <p class="state__text">Kiểm tra kết nối rồi thử lại.</p>
+              <button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Thử lại</button>
+            </div>
+            <p class="weekly-board__more"><a class="link" href="#s5">Xem bảng xếp hạng đầy đủ</a></p>
+          </section>
+        </div>
+      </div>
+      <span class="mk-tag"><strong>Trạng thái trống không mang nút.</strong> <code>components.md</code> §4.2 để hành động là tuỳ chọn, và trò chơi đang ở ngay trên cùng trang này — một nút “Chơi ngay” sẽ dẫn tới thứ người đọc đang nhìn. Trạng thái trống <em>không phải</em> lỗi: không màu cảnh báo, không chuông.</span>
+    </section>
+  </div>
+
+  <div class="mk-specs">
+    <section>
+      <h3 class="mk-cap">Sáng · 1280 px — bảng trong cột bên 300 px</h3>
+      <div class="mk-scroll"><div class="mk-view mk-view--desktop">
+        <div class="mk-stack">
+          <div class="play-grid">
+            <div class="play-main">
+              <div class="game-frame game-frame--mounted" tabindex="0" role="group" aria-label="Khung trò chơi — Xếp gạch cổ điển">
+                <p class="game-frame__placeholder">Khung trò chơi · 16:9</p>
+              </div>
+            </div>
+            <div class="play-rail">
+              <aside class="ad-slot ad-slot--rail-rectangle" aria-label="Quảng cáo">
+                <span class="ad-slot__label">Quảng cáo · 300 × 250</span>
+              </aside>
+              <section class="weekly-board card">
+                <h4 class="weekly-board__title">Bảng xếp hạng tuần này</h4>
+                <p class="weekly-board__week"><span class="badge">Tuần · UTC+7</span></p>
+                <table class="board">
+                  <caption>Ba điểm cao nhất tuần này</caption>
+                  <thead><tr><th class="board__rank" scope="col">#</th><th scope="col">Người chơi</th><th class="board__score" scope="col">Điểm</th></tr></thead>
+                  <tbody>
+                    <tr><td class="board__rank">1</td><td>Minh</td><td class="board__score">12.480</td></tr>
+                    <tr class="board__row--own"><td class="board__rank">2</td><td>Hà<span class="board__you">Bạn</span></td><td class="board__score">11.905</td></tr>
+                    <tr><td class="board__rank">3</td><td>Quân</td><td class="board__score">10.740</td></tr>
+                  </tbody>
+                </table>
+                <p class="weekly-board__more"><a class="link" href="#s5">Xem bảng xếp hạng đầy đủ</a></p>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div></div>
+      <span class="mk-tag">Cột bên rộng đúng bằng khổ 300 × 250, và chiều rộng ấy đọc từ chính biến khổ của <code>ads.css</code> chứ không viết lại thành số — nên cột và ô không thể lệch nhau. Ô quảng cáo nằm <strong>trên</strong> bảng tuần, đúng <code>requirements.md</code> §5.1.</span>
+    </section>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     6. AD SLOTS.
+     ========================================================================== -->
+<section class="mk-section" id="s6">
+  <h2>6. Ô quảng cáo và khoảng cách đo được</h2>
+  <p>
+    Trang chơi là trang mang nhiều ô nhất trên site: <strong>ba</strong> ô ở dải
+    compact và wide, <strong>hai</strong> ở dải mobile. Toàn bộ kiểm kê, khổ, vị trí
+    và dải là <code>ad-slots.md</code> §3 nguyên văn. Task này không thêm ô, không bớt
+    ô, không di chuyển ô và <strong>không tạo kiểu lại ô nào</strong> —
+    <code>ads.css</code> là chủ sở hữu duy nhất của <code>.ad-slot</code>
+    (<code>ad-slots.md</code> §11).
+  </p>
+
+  <table class="mk-table">
+    <caption>Kiểm kê theo dải. Đúng một hộp 300 × 250 trên trang ở mọi chiều rộng</caption>
+    <thead>
+      <tr><th scope="col">Ô</th><th scope="col">Khổ</th><th scope="col">mobile &lt; 768</th><th scope="col">compact 768–1023</th><th scope="col">wide ≥ 1024</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>ad-header-leaderboard</code></td><td>728 × 90</td><td>vắng</td><td>có</td><td>có</td></tr>
+      <tr><td><code>ad-mobile-top</code></td><td>320 × 100</td><td><strong>có</strong></td><td>vắng</td><td>vắng</td></tr>
+      <tr><td><code>ad-after-info-rectangle</code></td><td>300 × 250</td><td><strong>có</strong></td><td>có</td><td>vắng</td></tr>
+      <tr><td><code>ad-incontent-banner</code></td><td>728 × 90</td><td>vắng</td><td>có</td><td>có</td></tr>
+      <tr><td><code>ad-rail-rectangle</code></td><td>300 × 250</td><td>vắng</td><td>vắng</td><td><strong>có</strong></td></tr>
+      <tr><td><strong>Tổng trên trang</strong></td><td></td><td><strong>2</strong></td><td><strong>3</strong></td><td><strong>3</strong></td></tr>
+    </tbody>
+  </table>
+
+  <table class="mk-table">
+    <caption>Khoảng cách tới khung trò chơi, theo ô, theo dải. Mọi số đều là token, không số thô</caption>
+    <thead>
+      <tr><th scope="col">Ô</th><th scope="col">Dải</th><th scope="col">Khung ở phía</th><th scope="col">Khoảng cách</th><th scope="col">Cộng từ đâu</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>ad-mobile-top</code></td><td>mobile</td><td>dưới</td><td><strong>24 px chẵn</strong></td><td>lề dưới của ô = <code>--space-ad-clearance</code></td></tr>
+      <tr><td><code>ad-after-info-rectangle</code></td><td>mobile</td><td>trên</td><td><strong>≥ 64 px</strong></td><td>40 khung→game-meta + 24 lề trên của ô, cộng chiều cao game-meta</td></tr>
+      <tr><td><code>ad-header-leaderboard</code></td><td>compact + wide</td><td>dưới</td><td><strong>≥ 145 px</strong></td><td>24 lề dưới của ô + 1 viền header + 48 đệm main + 32 lề h1, cộng chiều cao h1 (~41)</td></tr>
+      <tr><td><code>ad-after-info-rectangle</code></td><td>compact</td><td>trên</td><td><strong>≥ 72 px</strong></td><td>48 khung→game-meta + 24 lề trên của ô, cộng chiều cao game-meta</td></tr>
+      <tr><td><code>ad-incontent-banner</code></td><td>compact</td><td>trên</td><td><strong>≥ 370 px</strong></td><td>≥ 72 ở trên, cộng 250 chiều cao ô chữ nhật và 24 + 24 giữa hai ô</td></tr>
+      <tr><td><code>ad-incontent-banner</code></td><td>wide</td><td>trên</td><td><strong>≥ 72 px</strong></td><td>48 khung→game-meta + 24 lề trên của ô, cộng chiều cao game-meta</td></tr>
+      <tr><td><code>ad-rail-rectangle</code></td><td>wide</td><td>bên trái</td><td><strong>32 px chẵn</strong></td><td><code>column-gap</code> của lưới = <code>--space-2xl</code>; mức sàn bắt buộc là <code>--space-ad-clearance</code> = 24</td></tr>
+    </tbody>
+  </table>
+
+  <p>
+    <strong>Mỗi ô chỉ kề khung trên một trục.</strong> Bốn ô biểu ngữ và chữ nhật
+    trong dòng chảy nằm <em>trên hoặc dưới</em> khung, nên chỉ khoảng cách dọc có
+    nghĩa; ô cột bên nằm <em>bên cạnh</em> khung và cao 250 px, luôn nằm gọn trong
+    chiều cao khung (353 px ở 1024 px, 488 px ở 1280 px), nên chỉ khoảng cách ngang
+    có nghĩa. Vì thế “cách 24 px ở mọi phía hai bên kề nhau” được thoả bằng đúng một
+    con số cho mỗi ô.
+  </p>
+  <p>
+    <strong>Hai lề luôn cộng vào nhau, không bao giờ nuốt nhau.</strong> Mỗi cột của
+    trang là một flex column <em>không có</em> <code>gap</code>: lề của flex item
+    không bao giờ collapse, nên 24 px của ô luôn được cộng thêm vào khoảng cách trang
+    đã có. Đó là lý do các con số trên là phép cộng người review tự cộng lại được.
+  </p>
+  <p>
+    <strong>Không ô nào nằm trong khung, chồng lên khung, dính hay cố định.</strong>
+    Mọi ô là <em>anh em</em> của khung trong dòng chảy bình thường, không bao giờ là
+    con cháu của nó — <code>.game-frame .ad-slot</code> không khớp gì cả.
+    <code>ads.css</code> viết <code>position: static</code>, <code>float: none</code>,
+    <code>z-index: auto</code> và <code>transform: none</code> lên
+    <code>.ad-slot</code>, và tệp này không đè lên một dòng nào trong bốn dòng ấy.
+    Không lề âm ở đâu cả.
+  </p>
+  <p>
+    <strong>Hộp được đặt chỗ trước, nên khung không bao giờ nhảy.</strong> Chiều cao
+    mỗi ô là một số pixel tường minh do stylesheet đặt, có hiệu lực ngay từ lần vẽ
+    đầu tiên — trước mọi creative, trước mọi quyết định đồng ý cookie, trước mọi yêu
+    cầu mạng. Đóng góp của các ô vào Cumulative Layout Shift là <strong>0</strong>,
+    không phải “dưới 0,1”.
+  </p>
+  <p>
+    <strong>Không mã quảng cáo, không thẻ, không script, không khung nhúng, không
+    pixel, không bộ theo dõi</strong> ở bất cứ đâu trong ba tệp của Task này. Mỗi ô là
+    một hộp giữ chỗ rỗng. Tích hợp là M6, sau khi người dùng đồng ý.
+  </p>
+</section>
+
+<!-- ==========================================================================
+     7. KEYBOARD.
+     ========================================================================== -->
+<section class="mk-section" id="s7">
+  <h2>7. Bàn phím, tiêu điểm và thứ tự đọc</h2>
+  <p>
+    Thứ tự DOM = thứ tự Tab = thứ tự đọc. Không chỗ nào dùng thuộc tính
+    <code>order</code>, không chỗ nào dùng <code>tabindex</code> dương, không chỗ nào
+    có bẫy tiêu điểm, và trang này không có một bề mặt dính nào.
+  </p>
+
+  <table class="mk-table">
+    <caption>Thứ tự Tab đầy đủ của trang chơi</caption>
+    <thead><tr><th scope="col">#</th><th scope="col">Điểm dừng</th><th scope="col">Ghi chú</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><code>skip-link</code> → <code>#main</code></td><td>Đầu tiên trong tài liệu, <strong>trước</strong> ô quảng cáo trong header — một phím là qua được biểu ngữ.</td></tr>
+      <tr><td>2</td><td>Wordmark</td><td>Liên kết về <code>/</code>.</td></tr>
+      <tr><td>3</td><td>Nút mở điều hướng</td><td>Chỉ dưới 768 px.</td></tr>
+      <tr><td>4–6</td><td>Trò chơi · Bảng xếp hạng · Tài khoản</td><td>Trang hiện tại không nằm trong ba mục này, nên không mục nào mang <code>aria-current</code>.</td></tr>
+      <tr><td>7–8</td><td>Giao diện: Sáng · Tối</td><td>Hai radio thật; Tab vào nhóm, phím mũi tên chuyển trong nhóm.</td></tr>
+      <tr><td>—</td><td><em>ô quảng cáo</em></td><td><strong>Không phải điểm dừng.</strong> Không <code>tabindex</code>, không nội dung tương tác, ở cả ba ô.</td></tr>
+      <tr><td>9</td><td><strong>Khung trò chơi</strong></td><td><strong>Đúng một điểm dừng.</strong> <code>tabindex="0"</code>, có tên trợ năng, có vòng tiêu điểm nhìn thấy. Tab lần nữa là ra — khung không giữ Tab.</td></tr>
+      <tr><td>10</td><td>Toàn màn hình</td><td>Hành động chính duy nhất của trang.</td></tr>
+      <tr><td>11</td><td>Tải lại trò chơi</td><td></td></tr>
+      <tr><td>12</td><td>Xem bảng xếp hạng đầy đủ</td><td>Ở dải wide, cột bên đứng sau <em>toàn bộ</em> cột chính trong DOM, nên liên kết này được Tab tới sau biểu ngữ in-content dù mắt nhìn thấy nó sớm hơn (<code>ad-slots.md</code> §9.1).</td></tr>
+      <tr><td>cuối</td><td>Bốn liên kết chân trang</td><td>Mỗi liên kết là một đích 44 px.</td></tr>
+    </tbody>
+  </table>
+
+  <p>
+    <strong>Khung trò chơi là một điểm dừng, và chỉ khi có trò chơi trong đó.</strong>
+    Lúc đang tải hoặc lỗi thì khung không mang <code>tabindex</code>: một điểm dừng
+    vào một hộp rỗng chẳng dẫn tới đâu, và thứ cần tới được lúc đó là nút “Thử lại”
+    bên trong khối lỗi — nút ấy là một điểm dừng bình thường.
+  </p>
+  <p>
+    <strong>Không bẫy tiêu điểm, và điều đó phải đúng cả ở M2.</strong> Khung không
+    bao giờ được nuốt phím Tab. Trò chơi bên trong không được chặn hành vi mặc định
+    của Tab, và nếu ở M2 khung trở thành một phần tử nhúng thì thứ tự Tab vẫn phải đi
+    xuyên qua nó rồi đi tiếp. Đây là một ràng buộc dành cho hợp đồng nền tảng trò chơi
+    (GAM-16) và được ghi lại ở <a class="link" href="../pages/play.md">play.md</a> §7,
+    chứ không được quyết ở đây.
+  </p>
+
+  <div class="mk-specs mk-specs--row">
+    <section>
+      <h3 class="mk-cap">Sáng · 375 px — vòng tiêu điểm trên khung</h3>
+      <div class="mk-view mk-view--mobile">
+        <div class="mk-stack">
+          <div class="game-frame game-frame--mounted is-focus" tabindex="0" role="group" aria-label="Khung trò chơi — Xếp gạch cổ điển">
+            <p class="game-frame__placeholder">Khung trò chơi · đang có tiêu điểm bàn phím</p>
+          </div>
+        </div>
+      </div>
+      <span class="mk-tag">Vòng tiêu điểm cách mép 2 px nên nó nằm trên nền trang chứ không nằm trên nền <code>sunken</code> của khung: <code>focus</code> trên <code>bg</code> đo được <strong>5.65:1</strong> sáng và <strong>8.92:1</strong> tối, cần 3:1.</span>
+    </section>
+
+    <section>
+      <h3 class="mk-cap">Tối · 375 px — cùng vòng tiêu điểm</h3>
+      <div class="mk-view mk-view--mobile" data-theme="dark">
+        <div class="mk-stack">
+          <div class="game-frame game-frame--mounted is-focus" tabindex="0" role="group" aria-label="Khung trò chơi — Xếp gạch cổ điển">
+            <p class="game-frame__placeholder">Khung trò chơi · đang có tiêu điểm bàn phím</p>
+          </div>
+        </div>
+      </div>
+      <span class="mk-tag">Vòng tiêu điểm thật được chứng minh bằng cách Tab, không bằng <code>.is-focus</code>. Lớp ép trạng thái chỉ tồn tại trên tờ mockup.</span>
+    </section>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     8. CONTRAST.
+     ========================================================================== -->
+<section class="mk-section" id="s8">
+  <h2>8. Tương phản</h2>
+  <p>
+    <strong>Trang này không tạo ra một cặp nền/chữ mới nào.</strong> Mọi cặp nó dùng
+    đều đã được đo và ghi trong <code>DESIGN.md</code> → “Measured contrast”, hoặc
+    trong <code>components.md</code> §3.4 với bốn cặp <code>primary-hover</code>. Vì
+    thế không tỉ lệ nào dưới đây là tỉ lệ Task này phải tự đo — mỗi dòng đều có nguồn.
+  </p>
+
+  <table class="mk-table">
+    <caption>Mọi cặp trang chơi dùng. Sáng / tối, đã đo, nguồn ở cột cuối</caption>
+    <thead>
+      <tr><th scope="col">Dùng ở đâu</th><th scope="col">Chữ</th><th scope="col">Nền</th><th scope="col">Sáng</th><th scope="col">Tối</th><th scope="col">Cần</th><th scope="col">Nguồn</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Tên trò chơi trong khung, nhãn giữ chỗ</td><td><code>text</code></td><td><code>sunken</code></td><td>13.24</td><td>15.27</td><td>4.5</td><td>DESIGN.md</td></tr>
+      <tr><td>Tiêu đề khối thông tin, tên trong bảng tuần</td><td><code>text</code></td><td><code>surface</code></td><td>15.58</td><td>12.66</td><td>4.5</td><td>DESIGN.md</td></tr>
+      <tr><td>Chữ trong khối trạng thái và trong notice</td><td><code>text</code></td><td><code>bg</code></td><td>14.65</td><td>14.19</td><td>4.5</td><td>DESIGN.md</td></tr>
+      <tr><td>Dòng hợp đồng bàn phím, nhãn trong danh sách thông tin</td><td><code>text-muted</code></td><td><code>surface</code></td><td>6.65</td><td>6.83</td><td>4.5</td><td>DESIGN.md</td></tr>
+      <tr><td>Câu trong khối trạng thái</td><td><code>text-muted</code></td><td><code>bg</code></td><td>6.25</td><td>7.66</td><td>4.5</td><td>DESIGN.md</td></tr>
+      <tr><td>Nhãn nút phụ trên thẻ, liên kết “Xem bảng đầy đủ”</td><td><code>primary</code></td><td><code>surface</code></td><td>6.05</td><td>7.72</td><td>4.5</td><td>DESIGN.md</td></tr>
+      <tr><td>Nút “Thử lại” trong khối trạng thái, liên kết chân trang</td><td><code>primary</code></td><td><code>bg</code></td><td>5.69</td><td>8.65</td><td>4.5</td><td>DESIGN.md</td></tr>
+      <tr><td>Nhãn nút “Toàn màn hình”</td><td><code>on-primary</code></td><td><code>primary</code></td><td>6.08</td><td>8.13</td><td>4.5</td><td>DESIGN.md</td></tr>
+      <tr><td>Nhãn nút “Toàn màn hình” khi hover</td><td><code>on-primary</code></td><td><code>primary-hover</code></td><td>8.55</td><td>9.63</td><td>4.5</td><td>DESIGN.md</td></tr>
+      <tr><td>Nút và liên kết khi hover, trên thẻ</td><td><code>primary-hover</code></td><td><code>surface</code></td><td>8.49</td><td>9.14</td><td>4.5</td><td>components.md §3.4</td></tr>
+      <tr><td>Nút và liên kết khi hover, trên nền trang</td><td><code>primary-hover</code></td><td><code>bg</code></td><td>7.98</td><td>10.25</td><td>4.5</td><td>components.md §3.4</td></tr>
+      <tr><td>Nhãn tuần (badge)</td><td><code>secondary</code></td><td><code>surface</code></td><td>5.97</td><td>6.77</td><td>4.5</td><td>DESIGN.md</td></tr>
+      <tr><td>Biểu tượng và chữ “Lỗi”</td><td><code>error</code></td><td><code>bg</code></td><td>6.31</td><td>7.46</td><td>4.5</td><td>DESIGN.md</td></tr>
+      <tr><td>Biểu tượng và chữ “Cảnh báo” của notice cần JavaScript</td><td><code>warning</code></td><td><code>bg</code></td><td>6.09</td><td>8.09</td><td>4.5</td><td>DESIGN.md</td></tr>
+      <tr><td>Vòng tiêu điểm trên khung, trên nút trong khối trạng thái</td><td><code>focus</code></td><td><code>bg</code></td><td>5.65</td><td>8.92</td><td>3</td><td>DESIGN.md</td></tr>
+      <tr><td>Vòng tiêu điểm trong header, trên thẻ</td><td><code>focus</code></td><td><code>surface</code></td><td>6.01</td><td>7.96</td><td>3</td><td>DESIGN.md</td></tr>
+      <tr><td>Vòng tiêu điểm trên hàng của chính người chơi</td><td><code>focus</code></td><td><code>sunken</code></td><td>5.11</td><td>9.60</td><td>3</td><td>DESIGN.md</td></tr>
+      <tr><td>Viền khung trò chơi, viền khối trạng thái, viền nút phụ</td><td><code>border-strong</code></td><td><code>bg</code></td><td>3.48</td><td>3.58</td><td>3</td><td>DESIGN.md</td></tr>
+      <tr><td>Viền nút phụ trên thẻ</td><td><code>border-strong</code></td><td><code>surface</code></td><td>3.71</td><td>3.19</td><td>3</td><td>DESIGN.md</td></tr>
+      <tr><td>Viền hàng của chính người chơi</td><td><code>border-strong</code></td><td><code>sunken</code></td><td>3.15</td><td>3.85</td><td>3</td><td>DESIGN.md</td></tr>
+    </tbody>
+  </table>
+
+  <p>
+    <strong>Hai cặp dưới 3:1, cố ý.</strong> Viền thẻ và viền hàng bảng
+    (<code>border</code>) và thanh xương (<code>border</code> trên <code>bg</code>,
+    1.33 sáng / 1.50 tối) là trang trí: chúng không mang thông tin, thanh xương là
+    <code>aria-hidden</code>, và tín hiệu “đang tải” nằm ở dòng chữ trong vùng live
+    bên cạnh. WCAG 1.4.11 miễn trừ phần trang trí thuần tuý. Ranh giới điều khiển
+    trên trang này luôn là <code>border-strong</code>.
+  </p>
+  <p>
+    <strong>Một cặp chưa đo, và nó không phải của Task này.</strong>
+    <code>ads.css</code> đặt nhãn <code>.ad-slot__label</code> là
+    <code>text-muted</code> trên nền <code>sunken</code> của ô; <code>DESIGN.md</code>
+    không công bố cặp đó. <code>ad-slots.md</code> §11 cấm Task này tạo kiểu lại
+    <code>.ad-slot</code>, và môi trường này không có công cụ đo, nên tờ này không tự
+    công bố một tỉ lệ nào. <code>home.md</code> §9.3 đã nêu đúng mục này cho Board;
+    đây là lần thứ hai nó xuất hiện, trên trang mang <em>ba</em> ô thay vì một.
+  </p>
+</section>
+
+<!-- ==========================================================================
+     9. HOW TO READ THIS SHEET.
+     ========================================================================== -->
+<section class="mk-section" id="s9">
+  <h2>9. Cách đọc tờ này</h2>
+
+  <h3>9.1 Hai giao diện trên một trang, không cần script</h3>
+  <p>
+    <code>&lt;html&gt;</code> mang <code>data-theme="light"</code>. Điều đó loại khối
+    <code>prefers-color-scheme</code> của <code>tokens.css</code>, nên các bản dựng
+    sáng vẫn sáng kể cả với người đọc đặt máy ở chế độ tối; các bản dựng tối là những
+    bản tự mang <code>data-theme="dark"</code>. Bộ chọn <code>[data-theme='dark']</code>
+    khớp với <em>bất kỳ</em> phần tử nào chứ không riêng <code>:root</code>.
+  </p>
+
+  <h3>9.2 Mức tiêu đề trên tờ này không phải mức trên trang thật</h3>
+  <p>
+    Một tài liệu chỉ được có một <code>h1</code>, nên <code>h1</code> ở đây là của
+    <em>tờ mockup</em>. Trong mỗi bản dựng, các mức tiêu đề bị hạ xuống so với trang
+    thật, không bỏ bậc nào:
+  </p>
+  <table class="mk-table">
+    <thead><tr><th scope="col">Trên trang thật</th><th scope="col">Trên tờ này</th><th scope="col">Nội dung</th></tr></thead>
+    <tbody>
+      <tr><td><code>h1</code></td><td><code>h4</code></td><td>Tên trò chơi</td></tr>
+      <tr><td><code>h2</code></td><td><code>h5</code></td><td>“Cách chơi” và “Bảng xếp hạng tuần này”</td></tr>
+    </tbody>
+  </table>
+  <p>
+    Cùng lý do, phần chrome bị hạ cấp khỏi vai trò landmark: header là
+    <code>&lt;div class="site-header"&gt;</code>, <code>main</code> là
+    <code>&lt;div class="shell main"&gt;</code>, còn <code>&lt;footer&gt;</code> nằm
+    lồng trong một <code>&lt;section&gt;</code> nên theo chính quy tắc của HTML nó
+    không còn là <code>contentinfo</code>. Mỗi <code>&lt;nav&gt;</code> vẫn là
+    <code>&lt;nav&gt;</code> thật và mang nhãn riêng.
+    <strong>Mã HTML của trang thật, với đầy đủ landmark và đúng mức tiêu đề, nằm ở
+    <a class="link" href="../pages/play.md">play.md</a> §3</strong> để M2 bê thẳng.
+  </p>
+
+  <h3>9.3 Một điều tờ này không thể giả lập</h3>
+  <p>
+    <code>tokens.css</code> §7 nâng năm token kiểu chữ trong một media query theo
+    <em>viewport</em> trên <code>:root</code>. Một khung rộng cố định không thể lặp
+    lại bước đó mà không viết kích thước chữ thành số vào <code>play.css</code> —
+    đúng thứ mà quy tắc “không giá trị thô” tồn tại để ngăn. Vậy nên
+    <strong>trong cửa sổ rộng từ 768 px trở lên, các khung 375 px vẽ năm token đó ở
+    kích thước desktop.</strong> Nó chỉ ảnh hưởng tiêu đề; không đổi bố cục, không
+    đổi trạng thái, và <strong>không đổi một khoảng cách nào trong §6</strong>. Muốn
+    đọc khung mobile đúng thang chữ của nó thì thu cửa sổ xuống dưới 768 px.
+  </p>
+  <p>
+    Cùng lý do đó, mức trần chiều cao của khung trò chơi theo viewport chỉ áp dụng
+    trên trang thật (<code>.page</code>) chứ không trên khung cố định ở tờ này: một
+    mức trần tính theo <code>dvh</code> là phát biểu về <em>viewport</em>, và nếu áp
+    vào tờ này thì kích thước khung mà người review đo được sẽ phụ thuộc chiều cao
+    cửa sổ của họ. Chi tiết ở <a class="link" href="../pages/play.md">play.md</a> §4.
+  </p>
+
+  <h3>9.4 Các phép kiểm tra chạy được</h3>
+  <p>
+    Các lệnh <code>grep</code> mà tất cả phải không trả về gì nằm ở
+    <a class="link" href="../pages/play.md">play.md</a> §10, <strong>không</strong> ở
+    đây — một trong các mẫu tìm thuộc tính nguồn và tiền tố giao thức <em>trong chính
+    tệp này</em>, nên in nó ra đây là nó tự khớp với chính nó và phép kiểm tra thất
+    bại vì tài liệu của nó chứ không vì một lỗi thật. Tệp markdown nằm ngoài diện
+    quét, nên đó là chỗ duy nhất lệnh ấy còn đúng.
+  </p>
+
+  <h3>9.5 Kiểm tra bằng mắt</h3>
+  <ol>
+    <li><strong>Bốn bản dựng ở §1, cộng dải compact ở §2.</strong> Sáng/tối × 375/1280, cộng 768.</li>
+    <li><strong>Đếm ô quảng cáo trong mỗi bản dựng:</strong> hai ở 375, ba ở 768, ba ở 1280. Đúng một hộp 300 × 250 ở cả ba.</li>
+    <li><strong>Tab qua cả tờ.</strong> Vòng tiêu điểm luôn nhìn thấy, không bao giờ bị che, không ô quảng cáo nào nhận tiêu điểm, và khung trò chơi là đúng một điểm dừng mà Tab ra được.</li>
+    <li><strong>Không gì chuyển động.</strong> Không quét sáng trên thanh xương, không nhấp nháy.</li>
+    <li><strong>Chuyển sang thang xám.</strong> Khối lỗi, notice cảnh báo và hàng “Bạn” đều vẫn đọc được, vì không cái nào chỉ dùng màu.</li>
+    <li><strong>Kéo chậm cửa sổ qua mốc 1024 px</strong> trên trang thật: cột bên xuất hiện và ô chữ nhật sau khối thông tin biến mất trong cùng một khung hình — không bao giờ có hai, không bao giờ không có cái nào.</li>
+  </ol>
+</section>
+
+</body>
+</html>

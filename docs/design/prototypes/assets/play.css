@@ -1,0 +1,732 @@
+/* ==========================================================================
+   Soucean Game — M1-06 page stylesheet: the play page.
+   --------------------------------------------------------------------------
+   Source of truth: docs/design/pages/play.md (Task SOU-4, milestone M1-06).
+
+   SCOPE RULE — read before editing.
+
+   There is not ONE raw colour, type size, spacing step, radius or duration in
+   this file. Every such value is read from tokens.css. The complete list of
+   literals, and why each one has to be a literal, is:
+
+     * `1px` hairline edges — not a value on any token scale.
+     * `16 / 9` — the game frame's aspect ratio. It is a ratio, not a length,
+       and it is the SAME ratio components.css already writes on
+       `.state--frame` and `.game-card__art`. ad-slots.md measures every
+       clearance against this box, so the frame must stay exactly 16:9 at
+       every width.
+     * `768px` and `1024px` inside media conditions — a custom property is not
+       valid in a media condition, so `--bp-switch` and `--bp-wide` cannot be
+       read there. The same literal, for the same reason, that tokens.css,
+       base.css, components.css and ads.css each repeat and each document.
+       They MUST stay equal to those two tokens.
+     * `100%`, `0`, `auto`, and `100dvh` in section 2 — layout keywords and a
+       viewport unit, not design-scale values. base.css already uses `100dvh`.
+
+   This file adds NO shared component and restyles none. In particular it
+   contains no `.ad-slot` rule outside the sheet mirror of section 7: ads.css
+   is the sole owner of that component (ad-slots.md section 11), and the
+   mirror restates `display` and the rail slot's two margin overrides and
+   nothing else — every size, every block margin, `flex: none` and
+   `position: static` stay in ads.css.
+
+   Everything here is either
+     (a) page layout, which belongs to a page and not to the library,
+     (b) sheet furniture (section 6), which is not part of the product, or
+     (c) the band mirror (section 7), which restates what a viewport media
+         query already says so that a fixed-width view shows its own band.
+   ========================================================================== */
+
+/* The stack, in the order components.md section 7.1 fixes: tokens, base,
+   components. ads.css last — this page carries three of the five ad slots and
+   ad-slots.md section 11 makes ads.css their only owner. All four are
+   relative, same-directory imports. None makes a network request. */
+@import url('tokens.css');
+@import url('base.css');
+@import url('components.css');
+@import url('ads.css');
+
+/* ==========================================================================
+   1. PAGE LAYOUT.
+
+   The structure is wireframes.md section 4.2 and ad-slots.md sections 4 and 9,
+   unchanged: one DOM, three bands, nothing reordered or re-parented by a
+   media query. No `order` property appears anywhere in this file.
+   ========================================================================== */
+
+/* The h1. 32px below it, which is the `32 title margin` term in ad-slots.md
+   section 5.2's arithmetic for the header slot's clearance. */
+.play-title {
+  margin-block-end: var(--space-2xl);
+}
+
+/* One column in the mobile AND compact bands. Two only in the wide band —
+   1024px, not 768px (Board decision of 2026-11-04; ad-slots.md 4.4 and 4.5).
+   Below it `.play-rail` simply stacks under `.play-main`, carrying only the
+   weekly board, because the rail ad slot is display:none there. */
+.play-grid {
+  display: block;
+}
+
+/* EACH PAGE COLUMN IS A FLEX COLUMN WITH NO `gap` — ad-slots.md section 4.3,
+   and it is load-bearing rather than stylistic. Margins of flex items never
+   collapse, so every ad slot's own 24px clearance is ADDED to whatever
+   separation the page already has and can never be absorbed into it. That is
+   what makes the measured totals in play.md sums a reviewer can add up rather
+   than a `max()` they have to reason about.
+
+   Do not add `gap` to either of these. The vertical rhythm comes from each
+   block's own margin, below. */
+.play-main,
+.play-rail {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Below the wide band the rail is not a column at all: it stacks under the
+   main column and carries only the weekly board. This is the separation
+   between the last ad slot in the main column and the board. In the wide band
+   section 5 zeroes it, because there the rail starts at the top of the grid
+   row, level with the game frame. */
+.play-rail {
+  margin-block-start: var(--space-3xl);
+}
+
+/* ==========================================================================
+   2. THE GAME FRAME.
+
+   This is the box every ad clearance in ad-slots.md section 5 is measured
+   against, so two things about it are not negotiable: it is exactly 16:9 at
+   every width, and it is a SIBLING of every ad slot, never an ancestor of one
+   (`.game-frame .ad-slot` must never match anything).
+
+   It is one element in every state. Ready, loading, error and "needs
+   JavaScript" are the same box with a different class list and different
+   children — so switching between any two of them moves nothing, and the
+   frame's contribution to Cumulative Layout Shift is zero by construction and
+   not by tuning.
+
+   THE GAME PLATFORM CONTRACT IS OUT OF SCOPE (GAM-16, and SOU-4 says so
+   explicitly). Nothing here assumes how a game is embedded: there is no
+   iframe, no script, no mount API and no message channel. The frame is a box
+   with a ratio, which is all M1 is allowed to decide.
+   ========================================================================== */
+
+.game-frame {
+  /* The ratio, and the reason this element exists. */
+  aspect-ratio: 16 / 9;
+
+  /* Normally the full width of its column. `--game-frame-max-inline` is the
+     viewport cap applied by the product rule below; on a fixed-width sheet
+     view it is unset and this collapses to `100%`. The cap is expressed on
+     the INLINE axis on purpose: a `max-block-size` would clamp the height and
+     silently break the 16:9 ratio, where capping the width keeps it exact. */
+  inline-size: min(100%, var(--game-frame-max-inline, 100%));
+  margin-inline: auto;
+
+  border-radius: var(--radius-md);
+}
+
+/* THE VIEWPORT CAP — product only, and deliberately scoped to `.page`.
+
+   On a short landscape phone the content column can be wider than 16/9 of the
+   viewport height, and an uncapped frame would then be taller than the screen.
+   This keeps the whole frame on screen at every viewport, with the ratio
+   intact, by capping the width instead of the height.
+
+   It is scoped to `.page` — the real page's body class — because a cap on
+   `100dvh` is a statement about a VIEWPORT, and a fixed-width view on the
+   mockup sheet has no viewport of its own. Applying it there would make the
+   sheet's measured frame depend on the height of the reader's window, which
+   would wreck the one thing the sheet exists to let a reviewer measure.
+
+   Nothing else in this file depends on this rule: the clearances, the bands
+   and the states are all unchanged if it is deleted. play.md section 9 raises
+   it for the reviewer as this Task's one addition that no upstream document
+   asked for. */
+.page .game-frame {
+  --game-frame-max-inline: calc(100dvh * 16 / 9);
+}
+
+/* The mounted game, and the sheet's stand-in for it. `sunken` carries `text`
+   and nothing else (components.md section 2.1 — that pair is measured at
+   13.24 light / 15.27 dark), and the edge is `border-strong`, measured at
+   3.48 / 3.58 against the page background.
+
+   NO PADDING. requirements.md section 2 says the game fills its container and
+   letterboxes, so the frame must not inset it — the caption below carries its
+   own padding instead. The 1px edge is a border rather than an outline, and
+   with `box-sizing: border-box` from base.css that keeps the frame's BORDER
+   box exactly 16:9, which is the box every clearance in ad-slots.md section 5
+   is measured against. */
+.game-frame--mounted {
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  text-align: center;
+  color: var(--color-text);
+  background-color: var(--color-sunken);
+  border: 1px solid var(--color-border-strong);
+}
+
+/* The stand-in's caption. `text` on `sunken`, like everything else in the box.
+   In the product this element does not exist: the game is drawn here. */
+.game-frame__placeholder {
+  margin: 0;
+  max-inline-size: none;
+  padding: var(--space-lg);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+}
+
+/* A STATE BLOCK THAT *IS* THE FRAME.
+
+   Loading, error and "needs JavaScript" are the same box as the mounted game:
+   `class="game-frame state state--frame ..."`. The library's `.state` padding
+   is sized for a block that can grow to fit its content; this one cannot,
+   because its height is fixed by a ratio — at the 375px design width the whole
+   box is only 193px tall. So inside the frame the block takes the frame's own
+   padding and a tighter gap.
+
+   This is the frame's layout, not a restyle of `.state`: the selector matches
+   nothing but the frame, and every other state block on this page is the
+   library's, untouched. */
+.game-frame.state {
+  gap: var(--space-sm);
+  padding: var(--space-md);
+}
+
+/* THE ONE STATE ALLOWED TO EXCEED THE RATIO, AND WHY.
+
+   The error pattern is fixed by components.md section 4.2 and all five parts
+   of it are required: icon, the word "Lỗi", a title naming what failed, one
+   sentence, and a retry. At 375px that is a few pixels more than a 343 x 193
+   frame holds. The three available answers were to clip it, to drop a part of
+   the pattern, or to let the box grow; this page grows the box, for the error
+   state only.
+
+   `min-content` is the frame's content height, so the box is the LARGER of the
+   16:9 ratio and what the error needs — unchanged at every width where the
+   ratio already wins, which is every width above the mobile band.
+
+   LOADING IS NEVER ALLOWED TO DO THIS. It is exactly 16:9 at every width,
+   because loading is the state the acceptance criterion names: it reserves the
+   frame's final size so nothing jumps when the game arrives. play.md section 6
+   records what this costs at the mobile band and what it does not cost. */
+.game-frame.state--error {
+  min-block-size: min-content;
+}
+
+/* ==========================================================================
+   3. GAME CONTROLS AND THE GAME INFO BLOCK — `game-meta`.
+
+   `game-meta`'s position between the frame and the banner below it is
+   load-bearing: it is what keeps every ad slot off the frame and off the
+   controls (requirements.md 5.1 and 5.2, ad-slots.md section 11). Nothing
+   here moves it, and nothing may be inserted between it and the frame.
+
+   The block is composed as `class="game-meta card"`, so the surface, the edge,
+   the radius and the padding are components.css's `.card` and this file adds
+   no second surface. What it adds is the inner layout and the one margin.
+   ========================================================================== */
+
+.game-meta {
+  margin-block-start: var(--space-3xl);
+}
+
+.game-meta__title {
+  margin-block-end: var(--space-sm);
+}
+
+/* The keyboard contract, stated in the open rather than left to be
+   discovered. It is the first thing in the block, directly under the frame,
+   and the frame's `aria-describedby` points at it — so a keyboard user both
+   sees it and hears it. */
+.game-meta__hint {
+  margin: 0 0 var(--space-lg);
+  max-inline-size: none;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--color-text-muted);
+}
+
+/* The controls row. Every control in it is a real `.btn` from the library;
+   this rule is the row, not the buttons.
+
+   DESIGN.md asks for at least 8px between adjacent targets and every `.btn`
+   is already `--target-min` tall, so `--space-sm` is the gap. The row wraps
+   rather than shrinking its targets: a 343px mobile column takes two
+   Vietnamese labels on two lines before it takes one unreadable line. */
+.game-meta__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-block-end: var(--space-lg);
+}
+
+/* The facts: controls scheme, players, how long a round takes. A two-column
+   description list — label, then value — so the labels line up and the block
+   reads as data rather than as prose. */
+.game-meta__facts {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-xs) var(--space-lg);
+  align-items: baseline;
+  margin: 0 0 var(--space-lg);
+}
+
+.game-meta__facts dt {
+  font-size: var(--text-label-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+.game-meta__facts dd {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+}
+
+/* The "how to play" prose. The last thing in the block, so it can run as long
+   as a game needs without pushing the controls away from the frame. */
+.game-meta__how > :last-child {
+  margin-block-end: 0;
+}
+
+/* ==========================================================================
+   4. THE WEEKLY BOARD.
+
+   A VIEW, NOT A NEW DESIGN. The table is components.css's `.board`, the rows
+   are its rows, the own-row treatment is its own-row treatment, and the three
+   data states are components.md section 4's three blocks. This section adds
+   the region's own spacing and one reserved height — nothing else.
+
+   The full board, the period switch and the "your result" block belong to the
+   leaderboards page (M1-07). This board links to it and designs none of it.
+   ========================================================================== */
+
+.weekly-board__title {
+  margin-block-end: var(--space-sm);
+}
+
+.weekly-board__week {
+  margin: 0 0 var(--space-md);
+  max-inline-size: none;
+}
+
+.weekly-board__more {
+  margin: var(--space-md) 0 0;
+  max-inline-size: none;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+}
+
+/* ONE RESERVED HEIGHT FOR ALL FOUR DISPLAYS.
+
+   `.state`'s reserved height is chosen by a page from the three named
+   modifiers in components.css, or — as here — by setting `--state-reserve`
+   directly, which is the variable that rule reads. components.md section 4.1
+   names `reserve-sm` for "a short weekly board"; this board is a real
+   `.board` table with three rows, which is taller than that, so the reserve is
+   computed from the SAME tokens the real table reads rather than rounded to a
+   named step:
+
+     caption        label-md x leading-label, plus its md margin
+     header row     label-sm x leading-label, plus md padding top and bottom
+     three rows     body-md  x leading-body,  plus md padding top and bottom
+
+   It is a calc() and not a height on purpose: a height would be a literal, and
+   a literal would drift from the type scale the moment the scale moved. It is
+   exact to within the hairline row borders (collapsed, under 4px in total),
+   which is as far as this can be computed without rendering it — play.md
+   section 10 gives the one-line check that confirms it in a browser.
+
+   What this buys: loading -> empty, loading -> error and loading -> loaded all
+   move nothing. It is the same guarantee the frame gets from its ratio, for
+   the region beside it. */
+.weekly-board__state {
+  --state-reserve: calc(
+    var(--text-label-md) * var(--leading-label) + var(--space-md) +
+      var(--text-label-sm) * var(--leading-label) + 2 * var(--space-md) + 3 *
+      (var(--text-body-md) * var(--leading-body) + 2 * var(--space-md))
+  );
+}
+
+/* ==========================================================================
+   5. THE BAND — the real rules, the ones that ship.
+
+   Two switches, both M1-01's: `switch` at 768px and `wide` at 1024px. This
+   file introduces neither and invents no third. Section 7 mirrors both onto
+   the fixed-width sheet views.
+   ========================================================================== */
+
+/* --- compact and wide: >= 768px ---------------------------------------- */
+
+@media (min-width: 768px) {
+  /* The frame-to-game-meta distance ad-slots.md section 4.1 and 4.4 fix at
+     --space-4xl. It is the `48 frame->game-meta` term in every lower-slot
+     clearance in section 5.2. */
+  .game-meta {
+    margin-block-start: var(--space-4xl);
+  }
+
+  .play-rail {
+    margin-block-start: var(--space-4xl);
+  }
+}
+
+/* --- wide only: >= 1024px ----------------------------------------------
+   The side rail. The rail column is exactly the width of the 300x250
+   creative, read from ads.css's own format variable rather than written as
+   300px here, so the column and the slot cannot drift apart.
+
+   `column-gap` IS the rail slot's horizontal clearance from the frame
+   (ad-slots.md section 5.3): the slot carries `margin-inline: 0` in this band
+   because a 24px inline margin would make its box 324px and overflow a 300px
+   column. The gap is --space-2xl (32px). It may be increased. It may never go
+   below --space-ad-clearance (24px), and it may never be zero. */
+
+@media (min-width: 1024px) {
+  .play-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--ad-format-rectangle-inline);
+    column-gap: var(--space-2xl);
+    align-items: start;
+  }
+
+  /* In this band the rail is a grid column starting level with the frame, so
+     the stacked-band separation of section 1 does not apply. */
+  .play-rail {
+    margin-block-start: 0;
+  }
+}
+
+/* ==========================================================================
+   6. SHEET FURNITURE — NOT PART OF THE PRODUCT.
+
+   Everything from here down exists so one file can show one page at both
+   design widths, in both themes, in every state, plus the compact
+   verification band. No product page uses any of it and none of it describes
+   a component.
+
+   It is restated here under the `mk-` prefix rather than borrowed, for the
+   reason home.css section 4 gives: components.css section 19 says in its own
+   first paragraph "No page mockup should use any of it". The classes below
+   are this Task's, they match M1-05's by name so the two sheets read alike,
+   and `.mk-view--compact` is the one this Task adds — the play page is the
+   only page in the site with a third band.
+
+   THE ONE EXCEPTION, STATED PLAINLY — the same one wireframes.md section 2,
+   components.md section 1.3 and home.css section 4 each recorded. tokens.css
+   section 7 steps five type tokens in a VIEWPORT media query on `:root`. A
+   fixed-width view cannot restate that step without writing type-size
+   literals into this file, which the scope rule at the top forbids and which
+   is exactly the drift that rule exists to prevent. So IN A WINDOW >= 768px
+   WIDE THE 375px VIEWS RENDER `--text-display`, `--text-headline-lg`,
+   `--text-headline-md`, `--text-headline-sm` AND `--text-body-lg` AT THEIR
+   DESKTOP SIZE. It affects headings only; it changes no layout, no region, no
+   state, no reading order and no measured clearance. To read a mobile view at
+   its true type scale, narrow the window below 768px. In the product the
+   question never arises, because there the band comes from the viewport.
+   ========================================================================== */
+
+.mk-sheet {
+  max-inline-size: calc(var(--bp-desktop) + 2 * var(--space-3xl));
+  margin-inline: auto;
+  padding-inline: var(--space-lg);
+  padding-block: var(--space-2xl) var(--space-6xl);
+}
+
+.mk-sheet__kicker {
+  font-size: var(--text-label-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+.mk-sheet__lede {
+  max-inline-size: 70ch;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--color-text-muted);
+}
+
+.mk-section {
+  margin-block-start: var(--space-5xl);
+  padding-block-start: var(--space-2xl);
+  border-block-start: 1px solid var(--color-border);
+}
+
+.mk-section > p {
+  max-inline-size: 70ch;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--color-text-muted);
+}
+
+.mk-specs {
+  display: grid;
+  gap: var(--space-2xl);
+  margin-block: var(--space-lg);
+}
+
+/* Two narrow views sit side by side on a wide monitor and wrap on a narrow
+   one, so light and dark can be compared without scrolling between them. */
+.mk-specs--row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.mk-cap {
+  margin-block-end: var(--space-sm);
+  font-size: var(--text-label-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+/* A 1280px view does not fit every reader's window. Scroll the view, never
+   the page, and never scale it — a scaled mockup cannot be measured. */
+.mk-scroll {
+  overflow-x: auto;
+}
+
+/* The view: a fixed-width slice of a real page, at a real design width. The
+   gutter is set here rather than read from `--layout-gutter`, because that
+   token is viewport-dependent and a view's band must be a property of the
+   view. It is set to the SAME spacing tokens DESIGN.md gives each band, so it
+   restates a choice and invents no value. */
+.mk-view {
+  --layout-gutter: var(--space-lg);
+
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  outline: 1px solid var(--color-border-strong);
+}
+
+.mk-view--mobile {
+  inline-size: var(--bp-mobile);
+}
+
+/* The compact band, 768-1023px. Drawn at its LOWER EDGE, which is where the
+   geometry can go wrong: it is the width at which the 728px leaderboard
+   format meets a 704px content column, and the width the Board's decision of
+   2026-11-04 was about. ad-slots.md section 11 asks for this view by name. */
+.mk-view--compact {
+  --layout-gutter: var(--space-2xl);
+
+  inline-size: var(--bp-switch);
+}
+
+.mk-view--desktop {
+  --layout-gutter: var(--space-2xl);
+
+  inline-size: var(--bp-desktop);
+}
+
+/* The skip link lives off-screen until focused. On a sheet it is drawn in its
+   FOCUSED position so a reviewer can see it without tabbing, and so a
+   translated-away link does not float over the caption above each view. The
+   real behaviour is proved by tabbing in the product, never by this rule. */
+.mk-view .skip-link {
+  position: static;
+  transform: none;
+}
+
+/* A note under a view: "the 768px band", "keyboard focus", "no rail". */
+.mk-tag {
+  display: block;
+  margin-block-start: var(--space-xs);
+  font-size: var(--text-label-sm);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+/* Stacked specimens inside one view — four state blocks, say. */
+.mk-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+}
+
+.mk-table {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+}
+
+.mk-table th {
+  font-size: var(--text-label-sm);
+  color: var(--color-text);
+}
+
+.mk-table td {
+  vertical-align: top;
+}
+
+/* ==========================================================================
+   7. THE BAND MIRROR — sheet only.
+
+   Section 5 is the band as the product sees it, from the viewport. This
+   section mirrors it onto `.mk-view--mobile`, `.mk-view--compact` and
+   `.mk-view--desktop`, which is what lets a 375px view show the mobile band
+   inside a 1280px window and a 768px view show the compact band inside a
+   1400px one.
+
+   BOTH DIRECTIONS ARE STATED ON PURPOSE. A mobile view has to UNDO the media
+   queries when the sheet is read on a wide monitor, not merely fail to opt
+   into them. The selectors score (0,2,0) or (0,3,0) against the media blocks'
+   (0,1,0) or (0,2,0), and this file is imported last, so they win on both
+   counts.
+
+   The mirror restates `display`, `grid-template-columns`, `column-gap`,
+   `flex-direction`, `padding`, the two block margins that carry the band's
+   vertical rhythm, and the rail slot's two margin overrides. It restates no
+   size, no colour and no spacing token choice that is not already stated
+   above or in the library — and nothing at all about an ad slot's box.
+   ========================================================================== */
+
+/* --- 7.1 Page rhythm. ---------------------------------------------------- */
+
+.mk-view--mobile .main {
+  padding-block: var(--space-3xl);
+}
+
+.mk-view--compact .main,
+.mk-view--desktop .main {
+  padding-block: var(--space-4xl);
+}
+
+.mk-view--mobile .game-meta,
+.mk-view--mobile .play-rail {
+  margin-block-start: var(--space-3xl);
+}
+
+.mk-view--compact .game-meta,
+.mk-view--compact .play-rail,
+.mk-view--desktop .game-meta {
+  margin-block-start: var(--space-4xl);
+}
+
+.mk-view--mobile :is(.card, .game-card) {
+  padding: var(--space-lg);
+}
+
+.mk-view--compact :is(.card, .game-card),
+.mk-view--desktop :is(.card, .game-card) {
+  padding: var(--space-xl);
+}
+
+/* --- 7.2 The play grid. --------------------------------------------------
+   One column below `wide`, two columns at and above it. The rail's stacked
+   top margin is zeroed in the two-column case, exactly as section 5 does. */
+
+.mk-view--mobile .play-grid,
+.mk-view--compact .play-grid {
+  display: block;
+}
+
+.mk-view--desktop .play-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--ad-format-rectangle-inline);
+  column-gap: var(--space-2xl);
+  align-items: start;
+}
+
+.mk-view--desktop .play-rail {
+  margin-block-start: 0;
+}
+
+/* --- 7.3 Navigation. ----------------------------------------------------- */
+
+.mk-view--mobile .site-nav__toggle {
+  display: inline-flex;
+}
+
+.mk-view--mobile .site-nav__toggle[aria-expanded='false'] + .site-nav__list {
+  display: none;
+}
+
+.mk-view--mobile .site-nav__toggle[aria-expanded='true'] + .site-nav__list {
+  display: flex;
+  flex-direction: column;
+  padding-block-end: var(--space-md);
+}
+
+.mk-view--compact .site-nav__toggle,
+.mk-view--desktop .site-nav__toggle {
+  display: none;
+}
+
+.mk-view--compact .site-nav__list,
+.mk-view--desktop .site-nav__list {
+  display: flex;
+  flex-direction: row;
+  gap: var(--space-sm);
+  padding-block-end: 0;
+}
+
+/* --- 7.4 The ad inventory, per band. ------------------------------------
+   ads.css gates the five slots on the viewport. A fixed-width view has to
+   restate that gate, or a 375px view read on a 1400px monitor would show the
+   side rail the mobile band does not have — and a 1280px view read on a
+   900px monitor would not show it at all.
+
+   `flex` and `none` are ads.css's own on and off values, copied here. The
+   cross-reference can only be one way — ads.css belongs to M1-02 and this
+   Task does not edit it — so if ads.css ever changes that display type, these
+   rules keep `flex` silently. wireframes.md records the same note for the
+   same reason.
+
+   The rail slot's `margin-inline: 0` and `margin-block-start: 0` are the only
+   non-`display` declarations in this whole mirror. They are restated for the
+   same reason the gate is: they live inside ads.css's `min-width: 1024px`
+   block, so a 1280px view inside a narrower window would otherwise draw the
+   slot with a 24px inline margin in a 300px column and push the layout. */
+
+/* mobile: exactly two slots on the page, and no sidebar. */
+.mk-view--mobile .ad-slot.ad-slot--mobile-top,
+.mk-view--mobile .ad-slot.ad-slot--after-info-rectangle {
+  display: flex;
+}
+
+.mk-view--mobile .ad-slot.ad-slot--header-leaderboard,
+.mk-view--mobile .ad-slot.ad-slot--incontent-banner,
+.mk-view--mobile .ad-slot.ad-slot--rail-rectangle {
+  display: none;
+}
+
+/* compact: three slots, still no rail. The 300x250 is after the game info. */
+.mk-view--compact .ad-slot.ad-slot--header-leaderboard,
+.mk-view--compact .ad-slot.ad-slot--incontent-banner,
+.mk-view--compact .ad-slot.ad-slot--after-info-rectangle {
+  display: flex;
+}
+
+.mk-view--compact .ad-slot.ad-slot--mobile-top,
+.mk-view--compact .ad-slot.ad-slot--rail-rectangle {
+  display: none;
+}
+
+/* wide: three slots, and the 300x250 is the rail one instead. */
+.mk-view--desktop .ad-slot.ad-slot--header-leaderboard,
+.mk-view--desktop .ad-slot.ad-slot--incontent-banner {
+  display: flex;
+}
+
+.mk-view--desktop .ad-slot.ad-slot--rail-rectangle {
+  display: flex;
+  margin-inline: 0;
+  margin-block-start: 0;
+}
+
+.mk-view--desktop .ad-slot.ad-slot--mobile-top,
+.mk-view--desktop .ad-slot.ad-slot--after-info-rectangle {
+  display: none;
+}
