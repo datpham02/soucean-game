@@ -1,0 +1,671 @@
+/* ==========================================================================
+   Soucean Game — M1-07 page stylesheet: the leaderboards page.
+   --------------------------------------------------------------------------
+   Source of truth: docs/design/pages/leaderboards.md (Task SOU-5,
+   milestone M1-07).
+
+   SCOPE RULE — read before editing.
+
+   There is not ONE raw colour, type size, spacing step, radius or duration in
+   this file. Every such value is read from tokens.css. The complete list of
+   literals, and why each one has to be a literal, is:
+
+     * `1px` hairline edges — not a value on any token scale.
+     * `100%`, `0`, `auto`, `anywhere`, `start`, `center` — layout keywords,
+       not design-scale values.
+     * `768px` inside a media condition — a custom property is not valid in a
+       media condition, so `--bp-switch` cannot be read there. The same
+       literal, for the same reason, that tokens.css, base.css, components.css,
+       ads.css and play.css each repeat and each document. It MUST stay equal
+       to `--bp-switch`.
+
+   This page uses `switch` (768px) and nothing else. It has no side rail, so
+   `--bp-wide` (1024px) never appears — the rail is the play page's business.
+
+   This file adds NO shared component and restyles none.
+
+     * No `.ad-slot` rule outside the sheet mirror of section 7: ads.css is the
+       sole owner of that component (ad-slots.md section 11), and the mirror
+       restates `display` and nothing else.
+     * No `.board`, `.segmented`, `.state`, `.skeleton`, `.card`, `.well`,
+       `.badge`, `.btn`, `.field` or `.link` rule. Where this page needs a
+       declaration on an element INSIDE one of those components, it is written
+       against a page class carried by that element (`.lb-name`), never against
+       the library selector — so the library's rules keep exactly one owner.
+     * `--state-reserve` is set on two page blocks. That is the variable
+       components.css section 16 invites a page to set, not an override of it.
+
+   Everything here is either
+     (a) page layout, which belongs to a page and not to the library,
+     (b) sheet furniture (section 6), which is not part of the product, or
+     (c) the band mirror (section 7), which restates what a viewport media
+         query already says so that a fixed-width view shows its own band.
+   ========================================================================== */
+
+/* The stack, in the order components.md section 7.1 fixes: tokens, base,
+   components. ads.css last — this page carries exactly one of the five ad
+   slots and ad-slots.md section 11 makes ads.css its only owner. All four are
+   relative, same-directory imports. None makes a network request. */
+@import url('tokens.css');
+@import url('base.css');
+@import url('components.css');
+@import url('ads.css');
+
+/* ==========================================================================
+   1. PAGE LAYOUT.
+
+   The structure is wireframes.md section 4.3, unchanged and in its order:
+   title, game scope, "your result", this week, last week. One DOM in both
+   bands — nothing is reordered or re-parented by a media query, so no `order`
+   property appears anywhere in this file.
+   ========================================================================== */
+
+.lb-title {
+  margin-block-end: var(--space-2xl);
+}
+
+/* Every region below the title is separated by one step. A page-level rhythm
+   rather than a margin on each block, so adding a region later cannot forget
+   it. */
+.lb-region {
+  margin-block-end: var(--space-3xl);
+}
+
+/* ==========================================================================
+   2. THE TWO CONTROLS.
+
+   2a. GAME SCOPE — `/leaderboards` -> `/leaderboards/<game_id>`.
+
+   wireframes.md section 4.3 fixes two different controls for one job: a
+   `select` at 375px and linked chips at 1280px. Both are in the DOM at every
+   width and the band switches which one is displayed, exactly as the play
+   page does with its ad slots. `display: none` removes the hidden one from
+   the accessibility tree and the tab order too, so a screen-reader user meets
+   one control, never two.
+
+   The chips are components.css's `.segmented` — real links to real routes,
+   with `aria-current="page"` on the game being shown.
+
+   The select is wrapped in a REAL `<form method="get">` with a visible submit
+   button. A bare select cannot navigate without script, and wireframes.md
+   section 4.3 is explicit that this control must be real navigation and not a
+   JS-only tab. The button is the page's answer to that; leaderboards.md
+   section 5.1 records it as this Task's decision rather than the wireframe's.
+
+   2b. PERIOD — this week / last week.
+
+   Also `.segmented`, also real links, and they move the reader BETWEEN the
+   two boards rather than replacing either: both boards are on the page at
+   every width, which is what wireframes.md section 4.3 fixes and what
+   components.md section 6.3 says a page Task may not change without amending
+   that document first. So this control carries no `aria-current` — on a page
+   where both periods are present, neither is "the current one", and faking a
+   selected plate would be the control telling a lie. leaderboards.md
+   section 5.2 is the full argument.
+   ========================================================================== */
+
+.lb-scope__form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-sm);
+}
+
+/* Mobile-first, like every other rule in this file: below the switch the
+   chips are off and the form is on. Section 5 turns them over. Both values
+   are stated — a band that only opts IN would leave the other control on at
+   the width it does not belong to. */
+.lb-scope__chips {
+  display: none;
+}
+
+/* The select should take the width it needs and no more; the submit button
+   sits beside it on one line at 343px, because "Trò chơi" and "Xem" are both
+   short. */
+.lb-scope__field {
+  flex: 1 1 auto;
+}
+
+/* The week boundary, printed next to the selector — wireframes.md section 4.3
+   and requirements.md section 8 question 5. */
+.lb-week-note {
+  margin: var(--space-md) 0 0;
+  max-inline-size: none;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--color-text-muted);
+}
+
+/* Both segmented controls get the same separation from the heading above
+   them. The control itself is the library's and is untouched. */
+.lb-periods {
+  margin-block-end: var(--space-lg);
+}
+
+.lb-periods__label {
+  margin: 0 0 var(--space-sm);
+  max-inline-size: none;
+  font-size: var(--text-label-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+/* ==========================================================================
+   3. "YOUR RESULT" — own rank and personal best.
+
+   THIS BLOCK IS WHY THE PAGE HAS NO STICKY ROW. It sits above both boards and
+   answers "where am I" without scrolling, which is the trade wireframes.md
+   section 4.3 made deliberately: this page has no sticky element, and
+   ad-slots.md section 7 depends on that staying true.
+
+   It is composed as `class="lb-you card"`, so the surface, the edge, the
+   radius and the padding are components.css's `.card`. The two figures sit in
+   `.well`s, which the library fills with `bg` rather than `sunken` precisely
+   because a well holds muted labels and the surface rule reserves `sunken` for
+   `text` alone. Both pairs used inside one are measured: `text` on `bg` at
+   14.64 / 14.19 for the figure, `text-muted` on `bg` at 6.25 / 7.65 for the
+   label and the meta line.
+   ========================================================================== */
+
+.lb-you__title {
+  margin-block-end: var(--space-md);
+}
+
+/* One column at 375px, two from the switch up. The wireframe puts the rank
+   and the personal best side by side at 1280px and stacked at 375px. */
+.lb-you__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+  /* base.css gives every <dl> a block-end margin. This one is the last thing
+     in the card, so it takes the card's padding instead. */
+  margin: 0;
+}
+
+.lb-you__cell {
+  margin: 0;
+}
+
+.lb-you__label {
+  font-size: var(--text-label-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+/* The figure. `headline-md` from the type scale, tabular so a rank that
+   changes from 9 to 10 does not shift the line beside it. */
+.lb-you__value {
+  margin: var(--space-xs) 0 0;
+  font-size: var(--text-headline-md);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--leading-headline);
+  font-variant-numeric: tabular-nums;
+}
+
+.lb-you__meta {
+  margin: var(--space-xs) 0 0;
+  max-inline-size: none;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* THE RESERVED HEIGHT, AND EXACTLY WHAT IT GUARANTEES.
+
+   `--lb-well-block` is the block size of ONE `well` in this grid, computed from
+   the same tokens its three lines read: the well's padding top and bottom, the
+   label line, the figure line and the meta line with their own `xs` margins.
+   It is a calc() and not a height on purpose — a height would be a literal, and
+   a literal would drift from the type scale the moment the scale moved.
+
+   The reserve is then the LOADED display: two wells and a gap below the switch,
+   one well above it, because at the switch the two sit side by side. It is set
+   per band for that reason, and section 7 mirrors both values onto the sheet.
+
+   WHAT THIS GUARANTEES, PRECISELY: `loading -> loaded` moves nothing, in either
+   band. That is the path the acceptance criterion names and the one a player
+   takes on almost every visit.
+
+   WHAT IT DOES NOT: the empty and error fills are intrinsically TALLER than
+   this small region, because their pattern is fixed by components.md section
+   4.2 and all of it is required — icon, title, one sentence, an action, and for
+   the error the word "Lỗi" as well. The three available answers were to clip
+   them, to drop a part of the pattern, or to let the box grow. This page grows
+   the box, exactly as play.css section 2 does for the game frame's error state,
+   and leaderboards.md section 6.3 records what that costs. Growing is the safe
+   direction: the box is never SHORTER than what it stands in for. */
+.lb-you__state {
+  --lb-well-block: calc(
+    2 * var(--space-md) + var(--text-label-sm) * var(--leading-label) +
+      var(--space-xs) + var(--text-headline-md) * var(--leading-headline) +
+      var(--space-xs) + var(--text-body-sm) * var(--leading-body-sm)
+  );
+  --state-reserve: calc(2 * var(--lb-well-block) + var(--space-md));
+}
+
+/* ==========================================================================
+   4. THE TWO BOARDS.
+
+   A VIEW, NOT A NEW DESIGN. The table is components.css's `.board`, the rows
+   are its rows, the own-row treatment is its own-row treatment, and the three
+   data states are components.md section 4's three blocks. This section adds
+   the region's layout, one reserved height and one wrapping rule — nothing
+   else.
+
+   THE BOARDS SIT ON THE PAGE BACKGROUND, NOT IN CARDS. That is a contrast
+   decision, not a visual one: a `.board` inside a `.card` would draw its row
+   rule as `border` on `surface`, a pair DESIGN.md has never measured. On `bg`
+   the same rule is `border` on `bg`, which DESIGN.md already records as
+   decorative at 1.32 / 1.49. leaderboards.md section 8 states it in full.
+   ========================================================================== */
+
+/* Stacked at 375px, this week first; side by side from the switch up.
+   wireframes.md section 4.3 fixes both, and the 32px gap with them. */
+.lb-boards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-2xl);
+}
+
+.lb-board__title {
+  margin-block-end: var(--space-sm);
+}
+
+.lb-board__week {
+  margin: 0 0 var(--space-md);
+  max-inline-size: none;
+}
+
+/* The display name. A board cell is the one place on this page where content
+   the studio does not control sets the width, so it is told to break rather
+   than to overflow: at 343px the name column is roughly 190px and a long
+   Vietnamese display name has to wrap inside it. No ellipsis — truncating a
+   name hides information that the row exists to carry.
+
+   This is a page class on a page element, not a rule on `.board`. */
+.lb-name {
+  overflow-wrap: anywhere;
+}
+
+/* The board's last line: what to do when the answer is not on this page. */
+.lb-board__note {
+  margin: var(--space-md) 0 0;
+  max-inline-size: none;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--color-text-muted);
+}
+
+.lb-board__more {
+  display: flex;
+  justify-content: center;
+  margin: var(--space-md) 0 0;
+}
+
+/* ONE RESERVED HEIGHT FOR ALL FOUR DISPLAYS OF A BOARD.
+
+   components.md section 4.4 fixes ten skeleton rows for a leaderboard, so the
+   board is ten rows per page and the reserve is ten rows tall. It is computed
+   from the SAME tokens the real table reads, by the same formula play.css
+   section 4 uses for the three-row weekly board:
+
+     caption        label-md x leading-label, plus its md margin
+     header row     label-sm x leading-label, plus md padding top and bottom
+     ten rows       body-md  x leading-body,  plus md padding top and bottom
+     eleven edges   the 1px collapsed row rule under each of the eleven rows
+
+   The `1px` terms are hairline edges, which the scope rule at the top of this
+   file lists as the one length literal that belongs to no token scale — and
+   they are the same 1px base.css writes on `th, td`. Leaving them out would
+   make the reserve 11px short, which is a real jump rather than a rounding
+   error, so they are in.
+
+   `margin-block-end` matches the margin base.css puts under every <table>, so
+   the action below the board sits in the same place whichever display is
+   showing.
+
+   What this buys: loading -> empty, loading -> error and loading -> loaded all
+   move nothing, in either board, at either width. The board is the region the
+   acceptance criterion is about, and here the guarantee is exact rather than
+   approximate, because the real table is taller than any of the three state
+   blocks' own content — so the reserve binds in all three.
+
+   leaderboards.md section 6.3 gives the browser check, and section 11.2
+   records the one thing this costs: ten skeleton rows are shorter than ten
+   real rows, so the loading block carries slack at its foot. Slack is the safe
+   direction — the box is never smaller than what replaces it. */
+.lb-board__state {
+  --state-reserve: calc(
+    var(--text-label-md) * var(--leading-label) + var(--space-md) +
+      var(--text-label-sm) * var(--leading-label) + 2 * var(--space-md) + 1px +
+      10 * (var(--text-body-md) * var(--leading-body) + 2 * var(--space-md) + 1px)
+  );
+
+  margin-block-end: var(--space-lg);
+}
+
+/* ==========================================================================
+   5. THE BAND — the real rules, the ones that ship.
+
+   One switch, M1-01's `switch` at 768px. This file introduces none and invents
+   no second. Section 7 mirrors it onto the fixed-width sheet views.
+   ========================================================================== */
+
+@media (min-width: 768px) {
+  /* The game scope control swaps form for chips. Both are in the DOM at both
+     widths; only `display` differs. */
+  .lb-scope__form {
+    display: none;
+  }
+
+  .lb-scope__chips {
+    display: flex;
+  }
+
+  /* Rank and personal best side by side — so the loaded block is ONE well
+     tall, and the reserve follows it down. */
+  .lb-you__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .lb-you__state {
+    --state-reserve: var(--lb-well-block);
+  }
+
+  /* The two boards side by side, 32px apart — wireframes.md section 4.3. */
+  .lb-boards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+}
+
+/* ==========================================================================
+   6. SHEET FURNITURE — NOT PART OF THE PRODUCT.
+
+   Everything from here down exists so one file can show one page at both
+   design widths, in both themes, in every state. No product page uses any of
+   it and none of it describes a component.
+
+   It is restated here under the `mk-` prefix rather than borrowed, for the
+   reason home.css section 4 and play.css section 6 both give: components.css
+   section 19 says in its own first paragraph "No page mockup should use any of
+   it". The classes below are this Task's, and they match M1-05's and M1-06's
+   by name so the three sheets read alike.
+
+   THE ONE EXCEPTION, STATED PLAINLY — the same one wireframes.md section 2,
+   components.md section 1.3, home.css section 4 and play.css section 6 each
+   recorded. tokens.css section 7 steps five type tokens in a VIEWPORT media
+   query on `:root`. A fixed-width view cannot restate that step without
+   writing type-size literals into this file, which the scope rule at the top
+   forbids and which is exactly the drift that rule exists to prevent. So IN A
+   WINDOW >= 768px WIDE THE 375px VIEWS RENDER `--text-display`,
+   `--text-headline-lg`, `--text-headline-md`, `--text-headline-sm` AND
+   `--text-body-lg` AT THEIR DESKTOP SIZE. It affects headings only; it changes
+   no layout, no region, no state and no reading order. To read a mobile view
+   at its true type scale, narrow the window below 768px. In the product the
+   question never arises, because there the band comes from the viewport.
+   ========================================================================== */
+
+.mk-sheet {
+  max-inline-size: calc(var(--bp-desktop) + 2 * var(--space-3xl));
+  margin-inline: auto;
+  padding-inline: var(--space-lg);
+  padding-block: var(--space-2xl) var(--space-6xl);
+}
+
+.mk-sheet__kicker {
+  font-size: var(--text-label-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+.mk-sheet__lede {
+  max-inline-size: 70ch;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--color-text-muted);
+}
+
+.mk-section {
+  margin-block-start: var(--space-5xl);
+  padding-block-start: var(--space-2xl);
+  border-block-start: 1px solid var(--color-border);
+}
+
+.mk-section > p {
+  max-inline-size: 70ch;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--color-text-muted);
+}
+
+.mk-specs {
+  display: grid;
+  gap: var(--space-2xl);
+  margin-block: var(--space-lg);
+}
+
+/* Two narrow views sit side by side on a wide monitor and wrap on a narrow
+   one, so light and dark can be compared without scrolling between them. */
+.mk-specs--row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.mk-cap {
+  margin-block-end: var(--space-sm);
+  font-size: var(--text-label-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+/* A 1280px view does not fit every reader's window. Scroll the view, never
+   the page, and never scale it — a scaled mockup cannot be measured. */
+.mk-scroll {
+  overflow-x: auto;
+}
+
+/* The view: a fixed-width slice of a real page, at a real design width. The
+   gutter is set here rather than read from `--layout-gutter`, because that
+   token is viewport-dependent and a view's band must be a property of the
+   view. It is set to the SAME spacing tokens DESIGN.md gives each band, so it
+   restates a choice and invents no value. */
+.mk-view {
+  --layout-gutter: var(--space-lg);
+
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  outline: 1px solid var(--color-border-strong);
+}
+
+.mk-view--mobile {
+  inline-size: var(--bp-mobile);
+}
+
+.mk-view--desktop {
+  --layout-gutter: var(--space-2xl);
+
+  inline-size: var(--bp-desktop);
+}
+
+/* The skip link lives off-screen until focused. On a sheet it is drawn in its
+   FOCUSED position so a reviewer can see it without tabbing, and so a
+   translated-away link does not float over the caption above each view. The
+   real behaviour is proved by tabbing in the product, never by this rule. */
+.mk-view .skip-link {
+  position: static;
+  transform: none;
+}
+
+/* A note under a view: "the mobile band", "keyboard focus", "no ad slot". */
+.mk-tag {
+  display: block;
+  margin-block-start: var(--space-xs);
+  font-size: var(--text-label-sm);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+/* Stacked specimens inside one view — four state blocks, say. */
+.mk-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+}
+
+.mk-table {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+}
+
+.mk-table th {
+  font-size: var(--text-label-sm);
+  color: var(--color-text);
+}
+
+.mk-table td {
+  vertical-align: top;
+}
+
+/* ==========================================================================
+   7. THE BAND MIRROR — sheet only.
+
+   Section 5 is the band as the product sees it, from the viewport. This
+   section mirrors it onto `.mk-view--mobile` and `.mk-view--desktop`, which is
+   what lets a 375px view show the mobile band inside a 1280px window.
+
+   BOTH DIRECTIONS ARE STATED ON PURPOSE. A mobile view has to UNDO the media
+   query when the sheet is read on a wide monitor, not merely fail to opt into
+   it. The selectors score (0,2,0) or (0,3,0) against the media block's (0,1,0),
+   and this file is imported last, so they win on both counts.
+
+   The mirror restates `display`, `grid-template-columns`, `flex-direction`,
+   `align-items` and `padding`. It restates no size, no colour and no spacing
+   token choice that is not already stated above or in the library — and
+   nothing at all about an ad slot's box.
+   ========================================================================== */
+
+/* --- 7.1 Page rhythm. ---------------------------------------------------- */
+
+.mk-view--mobile .main {
+  padding-block: var(--space-3xl);
+}
+
+.mk-view--desktop .main {
+  padding-block: var(--space-4xl);
+}
+
+.mk-view--mobile .card {
+  padding: var(--space-lg);
+}
+
+.mk-view--desktop .card {
+  padding: var(--space-xl);
+}
+
+/* --- 7.2 The two page grids. --------------------------------------------- */
+
+.mk-view--mobile .lb-you__grid,
+.mk-view--mobile .lb-boards {
+  grid-template-columns: 1fr;
+}
+
+/* The reserve follows the grid, in both directions — a 375px view read on a
+   wide monitor has to UNDO the media query, not merely fail to opt in. */
+.mk-view--mobile .lb-you__state {
+  --state-reserve: calc(2 * var(--lb-well-block) + var(--space-md));
+}
+
+.mk-view--desktop .lb-you__grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.mk-view--desktop .lb-you__state {
+  --state-reserve: var(--lb-well-block);
+}
+
+.mk-view--desktop .lb-boards {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+}
+
+/* --- 7.3 The game scope control. ----------------------------------------- */
+
+.mk-view--mobile .lb-scope__form {
+  display: flex;
+}
+
+.mk-view--mobile .lb-scope__chips {
+  display: none;
+}
+
+.mk-view--desktop .lb-scope__form {
+  display: none;
+}
+
+.mk-view--desktop .lb-scope__chips {
+  display: flex;
+}
+
+/* --- 7.4 Navigation. ----------------------------------------------------- */
+
+.mk-view--mobile .site-nav__toggle {
+  display: inline-flex;
+}
+
+.mk-view--mobile .site-nav__toggle[aria-expanded='false'] + .site-nav__list {
+  display: none;
+}
+
+.mk-view--mobile .site-nav__toggle[aria-expanded='true'] + .site-nav__list {
+  display: flex;
+  flex-direction: column;
+  padding-block-end: var(--space-md);
+}
+
+.mk-view--desktop .site-nav__toggle {
+  display: none;
+}
+
+.mk-view--desktop .site-nav__list {
+  display: flex;
+  flex-direction: row;
+  gap: var(--space-sm);
+  padding-block-end: 0;
+}
+
+/* --- 7.5 The ad inventory, per band. ------------------------------------
+   This page carries exactly one slot: `ad-header-leaderboard`, in the header,
+   from the switch up. ads.css gates it on the viewport; a fixed-width view has
+   to restate that gate, or a 375px view read on a 1400px monitor would show a
+   banner the mobile band does not have.
+
+   `flex` and `none` are ads.css's own on and off values, copied here. The
+   cross-reference can only be one way — ads.css belongs to M1-02 and this Task
+   does not edit it — so if ads.css ever changes that display type, these rules
+   keep `flex` silently. wireframes.md and play.css record the same note for
+   the same reason.
+
+   ad-slots.md section 3 is why mobile carries none: outside the play page,
+   mobile has no ad position at all, and that document will not add one until
+   requirements.md section 5.1 names it. */
+
+.mk-view--mobile .ad-slot.ad-slot--header-leaderboard {
+  display: none;
+}
+
+.mk-view--desktop .ad-slot.ad-slot--header-leaderboard {
+  display: flex;
+}
