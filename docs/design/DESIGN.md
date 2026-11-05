@@ -346,14 +346,18 @@ on slate, and vice versa. The two themes were measured independently.
 
 ### Measured contrast
 
-Every ratio below was **measured**, not estimated. Method: each colour's
-relative luminance was obtained from `design.md lint` (`@google/design.md`
-0.4.0), which reports the exact WCAG 2.1 ratio for any pair it finds below
-4.5:1; pairs were measured against `#FFFFFF` and `#000000` references to recover
-each luminance, and every pair in the tables below was then re-declared and
-re-linted. Values are truncated, never rounded up, so no figure here overstates
-the real ratio. Three independent predictions were checked against the tool and
-matched to two decimal places before these tables were written.
+Every ratio below was **computed** from the hex values in the tables with the
+WCAG 2.1 contrast formula:
+
+- convert each sRGB channel to linear light — for `c = v / 255`, use
+  `c / 12.92` when `c ≤ 0.04045`, otherwise `((c + 0.055) / 1.055) ^ 2.4`;
+- compute relative luminance `L = 0.2126R + 0.7152G + 0.0722B`;
+- compute contrast as `(L_lighter + 0.05) / (L_darker + 0.05)`.
+
+Values are **truncated** to two decimals, never rounded up, so no figure here
+overstates the real ratio. That is the single convention for every ratio in this
+document: the exact ratio, truncated — never rounded, and never copied from a
+tool that rounds.
 
 **Requirements applied:** 4.5:1 for body text, 3:1 for large text (≥ 24px
 regular or ≥ 19px semibold) and for non-text UI boundaries and the focus
@@ -363,27 +367,27 @@ indicator.
 
 | Foreground | Background | Measured | Needs | |
 | --- | --- | --- | --- | --- |
-| `text` `#1D211F` | `bg` `#F3F3F0` | **14.65:1** | 4.5 | PASS |
+| `text` `#1D211F` | `bg` `#F3F3F0` | **14.64:1** | 4.5 | PASS |
 | `text` `#1D211F` | `surface` `#FAFAF8` | **15.58:1** | 4.5 | PASS |
 | `text` `#1D211F` | `sunken` `#E8E8E3` | **13.24:1** | 4.5 | PASS |
 | `text-muted` `#555B57` | `bg` `#F3F3F0` | **6.25:1** | 4.5 | PASS |
 | `text-muted` `#555B57` | `surface` `#FAFAF8` | **6.65:1** | 4.5 | PASS |
 | `primary` `#1F6B5C` | `bg` `#F3F3F0` | **5.69:1** | 4.5 | PASS |
-| `primary` `#1F6B5C` | `surface` `#FAFAF8` | **6.05:1** | 4.5 | PASS |
-| `on-primary` `#FBFBF9` | `primary` `#1F6B5C` | **6.08:1** | 4.5 | PASS |
-| `on-primary` `#FBFBF9` | `primary-hover` `#175347` | **8.55:1** | 4.5 | PASS |
-| `secondary` `#87552A` | `bg` `#F3F3F0` | **5.62:1** | 4.5 | PASS |
+| `primary` `#1F6B5C` | `surface` `#FAFAF8` | **6.06:1** | 4.5 | PASS |
+| `on-primary` `#FBFBF9` | `primary` `#1F6B5C` | **6.11:1** | 4.5 | PASS |
+| `on-primary` `#FBFBF9` | `primary-hover` `#175347` | **8.57:1** | 4.5 | PASS |
+| `secondary` `#87552A` | `bg` `#F3F3F0` | **5.61:1** | 4.5 | PASS |
 | `secondary` `#87552A` | `surface` `#FAFAF8` | **5.97:1** | 4.5 | PASS |
 | `success` `#2C6B3F` | `bg` `#F3F3F0` | **5.75:1** | 4.5 | PASS |
-| `error` `#A32F28` | `bg` `#F3F3F0` | **6.31:1** | 4.5 | PASS |
+| `error` `#A32F28` | `bg` `#F3F3F0` | **6.30:1** | 4.5 | PASS |
 | `error` `#A32F28` | `surface` `#FAFAF8` | **6.71:1** | 4.5 | PASS |
-| `warning` `#7A5410` | `bg` `#F3F3F0` | **6.09:1** | 4.5 | PASS |
+| `warning` `#7A5410` | `bg` `#F3F3F0` | **6.08:1** | 4.5 | PASS |
 | `focus` `#1A5FB4` | `bg` `#F3F3F0` | **5.65:1** | 3 | PASS |
 | `focus` `#1A5FB4` | `surface` `#FAFAF8` | **6.01:1** | 3 | PASS |
 | `focus` `#1A5FB4` | `sunken` `#E8E8E3` | **5.11:1** | 3 | PASS |
 | `border-strong` `#82827A` | `bg` `#F3F3F0` | **3.48:1** | 3 | PASS |
-| `border-strong` `#82827A` | `surface` `#FAFAF8` | **3.71:1** | 3 | PASS |
-| `border-strong` `#82827A` | `sunken` `#E8E8E3` | **3.15:1** | 3 | PASS |
+| `border-strong` `#82827A` | `surface` `#FAFAF8` | **3.70:1** | 3 | PASS |
+| `border-strong` `#82827A` | `sunken` `#E8E8E3` | **3.14:1** | 3 | PASS |
 | `primary` fill `#1F6B5C` | `bg` `#F3F3F0` | **5.69:1** | 3 | PASS |
 
 #### Dark theme
@@ -392,36 +396,36 @@ indicator.
 | --- | --- | --- | --- | --- |
 | `text` `#E7E9E7` | `bg` `#181B1C` | **14.19:1** | 4.5 | PASS |
 | `text` `#E7E9E7` | `surface` `#212527` | **12.66:1** | 4.5 | PASS |
-| `text` `#E7E9E7` | `sunken` `#111314` | **15.27:1** | 4.5 | PASS |
-| `text-muted` `#A7AEAA` | `bg` `#181B1C` | **7.66:1** | 4.5 | PASS |
-| `text-muted` `#A7AEAA` | `surface` `#212527` | **6.83:1** | 4.5 | PASS |
-| `primary` `#5FC9B4` | `bg` `#181B1C` | **8.65:1** | 4.5 | PASS |
+| `text` `#E7E9E7` | `sunken` `#111314` | **15.26:1** | 4.5 | PASS |
+| `text-muted` `#A7AEAA` | `bg` `#181B1C` | **7.65:1** | 4.5 | PASS |
+| `text-muted` `#A7AEAA` | `surface` `#212527` | **6.82:1** | 4.5 | PASS |
+| `primary` `#5FC9B4` | `bg` `#181B1C` | **8.66:1** | 4.5 | PASS |
 | `primary` `#5FC9B4` | `surface` `#212527` | **7.72:1** | 4.5 | PASS |
-| `on-primary` `#0C241F` | `primary` `#5FC9B4` | **8.13:1** | 4.5 | PASS |
-| `on-primary` `#0C241F` | `primary-hover` `#7FD7C5` | **9.63:1** | 4.5 | PASS |
-| `secondary` `#D9A071` | `bg` `#181B1C` | **7.59:1** | 4.5 | PASS |
-| `secondary` `#D9A071` | `surface` `#212527` | **6.77:1** | 4.5 | PASS |
-| `success` `#74C98A` | `bg` `#181B1C` | **8.61:1** | 4.5 | PASS |
-| `error` `#F09087` | `bg` `#181B1C` | **7.46:1** | 4.5 | PASS |
-| `error` `#F09087` | `surface` `#212527` | **6.66:1** | 4.5 | PASS |
+| `on-primary` `#0C241F` | `primary` `#5FC9B4` | **8.15:1** | 4.5 | PASS |
+| `on-primary` `#0C241F` | `primary-hover` `#7FD7C5` | **9.65:1** | 4.5 | PASS |
+| `secondary` `#D9A071` | `bg` `#181B1C` | **7.60:1** | 4.5 | PASS |
+| `secondary` `#D9A071` | `surface` `#212527` | **6.78:1** | 4.5 | PASS |
+| `success` `#74C98A` | `bg` `#181B1C` | **8.63:1** | 4.5 | PASS |
+| `error` `#F09087` | `bg` `#181B1C` | **7.45:1** | 4.5 | PASS |
+| `error` `#F09087` | `surface` `#212527` | **6.65:1** | 4.5 | PASS |
 | `warning` `#DCA94A` | `bg` `#181B1C` | **8.09:1** | 4.5 | PASS |
-| `focus` `#8CBEF5` | `bg` `#181B1C` | **8.92:1** | 3 | PASS |
-| `focus` `#8CBEF5` | `surface` `#212527` | **7.96:1** | 3 | PASS |
-| `focus` `#8CBEF5` | `sunken` `#111314` | **9.60:1** | 3 | PASS |
-| `border-strong` `#6B7376` | `bg` `#181B1C` | **3.58:1** | 3 | PASS |
+| `focus` `#8CBEF5` | `bg` `#181B1C` | **8.90:1** | 3 | PASS |
+| `focus` `#8CBEF5` | `surface` `#212527` | **7.94:1** | 3 | PASS |
+| `focus` `#8CBEF5` | `sunken` `#111314` | **9.58:1** | 3 | PASS |
+| `border-strong` `#6B7376` | `bg` `#181B1C` | **3.57:1** | 3 | PASS |
 | `border-strong` `#6B7376` | `surface` `#212527` | **3.19:1** | 3 | PASS |
-| `border-strong` `#6B7376` | `sunken` `#111314` | **3.85:1** | 3 | PASS |
-| `primary` fill `#5FC9B4` | `bg` `#181B1C` | **8.65:1** | 3 | PASS |
+| `border-strong` `#6B7376` | `sunken` `#111314` | **3.84:1** | 3 | PASS |
+| `primary` fill `#5FC9B4` | `bg` `#181B1C` | **8.66:1** | 3 | PASS |
 
 #### Decorative pairs — below 3:1 on purpose
 
-These three pairs do **not** meet 3:1 and are not required to, because they
+These two pairs do **not** meet 3:1 and are not required to, because they
 carry no information. They are recorded so a later Task does not mistake them
 for boundaries.
 
 | Pair | Light | Dark | Rule |
 | --- | --- | --- | --- |
-| `border` on `bg` | 1.33:1 | 1.50:1 | Decorative divider only. If a line delimits a control, use `border-strong`. |
+| `border` on `bg` | 1.32:1 | 1.49:1 | Decorative divider only. If a line delimits a control, use `border-strong`. |
 | `surface` on `bg` | 1.06:1 | 1.12:1 | Surface separation is carried by the border and the radius, not by the fill. |
 
 > **Rule for every later Task:** if you need a new colour, you do not have one.
@@ -738,16 +742,16 @@ outline-offset: var(--focus-ring-offset);
 
 - **Light:** `#1A5FB4` — measured **5.65:1** on `bg`, **6.01:1** on `surface`,
   **5.11:1** on `sunken`. Required: 3:1. Passes everywhere.
-- **Dark:** `#8CBEF5` — measured **8.92:1** on `bg`, **7.96:1** on `surface`,
-  **9.60:1** on `sunken`. Required: 3:1. Passes everywhere.
+- **Dark:** `#8CBEF5` — measured **8.90:1** on `bg`, **7.94:1** on `surface`,
+  **9.58:1** on `sunken`. Required: 3:1. Passes everywhere.
 
 **Why the 2px offset is not optional.** The focus blue and the primary teal are
-close in luminance — measured against each other they are **1.01:1**, which is
+close in luminance — measured against each other they are **1.00:1**, which is
 to say invisible. A ring drawn directly on a primary-filled button would
 therefore vanish. The offset pushes the ring onto the page or surface behind the
 control, where the measured ratios above apply. If a design genuinely needs a
-ring *inside* a primary fill, use `on-primary` instead: measured **6.08:1** on
-`primary` (light) and **8.13:1** on `primary` (dark).
+ring *inside* a primary fill, use `on-primary` instead: measured **6.11:1** on
+`primary` (light) and **8.15:1** on `primary` (dark).
 
 Further rules: never remove the outline without replacing it; use `:focus-visible`
 so pointer users do not see a ring on click; and the focused control must never
@@ -815,7 +819,7 @@ weight, no ad script before consent)
   before using it.
 - **Do** keep body text at 4.5:1 and UI boundaries and the focus ring at 3:1.
 - **Don't** remove a focus outline. Ever. Replace it or keep it.
-- **Don't** rely on `border` to delimit a control — it measures 1.33:1. Use
+- **Don't** rely on `border` to delimit a control — it measures 1.32:1. Use
   `border-strong`.
 - **Don't** assume a light-mode pair is fine in dark mode. Measure both.
 

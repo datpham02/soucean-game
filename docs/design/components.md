@@ -233,27 +233,27 @@ same row — the two themes were measured independently and both pass.
 
 | Where it is used | Foreground | Background | Light | Dark | Needs | |
 | --- | --- | --- | --- | --- | --- | --- |
-| Body text on the page | `text` | `bg` | 14.65 | 14.19 | 4.5 | PASS |
+| Body text on the page | `text` | `bg` | 14.64 | 14.19 | 4.5 | PASS |
 | Text on a card, header, dialog, banner | `text` | `surface` | 15.58 | 12.66 | 4.5 | PASS |
-| Text in the player's own rank row | `text` | `sunken` | 13.24 | 15.27 | 4.5 | PASS |
-| Help text, card description, state body | `text-muted` | `bg` | 6.25 | 7.66 | 4.5 | PASS |
-| Muted text on a card or in the footer | `text-muted` | `surface` | 6.65 | 6.83 | 4.5 | PASS |
-| Link, secondary/quiet button label on the page | `primary` | `bg` | 5.69 | 8.65 | 4.5 | PASS |
-| Link, secondary/quiet button label on a card | `primary` | `surface` | 6.05 | 7.72 | 4.5 | PASS |
-| Primary button label | `on-primary` | `primary` | 6.08 | 8.13 | 4.5 | PASS |
-| Primary button label, hovered | `on-primary` | `primary-hover` | 8.55 | 9.63 | 4.5 | PASS |
-| Badge text | `secondary` | `surface` | 5.97 | 6.77 | 4.5 | PASS |
-| Success notice title and icon | `success` | `bg` | 5.75 | 8.61 | 4.5 | PASS |
-| Warning notice title and icon | `warning` | `bg` | 6.09 | 8.09 | 4.5 | PASS |
-| Error notice, error state, error summary | `error` | `bg` | 6.31 | 7.46 | 4.5 | PASS |
-| Field error text, destructive button label | `error` | `surface` | 6.71 | 6.66 | 4.5 | PASS |
-| Focus ring on the page | `focus` | `bg` | 5.65 | 8.92 | 3 | PASS |
-| Focus ring on a card or dialog | `focus` | `surface` | 6.01 | 7.96 | 3 | PASS |
-| Focus ring on the own-rank row | `focus` | `sunken` | 5.11 | 9.60 | 3 | PASS |
-| Control edges on the page | `border-strong` | `bg` | 3.48 | 3.58 | 3 | PASS |
-| Control edges on a card | `border-strong` | `surface` | 3.71 | 3.19 | 3 | PASS |
-| Own-rank row edge | `border-strong` | `sunken` | 3.15 | 3.85 | 3 | PASS |
-| Primary fill as a boundary | `primary` | `bg` | 5.69 | 8.65 | 3 | PASS |
+| Text in the player's own rank row | `text` | `sunken` | 13.24 | 15.26 | 4.5 | PASS |
+| Help text, card description, state body | `text-muted` | `bg` | 6.25 | 7.65 | 4.5 | PASS |
+| Muted text on a card or in the footer | `text-muted` | `surface` | 6.65 | 6.82 | 4.5 | PASS |
+| Link, secondary/quiet button label on the page | `primary` | `bg` | 5.69 | 8.66 | 4.5 | PASS |
+| Link, secondary/quiet button label on a card | `primary` | `surface` | 6.06 | 7.72 | 4.5 | PASS |
+| Primary button label | `on-primary` | `primary` | 6.11 | 8.15 | 4.5 | PASS |
+| Primary button label, hovered | `on-primary` | `primary-hover` | 8.57 | 9.65 | 4.5 | PASS |
+| Badge text | `secondary` | `surface` | 5.97 | 6.78 | 4.5 | PASS |
+| Success notice title and icon | `success` | `bg` | 5.75 | 8.63 | 4.5 | PASS |
+| Warning notice title and icon | `warning` | `bg` | 6.08 | 8.09 | 4.5 | PASS |
+| Error notice, error state, error summary | `error` | `bg` | 6.30 | 7.45 | 4.5 | PASS |
+| Field error text, destructive button label | `error` | `surface` | 6.71 | 6.65 | 4.5 | PASS |
+| Focus ring on the page | `focus` | `bg` | 5.65 | 8.90 | 3 | PASS |
+| Focus ring on a card or dialog | `focus` | `surface` | 6.01 | 7.94 | 3 | PASS |
+| Focus ring on the own-rank row | `focus` | `sunken` | 5.11 | 9.58 | 3 | PASS |
+| Control edges on the page | `border-strong` | `bg` | 3.48 | 3.57 | 3 | PASS |
+| Control edges on a card | `border-strong` | `surface` | 3.70 | 3.19 | 3 | PASS |
+| Own-rank row edge | `border-strong` | `sunken` | 3.14 | 3.84 | 3 | PASS |
+| Primary fill as a boundary | `primary` | `bg` | 5.69 | 8.66 | 3 | PASS |
 
 ### 3.3 Two pairs that are below 3:1 on purpose
 
@@ -263,8 +263,8 @@ mistake a skeleton bar for a boundary.
 
 | Pair | Light | Dark | Where, and why it is exempt |
 | --- | --- | --- | --- |
-| `border` on `bg` | 1.33 | 1.50 | **The skeleton bar.** It carries no information and is `aria-hidden`; the "it is loading" signal is the live-region text beside it. WCAG 1.4.11 exempts pure decoration. Also the decorative divider and the card edge. |
-| `surface` on `bg` | 1.06 | 1.12 | Surface separation is carried by the border and the radius, never by the fill. A `.btn--secondary` inside a `bg`-filled state block is delimited by its `border-strong` edge (3.48 / 3.58), not by its fill. |
+| `border` on `bg` | 1.32 | 1.49 | **The skeleton bar.** It carries no information and is `aria-hidden`; the "it is loading" signal is the live-region text beside it. WCAG 1.4.11 exempts pure decoration. Also the decorative divider and the card edge. |
+| `surface` on `bg` | 1.06 | 1.12 | Surface separation is carried by the border and the radius, never by the fill. A `.btn--secondary` inside a `bg`-filled state block is delimited by its `border-strong` edge (3.48 / 3.57), not by its fill. |
 
 ### 3.4 Measured `primary-hover` pairs
 
@@ -472,7 +472,7 @@ hover exposed that it had none: `.site-nav__link[aria-current='page']` and
 one nav item that did not answer the pointer. The same held for the chosen
 theme option, where `:has(input:checked)` scores 0-2-1 against hover's 0-2-0.
 Both now have explicit hover rules, and both land on `primary-hover` — the
-pair `DESIGN.md` measures at **8.55:1** light and **9.63:1** dark against
+pair `DESIGN.md` measures at **8.57:1** light and **9.65:1** dark against
 `on-primary` (§3.2), so the fix does not spend any contrast.
 
 The theme toggle is a **`<fieldset>` of two real `<input type="radio">`** — two
@@ -667,8 +667,8 @@ an existing token**, which is a design decision M1-03 explicitly delegated here.
 
 Why this shape:
 
-- **It introduces no colour.** `error` on `surface` is 6.71:1 light / 6.66:1
-  dark and `error` on `bg` is 6.31 / 7.46 — all four already measured in
+- **It introduces no colour.** `error` on `surface` is 6.71:1 light / 6.65:1
+  dark and `error` on `bg` is 6.30 / 7.45 — all four already measured in
   `DESIGN.md`. Nothing new had to be measured.
 - **It is deliberately not the loudest thing on the page.** A destructive action
   is *dangerous*, not *important*. A filled red button competes with the primary
