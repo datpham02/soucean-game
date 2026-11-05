@@ -1,0 +1,963 @@
+<!doctype html>
+<html lang="vi" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup — Chính sách quyền riêng tư · Soucean Game (SOU-7, M1-09)</title>
+<link rel="stylesheet" href="assets/consent.css">
+</head>
+<body class="mk-sheet">
+
+<!-- ==========================================================================
+     Icon set — copied from components.html, not referenced. Every <use> below
+     is same-document, so nothing here makes a request. This Task draws NO new
+     icon: components.md §5.1 fixes the set at twelve, and the eight copied here
+     are eight of those twelve.
+     ========================================================================== -->
+<svg class="u-visually-hidden" aria-hidden="true" focusable="false"><defs>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 7.6h.01"/></symbol>
+  <symbol id="i-warning" viewBox="0 0 24 24"><path d="M12 4 2.6 20h18.8Z"/><path d="M12 10v4"/><path d="M12 17h.01"/></symbol>
+  <symbol id="i-error" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6"/><path d="m15 9-6 6"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-.7 4.3"/><path d="M20 5v6h-6"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2"/><path d="M12 19.5v2"/><path d="m4.5 4.5 1.4 1.4"/><path d="m18.1 18.1 1.4 1.4"/><path d="M2.5 12h2"/><path d="M19.5 12h2"/><path d="m4.5 19.5 1.4-1.4"/><path d="m18.1 5.9 1.4-1.4"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.4A8.5 8.5 0 0 1 9.6 4 8.5 8.5 0 1 0 20 14.4Z"/></symbol>
+  <symbol id="i-empty" viewBox="0 0 24 24"><path d="M5.5 5.5h13l2.5 8v5h-18v-5Z"/><path d="M3 13.5h4.5l1.5 3h6l1.5-3H21"/></symbol>
+</defs></svg>
+
+<header>
+  <p class="mk-sheet__kicker">Soucean Game · M1 · SOU-7 (M1-09) · mockup, độ chi tiết cao</p>
+  <h1>Chính sách quyền riêng tư — <code>/privacy</code></h1>
+  <p class="mk-sheet__lede">
+    Cùng một mẫu tài liệu dài như <a class="link" href="terms.html">Điều khoản</a>
+    và <a class="link" href="about.html">Giới thiệu</a> (<code>components.md</code>
+    §5.16). Khác một thứ, và nó là lý do trang này có Task riêng: mục 6 không chỉ
+    <em>nói</em> về cookie, nó <strong>là</strong> màn hình cài đặt cookie. Đó là
+    chỗ <code>requirements.md</code> §2 đặt liên kết <code>/privacy#cookies</code>,
+    và là nơi người chơi đổi ý sau khi banner đã biến mất.
+  </p>
+  <p class="mk-sheet__lede">
+    <strong>Văn bản pháp lý trong các bản dựng dưới đây là văn bản mẫu, không phải
+    chính sách thật.</strong> Nội dung pháp lý đến từ OQ-039, phải phủ Nghị định
+    13/2023 và GDPR nếu có người chơi EU, và không thuộc Task này
+    (<code>wireframes.md</code> §4.5). Mỗi bản dựng mang một
+    <code>notice--warning</code> nói đúng điều đó.
+    <strong>Bảng “chúng tôi lưu gì” thì không phải văn bản mẫu</strong> — nó là
+    danh sách trường của <code>requirements.md</code> §4.1 và phải khớp với trang
+    Tài khoản (M1-08). Xem <code>privacy-consent.md</code> §5.
+  </p>
+  <p class="mk-sheet__lede">
+    Không có script, không iframe, không file font, không yêu cầu mạng, không
+    thẻ quảng cáo, không nền tảng quản lý đồng ý nào. Mở file bằng trình duyệt
+    là chạy.
+  </p>
+  <nav class="mk-sheet__lede" aria-label="Mục lục trang mockup">
+    <ol>
+      <li><a class="link" href="#s1">Trang đầy đủ · bốn bản dựng</a></li>
+      <li><a class="link" href="#s2">Ba trạng thái của trang</a></li>
+      <li><a class="link" href="#s3">Ô quảng cáo, bàn phím, tương phản</a></li>
+      <li><a class="link" href="#s4">Cách đọc tờ này</a></li>
+    </ol>
+  </nav>
+</header>
+
+<!-- ==========================================================================
+     1. THE FULL PAGE — four renders.
+     ========================================================================== -->
+<section class="mk-section" id="s1">
+  <h2>1. Trang đầy đủ · bốn bản dựng</h2>
+  <p>
+    Sáng và tối, 375 px và 1280 px. Bảy mục đánh số, mục lục ngay dưới dòng “cập
+    nhật lần cuối”. Ở 375 px mục lục là một cột; từ 768 px trở lên nó là hai cột.
+    Mục 6 mang nguyên màn hình cài đặt cookie — hai nhóm, hai lời giải thích bằng
+    tiếng người, một nút lưu.
+  </p>
+
+  <div class="mk-specs mk-specs--row">
+    <section>
+      <h3 class="mk-cap">Sáng · 375 px</h3>
+      <div class="mk-view mk-view--mobile">
+        <div class="site-header">
+          <a class="skip-link" href="#pa-main">Tới nội dung chính</a>
+          <div class="shell site-header__bar">
+            <a class="wordmark" href="home.html">Soucean Game</a>
+            <div class="site-header__actions">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="tt-a" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="tt-a"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+            </div>
+          </div>
+          <nav class="shell" aria-label="Chính · sáng 375">
+            <button class="btn btn--quiet site-nav__toggle" type="button" aria-expanded="false" aria-controls="pa-nav"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-menu"/></svg>Menu</button>
+            <ul class="site-nav__list" id="pa-nav">
+              <li><a class="site-nav__link" href="home.html">Trò chơi</a></li>
+              <li><a class="site-nav__link" href="leaderboards.html">Bảng xếp hạng</a></li>
+              <li><a class="site-nav__link" href="#s1">Tài khoản</a></li>
+            </ul>
+          </nav>
+          <div class="shell">
+            <aside class="ad-slot ad-slot--header-leaderboard" aria-label="Quảng cáo">
+              <span class="ad-slot__label">Quảng cáo · 728 × 90</span>
+            </aside>
+          </div>
+        </div>
+
+        <div class="shell shell--text main" id="pa-main">
+          <h4>Chính sách quyền riêng tư</h4>
+          <p class="doc__updated">Cập nhật lần cuối: 5 tháng 11, 2026</p>
+
+          <div class="notice notice--warning"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-warning"/></svg><div class="notice__body"><p class="notice__title">Cảnh báo</p><p class="notice__text">Văn bản mẫu, không phải chính sách thật. Nội dung pháp lý đến từ OQ-039.</p></div></div>
+
+          <nav class="card" aria-label="Mục lục chính sách · sáng 375">
+            <ol class="doc__toc-list">
+              <li><a class="link" href="#pa-1">Chúng tôi lưu gì</a></li>
+              <li><a class="link" href="#pa-2">Vì sao cần những dữ liệu đó</a></li>
+              <li><a class="link" href="#pa-3">Lưu trong bao lâu</a></li>
+              <li><a class="link" href="#pa-4">Ai xử lý dữ liệu</a></li>
+              <li><a class="link" href="#pa-5">Quyền của bạn</a></li>
+              <li><a class="link" href="#pa-6">Cookie</a></li>
+              <li><a class="link" href="#pa-7">Liên hệ</a></li>
+            </ol>
+          </nav>
+
+          <section class="doc-section" id="pa-1">
+            <h5 class="doc-section__title">1. Chúng tôi lưu gì</h5>
+            <table>
+              <caption>Toàn bộ dữ liệu được lưu về một người chơi.</caption>
+              <thead><tr><th scope="col">Dữ liệu</th><th scope="col">Vì sao cần</th><th scope="col">Giữ đến khi nào</th></tr></thead>
+              <tbody>
+                <tr><td>Mã người chơi</td><td>Gắn điểm số với bạn</td><td>Đến khi bạn xóa</td></tr>
+                <tr><td>Tên hiển thị</td><td>Hiện trên bảng xếp hạng</td><td>Đến khi bạn xóa</td></tr>
+                <tr><td>Ngày tạo</td><td>Xử lý lạm dụng</td><td>Đến khi bạn xóa</td></tr>
+                <tr><td>Điểm theo tuần</td><td>Xếp hạng và kỷ lục</td><td>Đến khi bạn xóa</td></tr>
+              </tbody>
+            </table>
+            <p>Mỗi lần ghi điểm còn kèm vài giá trị kỹ thuật để máy chủ kiểm tra điểm có hợp lệ không: trò chơi, tuần, thời gian sống sót, seed và phiên bản trò chơi.</p>
+            <p><strong>Không lưu:</strong> bản sao email của bạn, địa chỉ IP, và bất kỳ dữ liệu đo đạc nào.</p>
+            <p>Trang <a class="link" href="#s1">Tài khoản</a> liệt kê đúng những mục này.</p>
+          </section>
+
+          <section class="doc-section" id="pa-2">
+            <h5 class="doc-section__title">2. Vì sao cần những dữ liệu đó</h5>
+            <p>Để điểm của bạn thuộc về bạn, để bảng xếp hạng gọi đúng tên, và để máy chủ nhận ra một điểm số không có thật. Không có mục đích nào khác.</p>
+          </section>
+
+          <section class="doc-section" id="pa-3">
+            <h5 class="doc-section__title">3. Lưu trong bao lâu</h5>
+            <p>Đến khi bạn xóa. Không có mốc thời gian cố định nào khác. Khi bạn xóa dữ liệu, hồ sơ và toàn bộ điểm của bạn biến mất.</p>
+          </section>
+
+          <section class="doc-section" id="pa-4">
+            <h5 class="doc-section__title">4. Ai xử lý dữ liệu</h5>
+            <p>Máy chủ của chúng tôi và nhà cung cấp hạ tầng chạy nó. Mạng quảng cáo chỉ nhận được gì khi bạn đã đồng ý cookie quảng cáo ở mục 6 — trước đó không có script quảng cáo nào chạy.</p>
+          </section>
+
+          <section class="doc-section" id="pa-5">
+            <h5 class="doc-section__title">5. Quyền của bạn</h5>
+            <p>Bạn xem được mọi thứ đã lưu về mình, sửa tên hiển thị, và xóa tất cả. Ba việc đó nằm ở <a class="link" href="#s1">Tài khoản → Dữ liệu của tôi</a>.</p>
+          </section>
+
+          <section class="doc-section" id="pa-6">
+            <h5 class="doc-section__title">6. Cookie</h5>
+            <p>Bạn đổi ý lúc nào cũng được, ngay tại đây. Lựa chọn áp dụng cho trình duyệt này.</p>
+            <div class="notice notice--info"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-info"/></svg><div class="notice__body"><p class="notice__title">Thông tin</p><p class="notice__text">Chỉ có hai nhóm. Soucean Game không dùng công cụ phân tích và không có trình theo dõi nào, nên không có nút bật/tắt cho những thứ đó.</p></div></div>
+            <fieldset>
+              <legend class="consent-fieldset__legend">Nhóm cookie</legend>
+              <ul class="consent-cats">
+                <li class="consent-cat">
+                  <div class="choice">
+                    <input id="pa-c1" type="checkbox" checked disabled aria-describedby="pa-d1">
+                    <label for="pa-c1">Cần thiết</label>
+                    <span class="consent-cat__always">Luôn bật</span>
+                  </div>
+                  <p class="consent-cat__desc" id="pa-d1">Giữ phiên của bạn, nhớ chính lựa chọn cookie này, và nhớ bạn chọn giao diện sáng hay tối. Không có nhóm này thì trang không chạy được, nên không tắt được.</p>
+                </li>
+                <li class="consent-cat">
+                  <div class="choice">
+                    <input id="pa-c2" type="checkbox" aria-describedby="pa-d2">
+                    <label for="pa-c2">Quảng cáo</label>
+                  </div>
+                  <p class="consent-cat__desc" id="pa-d2">Cho phép mạng quảng cáo đặt cookie cho quảng cáo trên trang web. Mặc định tắt. Khi tắt, ô quảng cáo vẫn giữ đúng chỗ và để trống, nên trang không xê dịch.</p>
+                </li>
+              </ul>
+            </fieldset>
+            <div class="consent-form__actions">
+              <button class="btn btn--primary" type="button">Lưu lựa chọn</button>
+            </div>
+          </section>
+
+          <section class="doc-section" id="pa-7">
+            <h5 class="doc-section__title">7. Liên hệ</h5>
+            <p>Câu hỏi về dữ liệu của bạn xin gửi tới địa chỉ ghi ở <a class="link" href="about.html">trang Giới thiệu</a>.</p>
+          </section>
+        </div>
+
+        <footer class="site-footer">
+          <div class="shell">
+            <ul class="site-footer__links">
+              <li><a class="link" href="about.html">Giới thiệu</a></li>
+              <li><a class="link" href="terms.html">Điều khoản</a></li>
+              <li><a class="link" href="#s1" aria-current="page">Quyền riêng tư</a></li>
+              <li><a class="link" href="#pa-6">Cài đặt cookie</a></li>
+            </ul>
+            <p class="site-footer__fine">© 2026 Soucean Game</p>
+          </div>
+        </footer>
+      </div>
+      <span class="mk-tag">Mục lục một cột. Ô quảng cáo có trong markup nhưng dải mobile tắt nó (<code>ad-slots.md</code> §3) — đúng cách sản phẩm làm. Liên kết “Cài đặt cookie” ở chân trang trỏ thẳng vào mục 6 của chính trang này.</span>
+    </section>
+
+    <section>
+      <h3 class="mk-cap">Tối · 375 px</h3>
+      <div class="mk-view mk-view--mobile" data-theme="dark">
+        <div class="site-header">
+          <a class="skip-link" href="#pb-main">Tới nội dung chính</a>
+          <div class="shell site-header__bar">
+            <a class="wordmark" href="home.html">Soucean Game</a>
+            <div class="site-header__actions">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="tt-b"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="tt-b" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+            </div>
+          </div>
+          <nav class="shell" aria-label="Chính · tối 375">
+            <button class="btn btn--quiet site-nav__toggle" type="button" aria-expanded="true" aria-controls="pb-nav"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-menu"/></svg>Menu</button>
+            <ul class="site-nav__list" id="pb-nav">
+              <li><a class="site-nav__link" href="home.html">Trò chơi</a></li>
+              <li><a class="site-nav__link" href="leaderboards.html">Bảng xếp hạng</a></li>
+              <li><a class="site-nav__link" href="#s1">Tài khoản</a></li>
+            </ul>
+          </nav>
+          <div class="shell">
+            <aside class="ad-slot ad-slot--header-leaderboard" aria-label="Quảng cáo">
+              <span class="ad-slot__label">Quảng cáo · 728 × 90</span>
+            </aside>
+          </div>
+        </div>
+
+        <div class="shell shell--text main" id="pb-main">
+          <h4>Chính sách quyền riêng tư</h4>
+          <p class="doc__updated">Cập nhật lần cuối: 5 tháng 11, 2026</p>
+
+          <div class="notice notice--warning"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-warning"/></svg><div class="notice__body"><p class="notice__title">Cảnh báo</p><p class="notice__text">Văn bản mẫu, không phải chính sách thật. Nội dung pháp lý đến từ OQ-039.</p></div></div>
+
+          <nav class="card" aria-label="Mục lục chính sách · tối 375">
+            <ol class="doc__toc-list">
+              <li><a class="link" href="#pb-1">Chúng tôi lưu gì</a></li>
+              <li><a class="link" href="#pb-2">Vì sao cần những dữ liệu đó</a></li>
+              <li><a class="link" href="#pb-3">Lưu trong bao lâu</a></li>
+              <li><a class="link" href="#pb-4">Ai xử lý dữ liệu</a></li>
+              <li><a class="link" href="#pb-5">Quyền của bạn</a></li>
+              <li><a class="link" href="#pb-6">Cookie</a></li>
+              <li><a class="link" href="#pb-7">Liên hệ</a></li>
+            </ol>
+          </nav>
+
+          <section class="doc-section" id="pb-1">
+            <h5 class="doc-section__title">1. Chúng tôi lưu gì</h5>
+            <table>
+              <caption>Toàn bộ dữ liệu được lưu về một người chơi.</caption>
+              <thead><tr><th scope="col">Dữ liệu</th><th scope="col">Vì sao cần</th><th scope="col">Giữ đến khi nào</th></tr></thead>
+              <tbody>
+                <tr><td>Mã người chơi</td><td>Gắn điểm số với bạn</td><td>Đến khi bạn xóa</td></tr>
+                <tr><td>Tên hiển thị</td><td>Hiện trên bảng xếp hạng</td><td>Đến khi bạn xóa</td></tr>
+                <tr><td>Ngày tạo</td><td>Xử lý lạm dụng</td><td>Đến khi bạn xóa</td></tr>
+                <tr><td>Điểm theo tuần</td><td>Xếp hạng và kỷ lục</td><td>Đến khi bạn xóa</td></tr>
+              </tbody>
+            </table>
+            <p>Mỗi lần ghi điểm còn kèm vài giá trị kỹ thuật để máy chủ kiểm tra điểm có hợp lệ không: trò chơi, tuần, thời gian sống sót, seed và phiên bản trò chơi.</p>
+            <p><strong>Không lưu:</strong> bản sao email của bạn, địa chỉ IP, và bất kỳ dữ liệu đo đạc nào.</p>
+            <p>Trang <a class="link" href="#s1">Tài khoản</a> liệt kê đúng những mục này.</p>
+          </section>
+
+          <section class="doc-section" id="pb-2">
+            <h5 class="doc-section__title">2. Vì sao cần những dữ liệu đó</h5>
+            <p>Để điểm của bạn thuộc về bạn, để bảng xếp hạng gọi đúng tên, và để máy chủ nhận ra một điểm số không có thật. Không có mục đích nào khác.</p>
+          </section>
+
+          <section class="doc-section" id="pb-3">
+            <h5 class="doc-section__title">3. Lưu trong bao lâu</h5>
+            <p>Đến khi bạn xóa. Không có mốc thời gian cố định nào khác. Khi bạn xóa dữ liệu, hồ sơ và toàn bộ điểm của bạn biến mất.</p>
+          </section>
+
+          <section class="doc-section" id="pb-4">
+            <h5 class="doc-section__title">4. Ai xử lý dữ liệu</h5>
+            <p>Máy chủ của chúng tôi và nhà cung cấp hạ tầng chạy nó. Mạng quảng cáo chỉ nhận được gì khi bạn đã đồng ý cookie quảng cáo ở mục 6 — trước đó không có script quảng cáo nào chạy.</p>
+          </section>
+
+          <section class="doc-section" id="pb-5">
+            <h5 class="doc-section__title">5. Quyền của bạn</h5>
+            <p>Bạn xem được mọi thứ đã lưu về mình, sửa tên hiển thị, và xóa tất cả. Ba việc đó nằm ở <a class="link" href="#s1">Tài khoản → Dữ liệu của tôi</a>.</p>
+          </section>
+
+          <section class="doc-section" id="pb-6">
+            <h5 class="doc-section__title">6. Cookie</h5>
+            <p>Bạn đổi ý lúc nào cũng được, ngay tại đây. Lựa chọn áp dụng cho trình duyệt này.</p>
+            <div class="notice notice--info"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-info"/></svg><div class="notice__body"><p class="notice__title">Thông tin</p><p class="notice__text">Chỉ có hai nhóm. Soucean Game không dùng công cụ phân tích và không có trình theo dõi nào, nên không có nút bật/tắt cho những thứ đó.</p></div></div>
+            <fieldset>
+              <legend class="consent-fieldset__legend">Nhóm cookie</legend>
+              <ul class="consent-cats">
+                <li class="consent-cat">
+                  <div class="choice">
+                    <input id="pb-c1" type="checkbox" checked disabled aria-describedby="pb-d1">
+                    <label for="pb-c1">Cần thiết</label>
+                    <span class="consent-cat__always">Luôn bật</span>
+                  </div>
+                  <p class="consent-cat__desc" id="pb-d1">Giữ phiên của bạn, nhớ chính lựa chọn cookie này, và nhớ bạn chọn giao diện sáng hay tối. Không có nhóm này thì trang không chạy được, nên không tắt được.</p>
+                </li>
+                <li class="consent-cat">
+                  <div class="choice">
+                    <input id="pb-c2" type="checkbox" checked aria-describedby="pb-d2">
+                    <label for="pb-c2">Quảng cáo</label>
+                  </div>
+                  <p class="consent-cat__desc" id="pb-d2">Cho phép mạng quảng cáo đặt cookie cho quảng cáo trên trang web. Mặc định tắt. Khi tắt, ô quảng cáo vẫn giữ đúng chỗ và để trống, nên trang không xê dịch.</p>
+                </li>
+              </ul>
+            </fieldset>
+            <div class="consent-form__actions">
+              <button class="btn btn--primary" type="button">Lưu lựa chọn</button>
+            </div>
+          </section>
+
+          <section class="doc-section" id="pb-7">
+            <h5 class="doc-section__title">7. Liên hệ</h5>
+            <p>Câu hỏi về dữ liệu của bạn xin gửi tới địa chỉ ghi ở <a class="link" href="about.html">trang Giới thiệu</a>.</p>
+          </section>
+        </div>
+
+        <footer class="site-footer">
+          <div class="shell">
+            <ul class="site-footer__links">
+              <li><a class="link" href="about.html">Giới thiệu</a></li>
+              <li><a class="link" href="terms.html">Điều khoản</a></li>
+              <li><a class="link" href="#s1" aria-current="page">Quyền riêng tư</a></li>
+              <li><a class="link" href="#pb-6">Cài đặt cookie</a></li>
+            </ul>
+            <p class="site-footer__fine">© 2026 Soucean Game</p>
+          </div>
+        </footer>
+      </div>
+      <span class="mk-tag">Bản dựng này cho thấy ô “Quảng cáo” <strong>đã được bật bởi người chơi</strong> (menu cũng đang mở). Nó không bao giờ được tick sẵn khi trang mới mở — bản dựng sáng ở bên trái là trạng thái mặc định.</span>
+    </section>
+  </div>
+
+  <div class="mk-specs">
+    <section>
+      <h3 class="mk-cap">Sáng · 1280 px</h3>
+      <div class="mk-scroll"><div class="mk-view mk-view--desktop">
+        <div class="site-header">
+          <a class="skip-link" href="#pc-main">Tới nội dung chính</a>
+          <div class="shell site-header__bar">
+            <a class="wordmark" href="home.html">Soucean Game</a>
+            <div class="site-header__actions">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="tt-c" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="tt-c"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+            </div>
+          </div>
+          <nav class="shell" aria-label="Chính · sáng 1280">
+            <button class="btn btn--quiet site-nav__toggle" type="button" aria-expanded="false" aria-controls="pc-nav"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-menu"/></svg>Menu</button>
+            <ul class="site-nav__list" id="pc-nav">
+              <li><a class="site-nav__link" href="home.html">Trò chơi</a></li>
+              <li><a class="site-nav__link" href="leaderboards.html">Bảng xếp hạng</a></li>
+              <li><a class="site-nav__link" href="#s1">Tài khoản</a></li>
+            </ul>
+          </nav>
+          <div class="shell">
+            <aside class="ad-slot ad-slot--header-leaderboard" aria-label="Quảng cáo">
+              <span class="ad-slot__label">Quảng cáo · 728 × 90</span>
+            </aside>
+          </div>
+        </div>
+
+        <div class="shell shell--text main" id="pc-main">
+          <h4>Chính sách quyền riêng tư</h4>
+          <p class="doc__updated">Cập nhật lần cuối: 5 tháng 11, 2026</p>
+
+          <div class="notice notice--warning"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-warning"/></svg><div class="notice__body"><p class="notice__title">Cảnh báo</p><p class="notice__text">Văn bản mẫu, không phải chính sách thật. Nội dung pháp lý đến từ OQ-039.</p></div></div>
+
+          <nav class="card" aria-label="Mục lục chính sách · sáng 1280">
+            <ol class="doc__toc-list">
+              <li><a class="link" href="#pc-1">Chúng tôi lưu gì</a></li>
+              <li><a class="link" href="#pc-2">Vì sao cần những dữ liệu đó</a></li>
+              <li><a class="link" href="#pc-3">Lưu trong bao lâu</a></li>
+              <li><a class="link" href="#pc-4">Ai xử lý dữ liệu</a></li>
+              <li><a class="link" href="#pc-5">Quyền của bạn</a></li>
+              <li><a class="link" href="#pc-6">Cookie</a></li>
+              <li><a class="link" href="#pc-7">Liên hệ</a></li>
+            </ol>
+          </nav>
+
+          <section class="doc-section" id="pc-1">
+            <h5 class="doc-section__title">1. Chúng tôi lưu gì</h5>
+            <table>
+              <caption>Toàn bộ dữ liệu được lưu về một người chơi.</caption>
+              <thead><tr><th scope="col">Dữ liệu</th><th scope="col">Vì sao cần</th><th scope="col">Giữ đến khi nào</th></tr></thead>
+              <tbody>
+                <tr><td>Mã người chơi</td><td>Gắn điểm số với bạn</td><td>Đến khi bạn xóa</td></tr>
+                <tr><td>Tên hiển thị</td><td>Hiện trên bảng xếp hạng</td><td>Đến khi bạn xóa</td></tr>
+                <tr><td>Ngày tạo</td><td>Xử lý lạm dụng</td><td>Đến khi bạn xóa</td></tr>
+                <tr><td>Điểm theo tuần</td><td>Xếp hạng và kỷ lục</td><td>Đến khi bạn xóa</td></tr>
+              </tbody>
+            </table>
+            <p>Mỗi lần ghi điểm còn kèm vài giá trị kỹ thuật để máy chủ kiểm tra điểm có hợp lệ không: trò chơi, tuần, thời gian sống sót, seed và phiên bản trò chơi.</p>
+            <p><strong>Không lưu:</strong> bản sao email của bạn, địa chỉ IP, và bất kỳ dữ liệu đo đạc nào.</p>
+            <p>Trang <a class="link" href="#s1">Tài khoản</a> liệt kê đúng những mục này.</p>
+          </section>
+
+          <section class="doc-section" id="pc-2">
+            <h5 class="doc-section__title">2. Vì sao cần những dữ liệu đó</h5>
+            <p>Để điểm của bạn thuộc về bạn, để bảng xếp hạng gọi đúng tên, và để máy chủ nhận ra một điểm số không có thật. Không có mục đích nào khác.</p>
+          </section>
+
+          <section class="doc-section" id="pc-3">
+            <h5 class="doc-section__title">3. Lưu trong bao lâu</h5>
+            <p>Đến khi bạn xóa. Không có mốc thời gian cố định nào khác. Khi bạn xóa dữ liệu, hồ sơ và toàn bộ điểm của bạn biến mất.</p>
+          </section>
+
+          <section class="doc-section" id="pc-4">
+            <h5 class="doc-section__title">4. Ai xử lý dữ liệu</h5>
+            <p>Máy chủ của chúng tôi và nhà cung cấp hạ tầng chạy nó. Mạng quảng cáo chỉ nhận được gì khi bạn đã đồng ý cookie quảng cáo ở mục 6 — trước đó không có script quảng cáo nào chạy.</p>
+          </section>
+
+          <section class="doc-section" id="pc-5">
+            <h5 class="doc-section__title">5. Quyền của bạn</h5>
+            <p>Bạn xem được mọi thứ đã lưu về mình, sửa tên hiển thị, và xóa tất cả. Ba việc đó nằm ở <a class="link" href="#s1">Tài khoản → Dữ liệu của tôi</a>.</p>
+          </section>
+
+          <section class="doc-section" id="pc-6">
+            <h5 class="doc-section__title">6. Cookie</h5>
+            <p>Bạn đổi ý lúc nào cũng được, ngay tại đây. Lựa chọn áp dụng cho trình duyệt này.</p>
+            <div class="notice notice--info"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-info"/></svg><div class="notice__body"><p class="notice__title">Thông tin</p><p class="notice__text">Chỉ có hai nhóm. Soucean Game không dùng công cụ phân tích và không có trình theo dõi nào, nên không có nút bật/tắt cho những thứ đó.</p></div></div>
+            <fieldset>
+              <legend class="consent-fieldset__legend">Nhóm cookie</legend>
+              <ul class="consent-cats">
+                <li class="consent-cat">
+                  <div class="choice">
+                    <input id="pc-c1" type="checkbox" checked disabled aria-describedby="pc-d1">
+                    <label for="pc-c1">Cần thiết</label>
+                    <span class="consent-cat__always">Luôn bật</span>
+                  </div>
+                  <p class="consent-cat__desc" id="pc-d1">Giữ phiên của bạn, nhớ chính lựa chọn cookie này, và nhớ bạn chọn giao diện sáng hay tối. Không có nhóm này thì trang không chạy được, nên không tắt được.</p>
+                </li>
+                <li class="consent-cat">
+                  <div class="choice">
+                    <input id="pc-c2" type="checkbox" aria-describedby="pc-d2">
+                    <label for="pc-c2">Quảng cáo</label>
+                  </div>
+                  <p class="consent-cat__desc" id="pc-d2">Cho phép mạng quảng cáo đặt cookie cho quảng cáo trên trang web. Mặc định tắt. Khi tắt, ô quảng cáo vẫn giữ đúng chỗ và để trống, nên trang không xê dịch.</p>
+                </li>
+              </ul>
+            </fieldset>
+            <div class="consent-form__actions">
+              <button class="btn btn--primary" type="button">Lưu lựa chọn</button>
+            </div>
+          </section>
+
+          <section class="doc-section" id="pc-7">
+            <h5 class="doc-section__title">7. Liên hệ</h5>
+            <p>Câu hỏi về dữ liệu của bạn xin gửi tới địa chỉ ghi ở <a class="link" href="about.html">trang Giới thiệu</a>.</p>
+          </section>
+        </div>
+
+        <footer class="site-footer">
+          <div class="shell">
+            <ul class="site-footer__links">
+              <li><a class="link" href="about.html">Giới thiệu</a></li>
+              <li><a class="link" href="terms.html">Điều khoản</a></li>
+              <li><a class="link" href="#s1" aria-current="page">Quyền riêng tư</a></li>
+              <li><a class="link" href="#pc-6">Cài đặt cookie</a></li>
+            </ul>
+            <p class="site-footer__fine">© 2026 Soucean Game</p>
+          </div>
+        </footer>
+      </div></div>
+      <span class="mk-tag">Cột chữ dừng ở <code>70ch</code>, không phải 1200 px — và tiêu đề dừng theo, không chỉ đoạn văn (<code>.shell--text</code>). Header, ô quảng cáo và chân trang vẫn chạy hết chiều ngang. Mục lục hai cột, thứ tự DOM vẫn 1→7.</span>
+    </section>
+
+    <section>
+      <h3 class="mk-cap">Tối · 1280 px</h3>
+      <div class="mk-scroll"><div class="mk-view mk-view--desktop" data-theme="dark">
+        <div class="site-header">
+          <a class="skip-link" href="#pd-main">Tới nội dung chính</a>
+          <div class="shell site-header__bar">
+            <a class="wordmark" href="home.html">Soucean Game</a>
+            <div class="site-header__actions">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="tt-d"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="tt-d" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+            </div>
+          </div>
+          <nav class="shell" aria-label="Chính · tối 1280">
+            <button class="btn btn--quiet site-nav__toggle" type="button" aria-expanded="false" aria-controls="pd-nav"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-menu"/></svg>Menu</button>
+            <ul class="site-nav__list" id="pd-nav">
+              <li><a class="site-nav__link" href="home.html">Trò chơi</a></li>
+              <li><a class="site-nav__link" href="leaderboards.html">Bảng xếp hạng</a></li>
+              <li><a class="site-nav__link" href="#s1">Tài khoản</a></li>
+            </ul>
+          </nav>
+          <div class="shell">
+            <aside class="ad-slot ad-slot--header-leaderboard" aria-label="Quảng cáo">
+              <span class="ad-slot__label">Quảng cáo · 728 × 90</span>
+            </aside>
+          </div>
+        </div>
+
+        <div class="shell shell--text main" id="pd-main">
+          <h4>Chính sách quyền riêng tư</h4>
+          <p class="doc__updated">Cập nhật lần cuối: 5 tháng 11, 2026</p>
+
+          <div class="notice notice--warning"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-warning"/></svg><div class="notice__body"><p class="notice__title">Cảnh báo</p><p class="notice__text">Văn bản mẫu, không phải chính sách thật. Nội dung pháp lý đến từ OQ-039.</p></div></div>
+
+          <nav class="card" aria-label="Mục lục chính sách · tối 1280">
+            <ol class="doc__toc-list">
+              <li><a class="link" href="#pd-1">Chúng tôi lưu gì</a></li>
+              <li><a class="link" href="#pd-2">Vì sao cần những dữ liệu đó</a></li>
+              <li><a class="link" href="#pd-3">Lưu trong bao lâu</a></li>
+              <li><a class="link" href="#pd-4">Ai xử lý dữ liệu</a></li>
+              <li><a class="link" href="#pd-5">Quyền của bạn</a></li>
+              <li><a class="link" href="#pd-6">Cookie</a></li>
+              <li><a class="link" href="#pd-7">Liên hệ</a></li>
+            </ol>
+          </nav>
+
+          <section class="doc-section" id="pd-1">
+            <h5 class="doc-section__title">1. Chúng tôi lưu gì</h5>
+            <table>
+              <caption>Toàn bộ dữ liệu được lưu về một người chơi.</caption>
+              <thead><tr><th scope="col">Dữ liệu</th><th scope="col">Vì sao cần</th><th scope="col">Giữ đến khi nào</th></tr></thead>
+              <tbody>
+                <tr><td>Mã người chơi</td><td>Gắn điểm số với bạn</td><td>Đến khi bạn xóa</td></tr>
+                <tr><td>Tên hiển thị</td><td>Hiện trên bảng xếp hạng</td><td>Đến khi bạn xóa</td></tr>
+                <tr><td>Ngày tạo</td><td>Xử lý lạm dụng</td><td>Đến khi bạn xóa</td></tr>
+                <tr><td>Điểm theo tuần</td><td>Xếp hạng và kỷ lục</td><td>Đến khi bạn xóa</td></tr>
+              </tbody>
+            </table>
+            <p>Mỗi lần ghi điểm còn kèm vài giá trị kỹ thuật để máy chủ kiểm tra điểm có hợp lệ không: trò chơi, tuần, thời gian sống sót, seed và phiên bản trò chơi.</p>
+            <p><strong>Không lưu:</strong> bản sao email của bạn, địa chỉ IP, và bất kỳ dữ liệu đo đạc nào.</p>
+            <p>Trang <a class="link" href="#s1">Tài khoản</a> liệt kê đúng những mục này.</p>
+          </section>
+
+          <section class="doc-section" id="pd-2">
+            <h5 class="doc-section__title">2. Vì sao cần những dữ liệu đó</h5>
+            <p>Để điểm của bạn thuộc về bạn, để bảng xếp hạng gọi đúng tên, và để máy chủ nhận ra một điểm số không có thật. Không có mục đích nào khác.</p>
+          </section>
+
+          <section class="doc-section" id="pd-3">
+            <h5 class="doc-section__title">3. Lưu trong bao lâu</h5>
+            <p>Đến khi bạn xóa. Không có mốc thời gian cố định nào khác. Khi bạn xóa dữ liệu, hồ sơ và toàn bộ điểm của bạn biến mất.</p>
+          </section>
+
+          <section class="doc-section" id="pd-4">
+            <h5 class="doc-section__title">4. Ai xử lý dữ liệu</h5>
+            <p>Máy chủ của chúng tôi và nhà cung cấp hạ tầng chạy nó. Mạng quảng cáo chỉ nhận được gì khi bạn đã đồng ý cookie quảng cáo ở mục 6 — trước đó không có script quảng cáo nào chạy.</p>
+          </section>
+
+          <section class="doc-section" id="pd-5">
+            <h5 class="doc-section__title">5. Quyền của bạn</h5>
+            <p>Bạn xem được mọi thứ đã lưu về mình, sửa tên hiển thị, và xóa tất cả. Ba việc đó nằm ở <a class="link" href="#s1">Tài khoản → Dữ liệu của tôi</a>.</p>
+          </section>
+
+          <section class="doc-section" id="pd-6">
+            <h5 class="doc-section__title">6. Cookie</h5>
+            <p>Bạn đổi ý lúc nào cũng được, ngay tại đây. Lựa chọn áp dụng cho trình duyệt này.</p>
+            <div class="notice notice--info"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-info"/></svg><div class="notice__body"><p class="notice__title">Thông tin</p><p class="notice__text">Chỉ có hai nhóm. Soucean Game không dùng công cụ phân tích và không có trình theo dõi nào, nên không có nút bật/tắt cho những thứ đó.</p></div></div>
+            <fieldset>
+              <legend class="consent-fieldset__legend">Nhóm cookie</legend>
+              <ul class="consent-cats">
+                <li class="consent-cat">
+                  <div class="choice">
+                    <input id="pd-c1" type="checkbox" checked disabled aria-describedby="pd-d1">
+                    <label for="pd-c1">Cần thiết</label>
+                    <span class="consent-cat__always">Luôn bật</span>
+                  </div>
+                  <p class="consent-cat__desc" id="pd-d1">Giữ phiên của bạn, nhớ chính lựa chọn cookie này, và nhớ bạn chọn giao diện sáng hay tối. Không có nhóm này thì trang không chạy được, nên không tắt được.</p>
+                </li>
+                <li class="consent-cat">
+                  <div class="choice">
+                    <input id="pd-c2" type="checkbox" aria-describedby="pd-d2">
+                    <label for="pd-c2">Quảng cáo</label>
+                  </div>
+                  <p class="consent-cat__desc" id="pd-d2">Cho phép mạng quảng cáo đặt cookie cho quảng cáo trên trang web. Mặc định tắt. Khi tắt, ô quảng cáo vẫn giữ đúng chỗ và để trống, nên trang không xê dịch.</p>
+                </li>
+              </ul>
+            </fieldset>
+            <div class="consent-form__actions">
+              <button class="btn btn--primary" type="button">Lưu lựa chọn</button>
+            </div>
+          </section>
+
+          <section class="doc-section" id="pd-7">
+            <h5 class="doc-section__title">7. Liên hệ</h5>
+            <p>Câu hỏi về dữ liệu của bạn xin gửi tới địa chỉ ghi ở <a class="link" href="about.html">trang Giới thiệu</a>.</p>
+          </section>
+        </div>
+
+        <footer class="site-footer">
+          <div class="shell">
+            <ul class="site-footer__links">
+              <li><a class="link" href="about.html">Giới thiệu</a></li>
+              <li><a class="link" href="terms.html">Điều khoản</a></li>
+              <li><a class="link" href="#s1" aria-current="page">Quyền riêng tư</a></li>
+              <li><a class="link" href="#pd-6">Cài đặt cookie</a></li>
+            </ul>
+            <p class="site-footer__fine">© 2026 Soucean Game</p>
+          </div>
+        </footer>
+      </div></div>
+      <span class="mk-tag">Giao diện tối không đổ bóng (<code>DESIGN.md</code> → Elevation). Độ sâu đến từ tông nền và đường viền.</span>
+    </section>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     2. THE THREE STATES.
+     ========================================================================== -->
+<section class="mk-section" id="s2">
+  <h2>2. Ba trạng thái của trang</h2>
+  <p>
+    Ba khối chuẩn của <code>components.md</code> §4, không phải ba khối trang này
+    tự vẽ. Cả ba dùng <code>.state--reserve-md</code>, nên chuyển giữa hai trạng
+    thái bất kỳ <strong>không làm xê dịch gì</strong>.
+  </p>
+  <p>
+    <strong>Một mâu thuẫn được ghi lại, không được tự xử.</strong>
+    <code>wireframes.md</code> §4.5 và <code>components.md</code> §4.4 đều nói
+    trang Quyền riêng tư là trang tĩnh: không trạng thái tải, không trạng thái
+    rỗng, chỉ lỗi cấp trang. Tiêu chí nghiệm thu của SOU-7 lại yêu cầu đủ ba.
+    Task này vẽ cả ba và nói thẳng cái nào hôm nay chạm tới được — chi tiết ở
+    <code>privacy-consent.md</code> §6. Đây đúng là cách
+    <code>about-terms.md</code> §5.1 đã xử lý cùng một mâu thuẫn.
+  </p>
+
+  <div class="mk-specs mk-specs--row">
+    <section>
+      <h3 class="mk-cap">Sáng · 375 px</h3>
+      <div class="mk-view mk-view--mobile">
+        <div class="mk-stack">
+          <div class="state state--empty state--reserve-md">
+            <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-empty"/></svg>
+            <p class="state__title">Chính sách chưa được công bố</p>
+            <p class="state__text">Chúng tôi đang hoàn thiện văn bản. Mời bạn quay lại sau.</p>
+            <a class="btn btn--secondary" href="home.html">Về trang chủ</a>
+          </div>
+
+          <div class="state state--loading state--reserve-md" role="status" aria-busy="true">
+            <span class="u-visually-hidden">Đang tải chính sách quyền riêng tư…</span>
+            <div class="skeleton" aria-hidden="true">
+              <span class="skeleton__bar skeleton__bar--title"></span>
+              <span class="skeleton__bar"></span>
+              <span class="skeleton__bar skeleton__bar--most"></span>
+              <span class="skeleton__bar"></span>
+              <span class="skeleton__bar skeleton__bar--half"></span>
+            </div>
+          </div>
+
+          <div class="state state--error state--reserve-md" role="status">
+            <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+            <p class="state__label">Lỗi</p>
+            <p class="state__title">Không tải được chính sách</p>
+            <p class="state__text">Kiểm tra kết nối rồi thử lại.</p>
+            <button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Thử lại</button>
+          </div>
+        </div>
+      </div>
+      <span class="mk-tag">Ba khối, một hộp. Đo chiều cao cả ba trong một bản dựng: cùng một con số.</span>
+    </section>
+
+    <section>
+      <h3 class="mk-cap">Tối · 375 px</h3>
+      <div class="mk-view mk-view--mobile" data-theme="dark">
+        <div class="mk-stack">
+          <div class="state state--empty state--reserve-md">
+            <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-empty"/></svg>
+            <p class="state__title">Chính sách chưa được công bố</p>
+            <p class="state__text">Chúng tôi đang hoàn thiện văn bản. Mời bạn quay lại sau.</p>
+            <a class="btn btn--secondary" href="home.html">Về trang chủ</a>
+          </div>
+
+          <div class="state state--loading state--reserve-md" role="status" aria-busy="true">
+            <span class="u-visually-hidden">Đang tải chính sách quyền riêng tư…</span>
+            <div class="skeleton" aria-hidden="true">
+              <span class="skeleton__bar skeleton__bar--title"></span>
+              <span class="skeleton__bar"></span>
+              <span class="skeleton__bar skeleton__bar--most"></span>
+              <span class="skeleton__bar"></span>
+              <span class="skeleton__bar skeleton__bar--half"></span>
+            </div>
+          </div>
+
+          <div class="state state--error state--reserve-md" role="status">
+            <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+            <p class="state__label">Lỗi</p>
+            <p class="state__title">Không tải được chính sách</p>
+            <p class="state__text">Kiểm tra kết nối rồi thử lại.</p>
+            <button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Thử lại</button>
+          </div>
+        </div>
+      </div>
+      <span class="mk-tag">Thanh skeleton là <code>border</code> trên <code>bg</code> — cặp trang trí, <code>aria-hidden</code>. Tín hiệu “đang tải” nằm ở dòng chữ ẩn, không ở thanh.</span>
+    </section>
+  </div>
+
+  <div class="mk-specs">
+    <section>
+      <h3 class="mk-cap">Sáng · 1280 px</h3>
+      <div class="mk-scroll"><div class="mk-view mk-view--desktop">
+        <div class="mk-stack">
+          <div class="state state--empty state--reserve-md">
+            <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-empty"/></svg>
+            <p class="state__title">Chính sách chưa được công bố</p>
+            <p class="state__text">Chúng tôi đang hoàn thiện văn bản. Mời bạn quay lại sau.</p>
+            <a class="btn btn--secondary" href="home.html">Về trang chủ</a>
+          </div>
+
+          <div class="state state--loading state--reserve-md" role="status" aria-busy="true">
+            <span class="u-visually-hidden">Đang tải chính sách quyền riêng tư…</span>
+            <div class="skeleton" aria-hidden="true">
+              <span class="skeleton__bar skeleton__bar--title"></span>
+              <span class="skeleton__bar"></span>
+              <span class="skeleton__bar skeleton__bar--most"></span>
+              <span class="skeleton__bar"></span>
+              <span class="skeleton__bar skeleton__bar--half"></span>
+            </div>
+          </div>
+
+          <div class="state state--error state--reserve-md" role="status">
+            <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+            <p class="state__label">Lỗi</p>
+            <p class="state__title">Không tải được chính sách</p>
+            <p class="state__text">Kiểm tra kết nối rồi thử lại.</p>
+            <button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Thử lại</button>
+          </div>
+        </div>
+      </div></div>
+      <span class="mk-tag">Khối trạng thái giữ nguyên hộp ở mọi bề ngang; chỉ dòng chữ giãn ra tới <code>60ch</code>.</span>
+    </section>
+
+    <section>
+      <h3 class="mk-cap">Tối · 1280 px</h3>
+      <div class="mk-scroll"><div class="mk-view mk-view--desktop" data-theme="dark">
+        <div class="mk-stack">
+          <div class="state state--empty state--reserve-md">
+            <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-empty"/></svg>
+            <p class="state__title">Chính sách chưa được công bố</p>
+            <p class="state__text">Chúng tôi đang hoàn thiện văn bản. Mời bạn quay lại sau.</p>
+            <a class="btn btn--secondary" href="home.html">Về trang chủ</a>
+          </div>
+
+          <div class="state state--loading state--reserve-md" role="status" aria-busy="true">
+            <span class="u-visually-hidden">Đang tải chính sách quyền riêng tư…</span>
+            <div class="skeleton" aria-hidden="true">
+              <span class="skeleton__bar skeleton__bar--title"></span>
+              <span class="skeleton__bar"></span>
+              <span class="skeleton__bar skeleton__bar--most"></span>
+              <span class="skeleton__bar"></span>
+              <span class="skeleton__bar skeleton__bar--half"></span>
+            </div>
+          </div>
+
+          <div class="state state--error state--reserve-md" role="status">
+            <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+            <p class="state__label">Lỗi</p>
+            <p class="state__title">Không tải được chính sách</p>
+            <p class="state__text">Kiểm tra kết nối rồi thử lại.</p>
+            <button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Thử lại</button>
+          </div>
+        </div>
+      </div></div>
+      <span class="mk-tag">Chuyển sang thang xám: cả ba khối vẫn đọc được, vì mỗi khối mang một biểu tượng và một chữ chứ không chỉ một màu.</span>
+    </section>
+  </div>
+
+  <h3>2.1 Lỗi cấp trang — 404</h3>
+  <p>
+    Vẽ trong ngữ cảnh một trang đầy đủ, vì đó là cách người ta gặp nó: header,
+    nav và chân trang còn nguyên, bởi người đang lạc vẫn cần một lối đi tiếp.
+    Hành động là <em>Về trang chủ</em>, <strong>không phải <em>Thử lại</em></strong>
+    — tải lại một URL không tồn tại thì vẫn ra đúng 404 ấy.
+    <code>about-terms.md</code> §5.3 đã ghi đúng ngoại lệ này cho cùng mẫu trang.
+  </p>
+
+  <div class="mk-specs">
+    <section>
+      <h3 class="mk-cap">Sáng · 375 px</h3>
+      <div class="mk-view mk-view--mobile">
+        <div class="site-header">
+          <a class="skip-link" href="#pe-main">Tới nội dung chính</a>
+          <div class="shell site-header__bar">
+            <a class="wordmark" href="home.html">Soucean Game</a>
+          </div>
+          <nav class="shell" aria-label="Chính · 404 sáng">
+            <button class="btn btn--quiet site-nav__toggle" type="button" aria-expanded="false" aria-controls="pe-nav"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-menu"/></svg>Menu</button>
+            <ul class="site-nav__list" id="pe-nav">
+              <li><a class="site-nav__link" href="home.html">Trò chơi</a></li>
+              <li><a class="site-nav__link" href="leaderboards.html">Bảng xếp hạng</a></li>
+              <li><a class="site-nav__link" href="#s1">Tài khoản</a></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="shell shell--text main" id="pe-main">
+          <div class="state state--error state--reserve-md" role="status">
+            <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+            <p class="state__label">Lỗi 404</p>
+            <p class="state__title">Không tìm thấy trang</p>
+            <p class="state__text">Địa chỉ này không có trên Soucean Game.</p>
+            <a class="btn btn--secondary" href="home.html">Về trang chủ</a>
+          </div>
+        </div>
+        <footer class="site-footer">
+          <div class="shell">
+            <ul class="site-footer__links">
+              <li><a class="link" href="about.html">Giới thiệu</a></li>
+              <li><a class="link" href="terms.html">Điều khoản</a></li>
+              <li><a class="link" href="#s1">Quyền riêng tư</a></li>
+              <li><a class="link" href="#pa-6">Cài đặt cookie</a></li>
+            </ul>
+            <p class="site-footer__fine">© 2026 Soucean Game</p>
+          </div>
+        </footer>
+      </div>
+      <span class="mk-tag">“Lỗi 404” là chữ, không phải màu. Chân trang vẫn còn, kể cả liên kết cài đặt cookie.</span>
+    </section>
+
+    <section>
+      <h3 class="mk-cap">Tối · 1280 px</h3>
+      <div class="mk-scroll"><div class="mk-view mk-view--desktop" data-theme="dark">
+        <div class="site-header">
+          <a class="skip-link" href="#pf-main">Tới nội dung chính</a>
+          <div class="shell site-header__bar">
+            <a class="wordmark" href="home.html">Soucean Game</a>
+          </div>
+          <nav class="shell" aria-label="Chính · 404 tối">
+            <button class="btn btn--quiet site-nav__toggle" type="button" aria-expanded="false" aria-controls="pf-nav"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-menu"/></svg>Menu</button>
+            <ul class="site-nav__list" id="pf-nav">
+              <li><a class="site-nav__link" href="home.html">Trò chơi</a></li>
+              <li><a class="site-nav__link" href="leaderboards.html">Bảng xếp hạng</a></li>
+              <li><a class="site-nav__link" href="#s1">Tài khoản</a></li>
+            </ul>
+          </nav>
+          <div class="shell">
+            <aside class="ad-slot ad-slot--header-leaderboard" aria-label="Quảng cáo">
+              <span class="ad-slot__label">Quảng cáo · 728 × 90</span>
+            </aside>
+          </div>
+        </div>
+        <div class="shell shell--text main" id="pf-main">
+          <div class="state state--error state--reserve-md" role="status">
+            <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+            <p class="state__label">Lỗi 404</p>
+            <p class="state__title">Không tìm thấy trang</p>
+            <p class="state__text">Địa chỉ này không có trên Soucean Game.</p>
+            <a class="btn btn--secondary" href="home.html">Về trang chủ</a>
+          </div>
+        </div>
+        <footer class="site-footer">
+          <div class="shell">
+            <ul class="site-footer__links">
+              <li><a class="link" href="about.html">Giới thiệu</a></li>
+              <li><a class="link" href="terms.html">Điều khoản</a></li>
+              <li><a class="link" href="#s1">Quyền riêng tư</a></li>
+              <li><a class="link" href="#pa-6">Cài đặt cookie</a></li>
+            </ul>
+            <p class="site-footer__fine">© 2026 Soucean Game</p>
+          </div>
+        </footer>
+      </div></div>
+      <span class="mk-tag">Hai bản dựng của 404 phủ cả hai bề ngang và cả hai giao diện. Khối lỗi là khối chuẩn đã dựng bốn lần ở §2 phía trên.</span>
+    </section>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     3. AD SLOT, KEYBOARD, CONTRAST.
+     ========================================================================== -->
+<section class="mk-section" id="s3">
+  <h2>3. Ô quảng cáo, bàn phím, tương phản</h2>
+
+  <h3>3.1 Ô quảng cáo</h3>
+  <p>
+    Đúng một ô, chỉ từ 768 px trở lên: <code>ad-header-leaderboard</code>,
+    728 × 90, trong site header. Ở dải mobile <strong>không có ô nào</strong>
+    (<code>ad-slots.md</code> §3) — markup có mặt, và dải mobile tắt nó, đúng như
+    <code>ads.css</code> làm theo viewport trong sản phẩm. Quy tắc cách 24 px
+    không áp dụng ở đây vì trang không có khung trò chơi. Task này không thêm,
+    không bớt, không dời và không sửa kiểu ô nào; <code>ads.css</code> là chủ sở
+    hữu duy nhất của <code>.ad-slot</code>.
+  </p>
+  <p>
+    <strong>Không có thẻ quảng cáo, script quảng cáo hay yêu cầu bên thứ ba nào
+    trong file này.</strong> Ô quảng cáo là một hộp giữ chỗ đã được đặt kích
+    thước trước, nên câu trả lời “Từ chối” để lại một hộp rỗng đúng cỡ chứ không
+    làm trang nhảy (<code>ad-slots.md</code> §8.2).
+  </p>
+
+  <h3>3.2 Bàn phím</h3>
+  <p>
+    Thứ tự DOM = thứ tự Tab = thứ tự đọc, ở cả hai bề ngang. Không có thuộc tính
+    <code>order</code>, không có <code>tabindex</code> dương nào.
+  </p>
+  <ol>
+    <li><code>skip-link</code> → <code>#main</code>, đầu tiên trong tài liệu và <strong>trước</strong> ô quảng cáo header.</li>
+    <li>Wordmark; nút Menu (chỉ dưới 768 px); ba liên kết nav; hai radio giao diện.</li>
+    <li>Bảy mục trong mục lục, theo đúng thứ tự 1→7 — <code>columns: 2</code> chỉ đổi cách bày, không đổi DOM.</li>
+    <li>Liên kết trong thân bài, theo thứ tự chúng xuất hiện trong câu.</li>
+    <li>Mục 6: ô “Quảng cáo”, rồi nút <em>Lưu lựa chọn</em>. Ô “Cần thiết” là <code>disabled</code> nên không nhận Tab — nó vẫn được đọc khi duyệt nội dung, và chữ “Luôn bật” nói rõ vì sao.</li>
+    <li>Bốn liên kết chân trang, mỗi liên kết là một đích 44 px.</li>
+  </ol>
+  <p>
+    Trang này <strong>không có phần tử dính (sticky) nào</strong> và không có bẫy
+    tiêu điểm. Banner cookie — thứ duy nhất dính trên cả site — nằm ở
+    <a class="link" href="cookie-settings.html">cookie-settings.html</a>, cùng với
+    toàn bộ phần xử lý tiêu điểm của nó.
+  </p>
+
+  <h3>3.3 Tương phản</h3>
+  <p>
+    <strong>Trang này không tạo ra cặp màu mới nào.</strong> Mọi cặp đã được đo
+    trong <code>DESIGN.md</code> → “Measured contrast”, hoặc <code>components.md</code>
+    §3.4 cho <code>primary-hover</code>. Bảng đầy đủ kèm nguồn từng dòng nằm ở
+    <code>privacy-consent.md</code> §7. Điểm đáng chú ý: lời giải thích từng nhóm
+    cookie là <code>text-muted</code> và <strong>không có nền riêng</strong>, nên
+    nó đọc trên <code>bg</code> (6.25 / 7.65) khi nằm trong trang và trên
+    <code>surface</code> (6.65 / 6.82) khi nằm trong hộp thoại — cả hai đều đã
+    được đo.
+  </p>
+</section>
+
+<!-- ==========================================================================
+     4. HOW TO READ THIS SHEET.
+     ========================================================================== -->
+<section class="mk-section" id="s4">
+  <h2>4. Cách đọc tờ này</h2>
+  <ol>
+    <li><strong>Bốn bản dựng cho mỗi thứ.</strong> Sáng/tối × 375/1280.</li>
+    <li><strong>Khổ đọc.</strong> Ở 1280 px cột chữ dừng ở <code>70ch</code>, và tiêu đề dừng theo — không chỉ đoạn văn.</li>
+    <li><strong>Tab qua một bản dựng.</strong> Vòng tiêu điểm luôn thấy được và thứ tự khớp thứ tự nhìn.</li>
+    <li><strong>Bấm một mục trong mục lục.</strong> Tiêu đề đích không dán sát mép trên (<code>:target</code> có <code>scroll-margin</code>).</li>
+    <li><strong>Hai nhóm cookie, không phải ba.</strong> Không có công tắc “phân tích”. Nếu bạn thấy một cái, đó là lỗi.</li>
+    <li><strong>Không có ô nào được tick sẵn</strong> ngoài “Cần thiết”, và “Cần thiết” nói rõ nó luôn bật.</li>
+    <li><strong>Không có gì chuyển động.</strong> Bật <code>prefers-reduced-motion: reduce</code> và không có gì đổi, vì không có gì từng động.</li>
+    <li><strong>Chuyển thang xám.</strong> Mọi trạng thái vẫn đọc được.</li>
+    <li><strong>Đo lời hứa “không xê dịch”.</strong> Trong Console: <code>[...document.querySelectorAll('.state')].map(e =&gt; e.getBoundingClientRect().height)</code> — trong cùng một bản dựng mọi con số phải bằng nhau.</li>
+  </ol>
+  <p>
+    Bốn lệnh kiểm tra tĩnh (không script, không màu thô, không style nội tuyến,
+    không breakpoint lạ) nằm trong
+    <code>docs/design/pages/privacy-consent.md</code> §9 — in ở đó chứ không in ở
+    đây, vì một lệnh <code>grep</code> đi tìm thuộc tính nguồn và tiền tố giao
+    thức mà lại in ngay trong file bị quét thì sẽ tự khớp chính nó, và phép kiểm
+    tra sẽ trượt trên chính tài liệu của nó.
+  </p>
+</section>
+
+</body>
+</html>
