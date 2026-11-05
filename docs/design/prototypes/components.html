@@ -640,6 +640,13 @@
      trên <code>bg</code>, trên <code>surface</code> hay trong một khối trạng thái. Nút
      <strong>destructive</strong> mang sẵn cạnh đôi ngay ở trạng thái mặc định; lý do nằm ở
      <code>components.md</code> §6.1.</p>
+  <p><strong>Hai ô cuối của hàng secondary là một cặp cố ý.</strong> Nút
+     <code>disabled</code> và nút <code>aria-disabled="true"</code> phải <strong>trông giống
+     hệt nhau</strong> — cùng <code>opacity</code>, cùng con trỏ <code>not-allowed</code>, cùng
+     không nhún khi bấm. Khác nhau duy nhất là cái thứ hai <strong>vẫn nằm trong thứ tự
+     Tab</strong>, nên người dùng bàn phím tới được nó và nghe được lý do. Trước đây chỉ có
+     <code>:disabled</code> được vẽ, còn <code>aria-disabled</code> thì chỉ được <em>thông
+     báo</em>: một trạng thái mà trình đọc màn hình biết còn mắt thường không thấy (A-04).</p>
 
   <div class="spec">
     <section class="spec__cell">
@@ -663,6 +670,7 @@
           <div class="pane__row">
             <span class="pane__cell"><button class="btn btn--secondary is-active" type="button">Lưu</button><span class="pane__tag">active</span></span>
             <span class="pane__cell"><button class="btn btn--secondary" type="button" disabled>Lưu</button><span class="pane__tag">disabled</span></span>
+            <span class="pane__cell"><button class="btn btn--secondary" type="button" aria-disabled="true">Lưu</button><span class="pane__tag">aria-disabled — cùng cách vẽ, vẫn tới được bằng Tab</span></span>
           </div>
           <div class="pane__row">
             <span class="pane__cell"><button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu</button><span class="pane__tag">destructive</span></span>
@@ -715,6 +723,7 @@
             <span class="pane__cell"><button class="btn btn--secondary is-focus" type="button">Lưu</button><span class="pane__tag">focus</span></span>
             <span class="pane__cell"><button class="btn btn--secondary is-active" type="button">Lưu</button><span class="pane__tag">active</span></span>
             <span class="pane__cell"><button class="btn btn--secondary" type="button" disabled>Lưu</button><span class="pane__tag">disabled</span></span>
+            <span class="pane__cell"><button class="btn btn--secondary" type="button" aria-disabled="true">Lưu</button><span class="pane__tag">aria-disabled — cùng cách vẽ, vẫn tới được bằng Tab</span></span>
           </div>
           <div class="pane__row">
             <span class="pane__cell"><button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu của tôi</button><span class="pane__tag">destructive</span></span>
@@ -765,6 +774,7 @@
           <div class="pane__row">
             <span class="pane__cell"><button class="btn btn--secondary is-active" type="button">Lưu</button><span class="pane__tag">active</span></span>
             <span class="pane__cell"><button class="btn btn--secondary" type="button" disabled>Lưu</button><span class="pane__tag">disabled</span></span>
+            <span class="pane__cell"><button class="btn btn--secondary" type="button" aria-disabled="true">Lưu</button><span class="pane__tag">aria-disabled — cùng cách vẽ, vẫn tới được bằng Tab</span></span>
           </div>
           <div class="pane__row">
             <span class="pane__cell"><button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu</button><span class="pane__tag">destructive</span></span>
@@ -815,6 +825,7 @@
             <span class="pane__cell"><button class="btn btn--secondary is-focus" type="button">Lưu</button><span class="pane__tag">focus</span></span>
             <span class="pane__cell"><button class="btn btn--secondary is-active" type="button">Lưu</button><span class="pane__tag">active</span></span>
             <span class="pane__cell"><button class="btn btn--secondary" type="button" disabled>Lưu</button><span class="pane__tag">disabled</span></span>
+            <span class="pane__cell"><button class="btn btn--secondary" type="button" aria-disabled="true">Lưu</button><span class="pane__tag">aria-disabled — cùng cách vẽ, vẫn tới được bằng Tab</span></span>
           </div>
           <div class="pane__row">
             <span class="pane__cell"><button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu của tôi</button><span class="pane__tag">destructive</span></span>

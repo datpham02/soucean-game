@@ -33,6 +33,11 @@
        100%), opacity numbers, and `0` — none of which belong to a token
        scale. This is checkable; components.md section 1.4 gives the grep.
 
+       Every colour here is a SEMANTIC token (`--color-*`) with exactly one
+       exception, named and argued where it sits: the modal scrim in section
+       14 reads the primitive `--slate-900`, because a backdrop is the one
+       value in this library that must NOT change with the theme.
+
      * THE SURFACE RULE — the one rule that shapes everything below.
        DESIGN.md measured a specific SET of foreground/background pairs, and
        it forbids using a pair that has not been measured and written down.
@@ -221,9 +226,31 @@
   transform: translateY(-100%);
 }
 
+/* The ring on THIS one control is drawn inside its own edge.
+
+   Everywhere else the ring sits 2px outside the element, on the surface
+   behind, because base.css needs it off a primary fill to stay visible. This
+   control is pinned flush to the top-left corner of the viewport, so outside
+   means off-screen on two of its four sides: the system ring is 3px at a 2px
+   offset, i.e. 2-5px beyond the element, and the first thing a keyboard user
+   ever focuses on this site was showing half its designed area. Accessibility
+   report A-11.
+
+   The offset here is the negative of the ring's WIDTH, not of the shared
+   offset. `outline-offset` moves the outline edge relative to the border box
+   and the ring is painted outward from that edge, so negating the 2px offset
+   would still leave 1px of a 3px ring outside the border box — still
+   off-screen on those two sides. Negating the width instead lands the ring
+   flush inside the border edge: all four sides on-screen, the control does
+   not move, the ring is not resized, and there is no new colour pair — it
+   sits on this element's own `surface` fill, the same pair it lands on when
+   it is drawn outside. The padding is var(--space-lg) = 16px, so 3px of
+   inset does not reach the label. */
 .skip-link:focus-visible,
 .skip-link.is-focus {
   transform: translateY(0);
+  outline: var(--focus-ring-width) solid var(--color-focus);
+  outline-offset: calc(var(--focus-ring-width) * -1);
 }
 
 /* --------------------------------------------------------------------------
@@ -501,6 +528,10 @@
      disabled  base.css's opacity 0.5 and not-allowed cursor. WCAG 1.4.3
                exempts an inactive control from the contrast minimum; the
                control is still never the ONLY way to reach a function.
+     aria-disabled
+               the SAME treatment, written out again below, because
+               base.css's `:disabled` selector does not match an attribute.
+               See the block after the variants.
    -------------------------------------------------------------------------- */
 
 .btn {
@@ -611,6 +642,36 @@
 .btn:active,
 .btn.is-active {
   transform: translateY(1px);
+}
+
+/* --- Unavailable but still reachable. One rule for every variant. ---------
+   Where a page must keep an unavailable control in the tab order and say why
+   it cannot be used, it ships an ENABLED button carrying aria-disabled="true"
+   (components.md section 5.5; account.html is the live case). That decision
+   is right, and on its own it is half a signal: base.css's `:disabled`
+   selector does not match an attribute, so without this block the button
+   renders pixel-identical to an available one and the unavailable state
+   reaches assistive technology ONLY. That is "never colour alone" inverted —
+   a state announced but not drawn — and it is the one place in this library
+   where it happened. Accessibility report A-04.
+
+   The treatment is base.css's, declaration for declaration, so a disabled
+   button and an aria-disabled button are indistinguishable by eye, which is
+   the point: the difference between them is reachability, not availability.
+   Focus is deliberately NOT suppressed — staying focusable is the whole
+   reason the attribute is used instead of the property. */
+.btn[aria-disabled='true'],
+.btn.is-disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* The press is a claim that the button did something. It did not. */
+.btn[aria-disabled='true']:active,
+.btn[aria-disabled='true'].is-active,
+.btn.is-disabled:active,
+.btn.is-disabled.is-active {
+  transform: none;
 }
 
 /* --------------------------------------------------------------------------
@@ -1024,7 +1085,28 @@
 }
 
 /* A checkbox or radio row: control first, then its label, both inside one
-   44px target. */
+   44px target.
+
+   The TARGET here is the row, not the box. A native checkbox paints at
+   var(--icon-md) — 20px, the size of an icon, because that is what it is —
+   and tokens.css asks for a 44px minimum target at every breakpoint. The two
+   are not in conflict as long as the 44px is real and contiguous, and the
+   row below is where it comes from. Accessibility report A-12.
+
+   What that costs is one rule and no pixels. The <label for> stretches to
+   the full height of the row, takes a floor of var(--target-min) on its
+   width, and reaches back over the flex gap — a negative start margin of
+   exactly one var(--space-sm), cancelled by an equal start padding, so the
+   label's text and everything after it in the row stay where they were to
+   the pixel while its BOX now begins at the checkbox's own edge. The dead
+   strip between control and label, where a near-miss tap used to land on
+   nothing, is gone, and a short label no longer decides how big the control
+   is.
+
+   This is also why `.choice` keeps `gap` rather than handing the spacing to
+   the label: a row may carry a third item after the label — the "Luôn bật"
+   mark on a locked consent category — and that item's spacing is the gap's
+   job, not the label's. */
 .choice {
   display: flex;
   align-items: center;
@@ -1042,6 +1124,13 @@
 }
 
 .choice label {
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  min-block-size: var(--target-min);
+  min-inline-size: var(--target-min);
+  margin-inline-start: calc(var(--space-sm) * -1);
+  padding-inline-start: var(--space-sm);
   font-weight: var(--font-weight-regular);
 }
 
@@ -1149,9 +1238,31 @@
   box-shadow: var(--shadow-md);
 }
 
+/* The scrim colour. A backdrop has ONE job — to recede — so it must be dark
+   in both themes, and it is the one value in this library that must NOT
+   follow the theme.
+
+   It used to read `--color-text`, on the reasoning "the page's own ink at
+   half strength". That reasoning holds only in the light theme, where
+   `--color-text` is `--ink-900`. In dark it is `--ink-100`, a near-white, so
+   the dark-theme modal dimmed the page by washing it out: open a dialog and
+   everything behind it got LIGHTER and lost contrast. Accessibility report
+   A-05.
+
+   `--slate-900` is the dark ramp's deepest tone. It is a primitive, declared
+   once on :root in tokens.css and never re-declared per theme, so it is the
+   same colour under both — which is exactly the property a scrim needs and
+   no semantic token has. This is the only primitive this file reads, and it
+   is read through a name of its own so the value can be promoted to
+   tokens.css as `--color-backdrop` in M1-01's own Task without touching any
+   rule here. */
+:root {
+  --dialog-scrim: var(--slate-900);
+}
+
 .dialog::backdrop {
-  /* Token-derived, not a raw colour: the page's own ink at half strength. */
-  background-color: var(--color-text);
+  /* Token-derived, not a raw colour: see --dialog-scrim above. */
+  background-color: var(--dialog-scrim);
   opacity: 0.5;
 }
 
