@@ -171,8 +171,9 @@
 
    CONTRAST. The label is `text-muted` on the slot's own `sunken` fill. That
    pair is recorded in DESIGN.md -> "Measured contrast": 5.65:1 light and
-   8.23:1 dark, against a requirement of 4.5. Both pass. Do not restate those
-   two numbers anywhere else — cite the table (SOU-24, A-06).
+   8.23:1 dark, against a requirement of 4.5. Both pass. If these two numbers
+   appear anywhere else, they must be character-for-character the ones in that
+   table (SOU-24, A-06).
 
    It stays `text-muted` rather than `text` deliberately. The label names a
    reserved box; it is chrome, not content, and at `text` weight it would read
