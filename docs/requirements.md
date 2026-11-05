@@ -47,7 +47,7 @@ From the plan, §2. Routes are **proposed** there; M2 confirms them. Items marke
 | Home / game list | `/` | A card per game, built from **each game's manifest** **[GAM-16]**: thumbnail, title, short description, controls, a "Play" button, and this week's top 3 | The list is generated from the manifests at build time. Adding a game is adding its manifest and building — no hand-edited list. |
 | Play page | `/games/<game_id>` | The game frame (mounted or iframe **[GAM-16]**), title, controls, a weekly leaderboard beside or below it, and the ad slots of §5 | The game fills its container and letterboxes. The page never overlaps the frame. |
 | Leaderboards | `/leaderboards`, `/leaderboards/<game_id>` | This week's board per game, last week's final board, and the player's own rank and personal best | The week starts **Monday 00:00 UTC+7** (GAM-16 recommends this; GAM-16 confirms it). |
-| Account and profile | `/account` | Display name (editable, moderated), the anonymous id state, "Link Google or email" to keep scores across devices, sign out, and delete my data | Linking keeps the same player id (OQ-036). Delete removes the scores and the profile. |
+| Account and profile | `/account` | Display name (editable, moderated), the anonymous id state, "Link Google or email" to keep scores across devices, sign out, and delete my data | Linking keeps the same player id. Delete removes the scores and the profile. |
 | Privacy policy | `/privacy` | What is stored, why, for how long, who processes it (backend, hosting, ad network), the player's rights, and contact | Written with legal input (OQ-039). Covers Decree 13/2023, and GDPR if EU players are expected. |
 | About | `/about` | Studio info and contact | Ad networks usually expect this page (OQ-038). |
 | Terms | `/terms` | Terms of use | Ad networks usually expect this page (OQ-038). |
@@ -93,7 +93,7 @@ Requirements that apply to **every** page, plan or no plan:
 | Link **email (magic link)** | Optional, from `/account` | Same purpose; no password. |
 
 Linking **keeps the same player id** — it upgrades the existing identity rather
-than creating a second one, so no score is orphaned (OQ-036, `UNVERIFIED`).
+than creating a second one, so no score is orphaned.
 
 The backend provider is settled by ADR-021: Laravel issues the player token and
 handles account linking. The behaviour above is what the Laravel backend must
@@ -253,7 +253,7 @@ numbers above. Consult `ui-designer` on slot geometry before implementing one.
 | **any** | **production** | the **Board Operator** only |
 
 - No production credential is requested, read, stored or used by an agent — this
-  covers database admin and service-role keys, backend access tokens, hosting
+  covers database admin credentials, backend access tokens, hosting
   tokens, DNS, ad-network accounts and payment keys.
 - No deploy to production, no migration against the production database, no
   production secret change, and no dev configuration pointed at production.
@@ -270,7 +270,7 @@ numbers above. Consult `ui-designer` on slot geometry before implementing one.
 A change is done when:
 
 - the build, lint and unit tests pass;
-- row-level-security policy tests pass for every table it touches;
+- server-side access-rule feature tests pass for every protected player-data path it touches;
 - a visible change has a Playwright end-to-end test;
 - a change to a path in `AGENTS.md` §4 is marked `Security-sensitive: yes`, lists
   its paths, and has Board review in addition to `qa`;
@@ -288,7 +288,7 @@ A change is done when:
 | 4 | Routes in §2 are the plan's **proposed** routes. M2 confirms them. | `web-engineer`, at M2 |
 | 5 | The weekly reset boundary (Monday 00:00 UTC+7) is GAM-16's recommendation and GAM-16 confirms it. | `game-director`, via `project-manager` |
 
-Upstream open questions the plan depends on — OQ-036 (identity and free tier),
-OQ-037 (hosting), OQ-038 (ads and consent), OQ-039 (legal) — live in the
+Upstream open questions the plan depends on — OQ-037 (hosting), OQ-038 (ads and
+consent), OQ-039 (legal) — live in the
 framework repository's
 [`open-questions.md`](https://github.com/datpham02/game-studio/blob/main/docs/architecture/open-questions.md).

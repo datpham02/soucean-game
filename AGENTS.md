@@ -47,7 +47,7 @@ is fixed now by ADR-021.
 | Production build | `npm run build` | M2 |
 | End-to-end tests (Playwright) | `npm run test:e2e` | M4 |
 | Backend feature tests | `docker compose run --rm test` | M4 |
-| Apply migrations — **dev project only** | `npm run db:migrate` | M4 |
+| Apply migrations | `docker compose run --rm app php artisan migrate` | M4 |
 
 CI ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) runs install, lint and
 test, and nothing else. It skips a step that does not exist yet, so it stays green
@@ -78,7 +78,7 @@ This is the rule that matters most in this repository.
 Rules that do not change with the milestone:
 
 - **Never** ask for, read, store or use a production credential. This covers
-  database admin and service-role keys, backend access tokens, hosting tokens,
+  database admin credentials, backend access tokens, hosting tokens,
   DNS credentials, ad-network accounts and payment keys.
 - **Never** deploy to production, apply a migration to the production database,
   change a production secret, or point dev configuration at production.

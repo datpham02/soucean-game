@@ -31,7 +31,7 @@ This plan lives in the framework repository only while the project is `planned` 
 | Home / game list | `/` | A card per game from **each game's manifest** **[GAM-16]**: thumbnail, title, short description, controls, a "Play" button, and this week's top 3 | The list is built from the manifests at build time, so adding a game is adding its manifest and build. |
 | Play page | `/games/<game_id>` | The game frame (mounted or iframe **[GAM-16]**), title, controls, a weekly leaderboard beside or below it, and the ad slots (§4) | The game fills its container and letterboxes. The page never overlaps the frame. |
 | Leaderboards | `/leaderboards`, `/leaderboards/<game_id>` | This week's board per game, last week's final board, and the player's own rank and personal best | The week starts Monday 00:00 UTC+7, as GAM-16 recommends; GAM-16 confirms. |
-| Account and profile | `/account` | Display name (editable, moderated), the anonymous id state, "Link Google or email" to keep scores across devices, sign out, and delete my data | Linking keeps the same player id (OQ-036). Delete removes the scores and the profile. |
+| Account and profile | `/account` | Display name (editable, moderated), the anonymous id state, "Link Google or email" to keep scores across devices, sign out, and delete my data | Linking keeps the same player id. Delete removes the scores and the profile. |
 | Privacy policy | `/privacy` | What is stored, why, for how long, who processes it (backend, hosting, ad network), the player's rights, and contact | Written with legal input (OQ-039). Covers Decree 13/2023, and GDPR if EU players are expected. |
 | Cookie consent | Banner on first visit, plus a `/privacy#cookies` settings link in the footer | Accept / Reject / Settings. **No ad script loads before consent.** Essential storage (session, consent choice) only | Equal-weight "Reject". If ads are shown to EU/UK visitors, a certified consent tool may be required (OQ-038). |
 | Footer pages | `/about`, `/terms` | Studio info, terms of use and contact | Ad networks usually expect these (OQ-038). |
@@ -105,7 +105,7 @@ The roles are `web-engineer` (new), `ui-designer`, `qa`, `project-manager`, `pro
 | Later | More games, rewarded ads or purchases (separate ADR and legal), optional website analytics | — | Board decision |
 
 ## 6. Security and review summary
-- Production keys are never bound to agents. The Board holds them. Agents use the dev project only.
+- Production keys are never bound to agents. The Board holds them. Agents use the local Docker runtime only.
 - Production deploys, production migrations, DNS and ad settings are done by the Board.
 - PRs on auth, authorization policies, rate limiters, `submit_score` or rewards, payments, secrets or CSP are **security-sensitive**. They need a Board review in addition to `qa`.
 - Full rules: [security-architecture.md §10](https://github.com/datpham02/game-studio/blob/main/docs/architecture/security-architecture.md#10-production-environments-platform-projects).

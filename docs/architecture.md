@@ -42,7 +42,7 @@ in milestone M2 and recorded here, with the reasoning, as the first entry in §8
 Until that entry exists:
 
 - no runtime dependency is added;
-- no backend, hosting, analytics or ad-network configuration is added;
+- no hosting, analytics or ad-network configuration is added;
 - no framework is pinned in documentation, CI or tooling config.
 
 ### 2.1 Frontend recommendations from the plan (not decisions)
