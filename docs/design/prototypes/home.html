@@ -597,47 +597,52 @@
             <p class="state__text">Kiểm tra kết nối rồi thử lại.</p>
             <button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Thử lại</button>
           </div>
-          <div class="u-visually-hidden" role="status">Đang tải danh sách trò chơi…</div>
-          <div aria-busy="true">
-            <ul class="game-grid" aria-hidden="true">
-              <li class="game-card">
-                <div class="skeleton">
-                  <div class="skeleton__block skeleton__block--media"></div>
-                  <span class="skeleton__bar sk-reserve--title skeleton__bar--most"></span>
-                  <span class="skeleton__bar sk-reserve--line"></span>
-                  <span class="skeleton__bar sk-reserve--line skeleton__bar--half"></span>
-                  <span class="skeleton__bar sk-reserve--meta skeleton__bar--most"></span>
-                  <span class="skeleton__block sk-reserve--top3"></span>
-                  <span class="skeleton__block sk-reserve--action"></span>
-                </div>
-              </li>
-              <li class="game-card">
-                <div class="skeleton">
-                  <div class="skeleton__block skeleton__block--media"></div>
-                  <span class="skeleton__bar sk-reserve--title skeleton__bar--half"></span>
-                  <span class="skeleton__bar sk-reserve--line"></span>
-                  <span class="skeleton__bar sk-reserve--line skeleton__bar--most"></span>
-                  <span class="skeleton__bar sk-reserve--meta skeleton__bar--half"></span>
-                  <span class="skeleton__block sk-reserve--top3"></span>
-                  <span class="skeleton__block sk-reserve--action"></span>
-                </div>
-              </li>
-              <li class="game-card">
-                <div class="skeleton">
-                  <div class="skeleton__block skeleton__block--media"></div>
-                  <span class="skeleton__bar sk-reserve--title skeleton__bar--most"></span>
-                  <span class="skeleton__bar sk-reserve--line"></span>
-                  <span class="skeleton__bar sk-reserve--line skeleton__bar--half"></span>
-                  <span class="skeleton__bar sk-reserve--meta skeleton__bar--short"></span>
-                  <span class="skeleton__block sk-reserve--top3"></span>
-                  <span class="skeleton__block sk-reserve--action"></span>
-                </div>
-              </li>
-            </ul>
-          </div>
+        </div>
+        <div class="shell main" tabindex="-1">
+          <section class="page-section">
+            <h4 class="page-section__title">Trò chơi</h4>
+            <div class="u-visually-hidden" role="status">Đang tải danh sách trò chơi…</div>
+            <div aria-busy="true">
+              <ul class="game-grid" aria-hidden="true">
+                <li class="game-card">
+                  <div class="skeleton">
+                    <div class="skeleton__block skeleton__block--media"></div>
+                    <span class="skeleton__bar sk-reserve--title skeleton__bar--most"></span>
+                    <span class="skeleton__bar sk-reserve--line"></span>
+                    <span class="skeleton__bar sk-reserve--line skeleton__bar--half"></span>
+                    <span class="skeleton__bar sk-reserve--meta skeleton__bar--most"></span>
+                    <span class="skeleton__block sk-reserve--top3"></span>
+                    <span class="skeleton__block sk-reserve--action"></span>
+                  </div>
+                </li>
+                <li class="game-card">
+                  <div class="skeleton">
+                    <div class="skeleton__block skeleton__block--media"></div>
+                    <span class="skeleton__bar sk-reserve--title skeleton__bar--half"></span>
+                    <span class="skeleton__bar sk-reserve--line"></span>
+                    <span class="skeleton__bar sk-reserve--line skeleton__bar--most"></span>
+                    <span class="skeleton__bar sk-reserve--meta skeleton__bar--half"></span>
+                    <span class="skeleton__block sk-reserve--top3"></span>
+                    <span class="skeleton__block sk-reserve--action"></span>
+                  </div>
+                </li>
+                <li class="game-card">
+                  <div class="skeleton">
+                    <div class="skeleton__block skeleton__block--media"></div>
+                    <span class="skeleton__bar sk-reserve--title skeleton__bar--most"></span>
+                    <span class="skeleton__bar sk-reserve--line"></span>
+                    <span class="skeleton__bar sk-reserve--line skeleton__bar--half"></span>
+                    <span class="skeleton__bar sk-reserve--meta skeleton__bar--short"></span>
+                    <span class="skeleton__block sk-reserve--top3"></span>
+                    <span class="skeleton__block sk-reserve--action"></span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
         </div>
       </div></div>
-      <span class="mk-tag">Hai khối đầu xếp cạnh nhau để thấy chúng cao bằng nhau. Đo <code>getBoundingClientRect().height</code> của cả hai — phải ra cùng một số. Khối thứ ba là trạng thái <em>đang tải</em> ở giao diện tối: <strong>đây là ô duy nhất của lưới mang đủ cả ba</strong>, điều mà <code>accessibility-report.md</code> ghi là còn thiếu ở <strong>A-08</strong>. Nó là lưới thật với thẻ thật, không phải khối <code>.state</code> — lý do ở ngay đoạn mở §3.</span>
+      <span class="mk-tag">Hai khối đầu xếp cạnh nhau để thấy chúng cao bằng nhau. Đo <code>getBoundingClientRect().height</code> của cả hai — phải ra cùng một số. Khối thứ ba, bên dưới hộp đó, là trạng thái <em>đang tải</em> ở giao diện tối: <strong>đây là ô duy nhất của lưới mang đủ cả ba</strong>, điều mà <code>accessibility-report.md</code> ghi là còn thiếu ở <strong>A-08</strong>. Nó là lưới thật với thẻ thật, không phải khối <code>.state</code> — lý do ở ngay đoạn mở §3 — và nằm trong <code>.shell main</code> y như ô sáng 1280 ở trên, nên ba thẻ rộng đúng bằng ba thẻ ở đó.</span>
     </section>
   </div>
 </section>

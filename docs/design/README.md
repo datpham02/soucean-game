@@ -105,8 +105,10 @@ is a separate question and is answered in §3.
 - **ᵃ** The state is designed and demonstrated. When the audit ran it was **not
   in every one of the four width × theme cells**, which was finding **A-08**
   (Minor). SOU-25 drew the missing cells; §3 now records every cell the audit
-  listed as covered, and names the three by-design absences that are stated
-  rather than drawn. Nothing is claimed here that §3 does not repeat.
+  listed as covered, and carries a note on the four rows where something is
+  stated rather than drawn — two of them by design (the game frame and the
+  cookie settings screen have no empty state). Nothing is claimed here that §3
+  does not repeat.
 - **ᵇ** The play wireframe carries **three** views, not two: 375, 768 and 1280.
   The 768 px view is the compact-band check that `ad-slots.md` §11 requires.
 - **ᶜ** **The game frame has no empty state, by design.** Its four displays are
