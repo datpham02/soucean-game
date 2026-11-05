@@ -1,0 +1,2051 @@
+<!doctype html>
+<html lang="vi" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup — Tài khoản và hồ sơ · Soucean Game (SOU-6, M1-08)</title>
+<link rel="stylesheet" href="assets/account.css">
+</head>
+<body class="mk-sheet">
+
+<!-- ==========================================================================
+     Icon set. Line icons on a 24x24 grid at the single 1.5px stroke base.css
+     sets — original geometry (circles, chevrons, straight segments), so there
+     is no third-party asset and no licence to record.
+
+     All ten are M1-04's, COPIED unchanged. This Task draws no new icon: the
+     page needed none, and an icon invented for one page is an icon the
+     library does not own.
+
+     They are copied into this document rather than referenced across files on
+     purpose: a cross-document <use> would be a network request, and this
+     Task's rules allow none. Every <use> below is same-document (#id).
+     ========================================================================== -->
+<svg class="u-visually-hidden" aria-hidden="true" focusable="false"><defs>
+  <symbol id="i-empty" viewBox="0 0 24 24"><path d="M5.5 5.5h13l2.5 8v5h-18v-5Z"/><path d="M3 13.5h4.5l1.5 3h6l1.5-3H21"/></symbol>
+  <symbol id="i-success" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12.4 2.6 2.6L16 9.6"/></symbol>
+  <symbol id="i-warning" viewBox="0 0 24 24"><path d="M12 4 2.6 20h18.8Z"/><path d="M12 10v4"/><path d="M12 17h.01"/></symbol>
+  <symbol id="i-error" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6"/><path d="m15 9-6 6"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12"/><path d="m18 6-12 12"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-.7 4.3"/><path d="M20 5v6h-6"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2"/><path d="M12 19.5v2"/><path d="m4.5 4.5 1.4 1.4"/><path d="m18.1 18.1 1.4 1.4"/><path d="M2.5 12h2"/><path d="M19.5 12h2"/><path d="m4.5 19.5 1.4-1.4"/><path d="m18.1 5.9 1.4-1.4"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.4A8.5 8.5 0 0 1 9.6 4 8.5 8.5 0 1 0 20 14.4Z"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="m6.5 7 1 13h9l1-13"/><path d="M9.5 7V4.5h5V7"/></symbol>
+</defs></svg>
+
+<header>
+  <p class="mk-sheet__kicker">Soucean Game · M1 · SOU-6 (M1-08) · mockup, độ chi tiết cao</p>
+  <h1>Tài khoản và hồ sơ — <code>/account</code></h1>
+  <p class="mk-sheet__lede">
+    Ba việc trang này phải làm: cho <strong>sửa tên hiển thị</strong>, cho
+    <strong>liên kết hoặc bỏ liên kết</strong> một cách đăng nhập, và cho
+    <strong>xóa toàn bộ dữ liệu</strong> — kèm một bản kê trung thực những gì
+    tài khoản đang giữ. Tờ này vẽ trang ở cả hai chiều rộng thiết kế (375 px và
+    1280 px), ở cả hai giao diện (sáng và tối), cùng đủ các trạng thái: chưa
+    đăng nhập, đang tải, đang lưu, lưu hỏng, bị kiểm duyệt từ chối, đang xóa,
+    xóa xong và xóa hỏng.
+  </p>
+  <p class="mk-sheet__lede">
+    <strong>Đây là trang mà lời hứa “dữ liệu tối thiểu” của studio trở thành
+    thứ nhìn thấy được.</strong> Vì vậy bản kê ở §1 và §6 không phải là phần
+    trang trí: nó là danh sách đầy đủ các trường trong
+    <a class="link" href="../../requirements.md">requirements.md</a> §4.1, nói
+    bằng tiếng của người chơi, kèm cả những thứ <em>không</em> được lưu.
+  </p>
+  <p class="mk-sheet__lede">
+    Mọi thành phần đều lấy từ thư viện M1-04
+    (<a class="link" href="components.html">components.html</a>); Task này
+    <strong>không thêm thành phần dùng chung nào, không tạo kiểu lại thành phần
+    nào</strong> và <strong>không tạo kiểu lại ô quảng cáo</strong> —
+    <code>ads.css</code> là chủ sở hữu duy nhất của <code>.ad-slot</code>. Cấu
+    trúc và thứ tự đọc là của
+    <a class="link" href="wireframes/04-account.html">wireframe M1-03</a>: tiêu
+    đề, mục lục trong trang, Hồ sơ, Đăng nhập, Dữ liệu của tôi, rồi hộp thoại
+    xác nhận.
+  </p>
+  <p class="mk-sheet__lede">
+    Mở tệp này bằng trình duyệt là xong — không máy chủ, không bước build, không
+    phụ thuộc, không một yêu cầu mạng nào. Không mã quảng cáo, không thẻ quảng
+    cáo, không khung nhúng, không bộ theo dõi, <strong>không một dòng script
+    nào</strong>, và <strong>không một nhà cung cấp đăng nhập, SDK hay yêu cầu
+    bên thứ ba nào</strong> — ở đây chỉ có màn hình. Chưa có backend nào trước
+    M4.
+  </p>
+  <nav class="mk-sheet__lede" aria-label="Mục lục trang mockup">
+    <ol>
+      <li><a class="link" href="#s1">Trang đầy đủ · bốn bản dựng</a></li>
+      <li><a class="link" href="#s2">Tên hiển thị · mọi trạng thái</a></li>
+      <li><a class="link" href="#s3">Đăng nhập và liên kết · mọi trạng thái</a></li>
+      <li><a class="link" href="#s4">Xóa dữ liệu của tôi · cả luồng</a></li>
+      <li><a class="link" href="#s5">Chưa đăng nhập</a></li>
+      <li><a class="link" href="#s6">Tài khoản giữ những gì</a></li>
+      <li><a class="link" href="#s7">Ô quảng cáo</a></li>
+      <li><a class="link" href="#s8">Bàn phím, tiêu điểm và thứ tự đọc</a></li>
+      <li><a class="link" href="#s9">Tương phản</a></li>
+      <li><a class="link" href="#s10">Cách đọc tờ này</a></li>
+    </ol>
+  </nav>
+</header>
+
+<!-- ==========================================================================
+     1. THE FULL PAGE — four renders at the two design widths.
+     ========================================================================== -->
+<section class="mk-section" id="s1">
+  <h2>1. Trang đầy đủ · bốn bản dựng</h2>
+  <p>
+    Sáng và tối, 375 px và 1280 px. Trang là <strong>một cột ở cả hai chiều
+    rộng</strong>, giới hạn ở khổ đọc: mọi vùng ở đây là biểu mẫu hoặc văn bản
+    ngắn, và một ô nhập kéo dài 1200 px là ô có nhãn và có thông báo lỗi cách
+    nhau cả màn hình. Chiều rộng dư ở 1280 px trở thành lề, không thành độ dài
+    dòng. Đúng ba luật đổi theo dải: hai thẻ nhà cung cấp nằm cạnh nhau, hai
+    hành động của mục “Dữ liệu của tôi” nằm trên một hàng, và ô quảng cáo
+    728 × 90 bật lên trong header.
+  </p>
+  <p>
+    Bản dựng này là trạng thái mặc định của một người chơi
+    <strong>đang chơi ẩn danh</strong>: có tên hiển thị, chưa liên kết cách đăng
+    nhập nào. Hộp thoại xác nhận xóa được vẽ <strong>tại chỗ</strong> ở cuối
+    trang, đúng như wireframe M1-03 §4.4 yêu cầu — trên trang thật nó là một
+    hộp thoại modal và chỉ hiện khi được mở.
+  </p>
+
+  <div class="mk-specs mk-specs--row">
+    <section>
+      <h3 class="mk-cap">Sáng · 375 px</h3>
+      <div class="mk-view mk-view--mobile">
+        <div class="site-header">
+          <a class="skip-link" href="#ac-a">Tới nội dung chính</a>
+          <div class="shell site-header__bar">
+            <a class="wordmark" href="home.html">Soucean Game</a>
+            <div class="site-header__actions">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="th-a" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="th-a"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+            </div>
+          </div>
+          <nav class="shell" aria-label="Chính · sáng 375">
+            <button class="btn btn--quiet site-nav__toggle" type="button" aria-expanded="false" aria-controls="nav-a"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-menu"/></svg>Menu</button>
+            <ul class="site-nav__list" id="nav-a">
+              <li><a class="site-nav__link" href="home.html">Trò chơi</a></li>
+              <li><a class="site-nav__link" href="leaderboards.html">Bảng xếp hạng</a></li>
+              <li><a class="site-nav__link" href="#s1" aria-current="page">Tài khoản</a></li>
+            </ul>
+          </nav>
+          <!-- In the DOM at every width; `display: none` below 768px. The slot
+               is not removed by the band, it is switched off by it. -->
+          <div class="shell">
+            <aside class="ad-slot ad-slot--header-leaderboard" aria-label="Quảng cáo">
+              <span class="ad-slot__label">Quảng cáo · 728 × 90</span>
+            </aside>
+          </div>
+        </div>
+
+        <div class="shell main" id="ac-a">
+          <h4 class="ac-title">Tài khoản</h4>
+          <p class="ac-lede ac-measure">Tên hiển thị của bạn, cách bạn đăng nhập, và mọi thứ tài khoản này giữ về bạn — kèm nút xóa tất cả.</p>
+
+          <nav class="ac-toc" aria-label="Mục trong trang · sáng 375">
+            <ul class="ac-toc__list">
+              <li><a class="link" href="#hs-a">Hồ sơ</a></li>
+              <li><a class="link" href="#dn-a">Đăng nhập</a></li>
+              <li><a class="link" href="#dl-a">Dữ liệu của tôi</a></li>
+            </ul>
+          </nav>
+
+          <section class="ac-section" id="hs-a" aria-labelledby="hsh-a">
+            <h5 class="ac-section__title" id="hsh-a">Hồ sơ</h5>
+            <p class="ac-section__intro ac-measure">Tên hiển thị là thứ duy nhất người khác nhìn thấy về bạn trên bảng xếp hạng.</p>
+            <form class="ac-profile__form" method="post" action="#hs-a">
+              <div class="field ac-profile__field">
+                <label class="field__label" for="name-a">Tên hiển thị <span class="field__opt">· bắt buộc</span></label>
+                <input id="name-a" name="display_name" type="text" value="Hải" autocomplete="nickname" aria-describedby="namehelp-a">
+                <p class="field__help" id="namehelp-a">3–20 ký tự. Tên được kiểm duyệt trước khi hiện trên bảng xếp hạng.</p>
+              </div>
+              <div class="ac-profile__actions">
+                <button class="btn btn--primary" type="submit">Lưu</button>
+              </div>
+            </form>
+          </section>
+
+          <section class="ac-section" id="dn-a" aria-labelledby="dnh-a">
+            <h5 class="ac-section__title" id="dnh-a">Đăng nhập</h5>
+            <p class="ac-section__intro ac-measure">Bạn chơi được ngay, không cần đăng ký. Liên kết một cách đăng nhập nếu bạn muốn giữ điểm khi đổi thiết bị.</p>
+            <p class="ac-identity ac-measure"><strong>Bạn đang chơi ẩn danh.</strong> Điểm của bạn đã được lưu và vẫn là của bạn. Chưa có cách đăng nhập nào được liên kết, nên hiện tại bạn chỉ quay lại được từ trình duyệt này.</p>
+            <div class="ac-links">
+              <section class="card ac-link" aria-labelledby="gh-a">
+                <div class="ac-link__head">
+                  <h6 class="ac-link__title" id="gh-a">Google</h6>
+                  <span class="badge">Chưa liên kết</span>
+                </div>
+                <p class="ac-link__note">Liên kết để đăng nhập lại trên thiết bị khác. Điểm của bạn giữ nguyên — liên kết nâng cấp danh tính sẵn có chứ không tạo tài khoản thứ hai.</p>
+                <div class="ac-link__actions">
+                  <button class="btn btn--secondary" type="button">Liên kết Google</button>
+                </div>
+              </section>
+              <section class="card ac-link" aria-labelledby="eh-a">
+                <div class="ac-link__head">
+                  <h6 class="ac-link__title" id="eh-a">Email</h6>
+                  <span class="badge">Chưa liên kết</span>
+                </div>
+                <p class="ac-link__note">Chúng tôi gửi một liên kết đăng nhập tới hộp thư của bạn. Không mật khẩu.</p>
+                <div class="field ac-link__field">
+                  <label class="field__label" for="mail-a">Địa chỉ email</label>
+                  <input id="mail-a" name="email" type="email" autocomplete="email" aria-describedby="mailhelp-a">
+                  <p class="field__help" id="mailhelp-a">Chỉ dùng để gửi liên kết đăng nhập.</p>
+                </div>
+                <div class="ac-link__actions">
+                  <button class="btn btn--secondary" type="button">Gửi liên kết đăng nhập</button>
+                </div>
+              </section>
+            </div>
+            <!-- Sign-out is REACHABLE BUT UNAVAILABLE here, not hidden.
+                 Signing out of an identity with nothing linked would leave the
+                 player unable to get back to their own scores, so the control
+                 says so instead of pretending. components.md section 5.5 fixes
+                 the mechanism: aria-disabled on an ENABLED button, with the
+                 reason in text, never `disabled` — which would drop it out of
+                 the tab order and tell a keyboard user nothing at all. -->
+            <div class="ac-signout">
+              <button class="btn btn--secondary" type="button" aria-disabled="true" aria-describedby="sowhy-a">Đăng xuất</button>
+            </div>
+            <p class="ac-link__note" id="sowhy-a">Chưa đăng xuất được: chưa có cách đăng nhập nào được liên kết, nên đăng xuất bây giờ sẽ khiến bạn không quay lại được điểm của mình. Liên kết Google hoặc email trước.</p>
+          </section>
+
+          <section class="ac-section" id="dl-a" aria-labelledby="dlh-a">
+            <h5 class="ac-section__title" id="dlh-a">Dữ liệu của tôi</h5>
+            <p class="ac-section__intro ac-measure">Đây là toàn bộ những gì tài khoản này giữ. Không có mục nào khác.</p>
+            <table class="ac-what">
+              <caption>Những gì tài khoản của bạn giữ</caption>
+              <thead><tr><th scope="col">Thứ được lưu</th><th scope="col">Vì sao cần</th></tr></thead>
+              <tbody>
+                <tr><th class="ac-what__cell" scope="row">Tên hiển thị</th><td>Để hiện tên bạn trên bảng xếp hạng.</td></tr>
+                <tr><th class="ac-what__cell" scope="row">Mã người chơi</th><td>Để nối điểm với bạn. Mã này không được in ở đâu trên trang.</td></tr>
+                <tr><th class="ac-what__cell" scope="row">Ngày tạo tài khoản</th><td>Để xử lý lạm dụng.</td></tr>
+                <tr><th class="ac-what__cell" scope="row">Điểm của bạn</th><td>Mỗi lần ghi điểm gồm: trò chơi, tuần, điểm, thời gian sống sót, seed và phiên bản trò chơi. Dùng để xếp hạng và để kiểm tra điểm có hợp lý không.</td></tr>
+              </tbody>
+            </table>
+            <p class="ac-what__note">Mọi dòng trong bảng được giữ cho tới khi bạn xóa dữ liệu của mình. Không có thời hạn nào khác.</p>
+            <p class="ac-what__note"><strong>Những thứ không được lưu:</strong></p>
+            <ul class="ac-notstored">
+              <li>Hồ sơ của bạn không có bản sao địa chỉ email nào.</li>
+              <li>Không có địa chỉ IP trong bất kỳ bảng nào.</li>
+              <li>Không đo đạc, không theo dõi, không phân tích hành vi.</li>
+            </ul>
+            <div class="ac-data__actions">
+              <a class="btn btn--secondary" href="#s1">Tải bản sao dữ liệu của tôi</a>
+              <button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu của tôi</button>
+            </div>
+          </section>
+
+          <!-- Drawn in place, as wireframes.md section 4.4 asks. On the real
+               page this is a dialog element opened with showModal(); here it
+               is a plain div wearing the component's class, exactly as
+               components.html section 14 draws its static copies. Tag names
+               are spelled out rather than written in angle brackets so that a
+               reviewer counting opening against closing tags is not given a
+               false positive by this comment. -->
+          <div class="dialog" role="dialog" aria-labelledby="dgh-a">
+            <div class="dialog__head">
+              <h6 class="dialog__title" id="dgh-a">Xóa dữ liệu của tôi?</h6>
+              <button class="btn btn--quiet btn--icon" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-close"/></svg><span class="u-visually-hidden">Đóng</span></button>
+            </div>
+            <div class="dialog__body">
+              <p>Những thứ sau sẽ bị xóa khỏi máy chủ:</p>
+              <ul class="ac-dialog__list">
+                <li>tên hiển thị của bạn;</li>
+                <li>mã người chơi và ngày tạo tài khoản;</li>
+                <li>toàn bộ điểm của bạn, ở mọi trò chơi và mọi tuần — kể cả những điểm đang nằm trên bảng xếp hạng.</li>
+              </ul>
+              <p class="ac-dialog__warn">Không thể hoàn tác. Sau khi xóa, bạn sẽ được đăng xuất.</p>
+            </div>
+            <div class="dialog__actions">
+              <button class="btn btn--quiet" type="button">Hủy</button>
+              <button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa vĩnh viễn</button>
+            </div>
+          </div>
+        </div>
+
+        <footer class="site-footer">
+          <div class="shell">
+            <ul class="site-footer__links">
+              <li><a class="link" href="about.html">Giới thiệu</a></li>
+              <li><a class="link" href="terms.html">Điều khoản</a></li>
+              <li><a class="link" href="#s1">Quyền riêng tư</a></li>
+              <li><a class="link" href="#s1">Cài đặt cookie</a></li>
+            </ul>
+            <p class="site-footer__fine">© 2026 Soucean Game</p>
+          </div>
+        </footer>
+      </div>
+      <span class="mk-tag">Dải mobile: <strong>không có ô quảng cáo nào</strong>. Hai thẻ nhà cung cấp xếp chồng; hai hành động của “Dữ liệu của tôi” xếp chồng.</span>
+    </section>
+
+    <section>
+      <h3 class="mk-cap">Tối · 375 px</h3>
+      <div class="mk-view mk-view--mobile" data-theme="dark">
+        <div class="site-header">
+          <a class="skip-link" href="#ac-b">Tới nội dung chính</a>
+          <div class="shell site-header__bar">
+            <a class="wordmark" href="home.html">Soucean Game</a>
+            <div class="site-header__actions">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="th-b"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="th-b" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+            </div>
+          </div>
+          <nav class="shell" aria-label="Chính · tối 375">
+            <button class="btn btn--quiet site-nav__toggle" type="button" aria-expanded="false" aria-controls="nav-b"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-menu"/></svg>Menu</button>
+            <ul class="site-nav__list" id="nav-b">
+              <li><a class="site-nav__link" href="home.html">Trò chơi</a></li>
+              <li><a class="site-nav__link" href="leaderboards.html">Bảng xếp hạng</a></li>
+              <li><a class="site-nav__link" href="#s1" aria-current="page">Tài khoản</a></li>
+            </ul>
+          </nav>
+          <div class="shell">
+            <aside class="ad-slot ad-slot--header-leaderboard" aria-label="Quảng cáo">
+              <span class="ad-slot__label">Quảng cáo · 728 × 90</span>
+            </aside>
+          </div>
+        </div>
+
+        <div class="shell main" id="ac-b">
+          <h4 class="ac-title">Tài khoản</h4>
+          <p class="ac-lede ac-measure">Tên hiển thị của bạn, cách bạn đăng nhập, và mọi thứ tài khoản này giữ về bạn — kèm nút xóa tất cả.</p>
+
+          <nav class="ac-toc" aria-label="Mục trong trang · tối 375">
+            <ul class="ac-toc__list">
+              <li><a class="link" href="#hs-b">Hồ sơ</a></li>
+              <li><a class="link" href="#dn-b">Đăng nhập</a></li>
+              <li><a class="link" href="#dl-b">Dữ liệu của tôi</a></li>
+            </ul>
+          </nav>
+
+          <section class="ac-section" id="hs-b" aria-labelledby="hsh-b">
+            <h5 class="ac-section__title" id="hsh-b">Hồ sơ</h5>
+            <p class="ac-section__intro ac-measure">Tên hiển thị là thứ duy nhất người khác nhìn thấy về bạn trên bảng xếp hạng.</p>
+            <form class="ac-profile__form" method="post" action="#hs-b">
+              <div class="field ac-profile__field">
+                <label class="field__label" for="name-b">Tên hiển thị <span class="field__opt">· bắt buộc</span></label>
+                <input id="name-b" name="display_name" type="text" value="Hải" autocomplete="nickname" aria-describedby="namehelp-b">
+                <p class="field__help" id="namehelp-b">3–20 ký tự. Tên được kiểm duyệt trước khi hiện trên bảng xếp hạng.</p>
+              </div>
+              <div class="ac-profile__actions">
+                <button class="btn btn--primary" type="submit">Lưu</button>
+              </div>
+            </form>
+          </section>
+
+          <section class="ac-section" id="dn-b" aria-labelledby="dnh-b">
+            <h5 class="ac-section__title" id="dnh-b">Đăng nhập</h5>
+            <p class="ac-section__intro ac-measure">Bạn chơi được ngay, không cần đăng ký. Liên kết một cách đăng nhập nếu bạn muốn giữ điểm khi đổi thiết bị.</p>
+            <p class="ac-identity ac-measure"><strong>Bạn đang chơi ẩn danh.</strong> Điểm của bạn đã được lưu và vẫn là của bạn. Chưa có cách đăng nhập nào được liên kết, nên hiện tại bạn chỉ quay lại được từ trình duyệt này.</p>
+            <div class="ac-links">
+              <section class="card ac-link" aria-labelledby="gh-b">
+                <div class="ac-link__head">
+                  <h6 class="ac-link__title" id="gh-b">Google</h6>
+                  <span class="badge">Chưa liên kết</span>
+                </div>
+                <p class="ac-link__note">Liên kết để đăng nhập lại trên thiết bị khác. Điểm của bạn giữ nguyên — liên kết nâng cấp danh tính sẵn có chứ không tạo tài khoản thứ hai.</p>
+                <div class="ac-link__actions">
+                  <button class="btn btn--secondary" type="button">Liên kết Google</button>
+                </div>
+              </section>
+              <section class="card ac-link" aria-labelledby="eh-b">
+                <div class="ac-link__head">
+                  <h6 class="ac-link__title" id="eh-b">Email</h6>
+                  <span class="badge">Chưa liên kết</span>
+                </div>
+                <p class="ac-link__note">Chúng tôi gửi một liên kết đăng nhập tới hộp thư của bạn. Không mật khẩu.</p>
+                <div class="field ac-link__field">
+                  <label class="field__label" for="mail-b">Địa chỉ email</label>
+                  <input id="mail-b" name="email" type="email" autocomplete="email" aria-describedby="mailhelp-b">
+                  <p class="field__help" id="mailhelp-b">Chỉ dùng để gửi liên kết đăng nhập.</p>
+                </div>
+                <div class="ac-link__actions">
+                  <button class="btn btn--secondary" type="button">Gửi liên kết đăng nhập</button>
+                </div>
+              </section>
+            </div>
+            <div class="ac-signout">
+              <button class="btn btn--secondary" type="button" aria-disabled="true" aria-describedby="sowhy-b">Đăng xuất</button>
+            </div>
+            <p class="ac-link__note" id="sowhy-b">Chưa đăng xuất được: chưa có cách đăng nhập nào được liên kết, nên đăng xuất bây giờ sẽ khiến bạn không quay lại được điểm của mình. Liên kết Google hoặc email trước.</p>
+          </section>
+
+          <section class="ac-section" id="dl-b" aria-labelledby="dlh-b">
+            <h5 class="ac-section__title" id="dlh-b">Dữ liệu của tôi</h5>
+            <p class="ac-section__intro ac-measure">Đây là toàn bộ những gì tài khoản này giữ. Không có mục nào khác.</p>
+            <table class="ac-what">
+              <caption>Những gì tài khoản của bạn giữ</caption>
+              <thead><tr><th scope="col">Thứ được lưu</th><th scope="col">Vì sao cần</th></tr></thead>
+              <tbody>
+                <tr><th class="ac-what__cell" scope="row">Tên hiển thị</th><td>Để hiện tên bạn trên bảng xếp hạng.</td></tr>
+                <tr><th class="ac-what__cell" scope="row">Mã người chơi</th><td>Để nối điểm với bạn. Mã này không được in ở đâu trên trang.</td></tr>
+                <tr><th class="ac-what__cell" scope="row">Ngày tạo tài khoản</th><td>Để xử lý lạm dụng.</td></tr>
+                <tr><th class="ac-what__cell" scope="row">Điểm của bạn</th><td>Mỗi lần ghi điểm gồm: trò chơi, tuần, điểm, thời gian sống sót, seed và phiên bản trò chơi. Dùng để xếp hạng và để kiểm tra điểm có hợp lý không.</td></tr>
+              </tbody>
+            </table>
+            <p class="ac-what__note">Mọi dòng trong bảng được giữ cho tới khi bạn xóa dữ liệu của mình. Không có thời hạn nào khác.</p>
+            <p class="ac-what__note"><strong>Những thứ không được lưu:</strong></p>
+            <ul class="ac-notstored">
+              <li>Hồ sơ của bạn không có bản sao địa chỉ email nào.</li>
+              <li>Không có địa chỉ IP trong bất kỳ bảng nào.</li>
+              <li>Không đo đạc, không theo dõi, không phân tích hành vi.</li>
+            </ul>
+            <div class="ac-data__actions">
+              <a class="btn btn--secondary" href="#s1">Tải bản sao dữ liệu của tôi</a>
+              <button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu của tôi</button>
+            </div>
+          </section>
+
+          <div class="dialog" role="dialog" aria-labelledby="dgh-b">
+            <div class="dialog__head">
+              <h6 class="dialog__title" id="dgh-b">Xóa dữ liệu của tôi?</h6>
+              <button class="btn btn--quiet btn--icon" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-close"/></svg><span class="u-visually-hidden">Đóng</span></button>
+            </div>
+            <div class="dialog__body">
+              <p>Những thứ sau sẽ bị xóa khỏi máy chủ:</p>
+              <ul class="ac-dialog__list">
+                <li>tên hiển thị của bạn;</li>
+                <li>mã người chơi và ngày tạo tài khoản;</li>
+                <li>toàn bộ điểm của bạn, ở mọi trò chơi và mọi tuần — kể cả những điểm đang nằm trên bảng xếp hạng.</li>
+              </ul>
+              <p class="ac-dialog__warn">Không thể hoàn tác. Sau khi xóa, bạn sẽ được đăng xuất.</p>
+            </div>
+            <div class="dialog__actions">
+              <button class="btn btn--quiet" type="button">Hủy</button>
+              <button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa vĩnh viễn</button>
+            </div>
+          </div>
+        </div>
+
+        <footer class="site-footer">
+          <div class="shell">
+            <ul class="site-footer__links">
+              <li><a class="link" href="about.html">Giới thiệu</a></li>
+              <li><a class="link" href="terms.html">Điều khoản</a></li>
+              <li><a class="link" href="#s1">Quyền riêng tư</a></li>
+              <li><a class="link" href="#s1">Cài đặt cookie</a></li>
+            </ul>
+            <p class="site-footer__fine">© 2026 Soucean Game</p>
+          </div>
+        </footer>
+      </div>
+      <span class="mk-tag">Giao diện tối không làm nhạt bất kỳ tín hiệu nào: nút xóa vẫn mang viền kép, vẫn mang chữ, vẫn mang biểu tượng thùng rác.</span>
+    </section>
+  </div>
+
+  <div class="mk-specs">
+    <section>
+      <h3 class="mk-cap">Sáng · 1280 px</h3>
+      <div class="mk-scroll">
+        <div class="mk-view mk-view--desktop">
+          <div class="site-header">
+            <a class="skip-link" href="#ac-c">Tới nội dung chính</a>
+            <div class="shell site-header__bar">
+              <a class="wordmark" href="home.html">Soucean Game</a>
+              <div class="site-header__actions">
+                <fieldset class="theme-toggle">
+                  <legend class="u-visually-hidden">Giao diện</legend>
+                  <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="th-c" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                  <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="th-c"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+                </fieldset>
+              </div>
+            </div>
+            <nav class="shell" aria-label="Chính · sáng 1280">
+              <button class="btn btn--quiet site-nav__toggle" type="button" aria-expanded="false" aria-controls="nav-c"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-menu"/></svg>Menu</button>
+              <ul class="site-nav__list" id="nav-c">
+                <li><a class="site-nav__link" href="home.html">Trò chơi</a></li>
+                <li><a class="site-nav__link" href="leaderboards.html">Bảng xếp hạng</a></li>
+                <li><a class="site-nav__link" href="#s1" aria-current="page">Tài khoản</a></li>
+              </ul>
+            </nav>
+            <div class="shell">
+              <aside class="ad-slot ad-slot--header-leaderboard" aria-label="Quảng cáo">
+                <span class="ad-slot__label">Quảng cáo · 728 × 90</span>
+              </aside>
+            </div>
+          </div>
+
+          <div class="shell main" id="ac-c">
+            <h4 class="ac-title">Tài khoản</h4>
+            <p class="ac-lede ac-measure">Tên hiển thị của bạn, cách bạn đăng nhập, và mọi thứ tài khoản này giữ về bạn — kèm nút xóa tất cả.</p>
+
+            <nav class="ac-toc" aria-label="Mục trong trang · sáng 1280">
+              <ul class="ac-toc__list">
+                <li><a class="link" href="#hs-c">Hồ sơ</a></li>
+                <li><a class="link" href="#dn-c">Đăng nhập</a></li>
+                <li><a class="link" href="#dl-c">Dữ liệu của tôi</a></li>
+              </ul>
+            </nav>
+
+            <section class="ac-section" id="hs-c" aria-labelledby="hsh-c">
+              <h5 class="ac-section__title" id="hsh-c">Hồ sơ</h5>
+              <p class="ac-section__intro ac-measure">Tên hiển thị là thứ duy nhất người khác nhìn thấy về bạn trên bảng xếp hạng.</p>
+              <form class="ac-profile__form" method="post" action="#hs-c">
+                <div class="field ac-profile__field">
+                  <label class="field__label" for="name-c">Tên hiển thị <span class="field__opt">· bắt buộc</span></label>
+                  <input id="name-c" name="display_name" type="text" value="Hải" autocomplete="nickname" aria-describedby="namehelp-c">
+                  <p class="field__help" id="namehelp-c">3–20 ký tự. Tên được kiểm duyệt trước khi hiện trên bảng xếp hạng.</p>
+                </div>
+                <div class="ac-profile__actions">
+                  <button class="btn btn--primary" type="submit">Lưu</button>
+                </div>
+              </form>
+            </section>
+
+            <section class="ac-section" id="dn-c" aria-labelledby="dnh-c">
+              <h5 class="ac-section__title" id="dnh-c">Đăng nhập</h5>
+              <p class="ac-section__intro ac-measure">Bạn chơi được ngay, không cần đăng ký. Liên kết một cách đăng nhập nếu bạn muốn giữ điểm khi đổi thiết bị.</p>
+              <p class="ac-identity ac-measure"><strong>Bạn đang chơi ẩn danh.</strong> Điểm của bạn đã được lưu và vẫn là của bạn. Chưa có cách đăng nhập nào được liên kết, nên hiện tại bạn chỉ quay lại được từ trình duyệt này.</p>
+              <div class="ac-links">
+                <section class="card ac-link" aria-labelledby="gh-c">
+                  <div class="ac-link__head">
+                    <h6 class="ac-link__title" id="gh-c">Google</h6>
+                    <span class="badge">Chưa liên kết</span>
+                  </div>
+                  <p class="ac-link__note">Liên kết để đăng nhập lại trên thiết bị khác. Điểm của bạn giữ nguyên — liên kết nâng cấp danh tính sẵn có chứ không tạo tài khoản thứ hai.</p>
+                  <div class="ac-link__actions">
+                    <button class="btn btn--secondary" type="button">Liên kết Google</button>
+                  </div>
+                </section>
+                <section class="card ac-link" aria-labelledby="eh-c">
+                  <div class="ac-link__head">
+                    <h6 class="ac-link__title" id="eh-c">Email</h6>
+                    <span class="badge">Chưa liên kết</span>
+                  </div>
+                  <p class="ac-link__note">Chúng tôi gửi một liên kết đăng nhập tới hộp thư của bạn. Không mật khẩu.</p>
+                  <div class="field ac-link__field">
+                    <label class="field__label" for="mail-c">Địa chỉ email</label>
+                    <input id="mail-c" name="email" type="email" autocomplete="email" aria-describedby="mailhelp-c">
+                    <p class="field__help" id="mailhelp-c">Chỉ dùng để gửi liên kết đăng nhập.</p>
+                  </div>
+                  <div class="ac-link__actions">
+                    <button class="btn btn--secondary" type="button">Gửi liên kết đăng nhập</button>
+                  </div>
+                </section>
+              </div>
+              <div class="ac-signout">
+                <button class="btn btn--secondary" type="button" aria-disabled="true" aria-describedby="sowhy-c">Đăng xuất</button>
+              </div>
+              <p class="ac-link__note" id="sowhy-c">Chưa đăng xuất được: chưa có cách đăng nhập nào được liên kết, nên đăng xuất bây giờ sẽ khiến bạn không quay lại được điểm của mình. Liên kết Google hoặc email trước.</p>
+            </section>
+
+            <section class="ac-section" id="dl-c" aria-labelledby="dlh-c">
+              <h5 class="ac-section__title" id="dlh-c">Dữ liệu của tôi</h5>
+              <p class="ac-section__intro ac-measure">Đây là toàn bộ những gì tài khoản này giữ. Không có mục nào khác.</p>
+              <table class="ac-what ac-measure">
+                <caption>Những gì tài khoản của bạn giữ</caption>
+                <thead><tr><th scope="col">Thứ được lưu</th><th scope="col">Vì sao cần</th></tr></thead>
+                <tbody>
+                  <tr><th class="ac-what__cell" scope="row">Tên hiển thị</th><td>Để hiện tên bạn trên bảng xếp hạng.</td></tr>
+                  <tr><th class="ac-what__cell" scope="row">Mã người chơi</th><td>Để nối điểm với bạn. Mã này không được in ở đâu trên trang.</td></tr>
+                  <tr><th class="ac-what__cell" scope="row">Ngày tạo tài khoản</th><td>Để xử lý lạm dụng.</td></tr>
+                  <tr><th class="ac-what__cell" scope="row">Điểm của bạn</th><td>Mỗi lần ghi điểm gồm: trò chơi, tuần, điểm, thời gian sống sót, seed và phiên bản trò chơi. Dùng để xếp hạng và để kiểm tra điểm có hợp lý không.</td></tr>
+                </tbody>
+              </table>
+              <p class="ac-what__note ac-measure">Mọi dòng trong bảng được giữ cho tới khi bạn xóa dữ liệu của mình. Không có thời hạn nào khác.</p>
+              <p class="ac-what__note"><strong>Những thứ không được lưu:</strong></p>
+              <ul class="ac-notstored ac-measure">
+                <li>Hồ sơ của bạn không có bản sao địa chỉ email nào.</li>
+                <li>Không có địa chỉ IP trong bất kỳ bảng nào.</li>
+                <li>Không đo đạc, không theo dõi, không phân tích hành vi.</li>
+              </ul>
+              <div class="ac-data__actions">
+                <a class="btn btn--secondary" href="#s1">Tải bản sao dữ liệu của tôi</a>
+                <button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu của tôi</button>
+              </div>
+            </section>
+
+            <div class="dialog" role="dialog" aria-labelledby="dgh-c">
+              <div class="dialog__head">
+                <h6 class="dialog__title" id="dgh-c">Xóa dữ liệu của tôi?</h6>
+                <button class="btn btn--quiet btn--icon" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-close"/></svg><span class="u-visually-hidden">Đóng</span></button>
+              </div>
+              <div class="dialog__body">
+                <p>Những thứ sau sẽ bị xóa khỏi máy chủ:</p>
+                <ul class="ac-dialog__list">
+                  <li>tên hiển thị của bạn;</li>
+                  <li>mã người chơi và ngày tạo tài khoản;</li>
+                  <li>toàn bộ điểm của bạn, ở mọi trò chơi và mọi tuần — kể cả những điểm đang nằm trên bảng xếp hạng.</li>
+                </ul>
+                <p class="ac-dialog__warn">Không thể hoàn tác. Sau khi xóa, bạn sẽ được đăng xuất.</p>
+              </div>
+              <div class="dialog__actions">
+                <button class="btn btn--quiet" type="button">Hủy</button>
+                <button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa vĩnh viễn</button>
+              </div>
+            </div>
+          </div>
+
+          <footer class="site-footer">
+            <div class="shell">
+              <ul class="site-footer__links">
+                <li><a class="link" href="about.html">Giới thiệu</a></li>
+                <li><a class="link" href="terms.html">Điều khoản</a></li>
+                <li><a class="link" href="#s1">Quyền riêng tư</a></li>
+                <li><a class="link" href="#s1">Cài đặt cookie</a></li>
+              </ul>
+              <p class="site-footer__fine">© 2026 Soucean Game</p>
+            </div>
+          </footer>
+        </div>
+      </div>
+      <span class="mk-tag">Dải ≥ 768 px: <strong>đúng một</strong> ô quảng cáo 728 × 90 trong header, sau skip-link. Hai thẻ nhà cung cấp nằm cạnh nhau; hai hành động của “Dữ liệu của tôi” nằm trên một hàng. Nội dung vẫn giữ khổ đọc — chiều rộng dư thành lề.</span>
+    </section>
+
+    <section>
+      <h3 class="mk-cap">Tối · 1280 px</h3>
+      <div class="mk-scroll">
+        <div class="mk-view mk-view--desktop" data-theme="dark">
+          <div class="site-header">
+            <a class="skip-link" href="#ac-d">Tới nội dung chính</a>
+            <div class="shell site-header__bar">
+              <a class="wordmark" href="home.html">Soucean Game</a>
+              <div class="site-header__actions">
+                <fieldset class="theme-toggle">
+                  <legend class="u-visually-hidden">Giao diện</legend>
+                  <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="th-d"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                  <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="th-d" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+                </fieldset>
+              </div>
+            </div>
+            <nav class="shell" aria-label="Chính · tối 1280">
+              <button class="btn btn--quiet site-nav__toggle" type="button" aria-expanded="false" aria-controls="nav-d"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-menu"/></svg>Menu</button>
+              <ul class="site-nav__list" id="nav-d">
+                <li><a class="site-nav__link" href="home.html">Trò chơi</a></li>
+                <li><a class="site-nav__link" href="leaderboards.html">Bảng xếp hạng</a></li>
+                <li><a class="site-nav__link" href="#s1" aria-current="page">Tài khoản</a></li>
+              </ul>
+            </nav>
+            <div class="shell">
+              <aside class="ad-slot ad-slot--header-leaderboard" aria-label="Quảng cáo">
+                <span class="ad-slot__label">Quảng cáo · 728 × 90</span>
+              </aside>
+            </div>
+          </div>
+
+          <div class="shell main" id="ac-d">
+            <h4 class="ac-title">Tài khoản</h4>
+            <p class="ac-lede ac-measure">Tên hiển thị của bạn, cách bạn đăng nhập, và mọi thứ tài khoản này giữ về bạn — kèm nút xóa tất cả.</p>
+
+            <nav class="ac-toc" aria-label="Mục trong trang · tối 1280">
+              <ul class="ac-toc__list">
+                <li><a class="link" href="#hs-d">Hồ sơ</a></li>
+                <li><a class="link" href="#dn-d">Đăng nhập</a></li>
+                <li><a class="link" href="#dl-d">Dữ liệu của tôi</a></li>
+              </ul>
+            </nav>
+
+            <section class="ac-section" id="hs-d" aria-labelledby="hsh-d">
+              <h5 class="ac-section__title" id="hsh-d">Hồ sơ</h5>
+              <p class="ac-section__intro ac-measure">Tên hiển thị là thứ duy nhất người khác nhìn thấy về bạn trên bảng xếp hạng.</p>
+              <form class="ac-profile__form" method="post" action="#hs-d">
+                <div class="field ac-profile__field">
+                  <label class="field__label" for="name-d">Tên hiển thị <span class="field__opt">· bắt buộc</span></label>
+                  <input id="name-d" name="display_name" type="text" value="Hải" autocomplete="nickname" aria-describedby="namehelp-d">
+                  <p class="field__help" id="namehelp-d">3–20 ký tự. Tên được kiểm duyệt trước khi hiện trên bảng xếp hạng.</p>
+                </div>
+                <div class="ac-profile__actions">
+                  <button class="btn btn--primary" type="submit">Lưu</button>
+                </div>
+              </form>
+            </section>
+
+            <section class="ac-section" id="dn-d" aria-labelledby="dnh-d">
+              <h5 class="ac-section__title" id="dnh-d">Đăng nhập</h5>
+              <p class="ac-section__intro ac-measure">Bạn chơi được ngay, không cần đăng ký. Liên kết một cách đăng nhập nếu bạn muốn giữ điểm khi đổi thiết bị.</p>
+              <p class="ac-identity ac-measure"><strong>Bạn đang chơi ẩn danh.</strong> Điểm của bạn đã được lưu và vẫn là của bạn. Chưa có cách đăng nhập nào được liên kết, nên hiện tại bạn chỉ quay lại được từ trình duyệt này.</p>
+              <div class="ac-links">
+                <section class="card ac-link" aria-labelledby="gh-d">
+                  <div class="ac-link__head">
+                    <h6 class="ac-link__title" id="gh-d">Google</h6>
+                    <span class="badge">Chưa liên kết</span>
+                  </div>
+                  <p class="ac-link__note">Liên kết để đăng nhập lại trên thiết bị khác. Điểm của bạn giữ nguyên — liên kết nâng cấp danh tính sẵn có chứ không tạo tài khoản thứ hai.</p>
+                  <div class="ac-link__actions">
+                    <button class="btn btn--secondary" type="button">Liên kết Google</button>
+                  </div>
+                </section>
+                <section class="card ac-link" aria-labelledby="eh-d">
+                  <div class="ac-link__head">
+                    <h6 class="ac-link__title" id="eh-d">Email</h6>
+                    <span class="badge">Chưa liên kết</span>
+                  </div>
+                  <p class="ac-link__note">Chúng tôi gửi một liên kết đăng nhập tới hộp thư của bạn. Không mật khẩu.</p>
+                  <div class="field ac-link__field">
+                    <label class="field__label" for="mail-d">Địa chỉ email</label>
+                    <input id="mail-d" name="email" type="email" autocomplete="email" aria-describedby="mailhelp-d">
+                    <p class="field__help" id="mailhelp-d">Chỉ dùng để gửi liên kết đăng nhập.</p>
+                  </div>
+                  <div class="ac-link__actions">
+                    <button class="btn btn--secondary" type="button">Gửi liên kết đăng nhập</button>
+                  </div>
+                </section>
+              </div>
+              <div class="ac-signout">
+                <button class="btn btn--secondary" type="button" aria-disabled="true" aria-describedby="sowhy-d">Đăng xuất</button>
+              </div>
+              <p class="ac-link__note" id="sowhy-d">Chưa đăng xuất được: chưa có cách đăng nhập nào được liên kết, nên đăng xuất bây giờ sẽ khiến bạn không quay lại được điểm của mình. Liên kết Google hoặc email trước.</p>
+            </section>
+
+            <section class="ac-section" id="dl-d" aria-labelledby="dlh-d">
+              <h5 class="ac-section__title" id="dlh-d">Dữ liệu của tôi</h5>
+              <p class="ac-section__intro ac-measure">Đây là toàn bộ những gì tài khoản này giữ. Không có mục nào khác.</p>
+              <table class="ac-what ac-measure">
+                <caption>Những gì tài khoản của bạn giữ</caption>
+                <thead><tr><th scope="col">Thứ được lưu</th><th scope="col">Vì sao cần</th></tr></thead>
+                <tbody>
+                  <tr><th class="ac-what__cell" scope="row">Tên hiển thị</th><td>Để hiện tên bạn trên bảng xếp hạng.</td></tr>
+                  <tr><th class="ac-what__cell" scope="row">Mã người chơi</th><td>Để nối điểm với bạn. Mã này không được in ở đâu trên trang.</td></tr>
+                  <tr><th class="ac-what__cell" scope="row">Ngày tạo tài khoản</th><td>Để xử lý lạm dụng.</td></tr>
+                  <tr><th class="ac-what__cell" scope="row">Điểm của bạn</th><td>Mỗi lần ghi điểm gồm: trò chơi, tuần, điểm, thời gian sống sót, seed và phiên bản trò chơi. Dùng để xếp hạng và để kiểm tra điểm có hợp lý không.</td></tr>
+                </tbody>
+              </table>
+              <p class="ac-what__note ac-measure">Mọi dòng trong bảng được giữ cho tới khi bạn xóa dữ liệu của mình. Không có thời hạn nào khác.</p>
+              <p class="ac-what__note"><strong>Những thứ không được lưu:</strong></p>
+              <ul class="ac-notstored ac-measure">
+                <li>Hồ sơ của bạn không có bản sao địa chỉ email nào.</li>
+                <li>Không có địa chỉ IP trong bất kỳ bảng nào.</li>
+                <li>Không đo đạc, không theo dõi, không phân tích hành vi.</li>
+              </ul>
+              <div class="ac-data__actions">
+                <a class="btn btn--secondary" href="#s1">Tải bản sao dữ liệu của tôi</a>
+                <button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu của tôi</button>
+              </div>
+            </section>
+
+            <div class="dialog" role="dialog" aria-labelledby="dgh-d">
+              <div class="dialog__head">
+                <h6 class="dialog__title" id="dgh-d">Xóa dữ liệu của tôi?</h6>
+                <button class="btn btn--quiet btn--icon" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-close"/></svg><span class="u-visually-hidden">Đóng</span></button>
+              </div>
+              <div class="dialog__body">
+                <p>Những thứ sau sẽ bị xóa khỏi máy chủ:</p>
+                <ul class="ac-dialog__list">
+                  <li>tên hiển thị của bạn;</li>
+                  <li>mã người chơi và ngày tạo tài khoản;</li>
+                  <li>toàn bộ điểm của bạn, ở mọi trò chơi và mọi tuần — kể cả những điểm đang nằm trên bảng xếp hạng.</li>
+                </ul>
+                <p class="ac-dialog__warn">Không thể hoàn tác. Sau khi xóa, bạn sẽ được đăng xuất.</p>
+              </div>
+              <div class="dialog__actions">
+                <button class="btn btn--quiet" type="button">Hủy</button>
+                <button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa vĩnh viễn</button>
+              </div>
+            </div>
+          </div>
+
+          <footer class="site-footer">
+            <div class="shell">
+              <ul class="site-footer__links">
+                <li><a class="link" href="about.html">Giới thiệu</a></li>
+                <li><a class="link" href="terms.html">Điều khoản</a></li>
+                <li><a class="link" href="#s1">Quyền riêng tư</a></li>
+                <li><a class="link" href="#s1">Cài đặt cookie</a></li>
+              </ul>
+              <p class="site-footer__fine">© 2026 Soucean Game</p>
+            </div>
+          </footer>
+        </div>
+      </div>
+      <span class="mk-tag">Một hành động chính duy nhất trên trang — nút “Lưu” tô đặc. “Xóa dữ liệu của tôi” <strong>không</strong> tô đặc: nó nguy hiểm, không phải quan trọng (components.md §6.1).</span>
+    </section>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     2. DISPLAY NAME — every state.
+     ========================================================================== -->
+<section class="mk-section" id="s2">
+  <h2>2. Tên hiển thị · mọi trạng thái</h2>
+  <p>
+    Sáu trạng thái của một ô nhập: xem/sửa, đang tải, đang lưu, đã lưu, bị kiểm
+    duyệt từ chối, và lưu hỏng. Tất cả đều là <code>.field</code>,
+    <code>.notice</code>, <code>.error-summary</code> và ba khối trạng thái của
+    M1-04 — Task này không tạo thành phần nào.
+  </p>
+  <p>
+    <strong>Hai lỗi, hai cách báo, và chúng khác nhau có lý do.</strong> Một tên
+    bị kiểm duyệt từ chối là lỗi <em>của ô đó</em>: nó hiện ngay dưới ô, nối vào
+    ô bằng <code>aria-describedby</code>, ô mang <code>aria-invalid="true"</code>
+    và vì thế có viền kép. Một lần lưu hỏng vì mạng không phải lỗi của ô nào cả:
+    nó là <code>.error-summary</code> đặt <em>trên</em> biểu mẫu, mang
+    <code>role="alert"</code> và nhận tiêu điểm, nên người dùng bàn phím được
+    đưa tới chỗ cần đọc thay vì bị bỏ lại ở nút gửi. Đây đúng là hai dòng mà
+    components.md §4.4 ghi cho vùng này.
+  </p>
+  <p>
+    <strong>Nút “Lưu” khi đang lưu mang <code>aria-disabled="true"</code>, không
+    mang <code>disabled</code>.</strong> Một nút <code>disabled</code> rơi khỏi
+    thứ tự Tab ngay lúc nó đang được bấm, nên tiêu điểm rớt về <code>body</code>
+    và người dùng bàn phím mất chỗ đứng đúng vào lúc họ đang chờ câu trả lời.
+    components.md §5.5 cho sẵn lối ra này: một nút <em>bật</em> mang
+    <code>aria-disabled</code> và nói lý do ngay trong nhãn — “Đang lưu…”.
+  </p>
+
+  <div class="mk-specs mk-specs--row">
+    <section>
+      <h3 class="mk-cap">Sáng · 375 px</h3>
+      <div class="mk-view mk-view--mobile">
+        <div class="mk-stack">
+          <form class="ac-profile__form" method="post" action="#s2">
+            <div class="field ac-profile__field">
+              <label class="field__label" for="n1">Tên hiển thị <span class="field__opt">· bắt buộc</span></label>
+              <input id="n1" type="text" value="Hải" aria-describedby="n1h">
+              <p class="field__help" id="n1h">3–20 ký tự. Tên được kiểm duyệt trước khi hiện trên bảng xếp hạng.</p>
+            </div>
+            <div class="ac-profile__actions"><button class="btn btn--primary" type="submit">Lưu</button></div>
+          </form>
+
+          <form class="ac-profile__form" method="post" action="#s2">
+            <div class="field ac-profile__field">
+              <label class="field__label" for="n2">Tên hiển thị <span class="field__opt">· bắt buộc</span></label>
+              <input class="is-focus" id="n2" type="text" value="Hải Nguyễn" aria-describedby="n2h">
+              <p class="field__help" id="n2h">3–20 ký tự. Tên được kiểm duyệt trước khi hiện trên bảng xếp hạng.</p>
+            </div>
+            <div class="ac-profile__actions"><button class="btn btn--primary" type="submit">Lưu</button></div>
+          </form>
+
+          <div class="state state--loading ac-profile__state" role="status" aria-busy="true">
+            <p class="u-visually-hidden">Đang tải tên hiển thị của bạn…</p>
+            <div class="skeleton" aria-hidden="true"><span class="skeleton__bar skeleton__bar--half"></span></div>
+          </div>
+
+          <form class="ac-profile__form" method="post" action="#s2">
+            <div class="field ac-profile__field">
+              <label class="field__label" for="n3">Tên hiển thị <span class="field__opt">· bắt buộc</span></label>
+              <input id="n3" type="text" value="Hải Nguyễn" aria-describedby="n3h">
+              <p class="field__help" id="n3h">3–20 ký tự. Tên được kiểm duyệt trước khi hiện trên bảng xếp hạng.</p>
+            </div>
+            <div class="ac-profile__actions"><button class="btn btn--primary" type="submit" aria-disabled="true">Đang lưu…</button></div>
+          </form>
+
+          <form class="ac-profile__form" method="post" action="#s2">
+            <div class="field ac-profile__field">
+              <label class="field__label" for="n4">Tên hiển thị <span class="field__opt">· bắt buộc</span></label>
+              <input id="n4" type="text" value="Hải Nguyễn" aria-describedby="n4h">
+              <p class="field__help" id="n4h">3–20 ký tự. Tên được kiểm duyệt trước khi hiện trên bảng xếp hạng.</p>
+            </div>
+            <div class="ac-profile__actions">
+              <button class="btn btn--primary" type="submit">Lưu</button>
+              <div class="notice notice--success" role="status">
+                <svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-success"/></svg>
+                <div class="notice__body">
+                  <p class="notice__title">Thành công · đã lưu</p>
+                  <p class="notice__text">Tên hiển thị mới của bạn đã được lưu.</p>
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <form class="ac-profile__form" method="post" action="#s2">
+            <div class="field ac-profile__field">
+              <label class="field__label" for="n5">Tên hiển thị <span class="field__opt">· bắt buộc</span></label>
+              <input id="n5" type="text" value="xx" aria-invalid="true" aria-describedby="n5h n5e">
+              <p class="field__error" id="n5e">
+                <svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+                <span>Lỗi: tên hiển thị phải có ít nhất 3 ký tự.</span>
+              </p>
+              <p class="field__help" id="n5h">3–20 ký tự. Tên được kiểm duyệt trước khi hiện trên bảng xếp hạng.</p>
+            </div>
+            <div class="ac-profile__actions"><button class="btn btn--primary" type="submit">Lưu</button></div>
+          </form>
+
+          <form class="ac-profile__form" method="post" action="#s2">
+            <div class="field ac-profile__field">
+              <label class="field__label" for="n6">Tên hiển thị <span class="field__opt">· bắt buộc</span></label>
+              <input id="n6" type="text" value="Tên bị từ chối" aria-invalid="true" aria-describedby="n6h n6e">
+              <p class="field__error" id="n6e">
+                <svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+                <span>Lỗi: tên này không được chấp nhận. Hãy thử một tên khác.</span>
+              </p>
+              <p class="field__help" id="n6h">3–20 ký tự. Tên được kiểm duyệt trước khi hiện trên bảng xếp hạng.</p>
+            </div>
+            <div class="ac-profile__actions"><button class="btn btn--primary" type="submit">Lưu</button></div>
+          </form>
+
+          <div class="ac-profile__summary error-summary" role="alert" tabindex="-1">
+            <h6 class="error-summary__title">
+              <svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+              Lỗi: không lưu được tên hiển thị
+            </h6>
+            <ul>
+              <li><a class="link" href="#n1">Tên hiển thị — không gửi được lên máy chủ. Kiểm tra kết nối rồi thử lại.</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <span class="mk-tag">Thứ tự trong khối: xem · đang sửa (vòng tiêu điểm) · đang tải · đang lưu · đã lưu · quá ngắn · bị kiểm duyệt từ chối · lưu hỏng.</span>
+    </section>
+
+    <section>
+      <h3 class="mk-cap">Tối · 375 px</h3>
+      <div class="mk-view mk-view--mobile" data-theme="dark">
+        <div class="mk-stack">
+          <form class="ac-profile__form" method="post" action="#s2">
+            <div class="field ac-profile__field">
+              <label class="field__label" for="n7">Tên hiển thị <span class="field__opt">· bắt buộc</span></label>
+              <input id="n7" type="text" value="Hải" aria-describedby="n7h">
+              <p class="field__help" id="n7h">3–20 ký tự. Tên được kiểm duyệt trước khi hiện trên bảng xếp hạng.</p>
+            </div>
+            <div class="ac-profile__actions"><button class="btn btn--primary" type="submit">Lưu</button></div>
+          </form>
+
+          <form class="ac-profile__form" method="post" action="#s2">
+            <div class="field ac-profile__field">
+              <label class="field__label" for="n8">Tên hiển thị <span class="field__opt">· bắt buộc</span></label>
+              <input class="is-focus" id="n8" type="text" value="Hải Nguyễn" aria-describedby="n8h">
+              <p class="field__help" id="n8h">3–20 ký tự. Tên được kiểm duyệt trước khi hiện trên bảng xếp hạng.</p>
+            </div>
+            <div class="ac-profile__actions"><button class="btn btn--primary" type="submit">Lưu</button></div>
+          </form>
+
+          <div class="state state--loading ac-profile__state" role="status" aria-busy="true">
+            <p class="u-visually-hidden">Đang tải tên hiển thị của bạn…</p>
+            <div class="skeleton" aria-hidden="true"><span class="skeleton__bar skeleton__bar--half"></span></div>
+          </div>
+
+          <form class="ac-profile__form" method="post" action="#s2">
+            <div class="field ac-profile__field">
+              <label class="field__label" for="n9">Tên hiển thị <span class="field__opt">· bắt buộc</span></label>
+              <input id="n9" type="text" value="Hải Nguyễn" aria-describedby="n9h">
+              <p class="field__help" id="n9h">3–20 ký tự. Tên được kiểm duyệt trước khi hiện trên bảng xếp hạng.</p>
+            </div>
+            <div class="ac-profile__actions"><button class="btn btn--primary" type="submit" aria-disabled="true">Đang lưu…</button></div>
+          </form>
+
+          <form class="ac-profile__form" method="post" action="#s2">
+            <div class="field ac-profile__field">
+              <label class="field__label" for="n10">Tên hiển thị <span class="field__opt">· bắt buộc</span></label>
+              <input id="n10" type="text" value="Hải Nguyễn" aria-describedby="n10h">
+              <p class="field__help" id="n10h">3–20 ký tự. Tên được kiểm duyệt trước khi hiện trên bảng xếp hạng.</p>
+            </div>
+            <div class="ac-profile__actions">
+              <button class="btn btn--primary" type="submit">Lưu</button>
+              <div class="notice notice--success" role="status">
+                <svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-success"/></svg>
+                <div class="notice__body">
+                  <p class="notice__title">Thành công · đã lưu</p>
+                  <p class="notice__text">Tên hiển thị mới của bạn đã được lưu.</p>
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <form class="ac-profile__form" method="post" action="#s2">
+            <div class="field ac-profile__field">
+              <label class="field__label" for="n11">Tên hiển thị <span class="field__opt">· bắt buộc</span></label>
+              <input id="n11" type="text" value="xx" aria-invalid="true" aria-describedby="n11h n11e">
+              <p class="field__error" id="n11e">
+                <svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+                <span>Lỗi: tên hiển thị phải có ít nhất 3 ký tự.</span>
+              </p>
+              <p class="field__help" id="n11h">3–20 ký tự. Tên được kiểm duyệt trước khi hiện trên bảng xếp hạng.</p>
+            </div>
+            <div class="ac-profile__actions"><button class="btn btn--primary" type="submit">Lưu</button></div>
+          </form>
+
+          <form class="ac-profile__form" method="post" action="#s2">
+            <div class="field ac-profile__field">
+              <label class="field__label" for="n12">Tên hiển thị <span class="field__opt">· bắt buộc</span></label>
+              <input id="n12" type="text" value="Tên bị từ chối" aria-invalid="true" aria-describedby="n12h n12e">
+              <p class="field__error" id="n12e">
+                <svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+                <span>Lỗi: tên này không được chấp nhận. Hãy thử một tên khác.</span>
+              </p>
+              <p class="field__help" id="n12h">3–20 ký tự. Tên được kiểm duyệt trước khi hiện trên bảng xếp hạng.</p>
+            </div>
+            <div class="ac-profile__actions"><button class="btn btn--primary" type="submit">Lưu</button></div>
+          </form>
+
+          <div class="ac-profile__summary error-summary" role="alert" tabindex="-1">
+            <h6 class="error-summary__title">
+              <svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+              Lỗi: không lưu được tên hiển thị
+            </h6>
+            <ul>
+              <li><a class="link" href="#n7">Tên hiển thị — không gửi được lên máy chủ. Kiểm tra kết nối rồi thử lại.</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <span class="mk-tag">Chữ lỗi không bao giờ là tín hiệu duy nhất: mỗi lỗi mang biểu tượng, mang từ “Lỗi”, và ô mang viền kép do <code>aria-invalid</code> kéo theo.</span>
+    </section>
+  </div>
+
+  <div class="mk-specs mk-specs--row">
+    <section>
+      <h3 class="mk-cap">Sáng · 1280 px</h3>
+      <div class="mk-scroll">
+        <div class="mk-view mk-view--desktop">
+          <div class="mk-stack">
+            <form class="ac-profile__form" method="post" action="#s2">
+              <div class="field ac-profile__field">
+                <label class="field__label" for="n13">Tên hiển thị <span class="field__opt">· bắt buộc</span></label>
+                <input id="n13" type="text" value="Hải" aria-describedby="n13h">
+                <p class="field__help" id="n13h">3–20 ký tự. Tên được kiểm duyệt trước khi hiện trên bảng xếp hạng.</p>
+              </div>
+              <div class="ac-profile__actions"><button class="btn btn--primary" type="submit">Lưu</button></div>
+            </form>
+
+            <div class="state state--loading ac-profile__state" role="status" aria-busy="true">
+              <p class="u-visually-hidden">Đang tải tên hiển thị của bạn…</p>
+              <div class="skeleton" aria-hidden="true"><span class="skeleton__bar skeleton__bar--half"></span></div>
+            </div>
+
+            <form class="ac-profile__form" method="post" action="#s2">
+              <div class="field ac-profile__field">
+                <label class="field__label" for="n14">Tên hiển thị <span class="field__opt">· bắt buộc</span></label>
+                <input id="n14" type="text" value="Hải Nguyễn" aria-describedby="n14h">
+                <p class="field__help" id="n14h">3–20 ký tự. Tên được kiểm duyệt trước khi hiện trên bảng xếp hạng.</p>
+              </div>
+              <div class="ac-profile__actions"><button class="btn btn--primary" type="submit" aria-disabled="true">Đang lưu…</button></div>
+            </form>
+
+            <form class="ac-profile__form" method="post" action="#s2">
+              <div class="field ac-profile__field">
+                <label class="field__label" for="n15">Tên hiển thị <span class="field__opt">· bắt buộc</span></label>
+                <input id="n15" type="text" value="Tên bị từ chối" aria-invalid="true" aria-describedby="n15h n15e">
+                <p class="field__error" id="n15e">
+                  <svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+                  <span>Lỗi: tên này không được chấp nhận. Hãy thử một tên khác.</span>
+                </p>
+                <p class="field__help" id="n15h">3–20 ký tự. Tên được kiểm duyệt trước khi hiện trên bảng xếp hạng.</p>
+              </div>
+              <div class="ac-profile__actions"><button class="btn btn--primary" type="submit">Lưu</button></div>
+            </form>
+
+            <div class="ac-profile__summary error-summary" role="alert" tabindex="-1">
+              <h6 class="error-summary__title">
+                <svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+                Lỗi: không lưu được tên hiển thị
+              </h6>
+              <ul>
+                <li><a class="link" href="#n13">Tên hiển thị — không gửi được lên máy chủ. Kiểm tra kết nối rồi thử lại.</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span class="mk-tag">Ở 1280 px biểu mẫu <strong>không</strong> giãn ra hết chiều rộng: nó giữ khổ 60ch, nên nhãn, ô và dòng lỗi vẫn nằm trong một tầm mắt.</span>
+    </section>
+
+    <section>
+      <h3 class="mk-cap">Tối · 1280 px</h3>
+      <div class="mk-scroll">
+        <div class="mk-view mk-view--desktop" data-theme="dark">
+          <div class="mk-stack">
+            <form class="ac-profile__form" method="post" action="#s2">
+              <div class="field ac-profile__field">
+                <label class="field__label" for="n16">Tên hiển thị <span class="field__opt">· bắt buộc</span></label>
+                <input id="n16" type="text" value="Hải" aria-describedby="n16h">
+                <p class="field__help" id="n16h">3–20 ký tự. Tên được kiểm duyệt trước khi hiện trên bảng xếp hạng.</p>
+              </div>
+              <div class="ac-profile__actions"><button class="btn btn--primary" type="submit">Lưu</button></div>
+            </form>
+
+            <div class="state state--loading ac-profile__state" role="status" aria-busy="true">
+              <p class="u-visually-hidden">Đang tải tên hiển thị của bạn…</p>
+              <div class="skeleton" aria-hidden="true"><span class="skeleton__bar skeleton__bar--half"></span></div>
+            </div>
+
+            <form class="ac-profile__form" method="post" action="#s2">
+              <div class="field ac-profile__field">
+                <label class="field__label" for="n17">Tên hiển thị <span class="field__opt">· bắt buộc</span></label>
+                <input id="n17" type="text" value="Hải Nguyễn" aria-describedby="n17h">
+                <p class="field__help" id="n17h">3–20 ký tự. Tên được kiểm duyệt trước khi hiện trên bảng xếp hạng.</p>
+              </div>
+              <div class="ac-profile__actions"><button class="btn btn--primary" type="submit" aria-disabled="true">Đang lưu…</button></div>
+            </form>
+
+            <form class="ac-profile__form" method="post" action="#s2">
+              <div class="field ac-profile__field">
+                <label class="field__label" for="n18">Tên hiển thị <span class="field__opt">· bắt buộc</span></label>
+                <input id="n18" type="text" value="Tên bị từ chối" aria-invalid="true" aria-describedby="n18h n18e">
+                <p class="field__error" id="n18e">
+                  <svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+                  <span>Lỗi: tên này không được chấp nhận. Hãy thử một tên khác.</span>
+                </p>
+                <p class="field__help" id="n18h">3–20 ký tự. Tên được kiểm duyệt trước khi hiện trên bảng xếp hạng.</p>
+              </div>
+              <div class="ac-profile__actions"><button class="btn btn--primary" type="submit">Lưu</button></div>
+            </form>
+
+            <div class="ac-profile__summary error-summary" role="alert" tabindex="-1">
+              <h6 class="error-summary__title">
+                <svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+                Lỗi: không lưu được tên hiển thị
+              </h6>
+              <ul>
+                <li><a class="link" href="#n16">Tên hiển thị — không gửi được lên máy chủ. Kiểm tra kết nối rồi thử lại.</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span class="mk-tag">Khối “đang tải” cao đúng bằng ô đã tải: <code>--state-reserve</code> được tính từ chính các token mà nhãn, ô và dòng trợ giúp đọc. Chuyển từ “đang tải” sang “đã tải” không làm trang nhảy một pixel nào.</span>
+    </section>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     3. SIGN-IN AND LINKING — every state.
+     ========================================================================== -->
+<section class="mk-section" id="s3">
+  <h2>3. Đăng nhập và liên kết · mọi trạng thái</h2>
+  <p>
+    Hai nhà cung cấp, một thẻ mỗi bên, năm trạng thái: chưa liên kết, đã liên
+    kết, đang gửi, đã gửi, và nhà cung cấp báo lỗi. Thêm một trạng thái thứ sáu
+    mà một trang tài khoản trung thực phải vẽ: <strong>bỏ liên kết khi đó là
+    cách đăng nhập duy nhất</strong>.
+  </p>
+  <p>
+    <strong>Tình trạng liên kết do một TỪ mang, không do màu.</strong> Huy hiệu
+    “Đã liên kết” và huy hiệu “Chưa liên kết” <em>cùng một màu</em> — đó là chủ
+    ý. Màu Clay của <code>.badge</code> là dấu, không phải nghĩa
+    (<code>DESIGN.md</code> cấm nó trên mọi thứ bấm được), nên nếu hai trạng
+    thái khác nhau mà màu giống nhau thì màu không nói gì cả và từ nói tất cả.
+    Chuyển tờ này sang thang xám: không có thông tin nào mất đi.
+  </p>
+  <p>
+    <strong>Không có địa chỉ email nào được in ra, kể cả khi đã liên kết.</strong>
+    <code>requirements.md</code> §4.1 nói hồ sơ không giữ bản sao email, và một
+    trang không thể hiện thứ nó không có. “Đã liên kết” là toàn bộ sự thật mà
+    trang này biết — và đó cũng là toàn bộ sự thật người chơi cần để quyết định
+    có bỏ liên kết hay không.
+  </p>
+
+  <div class="mk-specs mk-specs--row">
+    <section>
+      <h3 class="mk-cap">Sáng · 375 px</h3>
+      <div class="mk-view mk-view--mobile">
+        <div class="mk-stack">
+          <section class="card ac-link" aria-labelledby="g1">
+            <div class="ac-link__head">
+              <h6 class="ac-link__title" id="g1">Google</h6>
+              <span class="badge">Chưa liên kết</span>
+            </div>
+            <p class="ac-link__note">Liên kết để đăng nhập lại trên thiết bị khác. Điểm của bạn giữ nguyên.</p>
+            <div class="ac-link__actions"><button class="btn btn--secondary" type="button">Liên kết Google</button></div>
+          </section>
+
+          <section class="card ac-link" aria-labelledby="g2">
+            <div class="ac-link__head">
+              <h6 class="ac-link__title" id="g2">Google</h6>
+              <span class="badge">Đã liên kết</span>
+            </div>
+            <p class="ac-link__note">Bạn đăng nhập lại được bằng Google trên bất kỳ thiết bị nào.</p>
+            <div class="ac-link__actions"><button class="btn btn--secondary" type="button">Bỏ liên kết Google</button></div>
+          </section>
+
+          <section class="card ac-link" aria-labelledby="g3">
+            <div class="ac-link__head">
+              <h6 class="ac-link__title" id="g3">Google</h6>
+              <span class="badge">Đã liên kết</span>
+            </div>
+            <p class="ac-link__note">Bạn đăng nhập lại được bằng Google trên bất kỳ thiết bị nào.</p>
+            <div class="notice notice--warning" role="status">
+              <svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-warning"/></svg>
+              <div class="notice__body">
+                <p class="notice__title">Cảnh báo · đây là cách đăng nhập duy nhất</p>
+                <p class="notice__text">Bỏ liên kết sẽ khiến bạn không đăng nhập lại được trên thiết bị khác. Điểm của bạn không bị xóa.</p>
+              </div>
+            </div>
+            <div class="ac-link__actions"><button class="btn btn--secondary" type="button">Bỏ liên kết Google</button></div>
+          </section>
+
+          <section class="card ac-link" aria-labelledby="e1">
+            <div class="ac-link__head">
+              <h6 class="ac-link__title" id="e1">Email</h6>
+              <span class="badge">Chưa liên kết</span>
+            </div>
+            <p class="ac-link__note">Chúng tôi gửi một liên kết đăng nhập tới hộp thư của bạn. Không mật khẩu.</p>
+            <div class="field ac-link__field">
+              <label class="field__label" for="m1">Địa chỉ email</label>
+              <input id="m1" type="email" autocomplete="email" aria-describedby="m1h">
+              <p class="field__help" id="m1h">Chỉ dùng để gửi liên kết đăng nhập.</p>
+            </div>
+            <div class="ac-link__actions"><button class="btn btn--secondary" type="button">Gửi liên kết đăng nhập</button></div>
+          </section>
+
+          <section class="card ac-link" aria-labelledby="e2">
+            <div class="ac-link__head">
+              <h6 class="ac-link__title" id="e2">Email</h6>
+              <span class="badge">Chưa liên kết</span>
+            </div>
+            <div class="field ac-link__field">
+              <label class="field__label" for="m2">Địa chỉ email</label>
+              <input id="m2" type="email" value="hai@example.com" aria-describedby="m2h">
+              <p class="field__help" id="m2h">Chỉ dùng để gửi liên kết đăng nhập.</p>
+            </div>
+            <div class="ac-link__actions"><button class="btn btn--secondary" type="button" aria-disabled="true">Đang gửi…</button></div>
+          </section>
+
+          <section class="card ac-link" aria-labelledby="e3">
+            <div class="ac-link__head">
+              <h6 class="ac-link__title" id="e3">Email</h6>
+              <span class="badge">Chưa liên kết</span>
+            </div>
+            <div class="notice notice--success" role="status">
+              <svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-success"/></svg>
+              <div class="notice__body">
+                <p class="notice__title">Thành công · đã gửi</p>
+                <p class="notice__text">Hãy mở hộp thư của bạn và bấm liên kết trong thư. Liên kết hết hạn sau 15 phút.</p>
+              </div>
+            </div>
+            <div class="ac-link__actions"><button class="btn btn--secondary" type="button">Gửi lại</button></div>
+          </section>
+
+          <section class="card ac-link" aria-labelledby="e4">
+            <div class="ac-link__head">
+              <h6 class="ac-link__title" id="e4">Email</h6>
+              <span class="badge">Chưa liên kết</span>
+            </div>
+            <div class="notice notice--error" role="alert">
+              <svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+              <div class="notice__body">
+                <p class="notice__title">Lỗi · không gửi được liên kết</p>
+                <p class="notice__text">Chưa gửi được thư lúc này. Kiểm tra kết nối rồi thử lại.</p>
+              </div>
+            </div>
+            <div class="ac-link__actions">
+              <button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Thử lại</button>
+            </div>
+          </section>
+
+          <div class="ac-signout">
+            <button class="btn btn--secondary" type="button">Đăng xuất</button>
+          </div>
+        </div>
+      </div>
+      <span class="mk-tag">Nút “Đăng xuất” cuối khối là bản <strong>dùng được</strong> — nó chỉ bật khi đã có ít nhất một cách đăng nhập được liên kết. Bản bị khóa, kèm lý do, nằm ở §1.</span>
+    </section>
+
+    <section>
+      <h3 class="mk-cap">Tối · 375 px</h3>
+      <div class="mk-view mk-view--mobile" data-theme="dark">
+        <div class="mk-stack">
+          <section class="card ac-link" aria-labelledby="g4">
+            <div class="ac-link__head">
+              <h6 class="ac-link__title" id="g4">Google</h6>
+              <span class="badge">Chưa liên kết</span>
+            </div>
+            <p class="ac-link__note">Liên kết để đăng nhập lại trên thiết bị khác. Điểm của bạn giữ nguyên.</p>
+            <div class="ac-link__actions"><button class="btn btn--secondary" type="button">Liên kết Google</button></div>
+          </section>
+
+          <section class="card ac-link" aria-labelledby="g5">
+            <div class="ac-link__head">
+              <h6 class="ac-link__title" id="g5">Google</h6>
+              <span class="badge">Đã liên kết</span>
+            </div>
+            <p class="ac-link__note">Bạn đăng nhập lại được bằng Google trên bất kỳ thiết bị nào.</p>
+            <div class="ac-link__actions"><button class="btn btn--secondary" type="button">Bỏ liên kết Google</button></div>
+          </section>
+
+          <section class="card ac-link" aria-labelledby="g6">
+            <div class="ac-link__head">
+              <h6 class="ac-link__title" id="g6">Google</h6>
+              <span class="badge">Đã liên kết</span>
+            </div>
+            <p class="ac-link__note">Bạn đăng nhập lại được bằng Google trên bất kỳ thiết bị nào.</p>
+            <div class="notice notice--warning" role="status">
+              <svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-warning"/></svg>
+              <div class="notice__body">
+                <p class="notice__title">Cảnh báo · đây là cách đăng nhập duy nhất</p>
+                <p class="notice__text">Bỏ liên kết sẽ khiến bạn không đăng nhập lại được trên thiết bị khác. Điểm của bạn không bị xóa.</p>
+              </div>
+            </div>
+            <div class="ac-link__actions"><button class="btn btn--secondary" type="button">Bỏ liên kết Google</button></div>
+          </section>
+
+          <section class="card ac-link" aria-labelledby="e5">
+            <div class="ac-link__head">
+              <h6 class="ac-link__title" id="e5">Email</h6>
+              <span class="badge">Đã liên kết</span>
+            </div>
+            <p class="ac-link__note">Bạn đăng nhập lại được bằng liên kết gửi tới hộp thư của mình. Trang này không giữ bản sao địa chỉ đó.</p>
+            <div class="ac-link__actions"><button class="btn btn--secondary" type="button">Bỏ liên kết email</button></div>
+          </section>
+
+          <section class="card ac-link" aria-labelledby="e6">
+            <div class="ac-link__head">
+              <h6 class="ac-link__title" id="e6">Email</h6>
+              <span class="badge">Chưa liên kết</span>
+            </div>
+            <div class="field ac-link__field">
+              <label class="field__label" for="m3">Địa chỉ email</label>
+              <input id="m3" type="email" value="khong-phai-email" aria-invalid="true" aria-describedby="m3h m3e">
+              <p class="field__error" id="m3e">
+                <svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+                <span>Lỗi: đây chưa phải một địa chỉ email.</span>
+              </p>
+              <p class="field__help" id="m3h">Chỉ dùng để gửi liên kết đăng nhập.</p>
+            </div>
+            <div class="ac-link__actions"><button class="btn btn--secondary" type="button">Gửi liên kết đăng nhập</button></div>
+          </section>
+
+          <section class="card ac-link" aria-labelledby="e7">
+            <div class="ac-link__head">
+              <h6 class="ac-link__title" id="e7">Email</h6>
+              <span class="badge">Chưa liên kết</span>
+            </div>
+            <div class="notice notice--error" role="alert">
+              <svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+              <div class="notice__body">
+                <p class="notice__title">Lỗi · không gửi được liên kết</p>
+                <p class="notice__text">Chưa gửi được thư lúc này. Kiểm tra kết nối rồi thử lại.</p>
+              </div>
+            </div>
+            <div class="ac-link__actions">
+              <button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Thử lại</button>
+            </div>
+          </section>
+
+          <section class="card ac-link" aria-labelledby="g7">
+            <div class="ac-link__head">
+              <h6 class="ac-link__title" id="g7">Google</h6>
+              <span class="badge">Chưa liên kết</span>
+            </div>
+            <div class="notice notice--error" role="alert">
+              <svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+              <div class="notice__body">
+                <p class="notice__title">Lỗi · không liên kết được Google</p>
+                <p class="notice__text">Việc liên kết không hoàn tất. Điểm và tên hiển thị của bạn không thay đổi. Thử lại.</p>
+              </div>
+            </div>
+            <div class="ac-link__actions">
+              <button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Thử lại</button>
+            </div>
+          </section>
+        </div>
+      </div>
+      <span class="mk-tag">Mọi lỗi của nhà cung cấp đều nói rõ <strong>cái gì không đổi</strong> — “điểm và tên hiển thị của bạn không thay đổi” — vì câu hỏi đầu tiên của người chơi khi một thao tác hỏng là họ vừa mất gì.</span>
+    </section>
+  </div>
+
+  <div class="mk-specs mk-specs--row">
+    <section>
+      <h3 class="mk-cap">Sáng · 1280 px</h3>
+      <div class="mk-scroll">
+        <div class="mk-view mk-view--desktop">
+          <div class="mk-stack">
+            <p class="ac-identity ac-measure"><strong>Bạn đã đăng nhập.</strong> Điểm của bạn theo bạn sang mọi thiết bị mà bạn đăng nhập.</p>
+            <div class="ac-links">
+              <section class="card ac-link" aria-labelledby="g8">
+                <div class="ac-link__head">
+                  <h6 class="ac-link__title" id="g8">Google</h6>
+                  <span class="badge">Đã liên kết</span>
+                </div>
+                <p class="ac-link__note">Bạn đăng nhập lại được bằng Google trên bất kỳ thiết bị nào.</p>
+                <div class="ac-link__actions"><button class="btn btn--secondary" type="button">Bỏ liên kết Google</button></div>
+              </section>
+              <section class="card ac-link" aria-labelledby="e8">
+                <div class="ac-link__head">
+                  <h6 class="ac-link__title" id="e8">Email</h6>
+                  <span class="badge">Chưa liên kết</span>
+                </div>
+                <p class="ac-link__note">Chúng tôi gửi một liên kết đăng nhập tới hộp thư của bạn. Không mật khẩu.</p>
+                <div class="field ac-link__field">
+                  <label class="field__label" for="m4">Địa chỉ email</label>
+                  <input id="m4" type="email" autocomplete="email" aria-describedby="m4h">
+                  <p class="field__help" id="m4h">Chỉ dùng để gửi liên kết đăng nhập.</p>
+                </div>
+                <div class="ac-link__actions"><button class="btn btn--secondary" type="button">Gửi liên kết đăng nhập</button></div>
+              </section>
+            </div>
+            <div class="ac-signout"><button class="btn btn--secondary" type="button">Đăng xuất</button></div>
+          </div>
+        </div>
+      </div>
+      <span class="mk-tag">Hai thẻ cạnh nhau, cao bằng nhau: hành động của mỗi thẻ bị đẩy xuống đáy thẻ, nên hai nút thẳng hàng dù hai đoạn mô tả dài ngắn khác nhau.</span>
+    </section>
+
+    <section>
+      <h3 class="mk-cap">Tối · 1280 px</h3>
+      <div class="mk-scroll">
+        <div class="mk-view mk-view--desktop" data-theme="dark">
+          <div class="mk-stack">
+            <p class="ac-identity ac-measure"><strong>Bạn đã đăng nhập.</strong> Điểm của bạn theo bạn sang mọi thiết bị mà bạn đăng nhập.</p>
+            <div class="ac-links">
+              <section class="card ac-link" aria-labelledby="g9">
+                <div class="ac-link__head">
+                  <h6 class="ac-link__title" id="g9">Google</h6>
+                  <span class="badge">Đã liên kết</span>
+                </div>
+                <p class="ac-link__note">Bạn đăng nhập lại được bằng Google trên bất kỳ thiết bị nào.</p>
+                <div class="ac-link__actions"><button class="btn btn--secondary" type="button">Bỏ liên kết Google</button></div>
+              </section>
+              <section class="card ac-link" aria-labelledby="e9">
+                <div class="ac-link__head">
+                  <h6 class="ac-link__title" id="e9">Email</h6>
+                  <span class="badge">Đã liên kết</span>
+                </div>
+                <p class="ac-link__note">Bạn đăng nhập lại được bằng liên kết gửi tới hộp thư của mình. Trang này không giữ bản sao địa chỉ đó.</p>
+                <div class="ac-link__actions"><button class="btn btn--secondary" type="button">Bỏ liên kết email</button></div>
+              </section>
+            </div>
+            <div class="ac-signout"><button class="btn btn--secondary" type="button">Đăng xuất</button></div>
+          </div>
+        </div>
+      </div>
+      <span class="mk-tag">Cả hai đã liên kết: không thẻ nào mang cảnh báo, vì bỏ một cái vẫn còn cái kia. Cảnh báo chỉ xuất hiện khi nó là cái cuối cùng.</span>
+    </section>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     4. DELETE MY DATA — the whole flow.
+     ========================================================================== -->
+<section class="mk-section" id="s4">
+  <h2>4. Xóa dữ liệu của tôi · cả luồng</h2>
+  <p>
+    Bốn chặng, vẽ đủ cả bốn: <strong>điểm vào</strong> trên trang,
+    <strong>hộp thoại xác nhận</strong> nói thẳng cái gì bị xóa và không hoàn
+    tác được, <strong>đang xóa</strong>, và <strong>kết quả</strong> — kèm chặng
+    thứ năm mà mọi luồng trung thực phải có: <strong>xóa hỏng</strong>.
+  </p>
+  <p>
+    <strong>Hành động phá hủy phân biệt được mà không cần tới màu.</strong> Nó
+    mang bốn tín hiệu, chỉ một trong đó là màu: hình dạng riêng (viền kép có sẵn
+    ở trạng thái mặc định, trước khi ai đó rê chuột), biểu tượng thùng rác, động
+    từ nói đúng việc nó làm (“Xóa dữ liệu của tôi”, không phải “Tiếp tục”), và
+    một hộp thoại xác nhận chặn trước. Chuyển sang thang xám thì ba tín hiệu kia
+    vẫn còn nguyên.
+  </p>
+  <p>
+    <strong>Lối thoát an toàn đứng trước trong thứ tự Tab.</strong> Trong hộp
+    thoại, thứ đầu tiên một người dùng bàn phím chạm tới là nút đóng, rồi “Hủy”
+    — động từ không thể hoàn tác đứng cuối cùng. Đó là luật của components.md
+    §5.11, và nó là lý do hàng hành động được viết theo thứ tự đó trong DOM chứ
+    không phải được xếp lại bằng CSS.
+  </p>
+  <p>
+    <strong>Khi đang xóa, cả hai nút mang <code>aria-disabled</code>, không mang
+    <code>disabled</code></strong> — cùng lý do với nút “Lưu” ở §2: tiêu điểm
+    đang nằm trên nút vừa được bấm, và <code>disabled</code> sẽ hất nó về
+    <code>body</code> đúng lúc người dùng đang chờ câu trả lời.
+  </p>
+
+  <div class="mk-specs mk-specs--row">
+    <section>
+      <h3 class="mk-cap">Sáng · 375 px</h3>
+      <div class="mk-view mk-view--mobile">
+        <div class="mk-stack">
+          <div class="ac-data__actions">
+            <a class="btn btn--secondary" href="#s4">Tải bản sao dữ liệu của tôi</a>
+            <button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu của tôi</button>
+          </div>
+
+          <div class="dialog" role="dialog" aria-labelledby="d1">
+            <div class="dialog__head">
+              <h6 class="dialog__title" id="d1">Xóa dữ liệu của tôi?</h6>
+              <button class="btn btn--quiet btn--icon" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-close"/></svg><span class="u-visually-hidden">Đóng</span></button>
+            </div>
+            <div class="dialog__body">
+              <p>Những thứ sau sẽ bị xóa khỏi máy chủ:</p>
+              <ul class="ac-dialog__list">
+                <li>tên hiển thị của bạn;</li>
+                <li>mã người chơi và ngày tạo tài khoản;</li>
+                <li>toàn bộ điểm của bạn, ở mọi trò chơi và mọi tuần — kể cả những điểm đang nằm trên bảng xếp hạng.</li>
+              </ul>
+              <p class="ac-dialog__warn">Không thể hoàn tác. Sau khi xóa, bạn sẽ được đăng xuất.</p>
+            </div>
+            <div class="dialog__actions">
+              <button class="btn btn--quiet" type="button">Hủy</button>
+              <button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa vĩnh viễn</button>
+            </div>
+          </div>
+
+          <div class="dialog" role="dialog" aria-labelledby="d2">
+            <div class="dialog__head">
+              <h6 class="dialog__title" id="d2">Xóa dữ liệu của tôi?</h6>
+              <button class="btn btn--quiet btn--icon" type="button" aria-disabled="true"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-close"/></svg><span class="u-visually-hidden">Đóng</span></button>
+            </div>
+            <div class="dialog__body">
+              <p class="ac-dialog__warn">Đang xóa. Đừng đóng tab này.</p>
+              <p class="ac-dialog__status" role="status">Đang xóa dữ liệu của bạn…</p>
+            </div>
+            <div class="dialog__actions">
+              <button class="btn btn--quiet" type="button" aria-disabled="true">Hủy</button>
+              <button class="btn btn--destructive" type="button" aria-disabled="true"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Đang xóa…</button>
+            </div>
+          </div>
+
+          <div class="dialog" role="dialog" aria-labelledby="d3">
+            <div class="dialog__head">
+              <h6 class="dialog__title" id="d3">Xóa dữ liệu của tôi?</h6>
+              <button class="btn btn--quiet btn--icon" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-close"/></svg><span class="u-visually-hidden">Đóng</span></button>
+            </div>
+            <div class="dialog__body">
+              <p>Chưa xóa được gì cả. Dữ liệu của bạn vẫn còn nguyên.</p>
+              <div class="notice notice--error ac-dialog__notice" role="alert">
+                <svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+                <div class="notice__body">
+                  <p class="notice__title">Lỗi · không xóa được dữ liệu</p>
+                  <p class="notice__text">Máy chủ không trả lời. Không có gì bị xóa. Kiểm tra kết nối rồi thử lại.</p>
+                </div>
+              </div>
+            </div>
+            <div class="dialog__actions">
+              <button class="btn btn--quiet" type="button">Hủy</button>
+              <button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Thử lại</button>
+            </div>
+          </div>
+
+          <div class="notice notice--success" role="status" tabindex="-1">
+            <svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-success"/></svg>
+            <div class="notice__body">
+              <p class="notice__title">Thành công · đã xóa</p>
+              <p class="notice__text">Dữ liệu của bạn đã được xóa và bạn đã được đăng xuất. Tên bạn không còn trên bảng xếp hạng nào.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span class="mk-tag">Thứ tự: điểm vào · xác nhận · đang xóa · xóa hỏng · kết quả. Thông báo kết quả mang <code>tabindex="-1"</code> vì sau khi hộp thoại đóng, nút đã mở nó không còn tồn tại — tiêu điểm được đưa về đây.</span>
+    </section>
+
+    <section>
+      <h3 class="mk-cap">Tối · 375 px</h3>
+      <div class="mk-view mk-view--mobile" data-theme="dark">
+        <div class="mk-stack">
+          <div class="ac-data__actions">
+            <a class="btn btn--secondary" href="#s4">Tải bản sao dữ liệu của tôi</a>
+            <button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu của tôi</button>
+          </div>
+
+          <div class="dialog" role="dialog" aria-labelledby="d4">
+            <div class="dialog__head">
+              <h6 class="dialog__title" id="d4">Xóa dữ liệu của tôi?</h6>
+              <button class="btn btn--quiet btn--icon" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-close"/></svg><span class="u-visually-hidden">Đóng</span></button>
+            </div>
+            <div class="dialog__body">
+              <p>Những thứ sau sẽ bị xóa khỏi máy chủ:</p>
+              <ul class="ac-dialog__list">
+                <li>tên hiển thị của bạn;</li>
+                <li>mã người chơi và ngày tạo tài khoản;</li>
+                <li>toàn bộ điểm của bạn, ở mọi trò chơi và mọi tuần — kể cả những điểm đang nằm trên bảng xếp hạng.</li>
+              </ul>
+              <p class="ac-dialog__warn">Không thể hoàn tác. Sau khi xóa, bạn sẽ được đăng xuất.</p>
+            </div>
+            <div class="dialog__actions">
+              <button class="btn btn--quiet" type="button">Hủy</button>
+              <button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa vĩnh viễn</button>
+            </div>
+          </div>
+
+          <div class="dialog" role="dialog" aria-labelledby="d5">
+            <div class="dialog__head">
+              <h6 class="dialog__title" id="d5">Xóa dữ liệu của tôi?</h6>
+              <button class="btn btn--quiet btn--icon" type="button" aria-disabled="true"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-close"/></svg><span class="u-visually-hidden">Đóng</span></button>
+            </div>
+            <div class="dialog__body">
+              <p class="ac-dialog__warn">Đang xóa. Đừng đóng tab này.</p>
+              <p class="ac-dialog__status" role="status">Đang xóa dữ liệu của bạn…</p>
+            </div>
+            <div class="dialog__actions">
+              <button class="btn btn--quiet" type="button" aria-disabled="true">Hủy</button>
+              <button class="btn btn--destructive" type="button" aria-disabled="true"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Đang xóa…</button>
+            </div>
+          </div>
+
+          <div class="dialog" role="dialog" aria-labelledby="d6">
+            <div class="dialog__head">
+              <h6 class="dialog__title" id="d6">Xóa dữ liệu của tôi?</h6>
+              <button class="btn btn--quiet btn--icon" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-close"/></svg><span class="u-visually-hidden">Đóng</span></button>
+            </div>
+            <div class="dialog__body">
+              <p>Chưa xóa được gì cả. Dữ liệu của bạn vẫn còn nguyên.</p>
+              <div class="notice notice--error ac-dialog__notice" role="alert">
+                <svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+                <div class="notice__body">
+                  <p class="notice__title">Lỗi · không xóa được dữ liệu</p>
+                  <p class="notice__text">Máy chủ không trả lời. Không có gì bị xóa. Kiểm tra kết nối rồi thử lại.</p>
+                </div>
+              </div>
+            </div>
+            <div class="dialog__actions">
+              <button class="btn btn--quiet" type="button">Hủy</button>
+              <button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Thử lại</button>
+            </div>
+          </div>
+
+          <div class="notice notice--success" role="status" tabindex="-1">
+            <svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-success"/></svg>
+            <div class="notice__body">
+              <p class="notice__title">Thành công · đã xóa</p>
+              <p class="notice__text">Dữ liệu của bạn đã được xóa và bạn đã được đăng xuất. Tên bạn không còn trên bảng xếp hạng nào.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span class="mk-tag">Câu đầu tiên của trạng thái lỗi là câu người chơi cần nhất: <strong>“Chưa xóa được gì cả.”</strong> Một thao tác phá hủy hỏng dở là nỗi sợ, nên trang trả lời nó trước khi nói gì khác.</span>
+    </section>
+  </div>
+
+  <div class="mk-specs mk-specs--row">
+    <section>
+      <h3 class="mk-cap">Sáng · 1280 px</h3>
+      <div class="mk-scroll">
+        <div class="mk-view mk-view--desktop">
+          <div class="mk-stack">
+            <div class="ac-data__actions">
+              <a class="btn btn--secondary" href="#s4">Tải bản sao dữ liệu của tôi</a>
+              <button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu của tôi</button>
+            </div>
+
+            <div class="dialog" role="dialog" aria-labelledby="d7">
+              <div class="dialog__head">
+                <h6 class="dialog__title" id="d7">Xóa dữ liệu của tôi?</h6>
+                <button class="btn btn--quiet btn--icon" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-close"/></svg><span class="u-visually-hidden">Đóng</span></button>
+              </div>
+              <div class="dialog__body">
+                <p>Những thứ sau sẽ bị xóa khỏi máy chủ:</p>
+                <ul class="ac-dialog__list">
+                  <li>tên hiển thị của bạn;</li>
+                  <li>mã người chơi và ngày tạo tài khoản;</li>
+                  <li>toàn bộ điểm của bạn, ở mọi trò chơi và mọi tuần — kể cả những điểm đang nằm trên bảng xếp hạng.</li>
+                </ul>
+                <p class="ac-dialog__warn">Không thể hoàn tác. Sau khi xóa, bạn sẽ được đăng xuất.</p>
+              </div>
+              <div class="dialog__actions">
+                <button class="btn btn--quiet is-focus" type="button">Hủy</button>
+                <button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa vĩnh viễn</button>
+              </div>
+            </div>
+
+            <div class="dialog" role="dialog" aria-labelledby="d8">
+              <div class="dialog__head">
+                <h6 class="dialog__title" id="d8">Xóa dữ liệu của tôi?</h6>
+                <button class="btn btn--quiet btn--icon" type="button" aria-disabled="true"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-close"/></svg><span class="u-visually-hidden">Đóng</span></button>
+              </div>
+              <div class="dialog__body">
+                <p class="ac-dialog__warn">Đang xóa. Đừng đóng tab này.</p>
+                <p class="ac-dialog__status" role="status">Đang xóa dữ liệu của bạn…</p>
+              </div>
+              <div class="dialog__actions">
+                <button class="btn btn--quiet" type="button" aria-disabled="true">Hủy</button>
+                <button class="btn btn--destructive" type="button" aria-disabled="true"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Đang xóa…</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span class="mk-tag">Vòng tiêu điểm được vẽ trên “Hủy” để thấy rõ nó là điểm dừng đầu trong hàng hành động — <strong>lối thoát trước, động từ không hoàn tác sau</strong>.</span>
+    </section>
+
+    <section>
+      <h3 class="mk-cap">Tối · 1280 px</h3>
+      <div class="mk-scroll">
+        <div class="mk-view mk-view--desktop" data-theme="dark">
+          <div class="mk-stack">
+            <div class="ac-data__actions">
+              <a class="btn btn--secondary" href="#s4">Tải bản sao dữ liệu của tôi</a>
+              <button class="btn btn--destructive is-hover" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu của tôi</button>
+            </div>
+
+            <div class="dialog" role="dialog" aria-labelledby="d9">
+              <div class="dialog__head">
+                <h6 class="dialog__title" id="d9">Xóa dữ liệu của tôi?</h6>
+                <button class="btn btn--quiet btn--icon" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-close"/></svg><span class="u-visually-hidden">Đóng</span></button>
+              </div>
+              <div class="dialog__body">
+                <p>Những thứ sau sẽ bị xóa khỏi máy chủ:</p>
+                <ul class="ac-dialog__list">
+                  <li>tên hiển thị của bạn;</li>
+                  <li>mã người chơi và ngày tạo tài khoản;</li>
+                  <li>toàn bộ điểm của bạn, ở mọi trò chơi và mọi tuần — kể cả những điểm đang nằm trên bảng xếp hạng.</li>
+                </ul>
+                <p class="ac-dialog__warn">Không thể hoàn tác. Sau khi xóa, bạn sẽ được đăng xuất.</p>
+              </div>
+              <div class="dialog__actions">
+                <button class="btn btn--quiet" type="button">Hủy</button>
+                <button class="btn btn--destructive is-focus" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa vĩnh viễn</button>
+              </div>
+            </div>
+
+            <div class="dialog" role="dialog" aria-labelledby="d10">
+              <div class="dialog__head">
+                <h6 class="dialog__title" id="d10">Xóa dữ liệu của tôi?</h6>
+                <button class="btn btn--quiet btn--icon" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-close"/></svg><span class="u-visually-hidden">Đóng</span></button>
+              </div>
+              <div class="dialog__body">
+                <p>Chưa xóa được gì cả. Dữ liệu của bạn vẫn còn nguyên.</p>
+                <div class="notice notice--error ac-dialog__notice" role="alert">
+                  <svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+                  <div class="notice__body">
+                    <p class="notice__title">Lỗi · không xóa được dữ liệu</p>
+                    <p class="notice__text">Máy chủ không trả lời. Không có gì bị xóa. Kiểm tra kết nối rồi thử lại.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="dialog__actions">
+                <button class="btn btn--quiet" type="button">Hủy</button>
+                <button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Thử lại</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span class="mk-tag">Trên cùng: nút phá hủy ở trạng thái rê chuột — viền trong dày lên, không đổi màu nền. Dưới: vòng tiêu điểm trên “Xóa vĩnh viễn”, cách <code>--focus-ring-offset</code> 2 px khỏi viền đỏ, nên hai đường không lẫn vào nhau.</span>
+    </section>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     5. SIGNED OUT.
+     ========================================================================== -->
+<section class="mk-section" id="s5">
+  <h2>5. Chưa đăng nhập</h2>
+  <p>
+    Khi không có phiên nào, trang vẫn tồn tại và vẫn nói thật. Nó dùng
+    <strong>khối rỗng</strong> của M1-04 — không phải khối lỗi: chưa đăng nhập
+    không phải một sự cố, và tô nó màu lỗi sẽ là trang coi “bạn chưa đăng nhập”
+    là một hỏng hóc. Khối lấy chiều cao dự trữ <code>reserve-md</code>, đúng cái
+    mà components.md §4.1 đã gán sẵn cho “khối hồ sơ tài khoản”.
+  </p>
+  <p>
+    Đây là một <em>cách điền</em> thứ tư vào khối rỗng, không phải một khối thứ
+    tư — đúng như components.md §4.4 cho phép: trang có thể đổi lời cho chủ đề
+    của nó, nhưng không đổi cấu trúc, không bỏ hành động, và không phát minh
+    khối mới. Ô “Dữ liệu của tôi” trong bảng §4.4 để trống cho trạng thái rỗng;
+    Task này điền nó, và account.md §9.2 ghi lại việc đó.
+  </p>
+
+  <div class="mk-specs mk-specs--row">
+    <section>
+      <h3 class="mk-cap">Sáng · 375 px</h3>
+      <div class="mk-view mk-view--mobile">
+        <div class="mk-stack">
+          <div class="state state--empty state--reserve-md">
+            <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-empty"/></svg>
+            <h6 class="state__title">Bạn chưa đăng nhập</h6>
+            <p class="state__text">Đăng nhập để xem và sửa hồ sơ của mình. Chơi thì không cần đăng nhập.</p>
+            <a class="btn btn--secondary" href="#s5">Đăng nhập</a>
+          </div>
+          <div class="state state--error state--reserve-md" role="status">
+            <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+            <p class="state__label">Lỗi</p>
+            <h6 class="state__title">Không tải được hồ sơ của bạn</h6>
+            <p class="state__text">Kiểm tra kết nối rồi thử lại.</p>
+            <button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Thử lại</button>
+          </div>
+        </div>
+      </div>
+      <span class="mk-tag">Hai khối cùng một hộp: cùng padding, cùng viền, cùng bán kính, cùng <code>--state-reserve</code>. Đổi giữa chúng không làm trang nhảy.</span>
+    </section>
+
+    <section>
+      <h3 class="mk-cap">Tối · 375 px</h3>
+      <div class="mk-view mk-view--mobile" data-theme="dark">
+        <div class="mk-stack">
+          <div class="state state--empty state--reserve-md">
+            <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-empty"/></svg>
+            <h6 class="state__title">Bạn chưa đăng nhập</h6>
+            <p class="state__text">Đăng nhập để xem và sửa hồ sơ của mình. Chơi thì không cần đăng nhập.</p>
+            <a class="btn btn--secondary" href="#s5">Đăng nhập</a>
+          </div>
+          <div class="state state--error state--reserve-md" role="status">
+            <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+            <p class="state__label">Lỗi</p>
+            <h6 class="state__title">Không tải được hồ sơ của bạn</h6>
+            <p class="state__text">Kiểm tra kết nối rồi thử lại.</p>
+            <button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Thử lại</button>
+          </div>
+        </div>
+      </div>
+      <span class="mk-tag">Khối rỗng không mang màu lỗi và không mang từ “Lỗi”. Khối lỗi mang cả hai, cộng biểu tượng — ba tín hiệu, không chỉ màu.</span>
+    </section>
+  </div>
+
+  <div class="mk-specs mk-specs--row">
+    <section>
+      <h3 class="mk-cap">Sáng · 1280 px</h3>
+      <div class="mk-scroll">
+        <div class="mk-view mk-view--desktop">
+          <div class="mk-stack">
+            <div class="state state--empty state--reserve-md">
+              <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-empty"/></svg>
+              <h6 class="state__title">Bạn chưa đăng nhập</h6>
+              <p class="state__text">Đăng nhập để xem và sửa hồ sơ của mình. Chơi thì không cần đăng nhập.</p>
+              <a class="btn btn--secondary" href="#s5">Đăng nhập</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span class="mk-tag">Mục “Dữ liệu của tôi” <strong>vẫn hiện</strong> khi chưa đăng nhập — bảng kê là thông tin công khai về trang, không phải dữ liệu của một người. Chỉ nút xóa là vắng mặt, vì chưa có gì để xóa.</span>
+    </section>
+
+    <section>
+      <h3 class="mk-cap">Tối · 1280 px</h3>
+      <div class="mk-scroll">
+        <div class="mk-view mk-view--desktop" data-theme="dark">
+          <div class="mk-stack">
+            <div class="state state--error state--reserve-md" role="status">
+              <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+              <p class="state__label">Lỗi</p>
+              <h6 class="state__title">Không tải được hồ sơ của bạn</h6>
+              <p class="state__text">Kiểm tra kết nối rồi thử lại.</p>
+              <button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Thử lại</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span class="mk-tag">Khối lỗi nền mang <code>role="status"</code> chứ không phải <code>role="alert"</code>: người chơi không yêu cầu lần tải này, nên nó chờ một quãng nghỉ thay vì cắt ngang (components.md §4.3).</span>
+    </section>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     6. WHAT THE ACCOUNT HOLDS.
+     ========================================================================== -->
+<section class="mk-section" id="s6">
+  <h2>6. Tài khoản giữ những gì</h2>
+  <p>
+    Bảng ở §1 là danh sách <strong>đầy đủ</strong> các trường trong
+    <a class="link" href="../../requirements.md">requirements.md</a> §4.1 — hai
+    bảng <code>players</code> và <code>scores</code>, không bỏ trường nào — nói
+    bằng tiếng của người chơi thay vì tên cột.
+  </p>
+
+  <table class="mk-table">
+    <caption>Dòng trên trang ↔ trường trong requirements.md §4.1</caption>
+    <thead>
+      <tr><th scope="col">Dòng trên trang</th><th scope="col">Trường</th><th scope="col">Bảng</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Tên hiển thị</td><td><code>display_name</code></td><td><code>players</code></td></tr>
+      <tr><td>Mã người chơi</td><td><code>id</code></td><td><code>players</code></td></tr>
+      <tr><td>Ngày tạo tài khoản</td><td><code>created_at</code></td><td><code>players</code></td></tr>
+      <tr><td>Điểm của bạn — trò chơi, tuần, điểm, thời gian sống sót, seed, phiên bản trò chơi</td><td><code>player_id</code>, <code>game_id</code>, <code>week</code>, <code>score</code>, <code>time_survived_ms</code>, <code>seed</code>, <code>game_version</code>, <code>created_at</code></td><td><code>scores</code></td></tr>
+    </tbody>
+  </table>
+
+  <p>
+    <strong>Cột “giữ đến khi nào” bị gộp thành một câu, không bị bỏ.</strong>
+    Trong <code>requirements.md</code> §4.1 mọi dòng đều có cùng một giá trị —
+    “cho đến khi người chơi xóa”. Lặp lại nó bốn lần sẽ tốn một phần ba chiều
+    rộng của bảng ở 343 px để nói một điều bốn lần, nên quy tắc lưu trữ được nói
+    <em>một lần</em> ngay dưới bảng. Không có thông tin nào mất đi; account.md §8
+    ghi lại đây là lựa chọn trình bày.
+  </p>
+  <p>
+    <strong>Một điều cần Board quyết, và trang này không tự quyết thay.</strong>
+    <code>requirements.md</code> §4.1 viết “không lưu bản sao email của người
+    chơi — nhà cung cấp đăng nhập giữ nó”. Theo ADR-021 thì nhà cung cấp đăng
+    nhập <em>chính là backend Laravel của studio</em>, nên câu đó, đọc nguyên
+    văn, có thể khiến người đọc hiểu rằng studio hoàn toàn không giữ email —
+    trong khi thực tế là email nằm ở phần đăng nhập chứ không nằm trong hồ sơ.
+    Trang này vì vậy dùng đúng câu hẹp mà nó chắc chắn đúng — <em>“Hồ sơ của bạn
+    không có bản sao địa chỉ email nào”</em> — và đẩy câu rộng hơn sang Board và
+    M1-09. account.md §14.1 là nội dung đầy đủ của vấn đề này.
+  </p>
+</section>
+
+<!-- ==========================================================================
+     7. AD SLOTS.
+     ========================================================================== -->
+<section class="mk-section" id="s7">
+  <h2>7. Ô quảng cáo</h2>
+  <p>
+    Trang này có <strong>đúng một</strong> ô, và nó đã được vẽ trong cả bốn bản
+    dựng ở §1. Không có khung trò chơi trên trang này, nên quy tắc khoảng cách
+    24 px của <code>ad-slots.md</code> §5 — vốn đo từ khung trò chơi — không có
+    đối tượng để đo. Điều đó không nới lỏng gì cả: nó có nghĩa là trang này
+    không thể vi phạm quy tắc đó, và các quy tắc còn lại vẫn áp dụng nguyên vẹn.
+  </p>
+
+  <table class="mk-table">
+    <caption>Kiểm kê ô quảng cáo của trang tài khoản</caption>
+    <thead>
+      <tr><th scope="col">Dải</th><th scope="col">Ô</th><th scope="col">Khổ</th><th scope="col">Vị trí</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>mobile · &lt; 768 px</td><td><strong>không có ô nào</strong></td><td>—</td><td>— <code>ad-slots.md</code> §3: ngoài trang chơi, dải mobile không có vị trí quảng cáo nào</td></tr>
+      <tr><td>compact + wide · ≥ 768 px</td><td><code>ad-header-leaderboard</code></td><td>728 × 90</td><td>trong header, <strong>sau</strong> skip-link</td></tr>
+    </tbody>
+  </table>
+
+  <p>
+    <strong>Không có ô quảng cáo nào bên trong hộp thoại xác nhận, và không có ô
+    nào cạnh nút xóa.</strong> Không tài liệu nào cấm riêng điều đó, vì không ai
+    nghĩ sẽ cần cấm; nó được viết ra ở đây để lần sau có người hỏi thì đã có câu
+    trả lời. <code>requirements.md</code> §5.1 liệt kê đủ các vị trí được phép và
+    “cạnh một hành động phá hủy” không nằm trong số đó — mọi vị trí khác là một
+    lỗi.
+  </p>
+</section>
+
+<!-- ==========================================================================
+     8. KEYBOARD, FOCUS AND READING ORDER.
+     ========================================================================== -->
+<section class="mk-section" id="s8">
+  <h2>8. Bàn phím, tiêu điểm và thứ tự đọc</h2>
+  <p>
+    Thứ tự DOM = thứ tự Tab = thứ tự đọc từ trên xuống, ở <strong>cả hai</strong>
+    dải. Trang này không có thuộc tính <code>order</code>, không có
+    <code>tabindex</code> dương, và không có phần tử nào được đổi vị trí bằng
+    media query — nên không có chỗ nào để hai thứ tự đó lệch nhau.
+  </p>
+
+  <table class="mk-table">
+    <caption>Điểm dừng Tab, theo thứ tự, trên trang thật</caption>
+    <thead>
+      <tr><th scope="col">#</th><th scope="col">Điểm dừng</th><th scope="col">375 px</th><th scope="col">1280 px</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td><code>skip-link</code> → <code>#main</code></td><td>có</td><td>có</td></tr>
+      <tr><td>2</td><td>Wordmark</td><td>có</td><td>có</td></tr>
+      <tr><td>3</td><td>Nút mở menu</td><td>có</td><td>— (ẩn)</td></tr>
+      <tr><td>4</td><td>Ba liên kết điều hướng</td><td>khi menu mở</td><td>có</td></tr>
+      <tr><td>5</td><td>Hai nút chọn giao diện (một điểm dừng cho cả nhóm, mũi tên đi trong nhóm)</td><td>có</td><td>có</td></tr>
+      <tr><td>6</td><td>Ô quảng cáo</td><td colspan="2"><strong>không bao giờ</strong> — ô không nhận tiêu điểm ở bất kỳ dải nào</td></tr>
+      <tr><td>7</td><td>Ba liên kết mục lục trong trang</td><td>có</td><td>có</td></tr>
+      <tr><td>8</td><td>Ô “Tên hiển thị”, rồi nút “Lưu”</td><td>có</td><td>có</td></tr>
+      <tr><td>9</td><td>Nút của thẻ Google</td><td>có</td><td>có</td></tr>
+      <tr><td>10</td><td>Ô “Địa chỉ email”, rồi nút của thẻ Email</td><td>có</td><td>có</td></tr>
+      <tr><td>11</td><td>Nút “Đăng xuất” — <strong>vẫn là một điểm dừng khi bị khóa</strong>, vì nó mang <code>aria-disabled</code> chứ không mang <code>disabled</code></td><td>có</td><td>có</td></tr>
+      <tr><td>12</td><td>Bảng “những gì tài khoản của bạn giữ”: <strong>không có điểm dừng nào</strong>; Tab đi thẳng qua bảng</td><td>có</td><td>có</td></tr>
+      <tr><td>13</td><td>“Tải bản sao dữ liệu của tôi”</td><td>có</td><td>có</td></tr>
+      <tr><td>14</td><td>“Xóa dữ liệu của tôi”</td><td>có</td><td>có</td></tr>
+      <tr><td>15</td><td>Bốn liên kết chân trang</td><td>có</td><td>có</td></tr>
+    </tbody>
+  </table>
+
+  <p>
+    <strong>Khi hộp thoại mở, thứ tự trên dừng lại.</strong> Nền trang thành
+    <code>inert</code>, và vòng Tab chạy trong hộp thoại: nút đóng → “Hủy” →
+    “Xóa vĩnh viễn” → quay lại nút đóng. <strong>Đó là hành vi bắt buộc, không
+    phải bẫy bàn phím</strong>: WCAG 2.1.2 đòi người dùng <em>thoát ra
+    được</em>, và Esc, “Hủy” và nút đóng đều làm được, cả ba đều trả tiêu điểm
+    về nút đã mở hộp thoại. components.md §5.11 là lập luận đầy đủ.
+  </p>
+  <p>
+    <strong>Ba lần tiêu điểm được dời đi, và chỉ ba.</strong> (1) Khi gửi hỏng,
+    tiêu điểm nhảy tới <code>.error-summary</code> — nó mang
+    <code>tabindex="-1"</code> và <code>role="alert"</code>, nên vừa được đọc
+    vừa được tới. (2) Khi hộp thoại đóng, tiêu điểm quay về nút đã mở nó — việc
+    này do <code>showModal()</code> của trình duyệt lo, trang không viết dòng
+    mã nào. (3) Khi xóa xong, nút đã mở hộp thoại không còn tồn tại, nên tiêu
+    điểm về thông báo kết quả, cũng mang <code>tabindex="-1"</code>.
+  </p>
+  <p>
+    <strong>Vùng cảm ứng tối thiểu 44 × 44 px</strong> ở mọi chiều rộng, cách
+    nhau ít nhất 8 px — kể cả hai nút trong hàng hành động của hộp thoại và hai
+    nút của mục “Dữ liệu của tôi”, nơi cái thứ hai là hành động phá hủy và nhận
+    khoảng cách <code>md</code> (12 px) chứ không phải mức tối thiểu.
+  </p>
+</section>
+
+<!-- ==========================================================================
+     9. CONTRAST.
+     ========================================================================== -->
+<section class="mk-section" id="s9">
+  <h2>9. Tương phản</h2>
+  <p>
+    <strong>Trang này không tạo ra một cặp nền/chữ mới nào.</strong> Mọi cặp nó
+    dùng đều đã được đo — trong <code>DESIGN.md</code> → “Measured contrast”,
+    hoặc trong <code>components.md</code> §3.4 với bốn cặp
+    <code>primary-hover</code>. Bảng đầy đủ, kèm nguồn của từng dòng, nằm ở
+    <a class="link" href="../pages/account.md">account.md</a> §11.
+  </p>
+  <p>
+    Ba quyết định trông như quyết định thị giác mà không phải:
+  </p>
+  <ul class="mk-sheet__lede">
+    <li><strong>Biểu mẫu và bảng nằm thẳng trên nền trang, không nằm trong
+        thẻ.</strong> Dòng trợ giúp và tiêu đề cột là <code>text-muted</code>,
+        dòng lỗi là <code>error</code>; trên <code>bg</code> cả hai cặp đều đã
+        được đo (6.25 / 7.65 và 6.30 / 7.45). Trong một thẻ, chúng sẽ là những
+        cặp trên <code>surface</code> — và ở đó <code>error</code> cũng đã được
+        đo (6.71 / 6.65), nhưng đường kẻ hàng của bảng thì chưa.</li>
+    <li><strong>Nút phá hủy tự mang nền <code>surface</code> của nó.</strong>
+        Nên nhãn đỏ luôn là <code>error</code> trên <code>surface</code>
+        (6.71 / 6.65) dù nút đứng ở đâu, và viền của nó là <code>error</code>
+        trên <code>bg</code> (6.30 / 7.45) — cả hai đều vượt ngưỡng.</li>
+    <li><strong>Huy hiệu tự mang nền <code>surface</code> của nó.</strong> Trong
+        một thẻ, nền huy hiệu trùng nền thẻ, nên thứ phân định nó là viền
+        <code>border-strong</code> trên <code>surface</code> (3.70 / 3.19), chứ
+        không phải màu nền — đúng như components.md §3.3 nói về mọi mảng nền
+        trong hệ này.</li>
+  </ul>
+  <p>
+    <strong>Điều khiển bị khóa.</strong> Nút “Đăng xuất” khi chưa liên kết gì
+    mang <code>aria-disabled</code> chứ không mang <code>disabled</code>, nên nó
+    <em>không</em> bị làm mờ bởi luật <code>:disabled</code> của
+    <code>base.css</code> và vẫn giữ nguyên tương phản. Lý do nó không dùng được
+    nằm trong câu văn bên dưới nó, không nằm trong độ mờ. Nút “Đang lưu…” và
+    “Đang xóa…” cũng vậy.
+  </p>
+</section>
+
+<!-- ==========================================================================
+     10. HOW TO READ THIS SHEET.
+     ========================================================================== -->
+<section class="mk-section" id="s10">
+  <h2>10. Cách đọc tờ này</h2>
+  <p>
+    <strong>Tờ mẫu hạ cấp phần khung của nó.</strong> Một tài liệu chỉ được có
+    một <code>banner</code>, một <code>main</code> và một <code>contentinfo</code>,
+    mà tờ này xếp bốn bản dựng của cùng một trang. Nên ở đây header là
+    <code>&lt;div class="site-header"&gt;</code> chứ không phải
+    <code>&lt;header&gt;</code>, “main” là <code>&lt;div class="shell main"&gt;</code>,
+    và tiêu đề trang được vẽ bằng <code>h4</code>/<code>h5</code>/<code>h6</code>.
+    <strong>Trang thật dùng đúng các phần tử đó và đúng cấp tiêu đề thật</strong>
+    — markup của trang thật nằm ở
+    <a class="link" href="../pages/account.md">account.md</a> §3, để M2 bê thẳng
+    chứ không phải gỡ cấp ngược lại.
+  </p>
+  <p>
+    <strong>Hộp thoại được vẽ tại chỗ bằng <code>&lt;div class="dialog"&gt;</code></strong>,
+    đúng như components.html §14 vẽ bản tĩnh của nó — không phải một
+    <code>&lt;dialog&gt;</code> đóng bị ép hiện bằng CSS. Nền mờ phía sau và hợp
+    đồng bàn phím thì <strong>không ảnh tĩnh nào chứng minh được</strong>:
+    chúng chỉ tồn tại khi <code>showModal()</code> đưa phần tử lên lớp trên
+    cùng. <a class="link" href="components.html">components.html</a> đã có sẵn
+    <strong>một</strong> <code>&lt;dialog&gt;</code> thật sau một nút thật cho
+    đúng phép thử ấy, và đó là chỗ người duyệt kiểm tra Esc, vòng Tab và việc
+    trả tiêu điểm. Tờ này không nhân bản nó: một bản sao thứ hai là một script
+    thứ hai, trên một trang mà luật của Task này không cho phép script nào.
+  </p>
+  <p>
+    <strong>Một điều tờ này không giả được.</strong>
+    <code>tokens.css</code> §7 nâng năm token cỡ chữ trong một media query theo
+    <em>viewport</em>. Một khung rộng cố định không thể nhắc lại bước đó mà không
+    viết cỡ chữ thành số vào <code>account.css</code> — đúng thứ trôi dạt mà
+    luật “không giá trị thô” sinh ra để chặn. Nên <strong>trong cửa sổ rộng từ
+    768 px trở lên, các khung 375 px hiển thị năm token đó ở cỡ desktop</strong>.
+    Nó chỉ ảnh hưởng tiêu đề; không đổi bố cục, không đổi vùng, không đổi trạng
+    thái, không đổi thứ tự đọc. Muốn đọc khung mobile đúng thang chữ của nó thì
+    thu cửa sổ xuống dưới 768 px.
+  </p>
+  <p>
+    <strong>Các lớp <code>is-hover</code>, <code>is-focus</code> và
+    <code>is-active</code> là quy ước ép trạng thái của M1-04.</strong> Chúng đi
+    qua đúng khối khai báo mà pseudo-class thật đi qua, nên người duyệt đang
+    nhìn luật thật chứ không phải một bản vẽ lại bằng tay. Chúng
+    <strong>không bao giờ được xuất hiện trên trang thật</strong>.
+  </p>
+  <p>
+    <strong>Năm lệnh kiểm tra</strong> cho người duyệt nằm trong
+    <a class="link" href="../pages/account.md">account.md</a> §15.1, chứ không in
+    ở đây: mẫu tìm kiếm của lệnh thứ nhất sẽ khớp với chính nó nếu in trong tệp
+    này, và phép kiểm tra sẽ trượt trên tài liệu của chính nó.
+  </p>
+  <p>
+    <strong>Việc nên làm bằng mắt:</strong> đếm bốn bản dựng ở mỗi mục; nhấn Tab
+    xuyên tờ và xem vòng tiêu điểm có luôn hiện không; chuyển sang thang xám rồi
+    đọc lại nút xóa, hai huy hiệu liên kết, khối lỗi và khối rỗng — không tín
+    hiệu nào được mất; bật <code>prefers-reduced-motion: reduce</code> và xác
+    nhận không có gì đổi, vì không có gì chuyển động.
+  </p>
+</section>
+
+</body>
+</html>

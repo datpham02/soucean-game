@@ -1,0 +1,780 @@
+/* ==========================================================================
+   Soucean Game — M1-08 page stylesheet: the account and profile page.
+   --------------------------------------------------------------------------
+   Source of truth: docs/design/pages/account.md (Task SOU-6, milestone M1-08).
+
+   SCOPE RULE — read before editing.
+
+   There is not ONE raw colour, type size, spacing step, radius or duration in
+   this file. Every such value is read from tokens.css. The complete list of
+   literals, and why each one has to be a literal, is:
+
+     * `1px` hairline edges — not a value on any token scale, and the same 1px
+       base.css writes on `th, td` and on every control.
+     * `100%`, `0`, `auto`, `anywhere`, `start`, `center`, `1fr`, `repeat(2,
+       minmax(0, 1fr))` — layout keywords, counts and ratios, not design-scale
+       values.
+     * `60ch` — the content measure, in the one unit a measure can be stated
+       in. DESIGN.md asks for a 60–75 character measure and `ch` is how CSS
+       says "characters"; a px equivalent would be a literal that drifts the
+       moment the type scale moves, which is the drift this whole rule exists
+       to prevent. 60 is the lower end of DESIGN.md's range, chosen because a
+       form is the one place where the eye travels from a label to a control to
+       an error message rather than along a line of prose. `70ch` appears twice
+       more in section 8, which is sheet furniture and not part of the product.
+     * `768px` inside a media condition — a custom property is not valid in a
+       media condition, so `--bp-switch` cannot be read there. The same
+       literal, for the same reason, that tokens.css, base.css, components.css,
+       ads.css, home.css, play.css and leaderboards.css each repeat and each
+       document. It MUST stay equal to `--bp-switch`.
+
+   This page uses `switch` (768px) and nothing else. It has no side rail and no
+   game frame, so `--bp-wide` (1024px) never appears — the rail is the play
+   page's business.
+
+   This file adds NO shared component and restyles none.
+
+     * No `.ad-slot` rule outside the sheet mirror of section 9: ads.css is the
+       sole owner of that component (ad-slots.md section 11), and the mirror
+       restates `display` and nothing else.
+     * No `.field`, `.dialog`, `.notice`, `.btn`, `.state`, `.skeleton`,
+       `.card`, `.well`, `.badge`, `.error-summary` or `.link` rule. Where this
+       page needs a declaration on an element INSIDE one of those components,
+       it is written against a page class carried by that element
+       (`.ac-what__cell`), never against the library selector — so the
+       library's rules keep exactly one owner.
+     * `--state-reserve` is set on one page block. That is the variable
+       components.css section 16 invites a page to set, not an override of it.
+
+   Everything here is either
+     (a) page layout, which belongs to a page and not to the library,
+     (b) sheet furniture (section 8), which is not part of the product, or
+     (c) the band mirror (section 9), which restates what a viewport media
+         query already says so that a fixed-width view shows its own band.
+   ========================================================================== */
+
+/* The stack, in the order components.md section 7.1 fixes: tokens, base,
+   components. ads.css last — this page carries exactly one of the five ad
+   slots and ad-slots.md section 11 makes ads.css its only owner. All four are
+   relative, same-directory imports. None makes a network request. */
+@import url('tokens.css');
+@import url('base.css');
+@import url('components.css');
+@import url('ads.css');
+
+/* ==========================================================================
+   1. PAGE LAYOUT.
+
+   The structure is wireframes.md section 4.4, unchanged and in its order:
+   title, in-page contents, profile, sign-in, my data, the delete dialog. One
+   DOM in both bands — nothing is reordered or re-parented by a media query, so
+   no `order` property appears anywhere in this file.
+
+   THE PAGE IS ONE COLUMN AT BOTH WIDTHS, capped at the reading measure. That
+   is not a shortcut. Every region here is a form or a short piece of prose,
+   and a form field stretched to 1200px is a field whose label and whose error
+   text are a monitor apart. The page therefore keeps `.shell`'s centred column
+   and caps the content itself; the extra width at 1280px becomes margin, not
+   line length.
+   ========================================================================== */
+
+.ac-title {
+  margin-block-end: var(--space-md);
+}
+
+/* The lede under the h1: what this page is for, in one sentence. */
+.ac-lede {
+  margin-block-end: var(--space-2xl);
+  color: var(--color-text-muted);
+}
+
+/* Every h2 region is separated by one step, as a page-level rhythm rather
+   than a margin on each block, so adding a region later cannot forget it. */
+.ac-section {
+  margin-block-end: var(--space-4xl);
+}
+
+.ac-section:last-child {
+  margin-block-end: 0;
+}
+
+.ac-section__title {
+  margin-block-end: var(--space-sm);
+}
+
+/* The one-sentence introduction each region opens with. */
+.ac-section__intro {
+  margin-block-end: var(--space-lg);
+  color: var(--color-text-muted);
+}
+
+/* The content measure. Set on the regions that hold a form or a table, so a
+   1280px window does not stretch a text input across the screen. `60ch` is the
+   lower end of the 60–75 character measure DESIGN.md asks for, and a form is
+   the one place on the site where the shorter end is the right one: the eye
+   travels from a label to a control to an error message, not along a line of
+   prose. */
+.ac-measure {
+  max-inline-size: 60ch;
+}
+
+/* --- In-page contents. ---------------------------------------------------
+   wireframes.md section 4.4 puts three links directly under the h1 — Hồ sơ,
+   Đăng nhập, Dữ liệu của tôi — so that "Xóa dữ liệu của tôi" is one action
+   away from the top of the page and is not buried in a footer.
+
+   They are ORDINARY LINKS, the same device components.md section 5.16 gives
+   the long-form document template. They are deliberately NOT `.segmented`:
+   that control means "you are looking at one of these", and all three of these
+   sections are on the page at once. A selected plate here would be the control
+   telling a lie, which is the same argument leaderboards.md section 5.2 makes
+   about the period switcher. */
+
+.ac-toc {
+  margin-block-end: var(--space-3xl);
+}
+
+.ac-toc__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm) var(--space-lg);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Each contents link is a full 44px target with at least 8px between it and
+   its neighbour — the gap above supplies the separation, this supplies the
+   height. Without it a `.link` is only its line box, about 26px, which is
+   under the `--target-min` floor components.md section 2.2 sets.
+
+   This is the one selector in this file that reaches an element rather than a
+   page class. It is scoped inside a page block and it names `a`, which is an
+   HTML element and not a library selector — `.link`'s own rules are untouched,
+   and `.link` sets no `display`, so nothing of the component's is overridden.
+   A page class on each anchor would be three identical class attributes
+   saying what "every link in this list" already says. */
+.ac-toc__list a {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--target-min);
+}
+
+/* ==========================================================================
+   2. PROFILE — the display name.
+
+   THE FORM SITS ON THE PAGE BACKGROUND, NOT IN A CARD. That is a contrast
+   decision rather than a visual one, and it is the same one leaderboards.css
+   section 4 made about the boards. The field's help text and its error text
+   are `text-muted` and `error`; on `bg` both pairs are measured (6.25 / 7.65
+   and 6.30 / 7.45). The control itself still carries its own `surface` fill
+   from base.css, so the text inside it is `text` on `surface` (15.58 / 12.66)
+   and its edge is `border-strong` on `surface` (3.70 / 3.19). Every pair on
+   this region is one DESIGN.md already measured; see account.md section 11.
+
+   The field, its label, its help text, its error text and the invalid edge are
+   all components.css's `.field`. Nothing here restyles any of them.
+   ========================================================================== */
+
+.ac-profile__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  align-items: flex-start;
+}
+
+/* The field takes the column; the action sits under it rather than beside it.
+   At 343px "Lưu" beside a text input leaves the input about 240px wide, which
+   is too narrow for a 20-character Vietnamese display name with its tone
+   marks. One arrangement at both widths is also one fewer thing for the band
+   mirror in section 9 to keep honest. */
+.ac-profile__field {
+  inline-size: 100%;
+}
+
+/* The submit row. `flex-wrap` so the saved notice can sit beside the button on
+   a wide line and drop below it on a narrow one. */
+.ac-profile__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+/* The error summary, when a submit fails. It is INSERTED above the form, which
+   moves the form down — and that is correct: the summary is the thing the
+   player must read, focus is moved to it, and a region that reserved space for
+   an error that is usually absent would be a permanent hole in the page.
+   account.md section 9.3 states plainly that this is the one transition on the
+   page that is not zero-shift, and why that is the right trade. */
+.ac-profile__summary {
+  margin-block-end: var(--space-lg);
+}
+
+/* ==========================================================================
+   3. SIGN-IN AND LINKING.
+
+   Two providers, one card each: Google and email. Stacked at 375px, side by
+   side from the switch up. Both cards are components.css's `.card` and the
+   link state is marked by a `.badge` carrying a WORD — "Đã liên kết" or "Chưa
+   liên kết". The badge's colour is identical in both states on purpose, so the
+   colour carries nothing and the word carries everything. See account.md
+   section 6.
+   ========================================================================== */
+
+/* The identity line — "you are playing anonymously" / "you are signed in".
+   requirements.md section 3 and wireframes.md section 4.4 both fix that this
+   page shows identity STATE and never prints a player id. */
+.ac-identity {
+  margin-block-end: var(--space-lg);
+}
+
+.ac-links {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-lg);
+  margin-block-end: var(--space-lg);
+}
+
+.ac-link {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.ac-link__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  justify-content: space-between;
+}
+
+.ac-link__title {
+  margin: 0;
+}
+
+.ac-link__note {
+  margin: 0;
+  max-inline-size: none;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--color-text-muted);
+}
+
+/* The provider's action sits at the foot of its card, so two cards of
+   different text lengths still line their buttons up. */
+.ac-link__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-block-start: auto;
+}
+
+/* The email address field inside the email card. It is a real `.field` with a
+   real `<label>`; the card only gives it the column. */
+.ac-link__field {
+  inline-size: 100%;
+}
+
+/* Sign out closes the region: an ordinary secondary action, never a
+   destructive one. Signing out deletes nothing. */
+.ac-signout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+/* ==========================================================================
+   4. MY DATA — the honest summary, and the destructive action.
+
+   TWO COLUMNS, NOT THREE. The field table in requirements.md section 4.1
+   carries a retention column whose value is the same string on every row —
+   "until the player deletes their account". Repeating it four times would cost
+   a third of a 343px table to say one thing four times, so the retention rule
+   is stated ONCE as a sentence under the table and the table keeps what
+   actually varies: what is stored, and why it is needed. account.md section 8
+   records that this is a presentation choice and that nothing was dropped.
+
+   THE TABLE SITS ON THE PAGE BACKGROUND. base.css draws `th` in `text-muted`;
+   on `bg` that pair is measured at 6.25 / 7.65, and the row rule is `border`
+   on `bg`, which DESIGN.md already records as decorative at 1.32 / 1.49. In a
+   card both would be pairs against `surface` that nobody has measured — the
+   same reasoning leaderboards.css section 4 applies to the boards.
+   ========================================================================== */
+
+.ac-what {
+  margin-block-end: var(--space-md);
+}
+
+/* The "what is stored" cell. It is a `<th scope="row">`, because the thing
+   stored is what identifies its row — a screen reader reading the "why" cell
+   should hear "Tên hiển thị" with it, and `scope="row"` is what supplies that.
+
+   base.css draws every `th` as muted `label-sm`, which is right for a column
+   header and wrong for a row header: it would print the stored field names
+   smaller and fainter than the explanations beside them, inverting the
+   emphasis of the one table on the site whose left column is the point. So
+   this rule restores body type and full-strength text — on the PAGE CLASS the
+   element carries, never on `th`, so base.css keeps exactly one owner of that
+   element. `text` on `bg` is 14.64 / 14.19.
+
+   `overflow-wrap` because at 343px the column is narrow and a field name has
+   to break rather than overflow. No ellipsis: truncating the name of a stored
+   field hides the exact thing the table exists to disclose. */
+.ac-what__cell {
+  overflow-wrap: anywhere;
+  font-size: var(--text-body-md);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--leading-body);
+  letter-spacing: var(--tracking-normal);
+  color: var(--color-text);
+}
+
+/* The retention rule and the "not stored" list, under the table. */
+.ac-what__note {
+  margin: 0 0 var(--space-lg);
+  max-inline-size: none;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--color-text-muted);
+}
+
+.ac-notstored {
+  margin: 0 0 var(--space-xl);
+  padding-inline-start: var(--space-xl);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--color-text-muted);
+}
+
+/* The two actions of the region: take a copy, and delete. They sit on one row
+   from the switch up and stack at 375px, where two Vietnamese labels do not
+   fit on one line at 343px.
+
+   THE DESTRUCTIVE ACTION IS NOT PUSHED TO THE END OF THE PAGE AND NOT HIDDEN
+   BEHIND A DISCLOSURE. wireframes.md section 4.4 makes "Xóa dữ liệu của tôi"
+   a first-class action of a first-class section, and components.md section 6.1
+   is explicit that its styling must not make the choice feel punished. */
+.ac-data__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-md);
+}
+
+/* ==========================================================================
+   5. THE DELETE CONFIRMATION DIALOG.
+
+   The dialog, its backdrop, its head, its body and its action row are all
+   components.css's `.dialog`. The product opens it with `showModal()`, which
+   supplies the focus cycle, the inert background, Esc and the return of focus
+   to the control that opened it — so this page ships NO focus-management code
+   of its own. components.md section 5.11 is the full argument, including why
+   Tab cycling inside an open modal is the REQUIRED behaviour and not a
+   keyboard trap.
+
+   This section adds the list of what will be deleted, and nothing else.
+   ========================================================================== */
+
+/* What will be deleted, itemised. A list rather than a paragraph, because a
+   player scanning a confirmation reads items and skips sentences. */
+.ac-dialog__list {
+  margin: 0 0 var(--space-md);
+  padding-inline-start: var(--space-xl);
+}
+
+/* The irreversibility line. It is a separate element, directly above the
+   actions, carrying the one sentence the player must not miss. It is `text` on
+   `surface` and is emphasised by WEIGHT, not by colour — the dialog already
+   carries the error colour on its destructive button, and spending it twice
+   would make neither use mean anything. */
+.ac-dialog__warn {
+  margin: 0;
+  font-weight: var(--font-weight-semibold);
+}
+
+/* The in-flight status line, between the body and the actions. */
+.ac-dialog__status {
+  margin: var(--space-md) 0 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--color-text-muted);
+}
+
+.ac-dialog__notice {
+  margin-block-start: var(--space-md);
+}
+
+/* ==========================================================================
+   6. THE ONE RESERVED HEIGHT.
+
+   `--ac-field-block` is the block size of the LOADED display-name field,
+   computed from the same tokens that field's three parts read:
+
+     label      label-md x leading-label      (base.css sets the label type)
+     gap        space-xs                      (.field's flex gap)
+     control    target-min                    (base.css's minimum control box;
+                                               the text inside is shorter, so
+                                               the minimum is what binds)
+     gap        space-xs
+     help text  body-sm x leading-body-sm
+
+   It is a calc() and not a height on purpose: a height would be a literal, and
+   a literal would drift from the type scale the moment the scale moved.
+
+   WHAT THIS GUARANTEES, PRECISELY: `loading -> loaded` moves nothing. That is
+   the path components.md section 4.4 names for this region ("1 skeleton row in
+   the name field") and the one a player takes on every visit. The loading
+   block is intrinsically SHORTER than the reserve — one skeleton bar inside
+   `.state`'s padding — so the reserve is what sets its height, which is
+   exactly what a reserve is for.
+
+   WHAT IT DOES NOT COVER: the submit-failure error summary, which is an
+   element INSERTED above the form rather than a state swapped inside it.
+   account.md section 9.3 states that, and why reserving a permanent hole for
+   an error that is usually absent would be the worse answer.
+   ========================================================================== */
+
+.ac-profile__state {
+  --ac-field-block: calc(
+    var(--text-label-md) * var(--leading-label) + var(--space-xs) +
+      var(--target-min) + var(--space-xs) + var(--text-body-sm) *
+      var(--leading-body-sm)
+  );
+  --state-reserve: var(--ac-field-block);
+}
+
+/* The signed-out fill uses the library's own named reserve. components.md
+   section 4.1 lists `.state--reserve-md` against "a full leaderboard, THE
+   ACCOUNT PROFILE BLOCK" — so the block that stands in for the whole profile
+   takes the size the library already chose for it, and this file sets nothing.
+   The two reserves answer two different questions and do not conflict:
+   `--ac-field-block` is the FIELD inside a loaded profile, `reserve-md` is the
+   PROFILE itself when there is no signed-in player to show one for. */
+
+/* ==========================================================================
+   7. THE BAND — the real rules, the ones that ship.
+
+   One switch, M1-01's `switch` at 768px. This file introduces none and invents
+   no second. Section 9 mirrors it onto the fixed-width sheet views.
+
+   There are exactly three responsive rules on this page, which is the point:
+   the fewer rules that depend on a breakpoint, the fewer there are to mirror,
+   and the smaller the chance the sheet and the product drift apart.
+   ========================================================================== */
+
+@media (min-width: 768px) {
+  /* The two provider cards sit side by side. */
+  .ac-links {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+  }
+
+  /* "Tải dữ liệu của tôi" and "Xóa dữ liệu của tôi" fit on one row. They keep
+     the `md` gap, which is above the 8px minimum separation between adjacent
+     targets that components.md section 2.2 fixes — and well above it for a
+     row whose second control is destructive. */
+  .ac-data__actions {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  /* The profile's field and its action row keep the measure; the extra width
+     becomes margin. Stated so a wide window cannot stretch the input. */
+  .ac-profile__form {
+    max-inline-size: 60ch;
+  }
+}
+
+/* ==========================================================================
+   8. SHEET FURNITURE — NOT PART OF THE PRODUCT.
+
+   Everything from here down exists so one file can show one page at both
+   design widths, in both themes, in every state. No product page uses any of
+   it and none of it describes a component.
+
+   It is restated here under the `mk-` prefix rather than borrowed, for the
+   reason home.css section 4, play.css section 6 and leaderboards.css section 6
+   each give: components.css section 19 says in its own first paragraph "No
+   page mockup should use any of it". The classes below are this Task's, and
+   they match M1-05's, M1-06's and M1-07's by name so the four sheets read
+   alike.
+
+   THE ONE EXCEPTION, STATED PLAINLY — the same one wireframes.md section 2,
+   components.md section 1.3 and the three page stylesheets before this one
+   each recorded. tokens.css section 7 steps five type tokens in a VIEWPORT
+   media query on `:root`. A fixed-width view cannot restate that step without
+   writing type-size literals into this file, which the scope rule at the top
+   forbids and which is exactly the drift that rule exists to prevent. So IN A
+   WINDOW >= 768px WIDE THE 375px VIEWS RENDER `--text-display`,
+   `--text-headline-lg`, `--text-headline-md`, `--text-headline-sm` AND
+   `--text-body-lg` AT THEIR DESKTOP SIZE. It affects headings only; it changes
+   no layout, no region, no state and no reading order. To read a mobile view
+   at its true type scale, narrow the window below 768px. In the product the
+   question never arises, because there the band comes from the viewport.
+   ========================================================================== */
+
+.mk-sheet {
+  max-inline-size: calc(var(--bp-desktop) + 2 * var(--space-3xl));
+  margin-inline: auto;
+  padding-inline: var(--space-lg);
+  padding-block: var(--space-2xl) var(--space-6xl);
+}
+
+.mk-sheet__kicker {
+  font-size: var(--text-label-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+.mk-sheet__lede {
+  max-inline-size: 70ch;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--color-text-muted);
+}
+
+.mk-section {
+  margin-block-start: var(--space-5xl);
+  padding-block-start: var(--space-2xl);
+  border-block-start: 1px solid var(--color-border);
+}
+
+.mk-section > p {
+  max-inline-size: 70ch;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--color-text-muted);
+}
+
+.mk-specs {
+  display: grid;
+  gap: var(--space-2xl);
+  margin-block: var(--space-lg);
+}
+
+/* Two narrow views sit side by side on a wide monitor and wrap on a narrow
+   one, so light and dark can be compared without scrolling between them. */
+.mk-specs--row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.mk-cap {
+  margin-block-end: var(--space-sm);
+  font-size: var(--text-label-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+/* A 1280px view does not fit every reader's window. Scroll the view, never
+   the page, and never scale it — a scaled mockup cannot be measured. */
+.mk-scroll {
+  overflow-x: auto;
+}
+
+/* The view: a fixed-width slice of a real page, at a real design width. The
+   gutter is set here rather than read from `--layout-gutter`, because that
+   token is viewport-dependent and a view's band must be a property of the
+   view. It is set to the SAME spacing tokens DESIGN.md gives each band, so it
+   restates a choice and invents no value. */
+.mk-view {
+  --layout-gutter: var(--space-lg);
+
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  outline: 1px solid var(--color-border-strong);
+}
+
+.mk-view--mobile {
+  inline-size: var(--bp-mobile);
+}
+
+.mk-view--desktop {
+  --layout-gutter: var(--space-2xl);
+
+  inline-size: var(--bp-desktop);
+}
+
+/* The skip link lives off-screen until focused. On a sheet it is drawn in its
+   FOCUSED position so a reviewer can see it without tabbing, and so a
+   translated-away link does not float over the caption above each view. The
+   real behaviour is proved by tabbing in the product, never by this rule. */
+.mk-view .skip-link {
+  position: static;
+  transform: none;
+}
+
+/* A note under a view: "the mobile band", "keyboard focus", "no ad slot". */
+.mk-tag {
+  display: block;
+  margin-block-start: var(--space-xs);
+  font-size: var(--text-label-sm);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+/* Stacked specimens inside one view — four state blocks, say. */
+.mk-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+}
+
+/* THERE IS NO `.mk-dialog` RULE, AND THAT IS DELIBERATE.
+
+   The delete confirmation is drawn in place on this sheet as
+   `<div class="dialog" role="dialog">`, exactly as components.html section 14
+   draws it — a `div` wearing the component's class, never a closed `<dialog>`
+   element forced visible with CSS. So the box a reviewer looks at goes through
+   components.css's real `.dialog` declaration block and needs no rule of this
+   Task's at all.
+
+   The backdrop and the keyboard contract cannot be shown by any static
+   picture: they exist only while `showModal()` has the element in the top
+   layer. components.html already ships ONE real `<dialog>` behind a real
+   button for exactly that test, and that is where a reviewer checks Esc, the
+   Tab cycle and the return of focus. This sheet does not duplicate it — a
+   second copy would be a second script on a page whose rules allow none, to
+   re-prove a contract the library already proves. account.md section 7.4 says
+   so in full. */
+
+.mk-table {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+}
+
+.mk-table th {
+  font-size: var(--text-label-sm);
+  color: var(--color-text);
+}
+
+.mk-table td {
+  vertical-align: top;
+}
+
+/* ==========================================================================
+   9. THE BAND MIRROR — sheet only.
+
+   Section 7 is the band as the product sees it, from the viewport. This
+   section mirrors it onto `.mk-view--mobile` and `.mk-view--desktop`, which is
+   what lets a 375px view show the mobile band inside a 1280px window.
+
+   BOTH DIRECTIONS ARE STATED ON PURPOSE. A mobile view has to UNDO the media
+   query when the sheet is read on a wide monitor, not merely fail to opt into
+   it. The selectors score (0,2,0) or (0,3,0) against the media block's (0,1,0),
+   and this file is imported last, so they win on both counts.
+
+   The mirror restates `display`, `flex-direction`, `grid-template-columns`,
+   `align-items`, `max-inline-size` and `padding`. It restates no colour and no
+   spacing token choice that is not already stated above or in the library —
+   and nothing at all about an ad slot's box.
+   ========================================================================== */
+
+/* --- 9.1 Page rhythm. ---------------------------------------------------- */
+
+.mk-view--mobile .main {
+  padding-block: var(--space-3xl);
+}
+
+.mk-view--desktop .main {
+  padding-block: var(--space-4xl);
+}
+
+.mk-view--mobile .card {
+  padding: var(--space-lg);
+}
+
+.mk-view--desktop .card {
+  padding: var(--space-xl);
+}
+
+/* --- 9.2 The two provider cards. ----------------------------------------- */
+
+.mk-view--mobile .ac-links {
+  grid-template-columns: 1fr;
+}
+
+.mk-view--desktop .ac-links {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+}
+
+/* --- 9.3 The two data actions, and the form measure. --------------------- */
+
+.mk-view--mobile .ac-data__actions {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.mk-view--desktop .ac-data__actions {
+  flex-direction: row;
+  align-items: center;
+}
+
+.mk-view--mobile .ac-profile__form {
+  max-inline-size: none;
+}
+
+.mk-view--desktop .ac-profile__form {
+  max-inline-size: 60ch;
+}
+
+/* --- 9.4 Navigation. ----------------------------------------------------- */
+
+.mk-view--mobile .site-nav__toggle {
+  display: inline-flex;
+}
+
+.mk-view--mobile .site-nav__toggle[aria-expanded='false'] + .site-nav__list {
+  display: none;
+}
+
+.mk-view--mobile .site-nav__toggle[aria-expanded='true'] + .site-nav__list {
+  display: flex;
+  flex-direction: column;
+  padding-block-end: var(--space-md);
+}
+
+.mk-view--desktop .site-nav__toggle {
+  display: none;
+}
+
+.mk-view--desktop .site-nav__list {
+  display: flex;
+  flex-direction: row;
+  gap: var(--space-sm);
+  padding-block-end: 0;
+}
+
+/* --- 9.5 The ad inventory, per band. -------------------------------------
+   This page carries exactly one slot: `ad-header-leaderboard`, in the header,
+   from the switch up. ads.css gates it on the viewport; a fixed-width view has
+   to restate that gate, or a 375px view read on a 1400px monitor would show a
+   banner the mobile band does not have.
+
+   `flex` and `none` are ads.css's own on and off values, copied here. The
+   cross-reference can only be one way — ads.css belongs to M1-02 and this Task
+   does not edit it — so if ads.css ever changes that display type, these rules
+   keep `flex` silently. wireframes.md, play.css and leaderboards.css each
+   record the same note for the same reason.
+
+   ad-slots.md section 3 is why mobile carries none: outside the play page,
+   mobile has no ad position at all, and that document will not add one until
+   requirements.md section 5.1 names it. */
+
+.mk-view--mobile .ad-slot.ad-slot--header-leaderboard {
+  display: none;
+}
+
+.mk-view--desktop .ad-slot.ad-slot--header-leaderboard {
+  display: flex;
+}
