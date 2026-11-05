@@ -253,6 +253,17 @@ In the markup the error element comes **before** the help element and both are
 named in `aria-describedby`, in that order, so a screen reader reads the problem
 first and the rule second.
 
+**What the summary's link points at, on the sheet and on the real page.** On the
+real page there is exactly one display-name field, so "one link per bad field"
+has exactly one target and §3's markup is unambiguous. The sheet is a different
+object: it draws the same form eight times, once per state, so the summary that
+illustrates the failed-save state sits in a document where four other copies of
+its own field already exist. Each render's summary therefore links to that
+render's **first** field (`#n1`, `#n7`, `#n13`, `#n16`) — the link resolves, it
+stays inside its own render, and it does not invent a ninth copy of the form to
+own. **It is a property of the sheet, not of the design**, and M2 should read
+§5.2's rule rather than copy the sheet's `href`.
+
 ### 5.3 Saving, and the `disabled` trap
 
 While a save is in flight the button reads **"Đang lưu…"** and carries
@@ -388,7 +399,7 @@ colour vision deficiency. §15.5 makes checking that a review step.
 | --- | --- |
 | **Entry** | the destructive button in the "Dữ liệu của tôi" section |
 | **Confirm** | the dialog: an itemised list of exactly what will be deleted, then one bold line — *"Không thể hoàn tác. Sau khi xóa, bạn sẽ được đăng xuất."* |
-| **In progress** | both actions carry `aria-disabled`, the destructive one reads "Đang xóa…", a `role="status"` line reads "Đang xóa dữ liệu của bạn…", and one sentence says "Đừng đóng tab này." |
+| **In progress** | both actions carry `aria-disabled`, the destructive one reads "Đang xóa…", a `role="status"` line reads "Đang xóa dữ liệu của bạn…", one sentence says "Đừng đóng tab này.", and **Esc is suppressed for exactly this stage** (§7.3.1) |
 | **Result** | the dialog closes; a `notice--success` with `role="status"` and `tabindex="-1"` receives focus: the data is gone and you have been signed out |
 | **Failure** | a `notice--error` with `role="alert"` **inside** the dialog, whose first sentence is *"Chưa xóa được gì cả. Dữ liệu của bạn vẫn còn nguyên."*, and a *Thử lại* action |
 
@@ -409,6 +420,45 @@ out, the "Dữ liệu của tôi" section no longer has a delete button, and the
 control that opened the dialog does not exist to return to. So the result notice
 is the focus target, and it carries `tabindex="-1"` for that reason only.
 
+### 7.3.1 Esc while the deletion is in flight
+
+The in-progress row above marks **every** exit unavailable — the close button,
+"Hủy" and the destructive button all carry `aria-disabled`. Esc is not an exit
+the page can mark: a native `<dialog>` opened with `showModal()` closes on Esc
+unless the product calls `preventDefault()` on the `cancel` event. Left alone it
+would be the one remaining way out of an irreversible operation already running,
+and it would land the player on an opener that a successful deletion is about to
+remove — with no status line left to read and no result notice yet to take
+focus. So this is a decision, not an omission:
+
+> **While the request is in flight, the product calls `preventDefault()` on the
+> dialog's `cancel` event. The moment the request resolves — either way — it
+> stops.**
+
+The stage is bounded in both directions, which is what keeps it on the right
+side of WCAG 2.1.2:
+
+- **Success** — the dialog closes itself and focus moves to the result notice
+  (§7.3). The player never needed Esc.
+- **Failure** — the error notice appears inside the dialog, and the close
+  button, "Hủy" and Esc are all live again in the same frame.
+
+The player is also told, while it is happening, what is happening: the
+`role="status"` line and "Đừng đóng tab này." are on screen for the whole of it.
+A short, announced, self-resolving wait is not a trap; an Esc that abandons a
+delete mid-flight is a worse answer to the same keystroke.
+
+**This buys one obligation for M4, recorded in §17: a request that never answers
+must still land in the failure state.** A deletion left hanging forever is the
+one thing that would turn a bounded wait into a real keyboard trap, so the
+timeout is an accessibility requirement here, not a nicety.
+
+`components.md` does not cover this case — its §5.11 describes the ordinary
+dialog, which has no stage where Esc should be refused. Nothing above changes
+the library's contract; it is one page's exception to it, written down so M2
+does not have to guess, and offered to M1-04 if a second destructive flow ever
+wants the same rule.
+
 ### 7.4 The dialog, and what this sheet deliberately does not duplicate
 
 The product opens a real `<dialog>` with `showModal()`. That single call supplies
@@ -418,6 +468,9 @@ ships no focus-management code of its own**.
 > **"No keyboard trap" does not mean Tab must leave the dialog.** WCAG 2.1.2
 > requires that the user can *get out* by keyboard. Esc, "Hủy" and the close
 > button all do that, and all three return focus to the control that opened it.
+> (The one stage where that is not true is the few seconds a deletion is in
+> flight, when all four exits are withheld together and both outcomes give the
+> keyboard back — §7.3.1 is the whole argument.)
 > **Tab cycling inside an open modal is the required behaviour** (WCAG 2.4.3 and
 > the ARIA dialog pattern), not the violation. `components.md` §5.11 spells this
 > out because it is the single most often misread criterion on the list.
@@ -619,6 +672,15 @@ query, so there is nowhere for the two to disagree.
 Tab cycles inside the dialog: close → Hủy → Xóa vĩnh viễn → close. §7.4 is why
 that is required rather than forbidden.
 
+**And while a deletion is in flight, Esc stops too.** That one stage withholds
+every exit at once — the three controls by `aria-disabled`, Esc by
+`preventDefault()` on the dialog's `cancel` event — and gives them all back the
+instant the request resolves: on success the dialog closes itself and focus
+moves to the result notice, on failure the error notice appears inside the
+dialog and close, "Hủy" and Esc are live again. Tab still cycles throughout, so
+the dialog is never a place the keyboard cannot move within. §7.3.1 is the
+argument and the obligation it puts on M4.
+
 **Focus is moved exactly three times, and only three.**
 
 1. **On a failed submit** → to `.error-summary` (`tabindex="-1"`,
@@ -710,7 +772,10 @@ on this page.
   directly under the table, in the same visual weight — not a footnote.
 - **The export action is "take a copy", not "view in a modal".** A player who
   wants their data wants to keep it; a modal they have to screenshot is a worse
-  answer to the same question. What format M4 hands them is M4's.
+  answer to the same question. **This one is not settled here** — "Tải bản sao
+  dữ liệu của tôi" promises more than any document this Task inherited, so it is
+  an open item for the Board and for M1-09, not a design decision this page gets
+  to take alone. **§14.7 is the whole of it.**
 
 ---
 
@@ -744,8 +809,9 @@ destructive action" is not among them — any other position is a defect.
 
 ### 14.1 "We do not keep your email" — for the Board and for M1-09
 
-**This is the one item on this Task that another document must agree with before
-either ships, and this page deliberately did not settle it alone.**
+**This is one of two items on this Task that another document must agree with
+before either ships — §14.7 is the other — and this page deliberately did not
+settle either alone.**
 
 `requirements.md` §4.1 says: *"No copy of the player's email. The auth provider
 holds it, and only if the player links an email."* That sentence was written
@@ -823,6 +889,50 @@ it.
 the Board installs them (security-architecture §11). **Neither was installed in
 this environment, so neither was used**, and no uninstalled tool was substituted
 for either.
+
+### 14.7 "Tải bản sao dữ liệu của tôi" — for the Board and for M1-09
+
+**This page draws an action no document asked for, and it should not be read as
+approved by having been drawn.** It is listed here rather than settled in §12,
+where it first appeared as a design decision.
+
+What the inherited documents actually say:
+
+- `wireframes.md` §4.4 gives this region three things: *what is stored*, *view
+  it*, and *Xóa dữ liệu của tôi*. A download is not among them.
+- `requirements.md` says a player can **see** everything stored about them. The
+  table in §8 already discharges that in full, on the page, with no request.
+- `wireframes.md` §4.5 routes the privacy policy's "your rights" section to
+  **delete** only.
+
+So "take a copy" is a stronger promise than "see it": it implies an export
+endpoint in M4 that nobody has approved, a format, and a decision about what a
+copy of a player's data even contains. And because M1-09's rights section is
+specified as delete-only, a privacy policy written to that spec will not mention
+an export — which is exactly the contradiction SOU-6's acceptance criteria
+forbid between these two documents.
+
+**The case for keeping it**, so the Board is deciding against something: the
+section is called "Dữ liệu của tôi" and holds the delete action; a player who
+has just read what is held and is one button away from destroying it is the
+player most likely to want to keep a copy first. Offering the copy beside the
+deletion is what makes the deletion safe to offer.
+
+What is needed, and from whom:
+
+- **The Board** decides whether the product promises an export at all. This Task
+  is not asking for removal and has not removed it; the button stays drawn so
+  the decision is made against a real screen.
+- **M1-09** must match whatever the Board decides. If the answer is no, the
+  action comes out of this page — one `<a>` in §3, one tab stop in §10, one
+  bullet in §12, and the sheet's eight copies. **Nothing else on the page
+  depends on it**, which is the reason it was safe to draw before the answer.
+- **M4** inherits a scope item if the answer is yes, and `AGENTS.md` §4 would
+  mark that path security-sensitive: an endpoint that hands a player a file of
+  their own data is an endpoint that can hand it to somebody else.
+
+Until that is answered, the honest reading of this button is "proposed", exactly
+as §14.2's display-name rules are proposed.
 
 ---
 
@@ -941,7 +1051,11 @@ Expected: **0** slots in every `--mobile` view, **1** slot of `728x90` at
    neither overflows — `overflow-wrap: anywhere` is the mechanism.
 6. **Open `components.html` and press the live dialog's button**: Esc closes it,
    Tab cycles inside it, and focus returns to the opener. That is the keyboard
-   contract this page relies on and does not re-prove (§7.4).
+   contract this page relies on and does not re-prove (§7.4). **What that dialog
+   cannot show is §7.3.1** — Esc refused while a deletion is in flight, and
+   accepted again the moment it fails — because no static sheet and no
+   script-free page has a request in flight to refuse it during. It is an M2
+   obligation and an M4 test, listed in §17 as both.
 7. **Turn on `prefers-reduced-motion: reduce`** and confirm nothing changes,
    because nothing on this page moves.
 
@@ -979,7 +1093,10 @@ than a gap.
 - **The dialog's focus behaviour is inherited, not demonstrated here.** This
   sheet draws the dialog statically and points at `components.html`'s live one
   (§7.4). If that live dialog does not actually return focus, this page is wrong
-  too — and the fix belongs in M1-04.
+  too — and the fix belongs in M1-04. **§7.3.1 is further than that: it is a
+  rule the library does not have and no page in this repository yet implements.**
+  Nothing here demonstrates it; it is written as a requirement on M2 and M4 and
+  nothing more.
 - **The Vietnamese font check remains open**, as `components.md` §8.3 left it.
   No platform was tested here.
 - **The long-display-name and long-field-name cases in §15.5 item 5 were
@@ -1004,18 +1121,24 @@ five things that most want your judgement:
    of `aria-describedby` (error first, help second).
 4. **§7** — the whole delete flow. Especially: is the confirmation list the
    right level of detail, and does the failure message lead with the right
-   sentence?
+   sentence? **§7.3.1 is the one to argue with**: suppressing Esc while the
+   deletion is in flight is this Task's answer to "every exit is unavailable, so
+   what does the key that is not a control do?", and it rests entirely on the
+   stage being bounded at both ends.
 5. **§9.2** — using the empty block for "not signed in". Does it read as a
    neutral state rather than a fault?
 
-**To the Board.** §14.1 is the one that needs an answer before M1-09 and this
-page can both be true — the email claim, and what ADR-021 changed about it.
-Then §14.4 (sign-out), §14.5 (the ad-slot label's unmeasured pair) and §14.6
-(the design tooling was not installed, so it was not used).
+**To the Board.** Two need an answer before M1-09 and this page can both be
+true. **§14.1** — the email claim, and what ADR-021 changed about it.
+**§14.7** — whether "Tải bản sao dữ liệu của tôi" is a promise the product
+makes at all; no inherited document asks for it, and M1-09's rights section is
+specified as delete-only. Then §14.4 (sign-out), §14.5 (the ad-slot label's
+unmeasured pair) and §14.6 (the design tooling was not installed, so it was not
+used).
 
 **To M1-09 (privacy and consent).** Your §1 "what is stored" section and this
 page's table are two renderings of the same source, `requirements.md` §4.1.
-**Read §8 and §14.1 before writing yours.** The three "not stored" lines and the
+**Read §8, §14.1 and §14.7 before writing yours.** The three "not stored" lines and the
 single retention sentence are the exact claims this page makes; if yours differ,
 one of the two is wrong and it needs fixing rather than reconciling. This page
 links the player to the policy, and the policy's "your rights" section links
@@ -1032,10 +1155,14 @@ If a second page ever needs either, that is when they become library business.
 not styling: **one `<h1>` and no skipped level**, **the in-page contents under
 the `<h1>` with "Dữ liệu của tôi" in it**, **the three sections as siblings**,
 **the error summary above the form**, and **a real `<dialog>` opened with
-`showModal()`**. Two obligations come with them:
+`showModal()`**. Three obligations come with them:
 
 - **Ignore activation while `aria-disabled="true"` is set** (§14.3). The browser
   no longer blocks it for you.
+- **Call `preventDefault()` on the dialog's `cancel` event while a deletion is
+  in flight, and stop the moment the request resolves either way** (§7.3.1).
+  `aria-disabled` marks the three controls; only this marks Esc, and without it
+  a keystroke abandons an irreversible operation already running.
 - **Insert each live region before you fill it** (§9.4), or the announcement
   will not happen.
 
@@ -1048,12 +1175,18 @@ to send a magic link; and a request to delete everything, which either succeeds
 completely or changes nothing. **"Partially deleted" is not a state this design
 has a screen for**, and §7.3's failure copy promises the player it cannot
 happen — so if the deletion path cannot be made all-or-nothing, that is a design
-change, not an implementation detail. `AGENTS.md` §4 marks every path involved
-as security-sensitive.
+change, not an implementation detail. **The delete request must also always
+answer**: it may succeed or fail, but it may not hang, because §7.3.1 withholds
+Esc for as long as it is in flight and a request that never resolves would leave
+a keyboard user shut inside the dialog. A timeout that lands in the failure
+state satisfies it. `AGENTS.md` §4 marks every path involved as
+security-sensitive.
 
 **To M4 (tests).** Every claim in §9.4, §10 and §15 is a Playwright assertion:
 the tab order, the visible ring on the `aria-disabled` button, the three focus
-moves, the live-region roles, the dialog's Esc-and-return, the per-band ad
+moves, the live-region roles, the dialog's Esc-and-return, **Esc refused while a
+deletion is in flight and accepted again the moment it fails** (§7.3.1), the
+per-band ad
 inventory (0 at 375 px, 1 at 1280 px), `position: static` on the slot, the equal
 heights of the loaded field and its loading block, and CLS = 0 at both widths.
 

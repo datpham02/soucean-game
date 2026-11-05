@@ -236,7 +236,7 @@
             </ul>
             <div class="ac-data__actions">
               <a class="btn btn--secondary" href="#s1">Tải bản sao dữ liệu của tôi</a>
-              <button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu của tôi</button>
+              <button class="btn btn--destructive" type="button" aria-haspopup="dialog"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu của tôi</button>
             </div>
           </section>
 
@@ -399,7 +399,7 @@
             </ul>
             <div class="ac-data__actions">
               <a class="btn btn--secondary" href="#s1">Tải bản sao dữ liệu của tôi</a>
-              <button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu của tôi</button>
+              <button class="btn btn--destructive" type="button" aria-haspopup="dialog"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu của tôi</button>
             </div>
           </section>
 
@@ -558,7 +558,7 @@
               </ul>
               <div class="ac-data__actions">
                 <a class="btn btn--secondary" href="#s1">Tải bản sao dữ liệu của tôi</a>
-                <button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu của tôi</button>
+                <button class="btn btn--destructive" type="button" aria-haspopup="dialog"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu của tôi</button>
               </div>
             </section>
 
@@ -716,7 +716,7 @@
               </ul>
               <div class="ac-data__actions">
                 <a class="btn btn--secondary" href="#s1">Tải bản sao dữ liệu của tôi</a>
-                <button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu của tôi</button>
+                <button class="btn btn--destructive" type="button" aria-haspopup="dialog"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu của tôi</button>
               </div>
             </section>
 
@@ -1432,6 +1432,22 @@
     đang nằm trên nút vừa được bấm, và <code>disabled</code> sẽ hất nó về
     <code>body</code> đúng lúc người dùng đang chờ câu trả lời.
   </p>
+  <p>
+    <strong>Và khi đang xóa, phím Esc cũng bị chặn — chỉ đúng chặng đó.</strong>
+    Cả ba lối ra bằng nút đều đã bị khóa ở chặng này, nên nếu để Esc nguyên thì
+    nó là đường duy nhất thoát khỏi một thao tác không hoàn tác được
+    <em>đang chạy</em>, và nó thả người chơi về một nút mà việc xóa thành công
+    sắp xóa mất. Một <code>&lt;dialog&gt;</code> mở bằng
+    <code>showModal()</code> luôn đóng khi nhấn Esc, trừ khi sản phẩm gọi
+    <code>preventDefault()</code> trên sự kiện <code>cancel</code> — nên đây là
+    một quyết định, không phải một chỗ bỏ sót. Chặng này có biên ở cả hai đầu:
+    <strong>xong</strong> thì hộp thoại tự đóng và tiêu điểm về thông báo kết
+    quả, <strong>hỏng</strong> thì thông báo lỗi hiện trong hộp thoại và nút
+    đóng, “Hủy”, Esc sống lại ngay. Vòng Tab vẫn chạy trong suốt chặng đó, nên
+    hộp thoại không lúc nào là một bẫy bàn phím theo WCAG 2.1.2. Kèm theo là một
+    ràng buộc cho M4: <strong>một yêu cầu không bao giờ trả lời vẫn phải rơi vào
+    trạng thái hỏng</strong>. account.md §7.3.1 là lập luận đầy đủ.
+  </p>
 
   <div class="mk-specs mk-specs--row">
     <section>
@@ -1440,7 +1456,7 @@
         <div class="mk-stack">
           <div class="ac-data__actions">
             <a class="btn btn--secondary" href="#s4">Tải bản sao dữ liệu của tôi</a>
-            <button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu của tôi</button>
+            <button class="btn btn--destructive" type="button" aria-haspopup="dialog"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu của tôi</button>
           </div>
 
           <div class="dialog" role="dialog" aria-labelledby="d1">
@@ -1517,7 +1533,7 @@
         <div class="mk-stack">
           <div class="ac-data__actions">
             <a class="btn btn--secondary" href="#s4">Tải bản sao dữ liệu của tôi</a>
-            <button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu của tôi</button>
+            <button class="btn btn--destructive" type="button" aria-haspopup="dialog"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu của tôi</button>
           </div>
 
           <div class="dialog" role="dialog" aria-labelledby="d4">
@@ -1597,7 +1613,7 @@
           <div class="mk-stack">
             <div class="ac-data__actions">
               <a class="btn btn--secondary" href="#s4">Tải bản sao dữ liệu của tôi</a>
-              <button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu của tôi</button>
+              <button class="btn btn--destructive" type="button" aria-haspopup="dialog"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu của tôi</button>
             </div>
 
             <div class="dialog" role="dialog" aria-labelledby="d7">
@@ -1647,7 +1663,7 @@
           <div class="mk-stack">
             <div class="ac-data__actions">
               <a class="btn btn--secondary" href="#s4">Tải bản sao dữ liệu của tôi</a>
-              <button class="btn btn--destructive is-hover" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu của tôi</button>
+              <button class="btn btn--destructive is-hover" type="button" aria-haspopup="dialog"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu của tôi</button>
             </div>
 
             <div class="dialog" role="dialog" aria-labelledby="d9">
@@ -1846,6 +1862,20 @@
     không có bản sao địa chỉ email nào”</em> — và đẩy câu rộng hơn sang Board và
     M1-09. account.md §14.1 là nội dung đầy đủ của vấn đề này.
   </p>
+  <p>
+    <strong>Điều thứ hai cần Board quyết: nút “Tải bản sao dữ liệu của
+    tôi”.</strong> Không tài liệu nào thừa hưởng được yêu cầu nó:
+    <code>wireframes.md</code> §4.4 cho mục này ba thứ — <em>giữ những gì</em>,
+    <em>xem nó</em>, <em>Xóa dữ liệu của tôi</em> — và
+    <code>requirements.md</code> chỉ hứa người chơi <em>xem</em> được, việc mà
+    bảng ở trên đã làm trọn trên trang. “Tải một bản” là lời hứa mạnh hơn: nó
+    kéo theo một đầu ra dữ liệu ở M4 mà chưa ai duyệt, và
+    <code>wireframes.md</code> §4.5 lại chỉ định mục “quyền của bạn” trong chính
+    sách riêng tư là <em>chỉ xóa</em> — nên M1-09 viết đúng đặc tả sẽ mâu thuẫn
+    với trang này. Nút vẫn được vẽ để Board quyết trên một màn hình thật, nhưng
+    nó là <strong>đề xuất</strong>, không phải quyết định của trang này.
+    account.md §14.7 là nội dung đầy đủ.
+  </p>
 </section>
 
 <!-- ==========================================================================
@@ -1925,6 +1955,13 @@
     phải bẫy bàn phím</strong>: WCAG 2.1.2 đòi người dùng <em>thoát ra
     được</em>, và Esc, “Hủy” và nút đóng đều làm được, cả ba đều trả tiêu điểm
     về nút đã mở hộp thoại. components.md §5.11 là lập luận đầy đủ.
+  </p>
+  <p>
+    <strong>Khi đang xóa, Esc cũng dừng.</strong> Đúng một chặng khóa mọi lối ra
+    cùng lúc — ba nút bằng <code>aria-disabled</code>, Esc bằng
+    <code>preventDefault()</code> trên sự kiện <code>cancel</code> của hộp thoại
+    — và trả lại tất cả ngay khi yêu cầu có câu trả lời, dù là xong hay hỏng.
+    §4 ở trên và account.md §7.3.1 là lý do và là ràng buộc nó đặt lên M2 và M4.
   </p>
   <p>
     <strong>Ba lần tiêu điểm được dời đi, và chỉ ba.</strong> (1) Khi gửi hỏng,
