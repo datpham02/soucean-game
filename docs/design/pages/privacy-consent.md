@@ -357,6 +357,28 @@ states where the address actually is. Neither makes the broad claim the Board
 forbade. [`account.md`](account.md) §6.3 ("No email address is printed, even
 when linked") is the same fact from the other side.
 
+**The cross-reference sentence, and why it is worded the way it is.** The last
+line of policy section 1 points the reader at the account page. Before the
+Board's decision the two lists were identical and the sentence said so —
+*"Trang Tài khoản liệt kê đúng những mục này"*. Adding the email row made that
+claim false: the policy's table now has five rows and the account page's has
+four, because the email is not a profile field. A player who followed the link
+to check would find a row missing and would be right to distrust both pages. So
+the sentence no longer claims the two lists are the same one:
+
+> Trang **Tài khoản** liệt kê những trường trong hồ sơ của bạn — bốn dòng đầu
+> của bảng trên. Email không nằm trong bảng đó vì nó ở hệ thống đăng nhập, như
+> đoạn trên đã nói.
+
+It states the relationship that is actually true (the account page is the
+profile; the policy's table is the profile **plus** the address the sign-in
+system holds), and it gives the reason in the same breath, so the missing row
+reads as the design's answer rather than as a gap. **Anyone adding a row to
+either table must check this sentence**: it is the only place in the four
+renders that counts rows across two pages, and the acceptance criterion it
+serves is "the privacy policy's statement of what is collected matches the
+account page — the two must not contradict each other".
+
 ### 5.2 The right to a copy, beside the right to delete
 
 **Same Board decision:** the product keeps *"Tải bản sao dữ liệu của tôi"* on the
@@ -802,8 +824,8 @@ than a gap.
 ### 11.0 What the review round changed
 
 `qa-engineer` reviewed PR #13 and requested changes; the Board Operator
-separately recorded two decisions this page had to match. Four things changed,
-and nothing else did.
+separately recorded two decisions this page had to match. Four things changed in
+the first round, and a fifth in the second — nothing else did.
 
 | Came from | What changed | Where |
 | --- | --- | --- |
@@ -811,6 +833,7 @@ and nothing else did.
 | QA finding 2 — two captions described an ad slot that is not in `cookie-settings.html` | both captions rewritten to say what their render actually shows. The same false claim was also sitting in the **"Quảng cáo" category description** in both files — "the slot keeps its place" is not true below 768 px, where `ad-slots.md` gives a non-play page no slot at all — so that sentence became "no ad is loaded and the layout does not change", which is true at both widths | `cookie-settings.html`, `privacy.html` |
 | Board decision 1 — the email | §1 gains an email row and a paragraph; the broad "we do not keep your email" is gone | `privacy.html` (4 renders), §5.1 |
 | Board decision 2 — the data export | §5 "Quyền của bạn" lists the right to a copy beside the right to delete, under the account page's own button label | `privacy.html` (4 renders), §5.2 |
+| QA second round — the closing sentence of policy §1 still claimed the Account page lists *exactly* the rows above, which decision 1 made false (five rows here, four there) | the sentence now says the Account page lists the **profile fields** — the first four rows — and gives the reason the email is not among them; the wording and the rule for changing it are recorded in §5.1 | `privacy.html` (4 renders), §5.1 |
 
 One piece of bookkeeping came with them: §9.2's structural figures were
 **recounted from scratch** and the counting method is now written down beside
