@@ -93,7 +93,7 @@ heading levels, so M2 can lift it directly rather than un-demote the sheet.
     </div>
   </header>
 
-  <main id="main" class="shell main">     <!-- main -->
+  <main id="main" class="shell main" tabindex="-1">  <!-- main -->
     <section class="page-section hero">
       <h1 class="hero__title">Soucean Game</h1>
       <p class="hero__lede">Một câu giới thiệu.</p>
@@ -169,14 +169,22 @@ that decision and does not re-open it:
   equal games has no single primary action, so making every card primary would
   make none of them primary. **The home page therefore has no filled button at
   all**, which is the honest answer rather than a gap.
-- **One control per card.** The art is not a link and the title is not a link.
-  Three links per game would give a keyboard user three stops per game and a
-  screen-reader user three identical entries in a links list.
+- **One control per card, out of the card's own chrome.** The art is not a link
+  and the title is not a link. Three links per game would give a keyboard user
+  three stops per game and a screen-reader user three identical entries in a
+  links list. This rule is about the card's chrome and never forbade the top-3
+  strip's own *Thử lại* in its error state (§6.3) — see the two bullets below.
 - The pointer hit area is stretched over the whole card by `::after`, so a mouse
   can click anywhere while the **accessible** target stays the one button.
 - The focus ring is drawn around **the whole card**, because the whole card is
   what will activate. A ring around the button alone would describe the wrong
   target.
+- **Both of those last two hold only while "Chơi" is the card's only control.**
+  When the top-3 strip is in its error state the card holds *Thử lại* as well,
+  and `components.css` §11 switches the stretch, the card ring and the ring
+  suppression off together, so *Thử lại* is clickable and each control draws
+  its own ring. This is `accessibility-report.md` A-01 and A-13, fixed in the
+  component library; the page adds no class and no markup for it.
 - The accessible name is "Chơi *&lt;tên trò chơi&gt;*" via a visually hidden
   span.
 
@@ -190,7 +198,7 @@ that decision and does not re-open it:
 | 4–6 | Trò chơi · Bảng xếp hạng · Tài khoản | Current page marked by weight **and** underline **and** `aria-current="page"` — never colour alone. |
 | 7–8 | Theme: Sáng · Tối | Two real radios. Tab enters the group, arrow keys move within it — the native radio contract, with no JavaScript. |
 | — | *the ad slot* | **Not a stop.** No `tabindex`, no interactive content. |
-| 9 … 9+N | **One stop per card** | |
+| 9 … 9+N | **One stop per card** | Two for a card whose top-3 strip is in its error state: *Thử lại* comes before "Chơi", in DOM order, and each draws its own focus ring (§6.3). |
 | last | Four footer links | Each a 44 px target. |
 
 Nothing on this page is sticky, there is no dialog and there is no focus trap,
@@ -205,7 +213,7 @@ so no focused control is ever obscured (WCAG 2.2 *Focus Not Obscured*).
 | State | Block | Copy |
 | --- | --- | --- |
 | **Empty** | `.state--empty .state--reserve-lg` | "Chưa có trò chơi nào" · "Danh sách sẽ xuất hiện khi trò chơi đầu tiên được thêm." |
-| **Loading** | the real grid, holding skeleton cards — see §6.2 | visually hidden "Đang tải danh sách trò chơi…" |
+| **Loading** | the real grid, holding skeleton cards — see §6.2 — with `aria-busy="true"` on the block that is replaced | visually hidden "Đang tải danh sách trò chơi…", in the persistent live region beside that block (`components.md` §4.3 note 3) |
 | **Error** | `.state--error .state--reserve-lg`, `role="status"` | "Không dựng được danh sách trò chơi" · "Kiểm tra kết nối rồi thử lại." · *Thử lại* |
 
 **The empty state carries no action, on purpose.** `components.md` §4.2 makes
@@ -267,11 +275,15 @@ Per `components.md` §4.4, with `.state--reserve-sm`:
 | State | Copy |
 | --- | --- |
 | Empty | "Chưa có điểm tuần này" · "Hãy là người đầu tiên." |
-| Loading | 3 skeleton rows, visually hidden "Đang tải bảng tuần…" |
+| Loading | 3 skeleton rows carrying `aria-busy="true"`; the visually hidden "Đang tải bảng tuần…" sits in the persistent live region beside them, per `components.md` §4.3 note 3 |
 | Error | "Không tải được bảng tuần" · *Thử lại* |
 
 **A broken strip does not break the card.** The art, title, description and
-"Chơi" button are all still there and still work. The state block supplies its
+"Chơi" button are all still there and still work — **and so does *Thử lại***.
+In the error state the card has two tab stops, not one: `components.css` §11
+drops the stretched hit area and the card-level ring for exactly this case, so
+the retry button is reachable by pointer and each control shows its own focus
+ring (`accessibility-report.md` A-01, A-13). See §5's card bullets. The state block supplies its
 own `bg` fill inside the `surface` card — that is the surface rule of
 `components.md` §2.1, not decoration: it is what lets a state sit inside a card
 without this Task inventing a colour or publishing an unmeasured ratio.

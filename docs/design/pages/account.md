@@ -98,7 +98,7 @@ the shape for M2 to lift; it is not a demotion to be undone.
     <div class="shell">…header ad slot, AFTER the skip link…</div>
   </header>
 
-  <main class="shell main" id="main">
+  <main class="shell main" id="main" tabindex="-1">
     <h1 class="ac-title">Tài khoản</h1>
     <p class="ac-lede ac-measure">…one sentence…</p>
 
@@ -561,7 +561,7 @@ Normative, and it is `components.md` §4.4's row for this page, filled in.
 
 | Region | Empty | Loading | Error |
 | --- | --- | --- | --- |
-| **Profile** · display name | — (a signed-in player always has a name) | `.state--loading` in the field's place, 1 skeleton bar, `role="status"` + `aria-busy="true"` | value invalid → `.field__error` + `aria-invalid`; save failed → `.error-summary` + `role="alert"` + focus |
+| **Profile** · display name | — (a signed-in player always has a name) | `.state--loading` in the field's place, 1 skeleton bar, `aria-busy="true"` on that block and the "Đang tải tên hiển thị của bạn…" text in the separate polite live region beside it (`components.md` §4.3 note 3) | value invalid → `.field__error` + `aria-invalid`; save failed → `.error-summary` + `role="alert"` + focus |
 | **Sign-in** · each provider card | — | the action reads "Đang gửi…" with `aria-disabled` | `notice--error` in the card, `role="alert"`, with *Thử lại* |
 | **My data** · delete | — | the action reads "Đang xóa…" with `aria-disabled`, plus a `role="status"` line | `notice--error` **inside the dialog**, `role="alert"` |
 | **The whole page** · no session | `.state--empty` at `.state--reserve-md`, with *Đăng nhập* | — | `.state--error` at the same reserve, `role="status"`, with *Thử lại* |
@@ -629,7 +629,7 @@ Straight from `components.md` §4.3, applied:
 
 | Situation on this page | Role | Why |
 | --- | --- | --- |
-| the name field is loading | `role="status"` + `aria-busy="true"` on the block | a load the player did not ask for must not interrupt them |
+| the name field is loading | `aria-busy="true"` on the block, and the status text in the persistent polite live region **beside** it — never both on one element (`components.md` §4.3 note 3) | a load the player did not ask for must not interrupt them, and a block that is replaced never clears its own busy flag |
 | the profile failed to load in the background | `role="status"` | still polite — the failure is not more urgent than the sentence they are reading |
 | the save failed / the link failed / the delete failed | `role="alert"` | the player just acted and is waiting; interrupting *is* the answer |
 | the save succeeded / the link was sent / the delete finished | `role="status"` | good news can wait for a pause |

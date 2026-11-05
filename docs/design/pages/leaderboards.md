@@ -111,7 +111,7 @@ levels, so M2 can lift it directly rather than un-demote the sheet.
     </div>
   </header>
 
-  <main id="main" class="shell main">          <!-- main -->
+  <main id="main" class="shell main" tabindex="-1">  <!-- main -->
     <h1 class="lb-title">Bảng xếp hạng</h1>
 
     <!-- 1. WHICH GAME. Both controls are in the DOM at both widths; the band
@@ -330,9 +330,12 @@ state block is exactly as tall as the board it stands in for.
 
 **The ARIA roles**, from `components.md` §4.3 and carried in the mockup markup:
 
-- loading → `role="status"` **and** `aria-busy="true"` on the state block; the
-  "it is working" signal is the visually hidden text, because the skeleton bars
-  are `aria-hidden` and a bar announces nothing;
+- loading → `aria-busy="true"` on the state block, and the announcing
+  `role="status"` on a **separate, persistent region beside it** — never on the
+  same element, per `components.md` §4.3 note 3, because the block is replaced
+  wholesale when the data lands and so never clears its own busy flag. The
+  "it is working" signal is the visually hidden text in that region, because
+  the skeleton bars are `aria-hidden` and a bar announces nothing;
 - a background load that failed → `role="status"`, still **polite**. The reader
   did not ask for this load, so interrupting them mid-sentence is wrong; the
   *Thử lại* button is reachable by Tab whenever they get to it.

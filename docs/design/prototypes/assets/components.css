@@ -857,9 +857,34 @@
   padding-block-start: var(--space-sm);
 }
 
+/* THE ONE CONDITION BEHIND THE NEXT THREE RULES.
+   -------------------------------------------------------------------------
+   "The card is the control" holds only while the play link is the ONLY
+   control in the card. A nested state block that carries its own control —
+   the top-3 strip's error state and its "Thử lại" (components.md section 4.2,
+   home.md section 6.3) — makes the card a container of two controls, and then
+   every consequence of that assumption is wrong at once:
+
+     - the stretched ::after paints OVER the second control, so a pointer
+       click lands on the play link instead (accessibility-report.md A-01);
+     - the card-level ring describes the whole card when the second control
+       is focused, and the third rule then strips that control's own ring,
+       so two consecutive tab stops look pixel-identical (A-13).
+
+   So all three rules carry the SAME guard, `:not(:has(.state .btn))`, and
+   switch off together. A card with a second control gets no stretched hit
+   area, no card-level ring, and no suppression — it falls back to base.css
+   section 4's per-element `:focus-visible` ring, which is already right for
+   that case. A card with only the play link is unchanged.
+
+   The guard is structural on purpose rather than a modifier class a page
+   Task has to remember: this defect reached review precisely because the
+   markup grew a second control and nothing in the stylesheet noticed.
+   -------------------------------------------------------------------------- */
+
 /* The stretched hit area. The ::after covers the card, so the pointer target
    is the whole card while the ACCESSIBLE target stays the one button. */
-.game-card__action .btn::after {
+.game-card:not(:has(.state .btn)) .game-card__action .btn::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -869,13 +894,13 @@
 /* With the hit area stretched, a ring around the button alone would describe
    the wrong thing: the whole card is what will activate. So the ring is
    drawn around the card and suppressed on the button. */
-.game-card:has(.btn:focus-visible),
-.game-card.is-focus {
+.game-card:not(:has(.state .btn)):has(.btn:focus-visible),
+.game-card:not(:has(.state .btn)).is-focus {
   outline: var(--focus-ring-width) solid var(--color-focus);
   outline-offset: var(--focus-ring-offset);
 }
 
-.game-card:has(.btn:focus-visible) .btn:focus-visible {
+.game-card:not(:has(.state .btn)):has(.btn:focus-visible) .btn:focus-visible {
   outline: none;
 }
 
