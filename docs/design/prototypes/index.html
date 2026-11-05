@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prototype — chỉ mục · Soucean Game (SOU-10, M1-12)</title>
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/base.css">
+<style>
+/* ==========================================================================
+   Chỉ mục M1 — bộ khung của riêng trang này.
+
+   SCOPE RULE. Khối này chỉ quyết định bố cục của trang chỉ mục: khoảng cách,
+   chiều rộng đọc, lưới của danh sách liên kết. Không một giá trị màu, bậc chữ,
+   bậc khoảng cách, bo góc hay điểm ngắt nào được viết lại ở đây — tất cả đọc từ
+   tokens.css, đúng như mọi tờ khác trong thư mục này.
+
+   Không script, không iframe, không khai báo phông chữ nhúng, không một tham
+   chiếu mạng nào. Mở thẳng tệp này bằng trình duyệt là xong.
+
+   Dòng trên cố ý viết bằng chữ thay vì tên thuộc tính CSS: lệnh grep ở
+   README.md §6 quét đúng những tên đó, và một lời phủ định trong chú thích
+   không nên hiện ra như một kết quả dương tính giả.
+   ========================================================================== */
+
+body {
+  padding: var(--space-2xl) var(--space-lg) var(--space-6xl);
+}
+
+.ix-wrap {
+  max-inline-size: 72ch;
+  margin-inline: auto;
+}
+
+.ix-wrap > * + * {
+  margin-block-start: var(--space-lg);
+}
+
+.ix-head {
+  padding-block-end: var(--space-xl);
+  border-block-end: 1px solid var(--color-border);
+}
+
+.ix-kicker {
+  font-size: var(--text-label-md);
+  color: var(--color-text-muted);
+}
+
+.ix-lede {
+  color: var(--color-text-muted);
+}
+
+.ix-section {
+  margin-block-start: var(--space-4xl);
+}
+
+.ix-section > * + * {
+  margin-block-start: var(--space-md);
+}
+
+.ix-page {
+  margin-block-start: var(--space-2xl);
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+}
+
+.ix-page > * + * {
+  margin-block-start: var(--space-sm);
+}
+
+.ix-page h3 {
+  font-size: var(--text-headline-sm);
+}
+
+.ix-route {
+  font-size: var(--text-body-sm);
+  color: var(--color-text-muted);
+}
+
+.ix-links {
+  list-style: none;
+  padding-inline-start: 0;
+}
+
+.ix-links > li + li {
+  margin-block-start: var(--space-sm);
+}
+
+.ix-links b {
+  display: block;
+  font-size: var(--text-label-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+}
+
+.ix-links a {
+  display: inline-block;
+  min-block-size: var(--target-min);
+  padding-block: var(--space-md);
+  padding-inline-end: var(--space-md);
+}
+
+.ix-note {
+  font-size: var(--text-body-sm);
+  color: var(--color-text-muted);
+}
+
+.ix-docs {
+  padding-inline-start: var(--space-xl);
+}
+
+.ix-docs > li + li {
+  margin-block-start: var(--space-sm);
+}
+</style>
+</head>
+<body>
+
+<div class="ix-wrap">
+
+<header class="ix-head">
+  <p class="ix-kicker">Soucean Game · M1 (Thiết kế) · SOU-10 (M1-12)</p>
+  <h1>Prototype M1 — chỉ mục</h1>
+  <p class="ix-lede">
+    Mọi bản dựng M1 đã giao, từ một chỗ: tám trang, mỗi trang có wireframe độ chi
+    tiết thấp và tờ mockup độ chi tiết cao, và trong tờ mockup là bốn bản dựng đầy
+    đủ — <strong>375 px và 1280 px</strong>, <strong>sáng và tối</strong> — cộng các
+    khối trạng thái <em>trống · đang tải · lỗi</em>.
+  </p>
+  <p class="ix-lede">
+    <strong>Cách mở:</strong> nhấn đúp bất kỳ liên kết nào bên dưới, hoặc mở thẳng
+    tệp này bằng trình duyệt từ ổ đĩa. Không máy chủ, không bước build, không phụ
+    thuộc, không một yêu cầu mạng nào — ở trang này và ở mọi tờ nó dẫn tới.
+  </p>
+  <p class="ix-lede">
+    Phần văn bản ký duyệt dành cho Board nằm ở
+    <a href="../README.md">docs/design/README.md</a>: bảng phủ sóng, tiêu chí thoát
+    M1 và các phát hiện còn mở.
+  </p>
+</header>
+
+<nav aria-label="Mục lục">
+  <h2>Mục lục</h2>
+  <ol>
+    <li><a href="#pages">Tám trang — wireframe, mockup, bốn bản dựng, trạng thái</a></li>
+    <li><a href="#library">Thư viện thành phần</a></li>
+    <li><a href="#wireframes">Wireframes — tập hợp riêng</a></li>
+    <li><a href="#docs">Tài liệu thiết kế</a></li>
+    <li><a href="#howto">Giao diện tối, chiều rộng, và cách đọc một tờ</a></li>
+  </ol>
+</nav>
+
+<!-- ==========================================================================
+     1. THE EIGHT PAGES.
+     ========================================================================== -->
+<section class="ix-section" id="pages">
+  <h2>1. Tám trang</h2>
+  <p>
+    Mỗi khối dưới đây dẫn tới: wireframe M1-03 (hai khung nhìn, ba ở trang chơi),
+    tờ mockup đầy đủ, bốn bản dựng trang đầy đủ của tờ đó, và mục trạng thái của
+    nó. Liên kết bản dựng nhảy thẳng vào vùng nội dung chính của đúng bản dựng ấy
+    trong tờ.
+  </p>
+
+  <article class="ix-page">
+    <h3>1.1 Trang chủ / danh sách trò chơi</h3>
+    <p class="ix-route"><code>/</code> · SOU-3 (M1-05)</p>
+    <ul class="ix-links">
+      <li><b>Wireframe</b><a href="wireframes/01-home.html">01-home.html — 375 px và 1280 px</a></li>
+      <li><b>Mockup</b><a href="home.html">home.html — tờ đầy đủ</a></li>
+      <li><b>Bốn bản dựng</b>
+        <a href="home.html#hm-a">Sáng · 375</a>
+        <a href="home.html#hm-b">Tối · 375</a>
+        <a href="home.html#hm-c">Sáng · 1280</a>
+        <a href="home.html#hm-d">Tối · 1280</a>
+      </li>
+      <li><b>Trạng thái</b>
+        <a href="home.html#s3">Ba trạng thái của lưới</a>
+        <a href="home.html#s4">Ba trạng thái của dải top 3</a>
+      </li>
+    </ul>
+  </article>
+
+  <article class="ix-page">
+    <h3>1.2 Trang chơi</h3>
+    <p class="ix-route"><code>/games/&lt;game_id&gt;</code> · SOU-4 (M1-06)</p>
+    <ul class="ix-links">
+      <li><b>Wireframe</b><a href="wireframes/02-play.html">02-play.html — 375 px, 768 px và 1280 px</a></li>
+      <li><b>Mockup</b><a href="play.html">play.html — tờ đầy đủ</a></li>
+      <li><b>Bốn bản dựng</b>
+        <a href="play.html#pm-a">Sáng · 375</a>
+        <a href="play.html#pm-b">Tối · 375</a>
+        <a href="play.html#pm-c">Sáng · 1280</a>
+        <a href="play.html#pm-d">Tối · 1280</a>
+      </li>
+      <li><b>Dải compact</b><a href="play.html#pm-e">Sáng · 768 px — dải 768–1023, không có rail</a></li>
+      <li><b>Trạng thái</b>
+        <a href="play.html#s3">Khung trò chơi · bốn hiển thị</a>
+        <a href="play.html#s5">Bảng xếp hạng tuần · bốn hiển thị</a>
+      </li>
+      <li><b>Quảng cáo</b><a href="play.html#s6">Ô quảng cáo và khoảng cách đo được</a></li>
+    </ul>
+  </article>
+
+  <article class="ix-page">
+    <h3>1.3 Bảng xếp hạng</h3>
+    <p class="ix-route"><code>/leaderboards</code> · SOU-5 (M1-07)</p>
+    <ul class="ix-links">
+      <li><b>Wireframe</b><a href="wireframes/03-leaderboards.html">03-leaderboards.html — 375 px và 1280 px</a></li>
+      <li><b>Mockup</b><a href="leaderboards.html">leaderboards.html — tờ đầy đủ</a></li>
+      <li><b>Bốn bản dựng</b>
+        <a href="leaderboards.html#lb-a">Sáng · 375</a>
+        <a href="leaderboards.html#lb-b">Tối · 375</a>
+        <a href="leaderboards.html#lb-c">Sáng · 1280</a>
+        <a href="leaderboards.html#lb-d">Tối · 1280</a>
+      </li>
+      <li><b>Trạng thái</b>
+        <a href="leaderboards.html#s2">Kết quả của bạn · ba trạng thái</a>
+        <a href="leaderboards.html#s3">Bảng xếp hạng · ba trạng thái</a>
+      </li>
+    </ul>
+  </article>
+
+  <article class="ix-page">
+    <h3>1.4 Tài khoản và hồ sơ</h3>
+    <p class="ix-route"><code>/account</code> · SOU-6 (M1-08)</p>
+    <ul class="ix-links">
+      <li><b>Wireframe</b><a href="wireframes/04-account.html">04-account.html — 375 px và 1280 px</a></li>
+      <li><b>Mockup</b><a href="account.html">account.html — tờ đầy đủ</a></li>
+      <li><b>Bốn bản dựng</b>
+        <a href="account.html#ac-a">Sáng · 375</a>
+        <a href="account.html#ac-b">Tối · 375</a>
+        <a href="account.html#ac-c">Sáng · 1280</a>
+        <a href="account.html#ac-d">Tối · 1280</a>
+      </li>
+      <li><b>Trạng thái</b>
+        <a href="account.html#s2">Tên hiển thị · mọi trạng thái</a>
+        <a href="account.html#s3">Đăng nhập và liên kết · mọi trạng thái</a>
+        <a href="account.html#s4">Xóa dữ liệu của tôi · cả luồng</a>
+        <a href="account.html#s5">Chưa đăng nhập</a>
+      </li>
+    </ul>
+  </article>
+
+  <article class="ix-page">
+    <h3>1.5 Chính sách quyền riêng tư</h3>
+    <p class="ix-route"><code>/privacy</code> (kèm mục <code>#cookies</code>) · SOU-7 (M1-09)</p>
+    <ul class="ix-links">
+      <li><b>Wireframe</b><a href="wireframes/05-privacy.html">05-privacy.html — 375 px và 1280 px</a></li>
+      <li><b>Mockup</b><a href="privacy.html">privacy.html — tờ đầy đủ</a></li>
+      <li><b>Bốn bản dựng</b>
+        <a href="privacy.html#pa-main">Sáng · 375</a>
+        <a href="privacy.html#pb-main">Tối · 375</a>
+        <a href="privacy.html#pc-main">Sáng · 1280</a>
+        <a href="privacy.html#pd-main">Tối · 1280</a>
+      </li>
+      <li><b>Trạng thái</b><a href="privacy.html#s2">Ba trạng thái của trang</a></li>
+    </ul>
+  </article>
+
+  <article class="ix-page">
+    <h3>1.6 Banner và cài đặt cookie</h3>
+    <p class="ix-route">bề mặt, không phải route · SOU-7 (M1-09)</p>
+    <ul class="ix-links">
+      <li><b>Wireframe</b><a href="wireframes/06-cookie-consent.html">06-cookie-consent.html — 375 px và 1280 px</a></li>
+      <li><b>Mockup</b><a href="cookie-settings.html">cookie-settings.html — tờ đầy đủ</a></li>
+      <li><b>Bốn bản dựng · banner lần đầu</b>
+        <a href="cookie-settings.html#ba-main">Sáng · 375</a>
+        <a href="cookie-settings.html#bb-main">Tối · 375</a>
+        <a href="cookie-settings.html#bc-main">Sáng · 1280</a>
+        <a href="cookie-settings.html#bd-main">Tối · 1280</a>
+      </li>
+      <li><b>Sau khi đã chọn</b><a href="cookie-settings.html#s2">Banner · sau khi đã chọn</a></li>
+      <li><b>Hộp thoại</b>
+        <a href="cookie-settings.html#s3">Hộp thoại cài đặt · bốn bản dựng</a>
+        <a href="cookie-settings.html#s4">Trạng thái của màn hình cài đặt</a>
+      </li>
+    </ul>
+    <p class="ix-note">
+      Màn hình cài đặt <strong>không có trạng thái trống</strong>, và tờ nói ra điều
+      đó thành một tuyên bố chứ không im lặng bỏ qua: danh mục cookie do site định
+      nghĩa và luôn có đúng hai mục. Xem <code>cookie-settings.html</code> §4 và
+      <a href="../components.md">components.md</a> §4.4.
+    </p>
+  </article>
+
+  <article class="ix-page">
+    <h3>1.7 Giới thiệu</h3>
+    <p class="ix-route"><code>/about</code> · SOU-3 (M1-05)</p>
+    <ul class="ix-links">
+      <li><b>Wireframe</b><a href="wireframes/07-about.html">07-about.html — 375 px và 1280 px</a></li>
+      <li><b>Mockup</b><a href="about.html">about.html — tờ đầy đủ</a></li>
+      <li><b>Bốn bản dựng</b>
+        <a href="about.html#am-a">Sáng · 375</a>
+        <a href="about.html#am-b">Tối · 375</a>
+        <a href="about.html#am-c">Sáng · 1280</a>
+        <a href="about.html#am-d">Tối · 1280</a>
+      </li>
+      <li><b>Trạng thái</b><a href="about.html#s3">Ba trạng thái</a></li>
+    </ul>
+  </article>
+
+  <article class="ix-page">
+    <h3>1.8 Điều khoản sử dụng</h3>
+    <p class="ix-route"><code>/terms</code> · SOU-3 (M1-05)</p>
+    <ul class="ix-links">
+      <li><b>Wireframe</b><a href="wireframes/08-terms.html">08-terms.html — 375 px và 1280 px</a></li>
+      <li><b>Mockup</b><a href="terms.html">terms.html — tờ đầy đủ</a></li>
+      <li><b>Bốn bản dựng</b>
+        <a href="terms.html#tm-a">Sáng · 375</a>
+        <a href="terms.html#tm-b">Tối · 375</a>
+        <a href="terms.html#tm-c">Sáng · 1280</a>
+        <a href="terms.html#tm-d">Tối · 1280</a>
+      </li>
+      <li><b>Trạng thái</b><a href="terms.html#s3">Ba trạng thái</a></li>
+    </ul>
+  </article>
+</section>
+
+<!-- ==========================================================================
+     2. THE COMPONENT LIBRARY.
+     ========================================================================== -->
+<section class="ix-section" id="library">
+  <h2>2. Thư viện thành phần</h2>
+  <p>
+    Không phải một trang — là nguồn mà tám trang trên lấy thành phần. Mười mục,
+    mỗi thành phần ở cả bốn ô (sáng/tối × 375/1280) ngay trong mục của nó.
+  </p>
+  <article class="ix-page">
+    <h3>2.1 components.html</h3>
+    <p class="ix-route">SOU-2 (M1-04) · đặc tả văn bản: <a href="../components.md">components.md</a></p>
+    <ul class="ix-links">
+      <li><b>Tờ đầy đủ</b><a href="components.html">components.html</a></li>
+      <li><b>Mục</b>
+        <a href="components.html#s1">1 · Nền tảng — chữ Việt và vòng focus</a>
+        <a href="components.html#s2">2 · Khung trang</a>
+        <a href="components.html#s3">3 · Nút và liên kết</a>
+        <a href="components.html#s4">4 · Thẻ trò chơi và lưới</a>
+        <a href="components.html#s5">5 · Bảng xếp hạng và bộ chọn kỳ</a>
+        <a href="components.html#s6">6 · Trường biểu mẫu</a>
+        <a href="components.html#s7">7 · Thông báo nội tuyến</a>
+        <a href="components.html#s8">8 · Hộp thoại và banner đồng ý</a>
+        <a href="components.html#s9">9 · Ba trạng thái: trống · đang tải · lỗi</a>
+        <a href="components.html#s10">10 · Trạng thái theo từng trang</a>
+      </li>
+    </ul>
+    <p class="ix-note">
+      Đây là tệp duy nhất trong cả bộ M1 có một khối <code>&lt;script&gt;</code>:
+      vài dòng JavaScript thuần, cùng tài liệu, để mở và đóng một
+      <code>&lt;dialog&gt;</code> thật cho phần kiểm tra bàn phím. Không thư viện,
+      không yêu cầu mạng. <a href="../feasibility-review.md">feasibility-review.md</a>
+      §1 ghi nhận và chấp nhận nó.
+    </p>
+  </article>
+</section>
+
+<!-- ==========================================================================
+     3. WIREFRAMES.
+     ========================================================================== -->
+<section class="ix-section" id="wireframes">
+  <h2>3. Wireframes — tập hợp riêng</h2>
+  <p>
+    Mười bảy khung nhìn độ chi tiết thấp: mỗi trang một lần ở 375 px và một lần ở
+    1280 px, cộng khung kiểm tra 768 px của trang chơi. Tám tờ có chỉ mục riêng,
+    kèm quy ước đọc và bảng đo của từng khung.
+  </p>
+  <ul class="ix-docs">
+    <li><a href="wireframes/index.html">wireframes/index.html</a> — chỉ mục wireframe, quy ước đọc, những gì các tờ thừa hưởng</li>
+    <li><a href="../wireframes.md">../wireframes.md</a> — văn bản: vùng, thứ tự đọc, cách kiểm tra</li>
+  </ul>
+</section>
+
+<!-- ==========================================================================
+     4. THE DOCUMENTS.
+     ========================================================================== -->
+<section class="ix-section" id="docs">
+  <h2>4. Tài liệu thiết kế</h2>
+  <p>
+    Các tệp Markdown của gói M1. Chỉ mục đầy đủ, bảng phủ sóng và phần ký duyệt
+    nằm trong tệp đầu tiên.
+  </p>
+  <ul class="ix-docs">
+    <li><a href="../README.md">README.md</a> — chỉ mục gói M1, bảng phủ sóng, tiêu chí thoát, phát hiện còn mở <strong>(bắt đầu từ đây)</strong></li>
+    <li><a href="../DESIGN.md">DESIGN.md</a> — hệ thống thiết kế: token màu, chữ, khoảng cách, điểm ngắt</li>
+    <li><a href="../ad-slots.md">ad-slots.md</a> — đặc tả ô quảng cáo: năm luật, kiểm kê ô, hình học trang, cách đo</li>
+    <li><a href="../wireframes.md">wireframes.md</a> — wireframe tám trang</li>
+    <li><a href="../components.md">components.md</a> — thư viện thành phần</li>
+    <li><a href="../pages/home.md">pages/home.md</a> · <a href="../pages/play.md">pages/play.md</a> · <a href="../pages/leaderboards.md">pages/leaderboards.md</a> · <a href="../pages/account.md">pages/account.md</a> · <a href="../pages/privacy-consent.md">pages/privacy-consent.md</a> · <a href="../pages/about-terms.md">pages/about-terms.md</a> — thiết kế từng trang</li>
+    <li><a href="../accessibility-report.md">accessibility-report.md</a> — kiểm toán tiếp cận (SOU-8)</li>
+    <li><a href="../feasibility-review.md">feasibility-review.md</a> — rà soát khả thi và luật quảng cáo (SOU-9)</li>
+  </ul>
+</section>
+
+<!-- ==========================================================================
+     5. HOW TO READ A SHEET.
+     ========================================================================== -->
+<section class="ix-section" id="howto">
+  <h2>5. Giao diện tối, chiều rộng, và cách đọc một tờ</h2>
+  <ul class="ix-docs">
+    <li>
+      <strong>Hai chiều rộng không cần device toolbar.</strong> Trong tờ mockup,
+      mỗi bản dựng là một hộp có chiều rộng cố định — 375 px hoặc 1280 px — nên
+      bạn thấy bố cục mobile thật ngay trên màn hình desktop. Trang chơi có thêm
+      hộp 768 px cho dải compact.
+    </li>
+    <li>
+      <strong>Hai giao diện nằm cạnh nhau trong tờ.</strong> Bản dựng sáng và bản
+      dựng tối là hai hộp riêng trên cùng một trang; không cần đổi gì để xem cả hai.
+    </li>
+    <li>
+      <strong>Đổi giao diện cả tờ</strong> (kể cả các tờ wireframe, vốn vẽ ở giao
+      diện sáng): đặt <code>data-theme="dark"</code> trên phần tử
+      <code>&lt;html&gt;</code> bằng DevTools, hoặc đặt hệ điều hành sang chế độ tối
+      — <code>tokens.css</code> tôn trọng <code>prefers-color-scheme</code>.
+    </li>
+    <li>
+      <strong>Bàn phím.</strong> Mỗi tờ mockup có một mục riêng về bàn phím, tiêu
+      điểm và thứ tự đọc. Các nút chuyển giao diện trong bản dựng là mô phỏng tĩnh:
+      chúng cho thấy hình dáng của điều khiển, không đổi giao diện của tờ.
+    </li>
+  </ul>
+</section>
+
+<footer class="ix-section">
+  <p class="ix-note">
+    Soucean Game · M1 (Thiết kế) · chỉ mục này do SOU-10 (M1-12) giao.
+    Nó chỉ tập hợp — không thiết kế lại gì, và không sửa tệp của Task khác.
+  </p>
+</footer>
+
+</div>
+
+</body>
+</html>
