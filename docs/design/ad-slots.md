@@ -1,7 +1,16 @@
 # Ad-slot layout — Soucean Game
 
 **Status:** Normative. Milestone M1 (Design), Task GAM-23 (M1-02). Owner:
-`ui-designer`, through `project-manager`. Last updated: 2026-11-04.
+`ui-designer`, through `project-manager`. Last updated: 2026-11-05.
+
+> **Amendment of 2026-11-05, §10 only.** Two documentation defects the Board
+> raised in its GAM-23 review, carried over to SOU-10 (M1-12) and fixed there:
+> §10 now checks **1023 px**, the upper edge of the compact band, alongside the
+> six widths it already checked; and the DevTools paragraph in §10.2 no longer
+> claims the frame-facing margin reads `24px` on `ad-rail-rectangle` — that slot
+> carries `margin-inline: 0`, its 32 px clearance is the play grid's
+> `column-gap`, and it exists only at 1024 px and above. No rule, no geometry and
+> no measured value changed; only how §10 says to verify them.
 
 > **Board decision of 2026-11-04.** The side rail now turns on at **1024px**,
 > not 768px, and between 768px and 1023px the game frame takes the full content
@@ -648,18 +657,26 @@ Vietnamese first: the placeholder label is "Quảng cáo". The English string is
 
 ## 10. How to verify
 
-**Six widths.** The two M1-01 design widths, plus the four the Board named when
-it added the `wide` breakpoint on 2026-11-04 — the band edges are where this
-geometry can go wrong, so they are checked, not assumed:
+**Seven widths.** The two M1-01 design widths, the four the Board named when it
+added the `wide` breakpoint on 2026-11-04, and **1023** — the upper edge of the
+compact band, added on the Board's instruction in its GAM-23 review and applied
+by SOU-10 (M1-12). The band edges are where this geometry can go wrong, so they
+are checked, not assumed:
 
 | Width | Band | What it proves |
 | --- | --- | --- |
 | **375** | mobile | the mobile design width; the 24 px floor case |
 | **768** | compact | the **lower edge** of the compact band — the old failure point |
 | **900** | compact | mid-band; both leaderboards at their full 728 px |
-| **1000** | compact | the **last width with no rail**; the frame at its widest single-column size |
+| **1000** | compact | a round mid-upper width inside the band; the published frame-geometry figure |
+| **1023** | compact | the **upper edge** of the compact band — the last width with no rail, and the frame at its widest single-column size |
 | **1024** | wide | the **first width with a rail** — the Board's new breakpoint |
 | **1280** | wide | the desktop design width |
+
+1023 and 1024 are adjacent pixels and they are the point of the whole table: the
+inventory, the frame size and the column count all change between them. Checking
+1000 and 1024 only would leave the band's actual upper edge inferred rather than
+measured.
 
 Device-toolbar responsive mode, device pixel ratio 1, browser zoom 100 %.
 
@@ -711,6 +728,9 @@ width**.
 | 1000 | `ad-header-leaderboard` | `728x90` | `gapAbove` ≥ 120 | `false` | `static` |
 | 1000 | `ad-after-info-rectangle` | `300x250` | `gapBelow` ≥ 72 | `false` | `static` |
 | 1000 | `ad-incontent-banner` | `728x90` | `gapBelow` ≥ 370 | `false` | `static` |
+| 1023 | `ad-header-leaderboard` | `728x90` | `gapAbove` ≥ 120 | `false` | `static` |
+| 1023 | `ad-after-info-rectangle` | `300x250` | `gapBelow` ≥ 72 | `false` | `static` |
+| 1023 | `ad-incontent-banner` | `728x90` | `gapBelow` ≥ 370 | `false` | `static` |
 | 1024 | `ad-header-leaderboard` | `728x90` | `gapAbove` ≥ 120 | `false` | `static` |
 | 1024 | `ad-rail-rectangle` | `300x250` | `gapRight` = 32 | `false` | `static` |
 | 1024 | `ad-incontent-banner` | `628x90` | `gapBelow` ≥ 72 | `false` | `static` |
@@ -725,18 +745,42 @@ Any `overlaps: true`, any `position` other than `static`, or any clearance below
 
 - At **375** the three ≥ 768 slots are absent — "no sidebar on mobile, exactly
   two banners".
-- At **768, 900 and 1000** `ad-rail-rectangle` is **absent** and
+- At **768, 900, 1000 and 1023** `ad-rail-rectangle` is **absent** and
   `ad-after-info-rectangle` is **present**. `ad-mobile-top` is absent.
 - At **1024 and 1280** exactly the reverse: the rail is present and the
   after-info rectangle is absent. Exactly one 300 × 250 box at every width.
+- **The band edge itself.** 1023 and 1024 differ by one pixel and must differ in
+  three ways at once: one column becomes two, `ad-after-info-rectangle`
+  disappears and `ad-rail-rectangle` appears, and the frame shrinks. If any one
+  of the three happens without the other two, the breakpoint is wrong.
 - Also measure the frame itself. `document.getElementById('game-frame')
   .getBoundingClientRect()` must read **704 × 396** at 768, **936 × 527** at
-  1000, and **628 × 353** at 1024 — the shrink at the breakpoint is expected and
-  is what buys the rail its room (§4.5).
+  1000, **959 × 539** at 1023, and **628 × 353** at 1024 — the shrink at the
+  breakpoint is expected and is what buys the rail its room (§4.5). 959 × 539 is
+  the largest the frame ever gets below the breakpoint, which is the other
+  reason 1023 is worth measuring.
 
-If you prefer the DevTools box model: select the slot in Elements, read
-`margin` in the Computed pane — the frame-facing side reads `24px` on all five
-slots — then hover the frame to see the gap highlighted.
+If you prefer the DevTools box model: select the slot in Elements, read `margin`
+in the Computed pane, then hover the frame to see the gap highlighted. The
+frame-facing side reads `24px` on the four normal-flow slots — `ad-mobile-top`,
+`ad-header-leaderboard`, `ad-after-info-rectangle` and `ad-incontent-banner`.
+At most **three** slots are on the page at any one width, so there is no width at
+which more than three of them can be inspected.
+
+**`ad-rail-rectangle` is the exception, and reading `24px` on it would mean
+something had gone wrong.** Two things to know before you go looking for it:
+
+- It exists **only at 1024 px and above**. Below the breakpoint it is not in the
+  layout at all, so at 375, 768, 900, 1000 and 1023 there is nothing to select.
+- Where it does exist, `ads.css` sets `margin-inline: 0` on it (§5.3 — the rail
+  column is exactly 300 px wide, so an inline margin would overflow the column).
+  Its frame-facing margin therefore reads **`0px`**, and its **32 px** clearance
+  is the play grid's `column-gap`, not the slot's own box.
+
+So measure that one on the **grid**, not on the slot: select `.play-grid` and
+read `column-gap` in the Computed pane — it must be at least 24 px and is 32 px
+in the reference layout — or just use the `gapRight` value the script above
+prints.
 
 ### 10.3 Confirm no shift
 
@@ -776,7 +820,7 @@ document.querySelector('.play-rail').style.height = '300px';  // < the rail's co
 console.log(document.getElementById('ad-rail-rectangle').getBoundingClientRect().height);
 ```
 
-At **768, 900 and 1000** (compact — the main column holds it):
+At **768, 900, 1000 and 1023** (compact — the main column holds it):
 
 ```js
 document.querySelector('.play-main').style.height = '400px';  // < the column's content
