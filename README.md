@@ -19,7 +19,7 @@ change anything here.
 
 Two rules worth knowing before you read any of it:
 
-- **Production belongs to the Board Operator.** No backend at all in M0–M3; the
-  dev project only from M4.
-- **No runtime dependencies yet**, and no backend, hosting or analytics
+- **Production belongs to the Board Operator.** No backend at all in M0–M3; local
+  Docker only from M4.
+- **No runtime dependencies yet**, and no hosting, analytics or ad-network
   configuration.
