@@ -1,0 +1,13 @@
+.git
+.github
+.paperclip
+node_modules
+backend/node_modules
+backend/vendor
+backend/storage/logs
+backend/storage/framework/cache
+backend/storage/framework/sessions
+backend/storage/framework/views
+backend/bootstrap/cache/*.php
+**/.DS_Store
+**/Thumbs.db
