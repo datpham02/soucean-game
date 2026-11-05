@@ -108,7 +108,7 @@ it directly rather than un-demote the sheet.
     </div>
   </header>
 
-  <main id="main" class="shell main">          <!-- main -->
+  <main id="main" class="shell main" tabindex="-1">  <!-- main -->
     <h1 class="play-title">Tên trò chơi</h1>
 
     <div class="play-grid">
@@ -192,7 +192,7 @@ different class list and different children:
 | Display | Markup | Box |
 | --- | --- | --- |
 | Ready (the game is mounted) | `.game-frame.game-frame--mounted`, `tabindex="0"` | 16:9 |
-| Loading | `.game-frame.state.state--frame.state--loading`, `role="status" aria-busy="true"` | 16:9, **exactly** |
+| Loading | `.game-frame.state.state--frame.state--loading` with `aria-busy="true"`; the announcing region is a separate polite live region beside it, never the frame itself (`components.md` §4.3 note 3) | 16:9, **exactly** |
 | Error | `.game-frame.state.state--frame.state--error`, `role="status"` | 16:9, or taller if it has to be — see §6.2 |
 | Needs JavaScript | `.game-frame.state.state--frame` holding a `.notice--warning` | 16:9 |
 
@@ -320,7 +320,7 @@ subject, the structure is not.
 
 | Region | Empty | Loading | Error |
 | --- | --- | --- | --- |
-| **Game frame** | — (a game is either there or it is not) | `.state--frame`, visually hidden "Đang tải trò chơi…", `role="status" aria-busy="true"`, static skeleton bars | "Không tải được trò chơi" · "Kiểm tra kết nối rồi thử lại." · *Thử lại*, `role="status"` |
+| **Game frame** | — (a game is either there or it is not) | `.state--frame` with `aria-busy="true"` and static skeleton bars; the visually hidden "Đang tải trò chơi…" sits in the separate polite live region beside it (`components.md` §4.3 note 3) | "Không tải được trò chơi" · "Kiểm tra kết nối rồi thử lại." · *Thử lại*; the error block is itself the polite live region (`status`, not `alert`) |
 | **Weekly board** | "Chưa có ai ghi điểm tuần này" · "Hãy là người đầu tiên — ván của bạn lên bảng ngay khi chơi xong." | 3 skeleton rows, visually hidden "Đang tải bảng xếp hạng tuần…" | "Không tải được bảng xếp hạng" · "Kiểm tra kết nối rồi thử lại." · *Thử lại* |
 | **`game-meta`** | — static | — static | — static |
 

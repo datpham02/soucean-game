@@ -100,7 +100,7 @@ directly. The chrome — skip link, header, nav, theme toggle, ad slot, footer �
 is identical to [`about-terms.md`](about-terms.md) §3 and is elided here.
 
 ```html
-<main id="main" class="shell shell--text main">
+<main id="main" class="shell shell--text main" tabindex="-1">
   <h1>Chính sách quyền riêng tư</h1>
   <p class="doc__updated">Cập nhật lần cuối: …</p>
 
@@ -443,7 +443,7 @@ same template.
 | **Saved · inline (the page)** | `notice--success` inside `.consent-form__status`, the `role="status"` region that sits **after** the Save button inside section 6 and is present-but-empty at rest | yes, from the moment a choice can be saved. Drawn in `privacy.html` §1, dark 375 (ads on) and light 1280 (essential only) |
 | **Saved · in the dialog** | the dialog closes, the banner goes with it, and a `role="status"` `notice--success` greets the reader at the top of `main` | yes. Drawn in `cookie-settings.html` §2, in all three of its renders — light 375 after *Từ chối*, dark 375 after *Chấp nhận*, light 1280 after *Từ chối* |
 | **Loading · saving** | the Save button reads "Đang lưu…" and is `disabled`; Cancel is disabled too | the canonical fill from `components.md` §4.4 |
-| **Loading · reading the stored choice** | `.state--loading .state--reserve-sm` replacing the category list, `role="status"`, `aria-busy="true"` | **M4+**, when the choice is read from the backend. On a browser-only store the read is instantaneous and this block never paints. |
+| **Loading · reading the stored choice** | `.state--loading .state--reserve-sm` replacing the category list, carrying `aria-busy="true"` only; the "Đang đọc lựa chọn cookie đã lưu…" text is announced from the separate polite live region beside it (`components.md` §4.3 note 3) | **M4+**, when the choice is read from the backend. On a browser-only store the read is instantaneous and this block never paints. |
 | **Error · save failed** | `notice--error` with `role="alert"` inside the dialog — the canonical fill from `components.md` §4.4 | yes, from the moment a choice can be saved |
 | **Error · could not read the stored choice** | `.state--error .state--reserve-sm` · *Thử lại*, `role="status"` | **M4+**, same condition as the read |
 | **Empty** | **does not exist** — see below | — |

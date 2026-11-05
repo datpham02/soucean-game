@@ -123,7 +123,7 @@
           </div>
         </div>
 
-        <div class="shell main" id="lb-a">
+        <div class="shell main" id="lb-a" tabindex="-1">
           <h4 class="lb-title">Bảng xếp hạng</h4>
 
           <section class="lb-region" aria-label="Chọn trò chơi · sáng 375">
@@ -264,7 +264,7 @@
           </div>
         </div>
 
-        <div class="shell main" id="lb-b">
+        <div class="shell main" id="lb-b" tabindex="-1">
           <h4 class="lb-title">Bảng xếp hạng</h4>
 
           <section class="lb-region" aria-label="Chọn trò chơi · tối 375">
@@ -408,7 +408,7 @@
             </div>
           </div>
 
-          <div class="shell main" id="lb-c">
+          <div class="shell main" id="lb-c" tabindex="-1">
             <h4 class="lb-title">Bảng xếp hạng</h4>
 
             <section class="lb-region" aria-label="Chọn trò chơi · sáng 1280">
@@ -551,7 +551,7 @@
             </div>
           </div>
 
-          <div class="shell main" id="lb-d">
+          <div class="shell main" id="lb-d" tabindex="-1">
             <h4 class="lb-title">Bảng xếp hạng</h4>
 
             <section class="lb-region" aria-label="Chọn trò chơi · tối 1280">
@@ -712,8 +712,8 @@
           </div>
 
           <p class="mk-cap">Đang tải · một hàng skeleton</p>
-          <div class="state state--loading lb-you__state" role="status" aria-busy="true">
-            <span class="u-visually-hidden">Đang tải kết quả của bạn…</span>
+          <div class="u-visually-hidden" role="status">Đang tải kết quả của bạn…</div>
+          <div class="state state--loading lb-you__state" aria-busy="true">
             <div class="skeleton" aria-hidden="true">
               <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--half"></span><span class="skeleton__bar"></span></div>
             </div>
@@ -742,8 +742,8 @@
             <p class="state__text">Chơi một ván để xuất hiện trên bảng.</p>
             <a class="btn btn--secondary" href="play.html">Chơi ngay</a>
           </div>
-          <div class="state state--loading lb-you__state" role="status" aria-busy="true">
-            <span class="u-visually-hidden">Đang tải kết quả của bạn…</span>
+          <div class="u-visually-hidden" role="status">Đang tải kết quả của bạn…</div>
+          <div class="state state--loading lb-you__state" aria-busy="true">
             <div class="skeleton" aria-hidden="true">
               <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--half"></span><span class="skeleton__bar"></span></div>
             </div>
@@ -773,8 +773,8 @@
               <p class="state__text">Chơi một ván để xuất hiện trên bảng.</p>
               <a class="btn btn--secondary" href="play.html">Chơi ngay</a>
             </div>
-            <div class="state state--loading lb-you__state" role="status" aria-busy="true">
-              <span class="u-visually-hidden">Đang tải kết quả của bạn…</span>
+            <div class="u-visually-hidden" role="status">Đang tải kết quả của bạn…</div>
+            <div class="state state--loading lb-you__state" aria-busy="true">
               <div class="skeleton" aria-hidden="true">
                 <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--half"></span><span class="skeleton__bar"></span></div>
               </div>
@@ -802,8 +802,8 @@
               <p class="state__text">Chơi một ván để xuất hiện trên bảng.</p>
               <a class="btn btn--secondary" href="play.html">Chơi ngay</a>
             </div>
-            <div class="state state--loading lb-you__state" role="status" aria-busy="true">
-              <span class="u-visually-hidden">Đang tải kết quả của bạn…</span>
+            <div class="u-visually-hidden" role="status">Đang tải kết quả của bạn…</div>
+            <div class="state state--loading lb-you__state" aria-busy="true">
               <div class="skeleton" aria-hidden="true">
                 <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--half"></span><span class="skeleton__bar"></span></div>
               </div>
@@ -818,7 +818,7 @@
           </div>
         </div>
       </div>
-      <span class="mk-tag">Đang tải là <code>role="status"</code> + <code>aria-busy="true"</code> — lịch sự, vì người chơi không yêu cầu lần tải này. Lỗi nền cũng là <code>role="status"</code>, không phải <code>alert</code>: không có hành động nào của người chơi đang chờ câu trả lời.</span>
+      <span class="mk-tag">Khối đang tải chỉ mang <code>aria-busy="true"</code>; dòng chữ nằm trong vùng live riêng đứng ngay trước nó, mang <code>role="status"</code> — lịch sự, vì người chơi không yêu cầu lần tải này. Hai thuộc tính không bao giờ ở cùng một phần tử: khối đang tải bị thay thế khi dữ liệu về nên cờ bận không bao giờ được gỡ (<code>accessibility-report.md</code> A-03). Lỗi nền cũng là <code>role="status"</code>, không phải <code>alert</code>: không có hành động nào của người chơi đang chờ câu trả lời.</span>
     </section>
   </div>
 </section>
@@ -856,8 +856,8 @@
           </div>
 
           <p class="mk-cap">Đang tải · mười hàng skeleton</p>
-          <div class="state state--loading lb-board__state" role="status" aria-busy="true">
-            <span class="u-visually-hidden">Đang tải bảng xếp hạng…</span>
+          <div class="u-visually-hidden" role="status">Đang tải bảng xếp hạng…</div>
+          <div class="state state--loading lb-board__state" aria-busy="true">
             <div class="skeleton" aria-hidden="true">
               <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--most"></span><span class="skeleton__bar"></span></div>
               <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--half"></span><span class="skeleton__bar"></span></div>
@@ -894,8 +894,8 @@
             <h4 class="state__title">Chưa có ai ghi điểm</h4>
             <p class="state__text">Bảng sẽ mở khi có điểm đầu tiên.</p>
           </div>
-          <div class="state state--loading lb-board__state" role="status" aria-busy="true">
-            <span class="u-visually-hidden">Đang tải bảng xếp hạng…</span>
+          <div class="u-visually-hidden" role="status">Đang tải bảng xếp hạng…</div>
+          <div class="state state--loading lb-board__state" aria-busy="true">
             <div class="skeleton" aria-hidden="true">
               <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--most"></span><span class="skeleton__bar"></span></div>
               <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--half"></span><span class="skeleton__bar"></span></div>
@@ -933,8 +933,8 @@
               <h4 class="state__title">Chưa có ai ghi điểm</h4>
               <p class="state__text">Bảng sẽ mở khi có điểm đầu tiên.</p>
             </div>
-            <div class="state state--loading lb-board__state" role="status" aria-busy="true">
-              <span class="u-visually-hidden">Đang tải bảng xếp hạng…</span>
+            <div class="u-visually-hidden" role="status">Đang tải bảng xếp hạng…</div>
+            <div class="state state--loading lb-board__state" aria-busy="true">
               <div class="skeleton" aria-hidden="true">
                 <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--most"></span><span class="skeleton__bar"></span></div>
                 <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--half"></span><span class="skeleton__bar"></span></div>
@@ -970,8 +970,8 @@
               <h4 class="state__title">Chưa có ai ghi điểm</h4>
               <p class="state__text">Bảng sẽ mở khi có điểm đầu tiên.</p>
             </div>
-            <div class="state state--loading lb-board__state" role="status" aria-busy="true">
-              <span class="u-visually-hidden">Đang tải bảng xếp hạng…</span>
+            <div class="u-visually-hidden" role="status">Đang tải bảng xếp hạng…</div>
+            <div class="state state--loading lb-board__state" aria-busy="true">
               <div class="skeleton" aria-hidden="true">
                 <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--most"></span><span class="skeleton__bar"></span></div>
                 <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--half"></span><span class="skeleton__bar"></span></div>

@@ -191,7 +191,7 @@
             </ul>
           </nav>
         </div>
-        <div class="shell main" id="demo-main-a"><p class="u-flush">Nội dung trang.</p></div>
+        <div class="shell main" id="demo-main-a" tabindex="-1"><p class="u-flush">Nội dung trang.</p></div>
         <footer class="site-footer">
           <div class="shell">
             <ul class="site-footer__links">
@@ -230,7 +230,7 @@
             </div>
           </div>
         </div>
-        <div class="shell main" id="demo-main-b"><p class="u-flush">Nội dung trang.</p></div>
+        <div class="shell main" id="demo-main-b" tabindex="-1"><p class="u-flush">Nội dung trang.</p></div>
         <footer class="site-footer">
           <div class="shell">
             <ul class="site-footer__links">
@@ -269,7 +269,7 @@
             </ul>
           </nav>
         </div>
-        <div class="shell main" id="demo-main-c"><p class="u-flush">Nội dung trang.</p></div>
+        <div class="shell main" id="demo-main-c" tabindex="-1"><p class="u-flush">Nội dung trang.</p></div>
         <footer class="site-footer">
           <div class="shell">
             <ul class="site-footer__links">
@@ -308,7 +308,7 @@
             </div>
           </div>
         </div>
-        <div class="shell main" id="demo-main-d"><p class="u-flush">Nội dung trang.</p></div>
+        <div class="shell main" id="demo-main-d" tabindex="-1"><p class="u-flush">Nội dung trang.</p></div>
         <footer class="site-footer">
           <div class="shell">
             <ul class="site-footer__links">
@@ -1532,11 +1532,15 @@
      sáng là vi phạm rõ nhất — nó cũng là kiểu loading hay gây khó chịu nhất cho người nhạy
      cảm với chuyển động. Tín hiệu "đang chạy" nằm ở <strong>vùng live</strong> trong
      markup, vì một hiệu ứng quét sáng chẳng nói gì với trình đọc màn hình cả.</p>
-  <p><strong>Vai trò ARIA.</strong> Khối đang tải mang <code>role="status"</code> và
-     <code>aria-busy="true"</code> (lịch sự — người dùng đang đọc, đừng cắt ngang). Lỗi
-     <em>tải nền</em> cũng là <code>role="status"</code>; lỗi do <em>chính hành động của
-     người dùng</em> (gửi biểu mẫu) mới là <code>role="alert"</code>. Bảng phân chia đầy đủ
-     ở <code>components.md</code> §4.3.</p>
+  <p><strong>Vai trò ARIA.</strong> Khối đang tải chỉ mang <code>aria-busy="true"</code>;
+     dòng chữ "đang tải" nằm trong một <strong>vùng live riêng, đứng cạnh khối</strong> và
+     mang <code>role="status"</code> (lịch sự — người dùng đang đọc, đừng cắt ngang). Hai
+     thuộc tính <strong>không bao giờ nằm trên cùng một phần tử</strong>: khối đang tải bị
+     <em>thay thế</em> khi dữ liệu về, nên cờ bận của nó không bao giờ được gỡ, và thông báo
+     bị hoãn sẽ không bao giờ phát (<code>accessibility-report.md</code> A-03). Lỗi
+     <em>tải nền</em> là <code>role="status"</code> ngay trên khối lỗi — khối lỗi không mang
+     cờ bận; lỗi do <em>chính hành động của người dùng</em> (gửi biểu mẫu) mới là
+     <code>role="alert"</code>. Bảng phân chia đầy đủ ở <code>components.md</code> §4.3.</p>
 
   <div class="spec">
     <section class="spec__cell">
@@ -1549,8 +1553,8 @@
             <p class="state__text">Hãy là người đầu tiên.</p>
             <p class="u-flush"><a class="btn btn--secondary" href="#s9">Chơi ngay</a></p>
           </div>
-          <div class="state state--loading state--reserve-sm" role="status" aria-busy="true">
-            <span class="u-visually-hidden">Đang tải bảng xếp hạng…</span>
+          <div class="u-visually-hidden" role="status">Đang tải bảng xếp hạng…</div>
+          <div class="state state--loading state--reserve-sm" aria-busy="true">
             <div class="skeleton" aria-hidden="true">
               <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--most"></span><span class="skeleton__bar"></span></div>
               <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--half"></span><span class="skeleton__bar"></span></div>
@@ -1572,8 +1576,8 @@
             <span class="skeleton__bar skeleton__bar--most"></span>
           </div>
           <p class="pane__tag">Khung trò chơi giữ tỉ lệ 16:9 thay vì chiều cao:</p>
-          <div class="state state--loading state--frame" role="status" aria-busy="true">
-            <span class="u-visually-hidden">Đang tải trò chơi…</span>
+          <div class="u-visually-hidden" role="status">Đang tải trò chơi…</div>
+          <div class="state state--loading state--frame" aria-busy="true">
             <div class="skeleton" aria-hidden="true"><div class="skeleton__block skeleton__block--fill"></div></div>
           </div>
         </div>
@@ -1590,8 +1594,8 @@
             <p class="state__text">Hãy là người đầu tiên.</p>
             <p class="u-flush"><a class="btn btn--secondary" href="#s9">Chơi ngay</a></p>
           </div>
-          <div class="state state--loading state--reserve-md" role="status" aria-busy="true">
-            <span class="u-visually-hidden">Đang tải bảng xếp hạng…</span>
+          <div class="u-visually-hidden" role="status">Đang tải bảng xếp hạng…</div>
+          <div class="state state--loading state--reserve-md" aria-busy="true">
             <div class="skeleton" aria-hidden="true">
               <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--most"></span><span class="skeleton__bar"></span></div>
               <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--half"></span><span class="skeleton__bar"></span></div>
@@ -1614,8 +1618,8 @@
             <span class="skeleton__bar skeleton__bar--most"></span>
           </div>
           <p class="pane__tag">Khung trò chơi, 16:9:</p>
-          <div class="state state--loading state--frame" role="status" aria-busy="true">
-            <span class="u-visually-hidden">Đang tải trò chơi…</span>
+          <div class="u-visually-hidden" role="status">Đang tải trò chơi…</div>
+          <div class="state state--loading state--frame" aria-busy="true">
             <div class="skeleton" aria-hidden="true"><div class="skeleton__block skeleton__block--fill"></div></div>
           </div>
         </div>
@@ -1632,8 +1636,8 @@
             <p class="state__text">Hãy là người đầu tiên.</p>
             <p class="u-flush"><a class="btn btn--secondary" href="#s9">Chơi ngay</a></p>
           </div>
-          <div class="state state--loading state--reserve-sm" role="status" aria-busy="true">
-            <span class="u-visually-hidden">Đang tải bảng xếp hạng…</span>
+          <div class="u-visually-hidden" role="status">Đang tải bảng xếp hạng…</div>
+          <div class="state state--loading state--reserve-sm" aria-busy="true">
             <div class="skeleton" aria-hidden="true">
               <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--most"></span><span class="skeleton__bar"></span></div>
               <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--half"></span><span class="skeleton__bar"></span></div>
@@ -1653,8 +1657,8 @@
             <span class="skeleton__bar"></span>
             <span class="skeleton__bar skeleton__bar--most"></span>
           </div>
-          <div class="state state--loading state--frame" role="status" aria-busy="true">
-            <span class="u-visually-hidden">Đang tải trò chơi…</span>
+          <div class="u-visually-hidden" role="status">Đang tải trò chơi…</div>
+          <div class="state state--loading state--frame" aria-busy="true">
             <div class="skeleton" aria-hidden="true"><div class="skeleton__block skeleton__block--fill"></div></div>
           </div>
         </div>
@@ -1671,8 +1675,8 @@
             <p class="state__text">Hãy là người đầu tiên.</p>
             <p class="u-flush"><a class="btn btn--secondary" href="#s9">Chơi ngay</a></p>
           </div>
-          <div class="state state--loading state--reserve-md" role="status" aria-busy="true">
-            <span class="u-visually-hidden">Đang tải bảng xếp hạng…</span>
+          <div class="u-visually-hidden" role="status">Đang tải bảng xếp hạng…</div>
+          <div class="state state--loading state--reserve-md" aria-busy="true">
             <div class="skeleton" aria-hidden="true">
               <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--most"></span><span class="skeleton__bar"></span></div>
               <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--half"></span><span class="skeleton__bar"></span></div>
@@ -1693,8 +1697,8 @@
             <span class="skeleton__bar"></span>
             <span class="skeleton__bar skeleton__bar--most"></span>
           </div>
-          <div class="state state--loading state--frame" role="status" aria-busy="true">
-            <span class="u-visually-hidden">Đang tải trò chơi…</span>
+          <div class="u-visually-hidden" role="status">Đang tải trò chơi…</div>
+          <div class="state state--loading state--frame" aria-busy="true">
             <div class="skeleton" aria-hidden="true"><div class="skeleton__block skeleton__block--fill"></div></div>
           </div>
         </div>

@@ -99,7 +99,7 @@ directly. The chrome — skip link, header, nav, theme toggle, ad slot, footer �
 is identical to [`home.md`](home.md) §3 and is elided here.
 
 ```html
-<main id="main" class="shell shell--text main">
+<main id="main" class="shell shell--text main" tabindex="-1">
   <h1>Điều khoản sử dụng</h1>
   <p class="doc__updated">Cập nhật lần cuối: 5 tháng 11, 2026</p>
 

@@ -189,7 +189,7 @@ A **real page** uses the elements, not the demoted stand-ins:
     <nav aria-label="Chính">…</nav>   <!-- navigation -->
     …header ad slot, AFTER the skip link…
   </header>
-  <main id="main">…</main>            <!-- main -->
+  <main id="main" tabindex="-1">…</main>  <!-- main -->
   <footer class="site-footer">…</footer>  <!-- contentinfo -->
   <aside class="consent" aria-label="Cookie">…</aside>  <!-- last in body -->
 </body>
@@ -204,6 +204,17 @@ A **real page** uses the elements, not the demoted stand-ins:
   outline, so it does not continue the page's.
 - The skip link is **first in the document and before the header ad slot**, so
   one keystroke passes the banner (`ad-slots.md` §9.4).
+- **`#main` carries `tabindex="-1"`, and so does the sheets' `<div class="shell
+  main">` stand-in.** The attribute is not decoration and not a tab stop: `-1`
+  makes the element programmatically focusable without putting it in the tab
+  order. The design calls `.focus()` on `#main` by name — after Chấp nhận /
+  Từ chối and after the cookie dialog saves (`privacy-consent.md` §9, because
+  the button that opened the dialog no longer exists) — and on an element that
+  is not focusable that call silently does nothing: focus falls back to
+  `<body>` and the next Tab starts again at the skip link. Fixes
+  `accessibility-report.md` A-02. The skip link itself is unaffected either
+  way; current browsers set the sequential focus navigation starting point on
+  fragment navigation, so this is a scripted-focus fix, not a skip-link one.
 
 ---
 
@@ -356,14 +367,14 @@ This is the part a screen-reader pass checks, so it is specified exactly.
 
 | Situation | Markup | Why |
 | --- | --- | --- |
-| A region is loading | `role="status"` + `aria-busy="true"` on the state block | `status` is `aria-live="polite"`: it waits for a pause rather than cutting the reader off. A load the user did not ask for must not interrupt them. |
+| A region is loading | `aria-busy="true"` on the state block, and the status text in a **separate** polite live region **beside** it — the two attributes never share an element, see note 3 | `status` is `aria-live="polite"`: it waits for a pause rather than cutting the reader off. A load the user did not ask for must not interrupt them. Putting `aria-busy` on the announcing element instead defers that announcement until busy clears, and busy never clears on a block that is replaced. |
 | A background load **failed** | `role="status"` on the state block | Still polite. The user is reading; the failure is not more urgent than the sentence they are in the middle of. The retry button is reachable by Tab whenever they get there. |
 | The user's **own action** failed (save, delete, consent) | `role="alert"` on the notice | `alert` is `aria-live="assertive"`. The user just acted and is waiting for the result, so interrupting is correct — that *is* the answer to what they asked. |
 | The user's own action **succeeded** | `role="status"` on the notice | Polite. Good news can wait for a pause. |
 | A form failed validation on submit | `role="alert"` on `.error-summary`, and move focus to it (`tabindex="-1"`) | Announced *and* reached, so a keyboard user is put at the list of what to fix rather than left at the submit button. |
 | A field is invalid | `aria-invalid="true"` on the control, `aria-describedby` pointing at the error text | Announced when the user arrives at the field, which is when it is useful. No live region — the error is not new by then. |
 
-Two rules behind the table:
+Three rules behind the table:
 
 1. **A live region must exist in the DOM before the content is put into it.**
    Insert the empty `role="status"` container with the region, then fill it.
@@ -371,6 +382,44 @@ Two rules behind the table:
    reason a correctly-marked-up status is never announced.
 2. **`aria-busy="true"` goes on the block that is loading, and comes off when it
    is done.** It suppresses partial announcements while the region churns.
+3. **The announcing role and the busy flag never go on the same element.**
+   `role="status"` marks the thing that speaks.
+   `aria-busy="true"` marks the thing that is churning. They are never one
+   element. This is rule 1 and rule 2 read together, and it is the one that was got
+   wrong across the whole set (`accessibility-report.md` A-03). `aria-busy`
+   asks assistive technology to *defer* announcing the region it is on. A
+   loading block is **replaced** when the data arrives rather than having
+   `aria-busy` set to `false`, so busy never clears on it and the deferred
+   announcement never fires — and since the skeleton bars are `aria-hidden`,
+   the user is told nothing at all.
+
+   The live region is therefore a sibling of the block, present at rest and
+   outside what gets replaced — the same shape `.consent-form__status` already
+   uses on the privacy page:
+
+   ```html
+   <!-- Present and EMPTY at rest; the "it is working" signal is put HERE. -->
+   <div class="u-visually-hidden" role="status">Đang tải bảng tuần…</div>
+
+   <!-- Replaced wholesale when the data arrives. Carries aria-busy, no role. -->
+   <div class="state state--loading" aria-busy="true">
+     <div class="skeleton" aria-hidden="true"> … </div>
+   </div>
+   ```
+
+   A page may give the region a named class instead of `.u-visually-hidden`
+   when the text is meant to be seen; what it may not do is move the region
+   back inside the block, or put `role="status"` on the block itself.
+
+   **Caveat `accessibility-report.md` A-03 states and this Task keeps:** exact
+   screen-reader behaviour with `aria-busy` on a live region varies by
+   implementation, so this is a markup-level rule rather than an observed
+   silence. It is correct either way; a real NVDA / VoiceOver pass in M2
+   should confirm it.
+
+   The **error** block is unchanged and keeps `role="status"` on itself: it
+   carries no `aria-busy`, it is inserted rather than replaced, and it holds
+   the retry control the reader needs to reach.
 
 ### 4.4 Which page fills in which state
 
@@ -530,9 +579,11 @@ not focusable.
 ### 5.7 `game-card` · `game-grid`
 
 **For:** one game in the home grid.
-**States:** default · hover · focus (ring around the **whole card**) and,
-separately, its top-3 strip has the three data states.
-**Keyboard:** **one tab stop per card.** See §6.2.
+**States:** default · hover · focus (ring around the **whole card** — but only
+while the play link is the card's only control; see §6.2) and, separately, its
+top-3 strip has the three data states.
+**Keyboard:** **one tab stop per card**, two while the strip is in its error
+state and offers *Thử lại*. See §6.2.
 **Pages:** home. The strip's shape is reused on the play page.
 **Note:** the thumbnail reserves 16:9 before the image arrives, so the grid
 cannot jump. The game supplies the only colour on the page — the chrome stays
@@ -710,6 +761,39 @@ card.**
 - **The accessible name is "Chơi <tên trò chơi>"**, via a `.u-visually-hidden`
   span. A list of links all reading "Chơi" is useless out of context, and
   context is exactly what a screen-reader links list removes.
+
+**Three of those bullets stop being true the moment the card holds a second
+control** — which it does whenever the top-3 strip is in its error state and
+carries *Thử lại* (§4.4). The card then has two tab stops, not one, and:
+
+- the stretched `::after` paints **over** the second control, so a pointer
+  click on *Thử lại* lands on the play link and takes the player into the game
+  instead (`accessibility-report.md` A-01);
+- the card-level ring then describes the whole card for **both** stops, and
+  the companion rule strips the ring from the focused control itself, so two
+  consecutive tab stops look pixel-identical and neither says what Enter will
+  do (A-13).
+
+**So the rule is conditional, and the condition is in the stylesheet, not in
+the page's memory.** `components.css` §11 gates all three rules — the stretch,
+the card ring, the ring suppression — on one guard, `:not(:has(.state .btn))`.
+A card whose only control is the play link behaves exactly as the bullets
+above describe. A card that contains a state block with its own control gets
+none of the three and falls back to `base.css` §4's per-element ring, which is
+already correct for two stops. A page Task adds nothing and remembers nothing;
+putting the state block in the card is enough.
+
+Two consequences worth stating, so a later Task does not undo this:
+
+- **"One control per card" is a rule about the card's *own* chrome** — the
+  thumbnail, the title, the button — and never meant that a nested state block
+  may not carry its retry. `home.md` §7's promise that a broken strip leaves
+  the card "still there and still working" depends on that retry being
+  reachable.
+- **Do not put `.is-focus` on a card that holds a second control** in a mockup
+  sheet. The forced-state class is the §1.2 paint convention and bypasses the
+  guard, so it would draw the card ring this fix exists to suppress. Paint the
+  ring on the focused control instead, which is what the page will really do.
 
 ### 6.3 The long-form document template
 
