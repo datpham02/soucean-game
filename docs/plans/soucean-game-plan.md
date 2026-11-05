@@ -2,6 +2,7 @@
 
 - **Status:** `APPROVED` (Board Operator, 2026-11-04). GAM-16 stays sequential: it starts after GAM-15 closes the Playable Vigil milestone. M3 waits for it.
 - **Revised 2026-11-04 (Board):** design and build the website first; hosting, the production backend and the domain come last (M6).
+- **Supabase was dropped on 2026-11-05 (ADR-021): Laravel + MySQL.**
 - **Date:** 2026-11-04
 - **Project:** `soucean-game` (name **Soucean Game**, chosen by the Board 2026-11-04). Type `platform`, status `planned` ([ADR-014](https://github.com/datpham02/game-studio/blob/main/docs/decisions/ADR-014-platform-project-type.md)).
 - **First game:** Lamplight Vigil.
@@ -21,7 +22,7 @@ This plan lives in the framework repository only while the project is `planned` 
 - Payments, top-ups, in-game purchases and rewarded ads. The contract leaves room for them, but they need a payments ADR and legal review first. See §8.
 - Chat, friends, comments or other user-generated content beyond a display name.
 - Analytics or telemetry inside games. Website analytics, if any, come later, behind consent and with a Board decision.
-- A self-run server. Use managed services only.
+- A production hosting decision before M6. Local Docker runtime is enough until then.
 
 ## 2. Pages
 
@@ -30,22 +31,23 @@ This plan lives in the framework repository only while the project is `planned` 
 | Home / game list | `/` | A card per game from **each game's manifest** **[GAM-16]**: thumbnail, title, short description, controls, a "Play" button, and this week's top 3 | The list is built from the manifests at build time, so adding a game is adding its manifest and build. |
 | Play page | `/games/<game_id>` | The game frame (mounted or iframe **[GAM-16]**), title, controls, a weekly leaderboard beside or below it, and the ad slots (§4) | The game fills its container and letterboxes. The page never overlaps the frame. |
 | Leaderboards | `/leaderboards`, `/leaderboards/<game_id>` | This week's board per game, last week's final board, and the player's own rank and personal best | The week starts Monday 00:00 UTC+7, as GAM-16 recommends; GAM-16 confirms. |
-| Account and profile | `/account` | Display name (editable, moderated), the anonymous id state, "Link Google or email" to keep scores across devices, sign out, and delete my data | Linking keeps the same player id (OQ-036). Delete removes the scores and the profile. |
+| Account and profile | `/account` | Display name (editable, moderated), the anonymous id state, "Link Google or email" to keep scores across devices, sign out, and delete my data | Linking keeps the same player id. Delete removes the scores and the profile. |
 | Privacy policy | `/privacy` | What is stored, why, for how long, who processes it (backend, hosting, ad network), the player's rights, and contact | Written with legal input (OQ-039). Covers Decree 13/2023, and GDPR if EU players are expected. |
 | Cookie consent | Banner on first visit, plus a `/privacy#cookies` settings link in the footer | Accept / Reject / Settings. **No ad script loads before consent.** Essential storage (session, consent choice) only | Equal-weight "Reject". If ads are shown to EU/UK visitors, a certified consent tool may be required (OQ-038). |
 | Footer pages | `/about`, `/terms` | Studio info, terms of use and contact | Ad networks usually expect these (OQ-038). |
 
-## 3. Recommended stack
+## 3. Runtime direction and frontend recommendations
 
 | Layer | Recommendation | Why | Alternative |
 |---|---|---|---|
 | Frontend | TypeScript with a static-first framework, for example **Astro** with small interactive islands, or Vite + React | Fast static pages for SEO and ad approval, and simple hosting. The game page needs only one interactive island | Next.js (static export) |
-| Identity | **Supabase Auth**: anonymous sign-in on first visit, with optional linking of **Google** or **email (magic link)** | Matches the Board decision: no sign-up to play, and scores survive across devices once linked (`UNVERIFIED`, OQ-036) | Firebase Auth |
-| Data | **Supabase Postgres** with **row-level security on every table** | Players can write only their own rows. Reads of the boards are public. Score submission goes only through a server function | Firebase Firestore |
-| Server logic | **Supabase Edge Functions** (or Postgres functions) for `submit_score` | Moderate anti-cheat: a maximum score for the time survived, rate limits, and a check of seed, week, duration and game version. No replay verification | — |
+| Identity | **Laravel-issued token** on first score submit, with optional linking of **Google** or **email (magic link)** | No sign-up to play, and scores survive across devices once linked while keeping one player id | — |
+| Data | **MySQL**, reachable only by Laravel | Browser never receives a database credential; all writes and reads pass through Laravel policies and validation | — |
+| Server logic | **Laravel API + jobs + rate limiters** for `submit_score` and grants | Moderate anti-cheat: a maximum score for the time survived, rate limits, and a check of seed, week, duration and game version. No replay verification | — |
+| Realtime | **Laravel Reverb** | Live leaderboards, lobbies, presence, chat and turn-based game updates | Per-game dedicated realtime server for a future fast-paced game |
 | Hosting (chosen at M6) | **Cloudflare Pages** (static), with preview deploys per branch | Free tier, CDN, custom headers for CSP, and preview URLs for review (`UNVERIFIED`, OQ-037) | GitHub Pages (no previews), Netlify, Vercel |
 | Ads | Google AdSense first, evaluated against alternatives | Common and simple. Needs an own domain, content, traffic and policy compliance (`UNVERIFIED`, OQ-038) | Ezoic, Media.net, game-portal ad networks |
-| Tests | Vitest (unit), pgTAP or SQL tests for RLS, and Playwright end-to-end | RLS is the main security boundary and needs its own tests | — |
+| Tests | Unit + feature tests (Laravel), and Playwright end-to-end | The Laravel API is the security boundary and needs its own tests | — |
 
 **Data model sketch.** The final version follows GAM-16.
 - `players`: id (the auth user id), display_name, created_at.
@@ -54,9 +56,10 @@ This plan lives in the framework repository only while the project is `planned` 
 - Nothing else: no email copy (Auth keeps it only if the player links), no IP logging in tables, and no analytics.
 
 **Environments.** These follow [security-architecture.md §10](https://github.com/datpham02/game-studio/blob/main/docs/architecture/security-architecture.md#10-production-environments-platform-projects).
-- `soucean-game-dev`: a Supabase project with fake data. Its keys are bound only to `web-engineer` and `qa`.
-- Preview deploys: these use the dev project.
-- Production: a separate Supabase project. The Board alone holds its keys, applies its migrations and controls its deploys.
+- M0-M3: no backend runtime.
+- M4 onward: local Docker runtime in this repository with `app`, `mysql`, `reverb`, `test`.
+- Agents run tests only with `docker compose run --rm test`.
+- Hosting is not decided yet; no preview or production runtime is configured from this repository.
 
 ## 4. Ad slots and the game frame
 
@@ -96,15 +99,15 @@ The roles are `web-engineer` (new), `ui-designer`, `qa`, `project-manager`, `pro
 | **M1: Design** | `ui-designer`: the design system as `DESIGN.md` (colours, type, spacing, components, light and dark), wireframes then high-fidelity mockups of every page in §2 at desktop and mobile widths, the ad-slot layout of §4, the consent banner, and empty, loading and error states. Delivered as `docs/design/` plus static HTML prototypes in the repository | ui-designer, web-engineer (feasibility), qa (accessibility review), **Board approves the design** | The Board approves the mockups. Contrast and keyboard checks pass. Every page of §2 has a design. |
 | **M2: Static site (local)** | The site built from the approved design: home with a hard-coded Lamplight Vigil card, the play page embedding the built game, about/terms/privacy drafts, the responsive layout with ad-slot placeholders and margins | web-engineer, ui-designer (design review), qa (e2e against localhost, accessibility, margins at all breakpoints) | Lamplight Vigil plays on the local site, the frame letterboxes, and the margins are verified by tests. |
 | **M3: Contract integration** (after GAM-16) | Game list from manifests, mount/destroy or iframe per the contract, the platform adapter on the website side, pause on blur | web-engineer, game-director (contract questions), qa | Two dummy games or one real game mount and unmount with no leaks, per the contract tests. |
-| **M4: Identity and leaderboards** (security-sensitive) | Board first creates the **dev** Supabase project only. Then: anonymous sign-in, account linking, the display name with moderation, the `scores` schema with RLS, the `submit_score` function with plausibility and rate limits, weekly boards, personal best, and "delete my data" | web-engineer, qa (RLS tests, e2e), **Board human review** | RLS tests prove players cannot write others' rows or forge the week. The Board reviews auth and RLS PRs. |
+| **M4: Identity and leaderboards** (security-sensitive) | Board confirms the local Docker backend baseline. Then: anonymous token issuing, account linking, display-name moderation, migrations for `scores`, `submit_score` plausibility checks, rate limiters, weekly boards, personal best, and "delete my data" | web-engineer, qa (feature tests, e2e), **Board human review** | Feature tests prove players cannot submit forged weeks or bypass score checks. The Board reviews auth, policies and limiter PRs. |
 | **M5: Privacy and consent** | The consent banner and settings, the final privacy policy (legal input), and consent-gated script loading | web-engineer, ui-designer, qa, Board (legal) | No third-party request before consent, verified with Playwright. The Board approves the policy text. |
-| **M6: Hosting, launch and ads** | Board: hosting account (Cloudflare Pages or the choice from OQ-037), the **prod** Supabase project and its migrations, the domain, production deploy, ads.txt and the ad-network application. Ads switched on behind consent | **Board** (accounts, prod deploy), web-engineer (deploy config and integration on a branch), qa | The site is live, the ad network is approved, and the ad margins hold in production. |
+| **M6: Hosting, launch and ads** | Board: hosting account (provider chosen from OQ-037), production runtime setup, domain, production deploy, ads.txt and the ad-network application. Ads switched on behind consent | **Board** (accounts, prod deploy), web-engineer (deploy config and integration on a branch), qa | The site is live, the ad network is approved, and the ad margins hold in production. |
 | Later | More games, rewarded ads or purchases (separate ADR and legal), optional website analytics | — | Board decision |
 
 ## 6. Security and review summary
-- Production keys are never bound to agents. The Board holds them. Agents use the dev project only.
+- Production keys are never bound to agents. The Board holds them. Agents use the local Docker runtime only.
 - Production deploys, production migrations, DNS and ad settings are done by the Board.
-- PRs on auth, RLS, `submit_score` or rewards, payments, secrets or CSP are **security-sensitive**. They need a Board review in addition to `qa`.
+- PRs on auth, authorization policies, rate limiters, `submit_score` or rewards, payments, secrets or CSP are **security-sensitive**. They need a Board review in addition to `qa`.
 - Full rules: [security-architecture.md §10](https://github.com/datpham02/game-studio/blob/main/docs/architecture/security-architecture.md#10-production-environments-platform-projects).
 
 ## 7. External accounts and Board decisions
@@ -120,13 +123,13 @@ Nothing below is created by an agent. The Board does each step, or says yes in i
 | 5 | Repository visibility | Public, or private with GitHub Pro. A private repository on the free plan cannot have branch protection, which ADR-009 and §10 rely on | Before M0 |
 | 6 | GitHub repository `datpham02/soucean-game` | Create it with branch protection (PR, 1 approval, no force-push) | M0 |
 | 7 | Paperclip project and the `web-engineer` agent | Create them. Only the GitHub token is bound at M0 | M0 |
-| 8 | Supabase | Create an account (studio-owned email) and **two** projects: dev (shared with agents) and prod (Board only). Enable anonymous sign-in, and Google OAuth later | dev: start of M4 · prod: M6 |
+| 8 | Backend runtime baseline | Confirm the local Docker stack (`app`, `mysql`, `reverb`, `test`) is the only runtime until hosting is decided | start of M4 |
 | 9 | Google OAuth client | Create it in Google Cloud for account linking | M4 |
-| 10 | Hosting | Cloudflare account and a Pages project connected to the repository. Production branch `main`, previews for task branches | M6 |
+| 10 | Hosting | Choose provider and create the account/project connected to the repository. Production branch `main`, previews for task branches if supported | M6 |
 | 11 | Domain | Buy it and point DNS at the hosting (needed for ads) | M6 |
 | 12 | Ad network | Apply to AdSense or an alternative after launch, with real content and traffic | M6 |
 | 13 | Legal | A lawyer checks Decree 147/2024 for a free game site with ads, Decree 13/2023 for personal data, the privacy policy and the terms (OQ-039) | Before M6 |
 | 14 | Payments (deferred) | Any top-up or purchase first needs the Vietnamese online-game licence (Decree 147/2024/ND-CP), a payment provider (VNPay, MoMo, ZaloPay, Stripe), refunds and tax, a lawyer and a payments ADR | Not in v1 |
 
 ## 8. Open questions
-OQ-036 (Supabase identity and free tier), OQ-037 (hosting), OQ-038 (ads and consent), OQ-039 (legal), all in [open-questions.md](https://github.com/datpham02/game-studio/blob/main/docs/architecture/open-questions.md). Contract questions belong to GAM-16.
+OQ-037 (hosting), OQ-038 (ads and consent), OQ-039 (legal), all in [open-questions.md](https://github.com/datpham02/game-studio/blob/main/docs/architecture/open-questions.md). Contract questions belong to GAM-16.

@@ -47,7 +47,7 @@ From the plan, §2. Routes are **proposed** there; M2 confirms them. Items marke
 | Home / game list | `/` | A card per game, built from **each game's manifest** **[GAM-16]**: thumbnail, title, short description, controls, a "Play" button, and this week's top 3 | The list is generated from the manifests at build time. Adding a game is adding its manifest and building — no hand-edited list. |
 | Play page | `/games/<game_id>` | The game frame (mounted or iframe **[GAM-16]**), title, controls, a weekly leaderboard beside or below it, and the ad slots of §5 | The game fills its container and letterboxes. The page never overlaps the frame. |
 | Leaderboards | `/leaderboards`, `/leaderboards/<game_id>` | This week's board per game, last week's final board, and the player's own rank and personal best | The week starts **Monday 00:00 UTC+7** (GAM-16 recommends this; GAM-16 confirms it). |
-| Account and profile | `/account` | Display name (editable, moderated), the anonymous id state, "Link Google or email" to keep scores across devices, sign out, and delete my data | Linking keeps the same player id (OQ-036). Delete removes the scores and the profile. |
+| Account and profile | `/account` | Display name (editable, moderated), the anonymous id state, "Link Google or email" to keep scores across devices, sign out, and delete my data | Linking keeps the same player id. Delete removes the scores and the profile. |
 | Privacy policy | `/privacy` | What is stored, why, for how long, who processes it (backend, hosting, ad network), the player's rights, and contact | Written with legal input (OQ-039). Covers Decree 13/2023, and GDPR if EU players are expected. |
 | About | `/about` | Studio info and contact | Ad networks usually expect this page (OQ-038). |
 | Terms | `/terms` | Terms of use | Ad networks usually expect this page (OQ-038). |
@@ -93,11 +93,11 @@ Requirements that apply to **every** page, plan or no plan:
 | Link **email (magic link)** | Optional, from `/account` | Same purpose; no password. |
 
 Linking **keeps the same player id** — it upgrades the existing identity rather
-than creating a second one, so no score is orphaned (OQ-036, `UNVERIFIED`).
+than creating a second one, so no score is orphaned.
 
-The provider is not settled here. The plan recommends Supabase Auth, with
-Firebase Auth as the alternative; the stack is chosen in M2 and the backend is
-not built before M4 (§6). The behaviour above is what any provider must deliver.
+The backend provider is settled by ADR-021: Laravel issues the player token and
+handles account linking. The behaviour above is what the Laravel backend must
+deliver once M4 starts (§6).
 
 ---
 
@@ -151,9 +151,9 @@ Nothing here may be read as permission to keep data after a deletion request.
 
 ### 4.2 Rules that do not depend on the plan
 
-- **Row-level security is on** for every table that holds player data, and every
-  policy is covered by an automated test. A table without a tested policy does
-  not ship.
+- **Server-side access rules are mandatory** for every player-data write and
+  read path, and every rule is covered by an automated feature test. A rule
+  without a test does not ship.
 - **No tracking.** No analytics, no advertising identifiers beyond what the ad
   slot itself requires, no third-party script — unless a task **and** the
   cookie-consent design allow it, and the consent banner reflects it.
@@ -249,16 +249,16 @@ numbers above. Consult `ui-designer` on slot geometry before implementing one.
 | Milestone | Backend | Who may act |
 | --- | --- | --- |
 | **M0 – M3** | none | agents, in this repository only |
-| **M4 onward** | the **dev project only** | agents, via the provider CLI against dev |
+| **M4 onward** | local Docker runtime only (`app`, `mysql`, `reverb`, `test`) | agents, in this repository only |
 | **any** | **production** | the **Board Operator** only |
 
 - No production credential is requested, read, stored or used by an agent — this
-  covers database admin and service-role keys, backend access tokens, hosting
+  covers database admin credentials, backend access tokens, hosting
   tokens, DNS, ad-network accounts and payment keys.
 - No deploy to production, no migration against the production database, no
   production secret change, and no dev configuration pointed at production.
 - Database changes are versioned migrations in this repository, never a manual
-  change in a provider dashboard.
+  change in an external dashboard.
 - Production changes are requested through `project-manager` and performed by the
   Board Operator. See `docs/architecture/security-architecture.md` §10 in the
   framework repository.
@@ -270,7 +270,7 @@ numbers above. Consult `ui-designer` on slot geometry before implementing one.
 A change is done when:
 
 - the build, lint and unit tests pass;
-- row-level-security policy tests pass for every table it touches;
+- server-side access-rule feature tests pass for every protected player-data path it touches;
 - a visible change has a Playwright end-to-end test;
 - a change to a path in `AGENTS.md` §4 is marked `Security-sensitive: yes`, lists
   its paths, and has Board review in addition to `qa`;
@@ -283,12 +283,12 @@ A change is done when:
 | # | Question | Owner |
 | --- | --- | --- |
 | 1 | ~~The page list, stored fields, ad positions and ad margin.~~ **Resolved** by the plan import (GAM-20 deliverable 5), 2026-11-04. | — |
-| 2 | ~~Sign-in methods.~~ **Resolved** by plan §3: anonymous first, optional Google or email link. The *provider* is chosen in M2. | — |
+| 2 | ~~Sign-in methods.~~ **Resolved** by plan §3: anonymous first, optional Google or email link. ADR-021 fixes the provider direction as Laravel-issued tokens. | — |
 | 3 | Retention periods per field. The plan ties retention to player deletion and names no fixed period; whether weekly boards are pruned after N weeks is still open. | Board, via `project-manager` |
 | 4 | Routes in §2 are the plan's **proposed** routes. M2 confirms them. | `web-engineer`, at M2 |
 | 5 | The weekly reset boundary (Monday 00:00 UTC+7) is GAM-16's recommendation and GAM-16 confirms it. | `game-director`, via `project-manager` |
 
-Upstream open questions the plan depends on — OQ-036 (identity and free tier),
-OQ-037 (hosting), OQ-038 (ads and consent), OQ-039 (legal) — live in the
+Upstream open questions the plan depends on — OQ-037 (hosting), OQ-038 (ads and
+consent), OQ-039 (legal) — live in the
 framework repository's
 [`open-questions.md`](https://github.com/datpham02/game-studio/blob/main/docs/architecture/open-questions.md).

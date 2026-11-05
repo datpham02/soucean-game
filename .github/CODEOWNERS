@@ -19,32 +19,40 @@
 /CLAUDE.md                          @datpham02
 /docs/                              @datpham02
 
-# --- Security-sensitive: database schema and row-level security ---------------
-/supabase/migrations/               @datpham02
+# --- Security-sensitive: database schema and authorization policy --------------
+/database/migrations/               @datpham02
 /db/migrations/                     @datpham02
-**/policies/                        @datpham02
-**/*.policy.sql                     @datpham02
+/app/Policies/                      @datpham02
+**/Policies/                        @datpham02
 
 # --- Security-sensitive: authentication ---------------------------------------
-**/auth/                            @datpham02
+/app/**/Auth/                       @datpham02
+/config/auth.php                    @datpham02
+/config/sanctum.php                 @datpham02
 
-# --- Security-sensitive: server code that grants scores, rewards, entitlements -
-/supabase/functions/                @datpham02
-/src/server/                        @datpham02
-**/leaderboard/                     @datpham02
-**/entitlements/                    @datpham02
-**/rewards/                         @datpham02
+# --- Security-sensitive: score/reward/entitlement and API execution paths -----
+/app/Http/Controllers/              @datpham02
+/app/Jobs/                          @datpham02
+/app/Models/**/Leaderboard*         @datpham02
+/app/**/Leaderboard/                @datpham02
+/app/**/Entitlements/               @datpham02
+/app/**/Rewards/                    @datpham02
+/routes/                            @datpham02
+/routes/api.php                     @datpham02
 
 # --- Security-sensitive: payments ---------------------------------------------
 **/payments/                        @datpham02
 **/billing/                         @datpham02
 
 # --- Security-sensitive: request security headers ------------------------------
+/app/Http/Middleware/               @datpham02
 **/middleware.*                     @datpham02
+**/*csp*                            @datpham02
+**/*cors*                           @datpham02
 
-# --- Security-sensitive: secret configuration ---------------------------------
-/.env.example                       @datpham02
-**/config/secrets*                  @datpham02
+# --- Security-sensitive: secret and security configuration ---------------------
+/.env*                              @datpham02
+/config/                            @datpham02
 
 # --- Security-sensitive: supply chain and CI (security-architecture §11) ------
 /.github/                           @datpham02
