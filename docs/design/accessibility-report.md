@@ -882,22 +882,31 @@ each was checked against the finding that asked for it:
 re-verification was selector-to-markup matching plus exhaustive `grep` over the
 prototypes and page docs: that the three `components.css` rules carry the same
 guard and that no `.game-card` with a nested state-block button is left with a
-stretched hit area; that no `.shell.main` or `<main id="main">` is missing
-`tabindex="-1"`; and that no element combines `role="status"` with
-`aria-busy="true"`. No browser was opened and no screen reader was run, for the
-same tooling reasons §2.1 and §2.3 record.
+stretched hit area; that within A-02's scope — the six `pages/*.md`,
+`components.md`'s canonical shell, and the `.shell.main` stand-ins in the hi-fi
+sheets — no `<main>` is missing `tabindex="-1"` (the grep was not exhaustive
+over every audited file; see the third bullet below); and that no element
+combines `role="status"` with `aria-busy="true"`. No browser was opened and no
+screen reader was run, for the same tooling reasons §2.1 and §2.3 record.
 
-**What is still owed, and when.** The two checks a static pass cannot make
-carry over to M2 and are not discharged by this addendum:
+**What is still owed, and when.** Three things carry over to M2 and are not
+discharged by this addendum — the two checks a static pass cannot make, and one
+gap the static pass found outside A-02's scope:
 
 - a **browser click-through of `home.html` §4** (top-3 strip, error state),
   confirming by pointer that "Thử lại" is clickable and that the two tab stops
   draw distinguishable rings;
 - an **NVDA and VoiceOver pass** over the loading and error live regions,
-  confirming the announcement A-03 exists to make actually fires.
+  confirming the announcement A-03 exists to make actually fires;
+- **`ad-slots.md:1025`** — the full page skeleton there still reads
+  `<main id="main" class="page-main">` with no `tabindex="-1"`, while carrying a
+  `<a class="skip-link" href="#main">` at `:1013`. The file is listed in §10
+  "Files audited" but sits outside A-02's stated scope, so SOU-22 correctly left
+  it alone. It matters because that skeleton is a copy source: a page Task that
+  builds from it in M2 reintroduces A-02. Owed to the ad-slots Task in M2.
 
-Until those run, the fixes for A-01, A-13 and A-03 are verified at the level of
-markup and selectors only. §2.3's limits still apply to them.
+Until the first two run, the fixes for A-01, A-13 and A-03 are verified at the
+level of markup and selectors only. §2.3's limits still apply to them.
 
 **Minor and Advisory findings are unchanged by this.** A-04 … A-12 were out of
 SOU-22's scope and are tracked as their own Tasks; §9's note stands, in
