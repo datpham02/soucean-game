@@ -43,9 +43,20 @@
        it forbids using a pair that has not been measured and written down.
        So this library uses only pairs from that set. In practice:
 
-         - `sunken` carries ONLY `text` (plus the focus ring and a
-           border-strong edge). No muted text, no accent, no meaning colour
+         - `sunken` carries ONLY `text` and `text-muted` (plus the focus
+           ring and a border-strong edge). No accent and no meaning colour
            is ever set on a sunken fill.
+
+           AMENDED 2026-11-05 (SOU-24, A-07). `text-muted` was added. It is
+           what ads.css has always drawn for `.ad-slot__label`, and the pair
+           is now measured and published in DESIGN.md at 5.65:1 light and
+           8.23:1 dark against a requirement of 4.5 — so the reason the rule
+           excluded it (not measured) no longer holds. The amendment admits
+           `text-muted` and nothing else; any further pair on `sunken` is
+           measured and added to DESIGN.md first. No colour changed: this
+           records what ships. components.md section 2.1 still carries the
+           pre-amendment wording and is outside SOU-24's write set.
+
          - `surface` carries `text`, `text-muted`, `primary`, `secondary`,
            `error`, `focus`, `border-strong` — but NOT `success` and NOT
            `warning`, which DESIGN.md measured on `bg` only.
@@ -146,10 +157,21 @@
    section adds only the forced-state mirror the specimen sheet needs, with
    the identical declarations, so the sheet cannot drift from the real ring.
 
-   The 2px offset is load-bearing: DESIGN.md measured the focus blue against
-   the primary teal at 1.01:1, so a ring drawn ON a primary fill would be
-   invisible. The offset puts it on the surface behind, where it measures
-   5.11:1 or better in light and 7.96:1 or better in dark.
+   The 2px offset is load-bearing: the focus blue and the primary teal sit at
+   roughly 1.01:1 against each other, so a ring drawn ON a primary fill would
+   be invisible. The offset puts it on the surface behind, where DESIGN.md ->
+   "Measured contrast" records 5.11:1 or better in light (focus on `sunken`)
+   and 7.94:1 or better in dark (focus on `surface`).
+
+   Two notes on the figures above, both from SOU-24 (A-06):
+
+     - The dark figure read 7.96 here until 2026-11-05 and was wrong; the
+       value in DESIGN.md is 7.94. Quote that table, never a second document.
+     - The 1.01:1 is NOT in DESIGN.md. Five documents state it and all five
+       agree, so it is not drift, but it is an unpublished ratio and no
+       document should be attributing it to DESIGN.md. It is left standing,
+       unattributed and hedged, pending a Board measurement that can add it
+       to the table. Do not restate it as a measured figure until then.
    -------------------------------------------------------------------------- */
 
 .is-focus {
@@ -444,7 +466,7 @@
    `primary` plate is not a pair this system has measured. So the chosen
    option hovers the way the segmented control's chosen item does: the PLATE
    moves to `primary-hover` and the label stays `on-primary`, a pair DESIGN.md
-   measures at 8.55 light / 9.63 dark. Without this, the one option the player
+   measures at 8.57 light / 9.65 dark. Without this, the one option the player
    is most likely to point at is the one that looks dead. */
 .theme-toggle__option:has(input:checked):hover,
 .theme-toggle__option:has(input:checked).is-hover,
@@ -1457,7 +1479,7 @@
    because a shimmer tells a screen-reader user nothing at all.
 
    The bars are `border` on a `bg` fill — the pair DESIGN.md already records
-   as DECORATIVE at 1.33:1 light and 1.50:1 dark. They carry no information
+   as DECORATIVE at 1.32:1 light and 1.49:1 dark. They carry no information
    and are aria-hidden, so they are not required to meet 3:1; the information
    is in the status text beside them. Recorded in components.md section 3.3
    so a later Task does not mistake a skeleton bar for a boundary.

@@ -372,6 +372,7 @@ indicator.
 | `text` `#1D211F` | `sunken` `#E8E8E3` | **13.24:1** | 4.5 | PASS |
 | `text-muted` `#555B57` | `bg` `#F3F3F0` | **6.25:1** | 4.5 | PASS |
 | `text-muted` `#555B57` | `surface` `#FAFAF8` | **6.65:1** | 4.5 | PASS |
+| `text-muted` `#555B57` | `sunken` `#E8E8E3` | **5.65:1** | 4.5 | PASS |
 | `primary` `#1F6B5C` | `bg` `#F3F3F0` | **5.69:1** | 4.5 | PASS |
 | `primary` `#1F6B5C` | `surface` `#FAFAF8` | **6.06:1** | 4.5 | PASS |
 | `on-primary` `#FBFBF9` | `primary` `#1F6B5C` | **6.11:1** | 4.5 | PASS |
@@ -399,6 +400,7 @@ indicator.
 | `text` `#E7E9E7` | `sunken` `#111314` | **15.26:1** | 4.5 | PASS |
 | `text-muted` `#A7AEAA` | `bg` `#181B1C` | **7.65:1** | 4.5 | PASS |
 | `text-muted` `#A7AEAA` | `surface` `#212527` | **6.82:1** | 4.5 | PASS |
+| `text-muted` `#A7AEAA` | `sunken` `#111314` | **8.23:1** | 4.5 | PASS |
 | `primary` `#5FC9B4` | `bg` `#181B1C` | **8.66:1** | 4.5 | PASS |
 | `primary` `#5FC9B4` | `surface` `#212527` | **7.72:1** | 4.5 | PASS |
 | `on-primary` `#0C241F` | `primary` `#5FC9B4` | **8.15:1** | 4.5 | PASS |
@@ -431,6 +433,46 @@ for boundaries.
 > **Rule for every later Task:** if you need a new colour, you do not have one.
 > Ask on the Task. Do not hand-pick a hex, and do not use a colour whose ratio
 > against its real background has not been measured and written down here.
+
+#### This table is the only place a ratio is published
+
+The three tables above are the **single source** for every contrast figure in
+this repository. They were recomputed in full after SOU-18 and re-verified by
+the Board on 2026-11-05.
+
+- **Cite, do not restate.** A page sheet, a component note or a CSS comment that
+  needs a ratio names the pair and points here. If it prints the number anyway
+  — some audit tables are easier to read with the figure in the row — the number
+  must be **character-for-character** the one above.
+- **Never copy a figure from a second document.** Copying from a copy is how the
+  two families of figures in SOU-24 (A-06) drifted apart by 0.01–0.03 while every
+  document still claimed to be quoting this one.
+- **A document may not publish a ratio this table does not have.** If a pair is
+  missing, it is measured and added here first, by someone with a tool that can
+  run the formula above. It is not estimated, and it is not left blank and used
+  anyway.
+
+Four `primary-hover` pairs are published in `components.md` §3.4 rather than
+here, because `primary-hover` on `surface` and on `bg` are hover states rather
+than base roles. That is the one sanctioned exception, and it is named here so
+it is not mistaken for drift.
+
+#### The surface rule, and the one pair it now admits
+
+`components.md` §2.1 and the header comment of `components.css` carry the
+**surface rule**: `sunken` carries only `text`, plus the focus ring and a
+`border-strong` edge. The rule exists as a proxy for this table — it kept the
+library inside the set of pairs that had actually been measured.
+
+**Amended 2026-11-05 (SOU-24, A-07).** `sunken` also carries **`text-muted`**,
+for the ad-slot label (`ads.css` `.ad-slot__label`) and for that use only. The
+pair is measured and recorded above at **5.65:1** light and **8.23:1** dark,
+against a requirement of 4.5 — so the reason the rule excluded it no longer
+holds. The amendment is deliberately narrow:
+
+- it admits `text-muted` and nothing else. No accent and no meaning colour is
+  set on a sunken fill, exactly as before;
+- any further pair on `sunken` is measured and added to this table first.
 
 ---
 
@@ -781,9 +823,10 @@ top-3 strip) · `game-grid` · `game-frame` · `game-meta`
 `skeleton` · `badge` · `chip`
 
 **Commercial and compliance**
-`ad-slot` (reserves its box; `sunken` fill; `caption` label; `ad-clearance`
-margin from the game frame) · `cookie-banner` (Accept / Reject / Settings, equal
-weight, no ad script before consent)
+`ad-slot` (reserves its box; `sunken` fill; `caption` label in `text-muted`,
+measured under "Measured contrast" at 5.65 / 8.23; `ad-clearance` margin from
+the game frame) · `cookie-banner` (Accept / Reject / Settings, equal weight, no
+ad script before consent)
 
 ### Rules that bind the whole inventory
 

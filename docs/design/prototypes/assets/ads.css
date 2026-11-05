@@ -167,7 +167,22 @@
 
 /* The placeholder caption. In production the slot is empty until a creative
    loads; this label exists so a prototype reads as a reserved ad box rather
-   than an unexplained grey rectangle. */
+   than an unexplained grey rectangle.
+
+   CONTRAST. The label is `text-muted` on the slot's own `sunken` fill. That
+   pair is recorded in DESIGN.md -> "Measured contrast": 5.65:1 light and
+   8.23:1 dark, against a requirement of 4.5. Both pass. If these two numbers
+   appear anywhere else, they must be character-for-character the ones in that
+   table (SOU-24, A-06).
+
+   It stays `text-muted` rather than `text` deliberately. The label names a
+   reserved box; it is chrome, not content, and at `text` weight it would read
+   louder than the page copy beside it. Until 2026-11-05 the surface rule said
+   `sunken` carries only `text`, which made this declaration a standing
+   violation. The rule was amended that day to admit `text-muted` for exactly
+   this use, now that the pair is measured — see DESIGN.md, "The surface rule,
+   and the one pair it now admits", and ad-slots.md section 9.4. The colour
+   value here did not change. */
 .ad-slot__label {
   font-size: var(--text-caption);
   line-height: var(--leading-label);

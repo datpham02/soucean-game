@@ -752,7 +752,7 @@
           </div>
         </div>
       </div>
-      <span class="mk-tag">Biểu tượng lỗi là <code>error</code> trên <code>bg</code> — 7.46:1 ở giao diện tối. Trạng thái không bao giờ chỉ là màu: luôn có biểu tượng <em>và</em> chữ (“Lỗi”, “Cảnh báo”).</span>
+      <span class="mk-tag">Biểu tượng lỗi là <code>error</code> trên <code>bg</code> — 7.45:1 ở giao diện tối. Trạng thái không bao giờ chỉ là màu: luôn có biểu tượng <em>và</em> chữ (“Lỗi”, “Cảnh báo”).</span>
     </section>
   </div>
 
@@ -1144,7 +1144,7 @@
           </div>
         </div>
       </div>
-      <span class="mk-tag">Vòng tiêu điểm cách mép 2 px nên nó nằm trên nền trang chứ không nằm trên nền <code>sunken</code> của khung: <code>focus</code> trên <code>bg</code> đo được <strong>5.65:1</strong> sáng và <strong>8.92:1</strong> tối, cần 3:1.</span>
+      <span class="mk-tag">Vòng tiêu điểm cách mép 2 px nên nó nằm trên nền trang chứ không nằm trên nền <code>sunken</code> của khung: <code>focus</code> trên <code>bg</code> đo được <strong>5.65:1</strong> sáng và <strong>8.90:1</strong> tối, cần 3:1.</span>
     </section>
 
     <section>
@@ -1179,45 +1179,49 @@
       <tr><th scope="col">Dùng ở đâu</th><th scope="col">Chữ</th><th scope="col">Nền</th><th scope="col">Sáng</th><th scope="col">Tối</th><th scope="col">Cần</th><th scope="col">Nguồn</th></tr>
     </thead>
     <tbody>
-      <tr><td>Tên trò chơi trong khung, nhãn giữ chỗ</td><td><code>text</code></td><td><code>sunken</code></td><td>13.24</td><td>15.27</td><td>4.5</td><td>DESIGN.md</td></tr>
+      <tr><td>Tên trò chơi trong khung, nhãn giữ chỗ</td><td><code>text</code></td><td><code>sunken</code></td><td>13.24</td><td>15.26</td><td>4.5</td><td>DESIGN.md</td></tr>
+      <tr><td>Nhãn ô quảng cáo (<code>.ad-slot__label</code>)</td><td><code>text-muted</code></td><td><code>sunken</code></td><td>5.65</td><td>8.23</td><td>4.5</td><td>DESIGN.md</td></tr>
       <tr><td>Tiêu đề khối thông tin, tên trong bảng tuần</td><td><code>text</code></td><td><code>surface</code></td><td>15.58</td><td>12.66</td><td>4.5</td><td>DESIGN.md</td></tr>
-      <tr><td>Chữ trong khối trạng thái và trong notice</td><td><code>text</code></td><td><code>bg</code></td><td>14.65</td><td>14.19</td><td>4.5</td><td>DESIGN.md</td></tr>
-      <tr><td>Dòng hợp đồng bàn phím, nhãn trong danh sách thông tin</td><td><code>text-muted</code></td><td><code>surface</code></td><td>6.65</td><td>6.83</td><td>4.5</td><td>DESIGN.md</td></tr>
-      <tr><td>Câu trong khối trạng thái</td><td><code>text-muted</code></td><td><code>bg</code></td><td>6.25</td><td>7.66</td><td>4.5</td><td>DESIGN.md</td></tr>
-      <tr><td>Nhãn nút phụ trên thẻ, liên kết “Xem bảng đầy đủ”</td><td><code>primary</code></td><td><code>surface</code></td><td>6.05</td><td>7.72</td><td>4.5</td><td>DESIGN.md</td></tr>
-      <tr><td>Nút “Thử lại” trong khối trạng thái, liên kết chân trang</td><td><code>primary</code></td><td><code>bg</code></td><td>5.69</td><td>8.65</td><td>4.5</td><td>DESIGN.md</td></tr>
-      <tr><td>Nhãn nút “Toàn màn hình”</td><td><code>on-primary</code></td><td><code>primary</code></td><td>6.08</td><td>8.13</td><td>4.5</td><td>DESIGN.md</td></tr>
-      <tr><td>Nhãn nút “Toàn màn hình” khi hover</td><td><code>on-primary</code></td><td><code>primary-hover</code></td><td>8.55</td><td>9.63</td><td>4.5</td><td>DESIGN.md</td></tr>
+      <tr><td>Chữ trong khối trạng thái và trong notice</td><td><code>text</code></td><td><code>bg</code></td><td>14.64</td><td>14.19</td><td>4.5</td><td>DESIGN.md</td></tr>
+      <tr><td>Dòng hợp đồng bàn phím, nhãn trong danh sách thông tin</td><td><code>text-muted</code></td><td><code>surface</code></td><td>6.65</td><td>6.82</td><td>4.5</td><td>DESIGN.md</td></tr>
+      <tr><td>Câu trong khối trạng thái</td><td><code>text-muted</code></td><td><code>bg</code></td><td>6.25</td><td>7.65</td><td>4.5</td><td>DESIGN.md</td></tr>
+      <tr><td>Nhãn nút phụ trên thẻ, liên kết “Xem bảng đầy đủ”</td><td><code>primary</code></td><td><code>surface</code></td><td>6.06</td><td>7.72</td><td>4.5</td><td>DESIGN.md</td></tr>
+      <tr><td>Nút “Thử lại” trong khối trạng thái, liên kết chân trang</td><td><code>primary</code></td><td><code>bg</code></td><td>5.69</td><td>8.66</td><td>4.5</td><td>DESIGN.md</td></tr>
+      <tr><td>Nhãn nút “Toàn màn hình”</td><td><code>on-primary</code></td><td><code>primary</code></td><td>6.11</td><td>8.15</td><td>4.5</td><td>DESIGN.md</td></tr>
+      <tr><td>Nhãn nút “Toàn màn hình” khi hover</td><td><code>on-primary</code></td><td><code>primary-hover</code></td><td>8.57</td><td>9.65</td><td>4.5</td><td>DESIGN.md</td></tr>
       <tr><td>Nút và liên kết khi hover, trên thẻ</td><td><code>primary-hover</code></td><td><code>surface</code></td><td>8.49</td><td>9.14</td><td>4.5</td><td>components.md §3.4</td></tr>
       <tr><td>Nút và liên kết khi hover, trên nền trang</td><td><code>primary-hover</code></td><td><code>bg</code></td><td>7.98</td><td>10.25</td><td>4.5</td><td>components.md §3.4</td></tr>
-      <tr><td>Nhãn tuần (badge)</td><td><code>secondary</code></td><td><code>surface</code></td><td>5.97</td><td>6.77</td><td>4.5</td><td>DESIGN.md</td></tr>
-      <tr><td>Biểu tượng và chữ “Lỗi”</td><td><code>error</code></td><td><code>bg</code></td><td>6.31</td><td>7.46</td><td>4.5</td><td>DESIGN.md</td></tr>
-      <tr><td>Biểu tượng và chữ “Cảnh báo” của notice cần JavaScript</td><td><code>warning</code></td><td><code>bg</code></td><td>6.09</td><td>8.09</td><td>4.5</td><td>DESIGN.md</td></tr>
-      <tr><td>Vòng tiêu điểm trên khung, trên nút trong khối trạng thái</td><td><code>focus</code></td><td><code>bg</code></td><td>5.65</td><td>8.92</td><td>3</td><td>DESIGN.md</td></tr>
-      <tr><td>Vòng tiêu điểm trong header, trên thẻ</td><td><code>focus</code></td><td><code>surface</code></td><td>6.01</td><td>7.96</td><td>3</td><td>DESIGN.md</td></tr>
-      <tr><td>Vòng tiêu điểm trên hàng của chính người chơi</td><td><code>focus</code></td><td><code>sunken</code></td><td>5.11</td><td>9.60</td><td>3</td><td>DESIGN.md</td></tr>
-      <tr><td>Viền khung trò chơi, viền khối trạng thái, viền nút phụ</td><td><code>border-strong</code></td><td><code>bg</code></td><td>3.48</td><td>3.58</td><td>3</td><td>DESIGN.md</td></tr>
-      <tr><td>Viền nút phụ trên thẻ</td><td><code>border-strong</code></td><td><code>surface</code></td><td>3.71</td><td>3.19</td><td>3</td><td>DESIGN.md</td></tr>
-      <tr><td>Viền hàng của chính người chơi</td><td><code>border-strong</code></td><td><code>sunken</code></td><td>3.15</td><td>3.85</td><td>3</td><td>DESIGN.md</td></tr>
+      <tr><td>Nhãn tuần (badge)</td><td><code>secondary</code></td><td><code>surface</code></td><td>5.97</td><td>6.78</td><td>4.5</td><td>DESIGN.md</td></tr>
+      <tr><td>Biểu tượng và chữ “Lỗi”</td><td><code>error</code></td><td><code>bg</code></td><td>6.30</td><td>7.45</td><td>4.5</td><td>DESIGN.md</td></tr>
+      <tr><td>Biểu tượng và chữ “Cảnh báo” của notice cần JavaScript</td><td><code>warning</code></td><td><code>bg</code></td><td>6.08</td><td>8.09</td><td>4.5</td><td>DESIGN.md</td></tr>
+      <tr><td>Vòng tiêu điểm trên khung, trên nút trong khối trạng thái</td><td><code>focus</code></td><td><code>bg</code></td><td>5.65</td><td>8.90</td><td>3</td><td>DESIGN.md</td></tr>
+      <tr><td>Vòng tiêu điểm trong header, trên thẻ</td><td><code>focus</code></td><td><code>surface</code></td><td>6.01</td><td>7.94</td><td>3</td><td>DESIGN.md</td></tr>
+      <tr><td>Vòng tiêu điểm trên hàng của chính người chơi</td><td><code>focus</code></td><td><code>sunken</code></td><td>5.11</td><td>9.58</td><td>3</td><td>DESIGN.md</td></tr>
+      <tr><td>Viền khung trò chơi, viền khối trạng thái, viền nút phụ</td><td><code>border-strong</code></td><td><code>bg</code></td><td>3.48</td><td>3.57</td><td>3</td><td>DESIGN.md</td></tr>
+      <tr><td>Viền nút phụ trên thẻ</td><td><code>border-strong</code></td><td><code>surface</code></td><td>3.70</td><td>3.19</td><td>3</td><td>DESIGN.md</td></tr>
+      <tr><td>Viền hàng của chính người chơi</td><td><code>border-strong</code></td><td><code>sunken</code></td><td>3.14</td><td>3.84</td><td>3</td><td>DESIGN.md</td></tr>
     </tbody>
   </table>
 
   <p>
     <strong>Hai cặp dưới 3:1, cố ý.</strong> Viền thẻ và viền hàng bảng
     (<code>border</code>) và thanh xương (<code>border</code> trên <code>bg</code>,
-    1.33 sáng / 1.50 tối) là trang trí: chúng không mang thông tin, thanh xương là
+    1.32 sáng / 1.49 tối) là trang trí: chúng không mang thông tin, thanh xương là
     <code>aria-hidden</code>, và tín hiệu “đang tải” nằm ở dòng chữ trong vùng live
     bên cạnh. WCAG 1.4.11 miễn trừ phần trang trí thuần tuý. Ranh giới điều khiển
     trên trang này luôn là <code>border-strong</code>.
   </p>
   <p>
-    <strong>Một cặp chưa đo, và nó không phải của Task này.</strong>
-    <code>ads.css</code> đặt nhãn <code>.ad-slot__label</code> là
-    <code>text-muted</code> trên nền <code>sunken</code> của ô; <code>DESIGN.md</code>
-    không công bố cặp đó. <code>ad-slots.md</code> §11 cấm Task này tạo kiểu lại
-    <code>.ad-slot</code>, và môi trường này không có công cụ đo, nên tờ này không tự
-    công bố một tỉ lệ nào. <code>home.md</code> §9.3 đã nêu đúng mục này cho Board;
-    đây là lần thứ hai nó xuất hiện, trên trang mang <em>ba</em> ô thay vì một.
+    <strong>Cặp từng chưa đo nay đã đo.</strong> <code>ads.css</code> đặt nhãn
+    <code>.ad-slot__label</code> là <code>text-muted</code> trên nền
+    <code>sunken</code> của ô. Khi tờ này được viết, <code>DESIGN.md</code> không
+    công bố cặp đó và môi trường không có công cụ đo, nên tờ này để trống và nêu
+    mục đó cho Board (<code>home.md</code> §9.3). Ngày 2026-11-05 Board đã đo:
+    <strong>5.65</strong> sáng / <strong>8.23</strong> tối, cần 4.5 — đạt. Cặp nay
+    nằm trong <code>DESIGN.md</code> → “Measured contrast” và có dòng riêng trong
+    bảng trên; quy tắc bề mặt đã được sửa đổi để nhận đúng cặp này và chỉ cặp này.
+    <code>ads.css</code> không đổi một giá trị màu nào — trang chơi vẫn vẽ ba ô
+    giống hệt trước.
   </p>
 </section>
 
