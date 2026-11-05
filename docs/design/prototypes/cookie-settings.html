@@ -1,0 +1,949 @@
+<!doctype html>
+<html lang="vi" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup — Banner cookie và cài đặt đồng ý · Soucean Game (SOU-7, M1-09)</title>
+<link rel="stylesheet" href="assets/consent.css">
+</head>
+<body class="mk-sheet">
+
+<!-- ==========================================================================
+     Icon set — copied from components.html, not referenced. Every <use> below
+     is same-document, so nothing here makes a request. No new icon is drawn:
+     components.md §5.1 fixes the set at twelve, and there is deliberately no
+     "cookie" glyph — a thirteenth icon would be a new shared asset, and this
+     Task may not add one.
+     ========================================================================== -->
+<svg class="u-visually-hidden" aria-hidden="true" focusable="false"><defs>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 7.6h.01"/></symbol>
+  <symbol id="i-success" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12.4 2.6 2.6L16 9.6"/></symbol>
+  <symbol id="i-error" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6"/><path d="m15 9-6 6"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12"/><path d="m18 6-12 12"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-.7 4.3"/><path d="M20 5v6h-6"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2"/><path d="M12 19.5v2"/><path d="m4.5 4.5 1.4 1.4"/><path d="m18.1 18.1 1.4 1.4"/><path d="M2.5 12h2"/><path d="M19.5 12h2"/><path d="m4.5 19.5 1.4-1.4"/><path d="m18.1 5.9 1.4-1.4"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.4A8.5 8.5 0 0 1 9.6 4 8.5 8.5 0 1 0 20 14.4Z"/></symbol>
+</defs></svg>
+
+<header>
+  <p class="mk-sheet__kicker">Soucean Game · M1 · SOU-7 (M1-09) · mockup, độ chi tiết cao</p>
+  <h1>Banner cookie và màn hình cài đặt — một bề mặt, không phải một route</h1>
+  <p class="mk-sheet__lede">
+    Banner xuất hiện ở lần truy cập đầu, trên bất kỳ trang nào người ta đáp xuống;
+    màn hình cài đặt mở ra từ banner <strong>hoặc</strong> từ liên kết “Cài đặt
+    cookie” ở chân trang, vốn trỏ tới <code>/privacy#cookies</code>
+    (<code>requirements.md</code> §2, <code>wireframes.md</code> §4.6). Vỏ banner
+    là <code>components.md</code> §5.13; nội dung, các nhóm và toàn bộ cách xử lý
+    tiêu điểm là của Task này.
+  </p>
+  <p class="mk-sheet__lede">
+    <strong>Ba hành động nặng bằng nhau.</strong> Chấp nhận, Từ chối và Cài đặt
+    cùng một kiểu <code>.btn--secondary</code>, cùng cỡ, cùng chỗ. Không cái nào
+    được tô đặc trong khi cái kia để trống; không có nhóm tùy chọn nào tick sẵn;
+    “Từ chối” không bị đẩy xuống một lớp sâu hơn “Chấp nhận”.
+    <code>requirements.md</code> §2 biến điều đó thành <em>yêu cầu</em>, không
+    phải sở thích.
+  </p>
+  <p class="mk-sheet__lede">
+    <strong>Hai nhóm, không phải ba.</strong> Không có công tắc “phân tích”, vì
+    site không thu thập gì để phân tích (<code>requirements.md</code> §4.2). Một
+    <code>notice--info</code> nói thẳng điều đó trong mọi bản dựng, để sự vắng mặt
+    đọc ra là cố ý chứ không phải sót.
+  </p>
+  <p class="mk-sheet__lede">
+    Không có script, không iframe, không file font, không yêu cầu mạng, không nền
+    tảng quản lý đồng ý (CMP), không SDK, không thẻ quảng cáo nào. Mở file bằng
+    trình duyệt là chạy.
+  </p>
+  <nav class="mk-sheet__lede" aria-label="Mục lục trang mockup">
+    <ol>
+      <li><a class="link" href="#s1">Banner · lần truy cập đầu tiên</a></li>
+      <li><a class="link" href="#s2">Banner · sau khi đã chọn</a></li>
+      <li><a class="link" href="#s3">Hộp thoại cài đặt · bốn bản dựng</a></li>
+      <li><a class="link" href="#s4">Trạng thái của màn hình cài đặt</a></li>
+      <li><a class="link" href="#s5">Tiêu điểm và bàn phím</a></li>
+      <li><a class="link" href="#s6">Cách đọc tờ này</a></li>
+    </ol>
+  </nav>
+</header>
+
+<!-- ==========================================================================
+     1. FIRST-VISIT BANNER — four renders, in page context.
+     ========================================================================== -->
+<section class="mk-section" id="s1">
+  <h2>1. Banner · lần truy cập đầu tiên</h2>
+  <p>
+    Banner nằm <strong>cuối <code>&lt;body&gt;</code></strong>, sau chân trang, và
+    là <strong>sticky chứ không phải fixed</strong>. Một hộp sticky vẫn giữ chỗ
+    của nó trong luồng, nên khi cuộn tới cuối tài liệu nó nằm <em>dưới</em> chân
+    trang chứ không đè lên: các liên kết chân trang không bao giờ bị che vĩnh
+    viễn. Một banner <code>fixed</code> thì che chúng ở mọi vị trí cuộn, kể cả vị
+    trí cuối — đó mới là thứ quy tắc “không che vĩnh viễn” nói tới.
+  </p>
+  <p>
+    Trên tờ này banner được vẽ <strong>tại chỗ</strong> (<code>.consent--inplace</code>)
+    ở cuối mỗi bản dựng thay vì dính vào cửa sổ người đọc, để bản dựng còn đo
+    được — đúng thủ pháp <code>wireframes.md</code> §4.6 và
+    <code>components.md</code> §5.13 đã dùng.
+  </p>
+
+  <div class="mk-specs mk-specs--row">
+    <section>
+      <h3 class="mk-cap">Sáng · 375 px</h3>
+      <div class="mk-view mk-view--mobile">
+        <div class="site-header">
+          <a class="skip-link" href="#ba-main">Tới nội dung chính</a>
+          <div class="shell site-header__bar">
+            <a class="wordmark" href="home.html">Soucean Game</a>
+            <div class="site-header__actions">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="ct-a" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="ct-a"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+            </div>
+          </div>
+          <nav class="shell" aria-label="Chính · banner sáng 375">
+            <button class="btn btn--quiet site-nav__toggle" type="button" aria-expanded="false" aria-controls="ba-nav"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-menu"/></svg>Menu</button>
+            <ul class="site-nav__list" id="ba-nav">
+              <li><a class="site-nav__link" href="home.html">Trò chơi</a></li>
+              <li><a class="site-nav__link" href="leaderboards.html">Bảng xếp hạng</a></li>
+              <li><a class="site-nav__link" href="#s1">Tài khoản</a></li>
+            </ul>
+          </nav>
+        </div>
+
+        <div class="shell main" id="ba-main">
+          <h4>Trò chơi</h4>
+          <p>Trang phía sau vẫn đọc được và vẫn dùng được bằng bàn phím. Banner <strong>không</strong> modal.</p>
+        </div>
+
+        <footer class="site-footer">
+          <div class="shell">
+            <ul class="site-footer__links">
+              <li><a class="link" href="about.html">Giới thiệu</a></li>
+              <li><a class="link" href="terms.html">Điều khoản</a></li>
+              <li><a class="link" href="privacy.html">Quyền riêng tư</a></li>
+              <li><a class="link" href="privacy.html#pa-6">Cài đặt cookie</a></li>
+            </ul>
+            <p class="site-footer__fine">© 2026 Soucean Game</p>
+          </div>
+        </footer>
+
+        <aside class="consent consent--inplace" tabindex="-1" aria-labelledby="ba-consent-title">
+          <h5 class="u-visually-hidden" id="ba-consent-title">Lựa chọn cookie</h5>
+          <p class="consent__text">Chúng tôi chỉ dùng cookie cần thiết để trang chạy được. Cookie quảng cáo chỉ đặt khi bạn đồng ý — không có công cụ phân tích, không có trình theo dõi. <a class="link" href="privacy.html#pa-6">Tìm hiểu thêm</a></p>
+          <div class="consent__actions">
+            <button class="btn btn--secondary" type="button">Chấp nhận</button>
+            <button class="btn btn--secondary" type="button">Từ chối</button>
+            <a class="btn btn--secondary" href="privacy.html#pa-6">Cài đặt</a>
+          </div>
+        </aside>
+      </div>
+      <span class="mk-tag">Ở 375 px ba hành động xếp dọc, mỗi cái đủ 44 px và cách nhau 8 px — ba nhãn tiếng Việt không vừa một hàng ở 343 px. Banner nằm <em>sau</em> chân trang: không liên kết nào bị che.</span>
+    </section>
+
+    <section>
+      <h3 class="mk-cap">Tối · 375 px</h3>
+      <div class="mk-view mk-view--mobile" data-theme="dark">
+        <div class="site-header">
+          <a class="skip-link" href="#bb-main">Tới nội dung chính</a>
+          <div class="shell site-header__bar">
+            <a class="wordmark" href="home.html">Soucean Game</a>
+            <div class="site-header__actions">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="ct-b"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="ct-b" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+            </div>
+          </div>
+          <nav class="shell" aria-label="Chính · banner tối 375">
+            <button class="btn btn--quiet site-nav__toggle" type="button" aria-expanded="false" aria-controls="bb-nav"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-menu"/></svg>Menu</button>
+            <ul class="site-nav__list" id="bb-nav">
+              <li><a class="site-nav__link" href="home.html">Trò chơi</a></li>
+              <li><a class="site-nav__link" href="leaderboards.html">Bảng xếp hạng</a></li>
+              <li><a class="site-nav__link" href="#s1">Tài khoản</a></li>
+            </ul>
+          </nav>
+        </div>
+
+        <div class="shell main" id="bb-main">
+          <h4>Trò chơi</h4>
+          <p>Trang phía sau vẫn đọc được và vẫn dùng được bằng bàn phím. Banner <strong>không</strong> modal.</p>
+        </div>
+
+        <footer class="site-footer">
+          <div class="shell">
+            <ul class="site-footer__links">
+              <li><a class="link" href="about.html">Giới thiệu</a></li>
+              <li><a class="link" href="terms.html">Điều khoản</a></li>
+              <li><a class="link" href="privacy.html">Quyền riêng tư</a></li>
+              <li><a class="link" href="privacy.html#pa-6">Cài đặt cookie</a></li>
+            </ul>
+            <p class="site-footer__fine">© 2026 Soucean Game</p>
+          </div>
+        </footer>
+
+        <aside class="consent consent--inplace" tabindex="-1" aria-labelledby="bb-consent-title">
+          <h5 class="u-visually-hidden" id="bb-consent-title">Lựa chọn cookie</h5>
+          <p class="consent__text">Chúng tôi chỉ dùng cookie cần thiết để trang chạy được. Cookie quảng cáo chỉ đặt khi bạn đồng ý — không có công cụ phân tích, không có trình theo dõi. <a class="link" href="privacy.html#pa-6">Tìm hiểu thêm</a></p>
+          <div class="consent__actions">
+            <button class="btn btn--secondary" type="button">Chấp nhận</button>
+            <button class="btn btn--secondary" type="button">Từ chối</button>
+            <a class="btn btn--secondary" href="privacy.html#pa-6">Cài đặt</a>
+          </div>
+        </aside>
+      </div>
+      <span class="mk-tag">Giao diện tối không đổ bóng. Banner tách khỏi trang bằng đường viền <code>border-strong</code> và tông <code>surface</code>, không bằng bóng.</span>
+    </section>
+  </div>
+
+  <div class="mk-specs">
+    <section>
+      <h3 class="mk-cap">Sáng · 1280 px</h3>
+      <div class="mk-scroll"><div class="mk-view mk-view--desktop">
+        <div class="site-header">
+          <a class="skip-link" href="#bc-main">Tới nội dung chính</a>
+          <div class="shell site-header__bar">
+            <a class="wordmark" href="home.html">Soucean Game</a>
+            <div class="site-header__actions">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="ct-c" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="ct-c"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+            </div>
+          </div>
+          <nav class="shell" aria-label="Chính · banner sáng 1280">
+            <button class="btn btn--quiet site-nav__toggle" type="button" aria-expanded="false" aria-controls="bc-nav"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-menu"/></svg>Menu</button>
+            <ul class="site-nav__list" id="bc-nav">
+              <li><a class="site-nav__link" href="home.html">Trò chơi</a></li>
+              <li><a class="site-nav__link" href="leaderboards.html">Bảng xếp hạng</a></li>
+              <li><a class="site-nav__link" href="#s1">Tài khoản</a></li>
+            </ul>
+          </nav>
+        </div>
+
+        <div class="shell main" id="bc-main">
+          <h4>Trò chơi</h4>
+          <p>Trang phía sau vẫn đọc được và vẫn dùng được bằng bàn phím. Banner <strong>không</strong> modal.</p>
+        </div>
+
+        <footer class="site-footer">
+          <div class="shell">
+            <ul class="site-footer__links">
+              <li><a class="link" href="about.html">Giới thiệu</a></li>
+              <li><a class="link" href="terms.html">Điều khoản</a></li>
+              <li><a class="link" href="privacy.html">Quyền riêng tư</a></li>
+              <li><a class="link" href="privacy.html#pa-6">Cài đặt cookie</a></li>
+            </ul>
+            <p class="site-footer__fine">© 2026 Soucean Game</p>
+          </div>
+        </footer>
+
+        <aside class="consent consent--inplace" tabindex="-1" aria-labelledby="bc-consent-title">
+          <h5 class="u-visually-hidden" id="bc-consent-title">Lựa chọn cookie</h5>
+          <p class="consent__text">Chúng tôi chỉ dùng cookie cần thiết để trang chạy được. Cookie quảng cáo chỉ đặt khi bạn đồng ý — không có công cụ phân tích, không có trình theo dõi. <a class="link" href="privacy.html#pa-6">Tìm hiểu thêm</a></p>
+          <div class="consent__actions">
+            <button class="btn btn--secondary" type="button">Chấp nhận</button>
+            <button class="btn btn--secondary" type="button">Từ chối</button>
+            <a class="btn btn--secondary" href="privacy.html#pa-6">Cài đặt</a>
+          </div>
+        </aside>
+      </div></div>
+      <span class="mk-tag">Từ 768 px trở lên ba hành động vào một hàng — <strong>vẫn y hệt nhau</strong> về cỡ và kiểu. Dòng giải thích dừng ở <code>70ch</code> chứ không kéo hết 1280 px.</span>
+    </section>
+
+    <section>
+      <h3 class="mk-cap">Tối · 1280 px</h3>
+      <div class="mk-scroll"><div class="mk-view mk-view--desktop" data-theme="dark">
+        <div class="site-header">
+          <a class="skip-link" href="#bd-main">Tới nội dung chính</a>
+          <div class="shell site-header__bar">
+            <a class="wordmark" href="home.html">Soucean Game</a>
+            <div class="site-header__actions">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="ct-d"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="ct-d" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+            </div>
+          </div>
+          <nav class="shell" aria-label="Chính · banner tối 1280">
+            <button class="btn btn--quiet site-nav__toggle" type="button" aria-expanded="false" aria-controls="bd-nav"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-menu"/></svg>Menu</button>
+            <ul class="site-nav__list" id="bd-nav">
+              <li><a class="site-nav__link" href="home.html">Trò chơi</a></li>
+              <li><a class="site-nav__link" href="leaderboards.html">Bảng xếp hạng</a></li>
+              <li><a class="site-nav__link" href="#s1">Tài khoản</a></li>
+            </ul>
+          </nav>
+        </div>
+
+        <div class="shell main" id="bd-main">
+          <h4>Trò chơi</h4>
+          <p>Trang phía sau vẫn đọc được và vẫn dùng được bằng bàn phím. Banner <strong>không</strong> modal.</p>
+        </div>
+
+        <footer class="site-footer">
+          <div class="shell">
+            <ul class="site-footer__links">
+              <li><a class="link" href="about.html">Giới thiệu</a></li>
+              <li><a class="link" href="terms.html">Điều khoản</a></li>
+              <li><a class="link" href="privacy.html">Quyền riêng tư</a></li>
+              <li><a class="link" href="privacy.html#pa-6">Cài đặt cookie</a></li>
+            </ul>
+            <p class="site-footer__fine">© 2026 Soucean Game</p>
+          </div>
+        </footer>
+
+        <aside class="consent consent--inplace" tabindex="-1" aria-labelledby="bd-consent-title">
+          <h5 class="u-visually-hidden" id="bd-consent-title">Lựa chọn cookie</h5>
+          <p class="consent__text">Chúng tôi chỉ dùng cookie cần thiết để trang chạy được. Cookie quảng cáo chỉ đặt khi bạn đồng ý — không có công cụ phân tích, không có trình theo dõi. <a class="link" href="privacy.html#pa-6">Tìm hiểu thêm</a></p>
+          <div class="consent__actions">
+            <button class="btn btn--secondary" type="button">Chấp nhận</button>
+            <button class="btn btn--secondary" type="button">Từ chối</button>
+            <a class="btn btn--secondary" href="privacy.html#pa-6">Cài đặt</a>
+          </div>
+        </aside>
+      </div></div>
+      <span class="mk-tag">Chuyển thang xám: ba hành động không phân biệt được với nhau, và <em>đó là điều đúng</em>. Nếu một trong ba nổi hơn trong thang xám thì thiết kế đã hỏng.</span>
+    </section>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     2. DISMISSED STATE.
+     ========================================================================== -->
+<section class="mk-section" id="s2">
+  <h2>2. Banner · sau khi đã chọn</h2>
+  <p>
+    Trạng thái thứ hai của banner là <strong>không có banner</strong>. Nó không
+    quay lại ở lần truy cập sau, và đường về là liên kết “Cài đặt cookie” ở chân
+    trang — có mặt trên cả tám trang, trỏ tới <code>/privacy#cookies</code>
+    (<code>components.md</code> §5.4). Đó là lý do mục 6 của trang Quyền riêng tư
+    là một màn hình thật chứ không chỉ một đoạn văn nói về cookie.
+  </p>
+  <p>
+    Một <code>notice--success</code> mang <code>role="status"</code> xác nhận lựa
+    chọn: lịch sự, không cắt ngang người đọc (<code>components.md</code> §4.3 —
+    việc của người dùng <em>thành công</em> thì chờ được một nhịp). Nó nằm đầu
+    <code>main</code>, đúng chỗ tiêu điểm vừa quay về.
+  </p>
+
+  <div class="mk-specs mk-specs--row">
+    <section>
+      <h3 class="mk-cap">Sáng · 375 px · đã từ chối</h3>
+      <div class="mk-view mk-view--mobile">
+        <div class="site-header">
+          <a class="skip-link" href="#be-main">Tới nội dung chính</a>
+          <div class="shell site-header__bar">
+            <a class="wordmark" href="home.html">Soucean Game</a>
+          </div>
+        </div>
+
+        <div class="shell main" id="be-main" tabindex="-1">
+          <div class="notice notice--success" role="status"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-success"/></svg><div class="notice__body"><p class="notice__title">Thành công</p><p class="notice__text">Đã lưu lựa chọn của bạn: chỉ cookie cần thiết. Đổi ý lúc nào cũng được ở “Cài đặt cookie” dưới chân trang.</p></div></div>
+          <h4>Trò chơi</h4>
+          <p>Banner đã biến mất và không quay lại. Đường về là liên kết “Cài đặt cookie” ở chân trang, có mặt trên mọi trang.</p>
+        </div>
+
+        <footer class="site-footer">
+          <div class="shell">
+            <ul class="site-footer__links">
+              <li><a class="link" href="about.html">Giới thiệu</a></li>
+              <li><a class="link" href="terms.html">Điều khoản</a></li>
+              <li><a class="link" href="privacy.html">Quyền riêng tư</a></li>
+              <li><a class="link is-focus" href="privacy.html#pa-6">Cài đặt cookie</a></li>
+            </ul>
+            <p class="site-footer__fine">© 2026 Soucean Game</p>
+          </div>
+        </footer>
+      </div>
+      <span class="mk-tag">Liên kết chân trang được vẽ ở trạng thái tiêu điểm (<code>.is-focus</code>) để thấy đường về. Trên trang thật vòng tiêu điểm chỉ xuất hiện khi dùng bàn phím.</span>
+    </section>
+
+    <section>
+      <h3 class="mk-cap">Tối · 375 px · đã chấp nhận</h3>
+      <div class="mk-view mk-view--mobile" data-theme="dark">
+        <div class="site-header">
+          <a class="skip-link" href="#bf-main">Tới nội dung chính</a>
+          <div class="shell site-header__bar">
+            <a class="wordmark" href="home.html">Soucean Game</a>
+          </div>
+        </div>
+
+        <div class="shell main" id="bf-main" tabindex="-1">
+          <div class="notice notice--success" role="status"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-success"/></svg><div class="notice__body"><p class="notice__title">Thành công</p><p class="notice__text">Đã lưu lựa chọn của bạn: cần thiết và quảng cáo. Đổi ý lúc nào cũng được ở “Cài đặt cookie” dưới chân trang.</p></div></div>
+          <h4>Trò chơi</h4>
+          <p>Hai lựa chọn dẫn tới cùng một màn hình, cùng một lời xác nhận, cùng một đường quay lại. Chỉ khác đúng một câu.</p>
+        </div>
+
+        <footer class="site-footer">
+          <div class="shell">
+            <ul class="site-footer__links">
+              <li><a class="link" href="about.html">Giới thiệu</a></li>
+              <li><a class="link" href="terms.html">Điều khoản</a></li>
+              <li><a class="link" href="privacy.html">Quyền riêng tư</a></li>
+              <li><a class="link" href="privacy.html#pa-6">Cài đặt cookie</a></li>
+            </ul>
+            <p class="site-footer__fine">© 2026 Soucean Game</p>
+          </div>
+        </footer>
+      </div>
+      <span class="mk-tag">“Chấp nhận” và “Từ chối” đối xứng cả ở hậu quả: cùng một màn hình sau đó, cùng một cách đổi ý. Không có lối nào dài hơn lối nào.</span>
+    </section>
+  </div>
+
+  <div class="mk-specs">
+    <section>
+      <h3 class="mk-cap">Sáng · 1280 px · đã từ chối</h3>
+      <div class="mk-scroll"><div class="mk-view mk-view--desktop">
+        <div class="site-header">
+          <a class="skip-link" href="#bg-main">Tới nội dung chính</a>
+          <div class="shell site-header__bar">
+            <a class="wordmark" href="home.html">Soucean Game</a>
+          </div>
+        </div>
+
+        <div class="shell main" id="bg-main" tabindex="-1">
+          <div class="notice notice--success" role="status"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-success"/></svg><div class="notice__body"><p class="notice__title">Thành công</p><p class="notice__text">Đã lưu lựa chọn của bạn: chỉ cookie cần thiết.</p></div></div>
+          <h4>Trò chơi</h4>
+          <p>Lời xác nhận nằm ngay đầu <code>main</code>, đúng chỗ tiêu điểm vừa quay về, nên người đọc gặp nó trước mọi thứ khác. Với lựa chọn “Từ chối”, không một script quảng cáo nào chạy.</p>
+        </div>
+
+        <footer class="site-footer">
+          <div class="shell">
+            <ul class="site-footer__links">
+              <li><a class="link" href="about.html">Giới thiệu</a></li>
+              <li><a class="link" href="terms.html">Điều khoản</a></li>
+              <li><a class="link" href="privacy.html">Quyền riêng tư</a></li>
+              <li><a class="link" href="privacy.html#pa-6">Cài đặt cookie</a></li>
+            </ul>
+            <p class="site-footer__fine">© 2026 Soucean Game</p>
+          </div>
+        </footer>
+      </div></div>
+      <span class="mk-tag">Hai bản dựng ở §2 phủ cả hai bề ngang và cả hai giao diện; khung trang là khung đã dựng đủ bốn lần ở §1.</span>
+    </section>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     3. THE SETTINGS DIALOG — four renders.
+     ========================================================================== -->
+<section class="mk-section" id="s3">
+  <h2>3. Hộp thoại cài đặt · bốn bản dựng</h2>
+  <p>
+    Cùng một danh sách nhóm, cùng một lời giải thích, cùng một nút lưu như mục 6
+    của <a class="link" href="privacy.html">trang Quyền riêng tư</a>. Thiết kế một
+    lần, dùng hai chỗ — vẽ danh sách nhóm hai lần là cách chắc chắn để hai chỗ
+    đó nói khác nhau.
+  </p>
+  <p>
+    Hộp thoại được vẽ <strong>tại chỗ</strong> bằng <code>&lt;div class="dialog"
+    role="dialog"&gt;</code>, đúng quy ước <code>components.html</code> §8 dùng cho
+    bản vẽ tĩnh. Hành vi modal thật — bẫy Tab bên trong, Esc đóng, trả tiêu điểm
+    về nút đã mở — là của <code>&lt;dialog&gt;.showModal()</code>, đã được chứng
+    minh bằng một hộp thoại thật trên tờ specimen của M1-04 và được khẳng định lại
+    bằng Playwright ở M4. Tờ này <strong>không có một dòng script nào</strong>,
+    nên nó không giả vờ chứng minh điều đó.
+  </p>
+  <p>
+    <strong>Vì sao là ô đánh dấu chứ không phải công tắc gạt.</strong> Thư viện
+    M1-04 không có thành phần “switch”, và <code>components.md</code> §7.1 cấm một
+    Task trang tự thêm biến thể vào thư viện. Ô đánh dấu gốc lại hợp hơn ở đây:
+    nó mang sẵn hợp đồng bàn phím (Space đổi trạng thái), được đọc là “đã chọn /
+    chưa chọn” mà không cần một thuộc tính ARIA nào, và nó đi với một nút
+    <em>Lưu</em> — trong khi một công tắc gạt ngụ ý thay đổi có hiệu lực ngay.
+    Chính <code>components.html</code> §5.10 cũng đã dựng sẵn đúng hai ô này.
+  </p>
+
+  <div class="mk-specs mk-specs--row">
+    <section>
+      <h3 class="mk-cap">Sáng · 375 px</h3>
+      <div class="mk-view mk-view--mobile">
+        <div class="mk-stack">
+          <div class="dialog" role="dialog" aria-label="Mẫu tĩnh: cài đặt cookie · sáng 375">
+            <div class="dialog__head">
+              <h4 class="dialog__title">Cài đặt cookie</h4>
+              <button class="btn btn--quiet btn--icon" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-close"/></svg><span class="u-visually-hidden">Đóng</span></button>
+            </div>
+            <div class="dialog__body">
+              <p>Bạn chọn nhóm nào được bật. Lựa chọn áp dụng cho trình duyệt này.</p>
+              <div class="notice notice--info"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-info"/></svg><div class="notice__body"><p class="notice__title">Thông tin</p><p class="notice__text">Chỉ có hai nhóm. Soucean Game không dùng công cụ phân tích và không có trình theo dõi nào.</p></div></div>
+              <fieldset>
+                <legend class="consent-fieldset__legend">Nhóm cookie</legend>
+                <ul class="consent-cats">
+                  <li class="consent-cat">
+                    <div class="choice">
+                      <input id="da-c1" type="checkbox" checked disabled aria-describedby="da-d1">
+                      <label for="da-c1">Cần thiết</label>
+                      <span class="consent-cat__always">Luôn bật</span>
+                    </div>
+                    <p class="consent-cat__desc" id="da-d1">Giữ phiên của bạn, nhớ chính lựa chọn cookie này, và nhớ bạn chọn giao diện sáng hay tối. Không có nhóm này thì trang không chạy được, nên không tắt được.</p>
+                  </li>
+                  <li class="consent-cat">
+                    <div class="choice">
+                      <input id="da-c2" type="checkbox" aria-describedby="da-d2">
+                      <label for="da-c2">Quảng cáo</label>
+                    </div>
+                    <p class="consent-cat__desc" id="da-d2">Cho phép mạng quảng cáo đặt cookie cho quảng cáo trên trang web. Mặc định tắt. Khi tắt, trang không tải quảng cáo nào, và bố cục trang không thay đổi vì lựa chọn này.</p>
+                  </li>
+                </ul>
+              </fieldset>
+            </div>
+            <div class="dialog__actions">
+              <button class="btn btn--secondary" type="button">Hủy</button>
+              <button class="btn btn--primary" type="button">Lưu lựa chọn</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span class="mk-tag">“Hủy” đứng trước “Lưu” trong thứ tự Tab: lối ra đến trước. “Quảng cáo” <strong>không</strong> tick sẵn — đó là trạng thái mặc định của hộp thoại khi chưa có lựa chọn nào được lưu.</span>
+    </section>
+
+    <section>
+      <h3 class="mk-cap">Tối · 375 px</h3>
+      <div class="mk-view mk-view--mobile" data-theme="dark">
+        <div class="mk-stack">
+          <div class="dialog" role="dialog" aria-label="Mẫu tĩnh: cài đặt cookie · tối 375">
+            <div class="dialog__head">
+              <h4 class="dialog__title">Cài đặt cookie</h4>
+              <button class="btn btn--quiet btn--icon" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-close"/></svg><span class="u-visually-hidden">Đóng</span></button>
+            </div>
+            <div class="dialog__body">
+              <p>Bạn chọn nhóm nào được bật. Lựa chọn áp dụng cho trình duyệt này.</p>
+              <div class="notice notice--info"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-info"/></svg><div class="notice__body"><p class="notice__title">Thông tin</p><p class="notice__text">Chỉ có hai nhóm. Soucean Game không dùng công cụ phân tích và không có trình theo dõi nào.</p></div></div>
+              <fieldset>
+                <legend class="consent-fieldset__legend">Nhóm cookie</legend>
+                <ul class="consent-cats">
+                  <li class="consent-cat">
+                    <div class="choice">
+                      <input id="db-c1" type="checkbox" checked disabled aria-describedby="db-d1">
+                      <label for="db-c1">Cần thiết</label>
+                      <span class="consent-cat__always">Luôn bật</span>
+                    </div>
+                    <p class="consent-cat__desc" id="db-d1">Giữ phiên của bạn, nhớ chính lựa chọn cookie này, và nhớ bạn chọn giao diện sáng hay tối. Không có nhóm này thì trang không chạy được, nên không tắt được.</p>
+                  </li>
+                  <li class="consent-cat">
+                    <div class="choice">
+                      <input id="db-c2" type="checkbox" checked aria-describedby="db-d2">
+                      <label for="db-c2">Quảng cáo</label>
+                    </div>
+                    <p class="consent-cat__desc" id="db-d2">Cho phép mạng quảng cáo đặt cookie cho quảng cáo trên trang web. Mặc định tắt. Khi tắt, trang không tải quảng cáo nào, và bố cục trang không thay đổi vì lựa chọn này.</p>
+                  </li>
+                </ul>
+              </fieldset>
+            </div>
+            <div class="dialog__actions">
+              <button class="btn btn--secondary" type="button">Hủy</button>
+              <button class="btn btn--primary" type="button">Lưu lựa chọn</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span class="mk-tag">Bản dựng này cho thấy hộp thoại khi người chơi <strong>đã tự bật</strong> nhóm Quảng cáo và mở lại để xem — không phải trạng thái mặc định.</span>
+    </section>
+  </div>
+
+  <div class="mk-specs">
+    <section>
+      <h3 class="mk-cap">Sáng · 1280 px</h3>
+      <div class="mk-scroll"><div class="mk-view mk-view--desktop">
+        <div class="mk-stack">
+          <div class="dialog" role="dialog" aria-label="Mẫu tĩnh: cài đặt cookie · sáng 1280">
+            <div class="dialog__head">
+              <h4 class="dialog__title">Cài đặt cookie</h4>
+              <button class="btn btn--quiet btn--icon" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-close"/></svg><span class="u-visually-hidden">Đóng</span></button>
+            </div>
+            <div class="dialog__body">
+              <p>Bạn chọn nhóm nào được bật. Lựa chọn áp dụng cho trình duyệt này.</p>
+              <div class="notice notice--info"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-info"/></svg><div class="notice__body"><p class="notice__title">Thông tin</p><p class="notice__text">Chỉ có hai nhóm. Soucean Game không dùng công cụ phân tích và không có trình theo dõi nào.</p></div></div>
+              <fieldset>
+                <legend class="consent-fieldset__legend">Nhóm cookie</legend>
+                <ul class="consent-cats">
+                  <li class="consent-cat">
+                    <div class="choice">
+                      <input id="dc-c1" type="checkbox" checked disabled aria-describedby="dc-d1">
+                      <label for="dc-c1">Cần thiết</label>
+                      <span class="consent-cat__always">Luôn bật</span>
+                    </div>
+                    <p class="consent-cat__desc" id="dc-d1">Giữ phiên của bạn, nhớ chính lựa chọn cookie này, và nhớ bạn chọn giao diện sáng hay tối. Không có nhóm này thì trang không chạy được, nên không tắt được.</p>
+                  </li>
+                  <li class="consent-cat">
+                    <div class="choice">
+                      <input id="dc-c2" type="checkbox" aria-describedby="dc-d2">
+                      <label for="dc-c2">Quảng cáo</label>
+                    </div>
+                    <p class="consent-cat__desc" id="dc-d2">Cho phép mạng quảng cáo đặt cookie cho quảng cáo trên trang web. Mặc định tắt. Khi tắt, trang không tải quảng cáo nào, và bố cục trang không thay đổi vì lựa chọn này.</p>
+                  </li>
+                </ul>
+              </fieldset>
+            </div>
+            <div class="dialog__actions">
+              <button class="btn btn--secondary" type="button">Hủy</button>
+              <button class="btn btn--primary" type="button">Lưu lựa chọn</button>
+            </div>
+          </div>
+        </div>
+      </div></div>
+      <span class="mk-tag">Hộp thoại dừng ở <code>70ch</code> chứ không kéo hết 1280 px — <code>components.css</code> §14 đã đặt mức đó, Task này không sửa.</span>
+    </section>
+
+    <section>
+      <h3 class="mk-cap">Tối · 1280 px</h3>
+      <div class="mk-scroll"><div class="mk-view mk-view--desktop" data-theme="dark">
+        <div class="mk-stack">
+          <div class="dialog" role="dialog" aria-label="Mẫu tĩnh: cài đặt cookie · tối 1280">
+            <div class="dialog__head">
+              <h4 class="dialog__title">Cài đặt cookie</h4>
+              <button class="btn btn--quiet btn--icon" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-close"/></svg><span class="u-visually-hidden">Đóng</span></button>
+            </div>
+            <div class="dialog__body">
+              <p>Bạn chọn nhóm nào được bật. Lựa chọn áp dụng cho trình duyệt này.</p>
+              <div class="notice notice--info"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-info"/></svg><div class="notice__body"><p class="notice__title">Thông tin</p><p class="notice__text">Chỉ có hai nhóm. Soucean Game không dùng công cụ phân tích và không có trình theo dõi nào.</p></div></div>
+              <fieldset>
+                <legend class="consent-fieldset__legend">Nhóm cookie</legend>
+                <ul class="consent-cats">
+                  <li class="consent-cat">
+                    <div class="choice">
+                      <input id="dd-c1" type="checkbox" checked disabled aria-describedby="dd-d1">
+                      <label for="dd-c1">Cần thiết</label>
+                      <span class="consent-cat__always">Luôn bật</span>
+                    </div>
+                    <p class="consent-cat__desc" id="dd-d1">Giữ phiên của bạn, nhớ chính lựa chọn cookie này, và nhớ bạn chọn giao diện sáng hay tối. Không có nhóm này thì trang không chạy được, nên không tắt được.</p>
+                  </li>
+                  <li class="consent-cat">
+                    <div class="choice">
+                      <input id="dd-c2" type="checkbox" aria-describedby="dd-d2">
+                      <label for="dd-c2">Quảng cáo</label>
+                    </div>
+                    <p class="consent-cat__desc" id="dd-d2">Cho phép mạng quảng cáo đặt cookie cho quảng cáo trên trang web. Mặc định tắt. Khi tắt, trang không tải quảng cáo nào, và bố cục trang không thay đổi vì lựa chọn này.</p>
+                  </li>
+                </ul>
+              </fieldset>
+            </div>
+            <div class="dialog__actions">
+              <button class="btn btn--secondary" type="button">Hủy</button>
+              <button class="btn btn--primary" type="button">Lưu lựa chọn</button>
+            </div>
+          </div>
+        </div>
+      </div></div>
+      <span class="mk-tag">Lời giải thích từng nhóm không có nền riêng, nên nó đọc trên <code>surface</code> ở đây và trên <code>bg</code> khi cùng markup đó nằm trong trang. Cả hai cặp đều đã được đo.</span>
+    </section>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     4. STATES OF THE SETTINGS SCREEN.
+     ========================================================================== -->
+<section class="mk-section" id="s4">
+  <h2>4. Trạng thái của màn hình cài đặt</h2>
+  <p>
+    Bốn biến thể dưới đây là nội dung của <em>cùng một hộp thoại</em> đã dựng đủ
+    bốn lần ở §3; hai bản dựng ở đây phủ cả hai bề ngang và cả hai giao diện.
+    Thứ tự trong mỗi bản dựng: <strong>đang lưu</strong> ·
+    <strong>lưu thất bại</strong> · <strong>đang đọc lựa chọn đã lưu</strong> ·
+    <strong>không đọc được lựa chọn đã lưu</strong>.
+  </p>
+  <p>
+    <strong>Trạng thái rỗng thì không có, và đó là một khẳng định chứ không phải
+    một chỗ bỏ sót.</strong> Danh sách nhóm do site định nghĩa, không do dữ liệu
+    sinh ra: nó luôn có đúng hai mục. Một màn hình cài đặt “rỗng” sẽ là một lỗi,
+    không phải một trạng thái — và thay khối điều khiển bằng một khối rỗng thì lại
+    cất đi đúng thứ người chơi mở màn hình này để dùng. Thứ gần nhất với “rỗng” là
+    <em>chưa có lựa chọn nào được lưu</em>, và đó chính là trạng thái mặc định đã
+    vẽ ở §3. <code>components.md</code> §4.4 cũng ghi trạng thái rỗng của bề mặt
+    cookie là “—”. Chi tiết và lối xử lý nếu Board muốn khác:
+    <code>privacy-consent.md</code> §6.
+  </p>
+
+  <div class="mk-specs">
+    <section>
+      <h3 class="mk-cap">Sáng · 375 px</h3>
+      <div class="mk-view mk-view--mobile">
+        <div class="mk-stack">
+
+          <div class="dialog" role="dialog" aria-label="Mẫu tĩnh: đang lưu · sáng 375">
+            <div class="dialog__body">
+              <ul class="consent-cats">
+                <li class="consent-cat">
+                  <div class="choice">
+                    <input id="sa-c1" type="checkbox" checked disabled aria-describedby="sa-d1">
+                    <label for="sa-c1">Cần thiết</label>
+                    <span class="consent-cat__always">Luôn bật</span>
+                  </div>
+                  <p class="consent-cat__desc" id="sa-d1">Giữ phiên, nhớ lựa chọn cookie và giao diện bạn chọn.</p>
+                </li>
+                <li class="consent-cat">
+                  <div class="choice">
+                    <input id="sa-c2" type="checkbox" disabled aria-describedby="sa-d2">
+                    <label for="sa-c2">Quảng cáo</label>
+                  </div>
+                  <p class="consent-cat__desc" id="sa-d2">Cookie cho quảng cáo trên trang web. Mặc định tắt.</p>
+                </li>
+              </ul>
+            </div>
+            <div class="dialog__actions">
+              <button class="btn btn--secondary" type="button" disabled>Hủy</button>
+              <button class="btn btn--primary" type="button" disabled>Đang lưu…</button>
+            </div>
+          </div>
+
+          <div class="dialog" role="dialog" aria-label="Mẫu tĩnh: lưu thất bại · sáng 375">
+            <div class="dialog__body">
+              <div class="notice notice--error" role="alert"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg><div class="notice__body"><p class="notice__title">Lỗi</p><p class="notice__text">Không lưu được lựa chọn của bạn. Lựa chọn cũ vẫn giữ nguyên — chưa có cookie quảng cáo nào được đặt. Kiểm tra kết nối rồi bấm “Lưu lựa chọn” lần nữa.</p></div></div>
+              <ul class="consent-cats">
+                <li class="consent-cat">
+                  <div class="choice">
+                    <input id="sb-c1" type="checkbox" checked disabled aria-describedby="sb-d1">
+                    <label for="sb-c1">Cần thiết</label>
+                    <span class="consent-cat__always">Luôn bật</span>
+                  </div>
+                  <p class="consent-cat__desc" id="sb-d1">Giữ phiên, nhớ lựa chọn cookie và giao diện bạn chọn.</p>
+                </li>
+                <li class="consent-cat">
+                  <div class="choice">
+                    <input id="sb-c2" type="checkbox" checked aria-describedby="sb-d2">
+                    <label for="sb-c2">Quảng cáo</label>
+                  </div>
+                  <p class="consent-cat__desc" id="sb-d2">Cookie cho quảng cáo trên trang web. Mặc định tắt.</p>
+                </li>
+              </ul>
+            </div>
+            <div class="dialog__actions">
+              <button class="btn btn--secondary" type="button">Hủy</button>
+              <button class="btn btn--primary" type="button">Lưu lựa chọn</button>
+            </div>
+          </div>
+
+          <div class="dialog" role="dialog" aria-label="Mẫu tĩnh: đang đọc lựa chọn · sáng 375">
+            <div class="dialog__body">
+              <div class="state state--loading state--reserve-sm" role="status" aria-busy="true">
+                <span class="u-visually-hidden">Đang đọc lựa chọn cookie đã lưu…</span>
+                <div class="skeleton" aria-hidden="true">
+                  <span class="skeleton__bar skeleton__bar--title"></span>
+                  <span class="skeleton__bar skeleton__bar--most"></span>
+                  <span class="skeleton__bar skeleton__bar--half"></span>
+                </div>
+              </div>
+            </div>
+            <div class="dialog__actions">
+              <button class="btn btn--secondary" type="button">Hủy</button>
+              <button class="btn btn--primary" type="button" disabled>Lưu lựa chọn</button>
+            </div>
+          </div>
+
+          <div class="dialog" role="dialog" aria-label="Mẫu tĩnh: không đọc được lựa chọn · sáng 375">
+            <div class="dialog__body">
+              <div class="state state--error state--reserve-sm" role="status">
+                <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+                <p class="state__label">Lỗi</p>
+                <p class="state__title">Không đọc được lựa chọn của bạn</p>
+                <p class="state__text">Trong lúc chờ, chỉ cookie cần thiết được dùng.</p>
+                <button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Thử lại</button>
+              </div>
+            </div>
+            <div class="dialog__actions">
+              <button class="btn btn--secondary" type="button">Hủy</button>
+              <button class="btn btn--primary" type="button" disabled>Lưu lựa chọn</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <span class="mk-tag">Khi lỗi là <strong>việc người dùng vừa làm</strong> (bấm Lưu) thì thông báo mang <code>role="alert"</code> — cắt ngang là đúng, vì đó chính là câu trả lời họ đang đợi. Khi lỗi là một tải nền (đọc lựa chọn cũ) thì khối mang <code>role="status"</code> — lịch sự.</span>
+    </section>
+
+    <section>
+      <h3 class="mk-cap">Tối · 1280 px</h3>
+      <div class="mk-scroll"><div class="mk-view mk-view--desktop" data-theme="dark">
+        <div class="mk-stack">
+
+          <div class="dialog" role="dialog" aria-label="Mẫu tĩnh: đang lưu · tối 1280">
+            <div class="dialog__body">
+              <ul class="consent-cats">
+                <li class="consent-cat">
+                  <div class="choice">
+                    <input id="sc-c1" type="checkbox" checked disabled aria-describedby="sc-d1">
+                    <label for="sc-c1">Cần thiết</label>
+                    <span class="consent-cat__always">Luôn bật</span>
+                  </div>
+                  <p class="consent-cat__desc" id="sc-d1">Giữ phiên, nhớ lựa chọn cookie và giao diện bạn chọn.</p>
+                </li>
+                <li class="consent-cat">
+                  <div class="choice">
+                    <input id="sc-c2" type="checkbox" disabled aria-describedby="sc-d2">
+                    <label for="sc-c2">Quảng cáo</label>
+                  </div>
+                  <p class="consent-cat__desc" id="sc-d2">Cookie cho quảng cáo trên trang web. Mặc định tắt.</p>
+                </li>
+              </ul>
+            </div>
+            <div class="dialog__actions">
+              <button class="btn btn--secondary" type="button" disabled>Hủy</button>
+              <button class="btn btn--primary" type="button" disabled>Đang lưu…</button>
+            </div>
+          </div>
+
+          <div class="dialog" role="dialog" aria-label="Mẫu tĩnh: lưu thất bại · tối 1280">
+            <div class="dialog__body">
+              <div class="notice notice--error" role="alert"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg><div class="notice__body"><p class="notice__title">Lỗi</p><p class="notice__text">Không lưu được lựa chọn của bạn. Lựa chọn cũ vẫn giữ nguyên — chưa có cookie quảng cáo nào được đặt. Kiểm tra kết nối rồi bấm “Lưu lựa chọn” lần nữa.</p></div></div>
+              <ul class="consent-cats">
+                <li class="consent-cat">
+                  <div class="choice">
+                    <input id="sd-c1" type="checkbox" checked disabled aria-describedby="sd-d1">
+                    <label for="sd-c1">Cần thiết</label>
+                    <span class="consent-cat__always">Luôn bật</span>
+                  </div>
+                  <p class="consent-cat__desc" id="sd-d1">Giữ phiên, nhớ lựa chọn cookie và giao diện bạn chọn.</p>
+                </li>
+                <li class="consent-cat">
+                  <div class="choice">
+                    <input id="sd-c2" type="checkbox" checked aria-describedby="sd-d2">
+                    <label for="sd-c2">Quảng cáo</label>
+                  </div>
+                  <p class="consent-cat__desc" id="sd-d2">Cookie cho quảng cáo trên trang web. Mặc định tắt.</p>
+                </li>
+              </ul>
+            </div>
+            <div class="dialog__actions">
+              <button class="btn btn--secondary" type="button">Hủy</button>
+              <button class="btn btn--primary" type="button">Lưu lựa chọn</button>
+            </div>
+          </div>
+
+          <div class="dialog" role="dialog" aria-label="Mẫu tĩnh: đang đọc lựa chọn · tối 1280">
+            <div class="dialog__body">
+              <div class="state state--loading state--reserve-sm" role="status" aria-busy="true">
+                <span class="u-visually-hidden">Đang đọc lựa chọn cookie đã lưu…</span>
+                <div class="skeleton" aria-hidden="true">
+                  <span class="skeleton__bar skeleton__bar--title"></span>
+                  <span class="skeleton__bar skeleton__bar--most"></span>
+                  <span class="skeleton__bar skeleton__bar--half"></span>
+                </div>
+              </div>
+            </div>
+            <div class="dialog__actions">
+              <button class="btn btn--secondary" type="button">Hủy</button>
+              <button class="btn btn--primary" type="button" disabled>Lưu lựa chọn</button>
+            </div>
+          </div>
+
+          <div class="dialog" role="dialog" aria-label="Mẫu tĩnh: không đọc được lựa chọn · tối 1280">
+            <div class="dialog__body">
+              <div class="state state--error state--reserve-sm" role="status">
+                <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+                <p class="state__label">Lỗi</p>
+                <p class="state__title">Không đọc được lựa chọn của bạn</p>
+                <p class="state__text">Trong lúc chờ, chỉ cookie cần thiết được dùng.</p>
+                <button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Thử lại</button>
+              </div>
+            </div>
+            <div class="dialog__actions">
+              <button class="btn btn--secondary" type="button">Hủy</button>
+              <button class="btn btn--primary" type="button" disabled>Lưu lựa chọn</button>
+            </div>
+          </div>
+
+        </div>
+      </div></div>
+      <span class="mk-tag">Mọi hư hỏng đều ngả về phía ít dữ liệu hơn: không đọc được lựa chọn thì mặc định là “chỉ cần thiết”, không phải “chấp nhận tất cả”. Nút Lưu bị tắt khi chưa biết trạng thái hiện tại, vì lưu một thứ mình chưa đọc được là ghi đè mù.</span>
+    </section>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     5. FOCUS AND KEYBOARD.
+     ========================================================================== -->
+<section class="mk-section" id="s5">
+  <h2>5. Tiêu điểm và bàn phím</h2>
+
+  <h3>5.1 Banner nhận tiêu điểm — nhưng không phải một cái nút</h3>
+  <p>
+    Khi banner xuất hiện, tiêu điểm chuyển vào <strong>chính vùng banner</strong>
+    (<code>tabindex="-1"</code> trên <code>&lt;aside&gt;</code>), không phải vào
+    “Chấp nhận”. Hai lý do, và cả hai đều quan trọng:
+  </p>
+  <ul>
+    <li><strong>Không có lựa chọn nào được chọn sẵn.</strong> Đặt tiêu điểm lên “Chấp nhận” là đưa một câu trả lời vào tay người dùng trước khi họ đọc câu hỏi — một Enter theo quán tính là đã đồng ý. Đó đúng là dạng ưu ái mà tiêu chí “nặng bằng nhau” cấm.</li>
+    <li><strong>Vùng được đọc nguyên vẹn.</strong> Tên của vùng là “Lựa chọn cookie” (một <code>h5</code> ẩn, nối bằng <code>aria-labelledby</code>), nên trình đọc màn hình đọc tên vùng rồi đọc lời giải thích rồi tới ba hành động — theo thứ tự ấy.</li>
+  </ul>
+
+  <h3>5.2 Không bẫy bàn phím</h3>
+  <p>
+    Banner <strong>không modal</strong>. Tab đi tiếp ra khỏi banner vào trang phía
+    sau và quay vòng bình thường; trang phía sau vẫn đọc được và vẫn bấm được.
+    Chỉ <strong>hộp thoại</strong> cài đặt mới modal, và ở đó vòng Tab bên trong
+    là <em>hành vi bắt buộc</em> chứ không phải vi phạm: WCAG 2.1.2 đòi người dùng
+    <em>thoát được</em> bằng bàn phím, và Esc, nút “Hủy” và nút đóng đều làm đúng
+    việc đó (<code>components.md</code> §5.11).
+  </p>
+
+  <h3>5.3 Tiêu điểm quay về đâu</h3>
+  <table class="mk-table">
+    <thead><tr><th scope="col">Hành động</th><th scope="col">Tiêu điểm đi đâu</th><th scope="col">Vì sao</th></tr></thead>
+    <tbody>
+      <tr><td>Banner xuất hiện</td><td>Vùng banner</td><td>Được đọc trọn vẹn, không câu trả lời nào được chọn sẵn.</td></tr>
+      <tr><td>Chấp nhận · Từ chối</td><td>Chỗ tiêu điểm đang đứng trước khi banner lấy nó. Nếu banner xuất hiện ngay khi trang vừa mở thì chưa có “chỗ trước đó”, nên tiêu điểm về đầu <code>#main</code> (<code>tabindex="-1"</code>) — đúng nơi liên kết bỏ qua cũng đáp xuống.</td><td>Người dùng quay lại đúng chỗ họ đang đọc; không ai bị ném về đầu tài liệu.</td></tr>
+      <tr><td>Cài đặt (từ banner)</td><td>Vào hộp thoại, do <code>showModal()</code>.</td><td>Hành vi gốc của trình duyệt, không cần code quản lý tiêu điểm.</td></tr>
+      <tr><td>Esc · Hủy · nút đóng</td><td>Về đúng nút đã mở hộp thoại.</td><td>Hợp đồng của <code>&lt;dialog&gt;</code>; <code>components.md</code> §5.11.</td></tr>
+      <tr><td>Lưu lựa chọn (trong hộp thoại mở từ banner)</td><td>Hộp thoại đóng, banner cũng biến mất, tiêu điểm về đầu <code>#main</code> và một <code>notice--success</code> <code>role="status"</code> xác nhận.</td><td>Nút đã mở hộp thoại không còn tồn tại, nên trả tiêu điểm về nó là trả về hư không.</td></tr>
+      <tr><td>Cài đặt cookie (từ chân trang)</td><td>Điều hướng trong trang tới <code>/privacy#cookies</code>; nếu script nâng cấp liên kết thành nút mở hộp thoại thì tiêu điểm quay về chính liên kết chân trang đó.</td><td>Liên kết ấy vẫn còn trên trang, nên nó là đích quay về đúng.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>5.4 Không che tiêu điểm, không che chân trang</h3>
+  <p>
+    Banner là <code>sticky</code>. Một hộp sticky giữ chỗ trong luồng, nên ở cuối
+    tài liệu nó nằm <em>sau</em> chân trang: không liên kết nào bị che vĩnh viễn.
+    Ở giữa trang nó có nổi lên trên nội dung — nên <code>consent.css</code> §1 đặt
+    <code>scroll-padding-block-end</code> lên phần tử cuộn bằng đúng chiều cao
+    banner ở dải mobile, tính từ chính các token dựng nên nó. Khi tiêu điểm nhảy
+    tới một thứ banner định che, trình duyệt cuộn thứ đó lên trên banner
+    (WCAG 2.2 <em>Focus Not Obscured</em>).
+  </p>
+
+  <h3>5.5 Không có script thì sao</h3>
+  <p>
+    Banner <strong>vốn cần script</strong>: không có chỗ lưu câu trả lời thì không
+    có quyền hỏi. Nên khi không chạy được script, <strong>banner không xuất
+    hiện</strong> — và điều đó an toàn, vì mặc định khi chưa có đồng ý là “chỉ
+    cookie cần thiết”: không script quảng cáo nào chạy. Màn hình cài đặt vẫn tới
+    được, vì nó là một <em>mục thật</em> của một <em>trang thật</em>
+    (<code>/privacy#cookies</code>) chứ không chỉ là một hộp thoại. Đó cũng là lý
+    do nút “Cài đặt” trên banner là một <strong>liên kết</strong> tới địa chỉ ấy:
+    một đích có URL thật nên là liên kết — mở được trong tab mới, lưu được — và
+    script chỉ nâng cấp nó thành mở hộp thoại tại chỗ.
+  </p>
+</section>
+
+<!-- ==========================================================================
+     6. HOW TO READ THIS SHEET.
+     ========================================================================== -->
+<section class="mk-section" id="s6">
+  <h2>6. Cách đọc tờ này</h2>
+  <ol>
+    <li><strong>Bốn bản dựng cho banner và cho hộp thoại.</strong> Sáng/tối × 375/1280.</li>
+    <li><strong>Chuyển thang xám.</strong> Ba hành động của banner phải <em>không</em> phân biệt được với nhau. Nếu một cái nổi hơn, thiết kế đã hỏng.</li>
+    <li><strong>Đếm số nhóm.</strong> Hai. Nếu thấy “Phân tích”, đó là lỗi.</li>
+    <li><strong>Đếm số ô tick sẵn.</strong> Một, và nó là “Cần thiết”, và nó nói “Luôn bật”.</li>
+    <li><strong>Tab qua một bản dựng ở §1.</strong> Thứ tự: nội dung trang → chân trang → banner. Banner ở cuối <code>&lt;body&gt;</code>, nên nó không chen lên trước nội dung.</li>
+    <li><strong>Tìm chân trang bị che.</strong> Không có. Banner nằm sau chân trang trong luồng.</li>
+    <li><strong>Không có gì chuyển động.</strong> Bật <code>prefers-reduced-motion: reduce</code> và không có gì đổi, vì không có gì từng động.</li>
+    <li><strong>Tìm script.</strong> Không có. Tờ này không có một dòng nào, nên nó cũng không tự nhận là đã chứng minh hành vi modal — xem §3.</li>
+  </ol>
+  <p>
+    Bốn lệnh kiểm tra tĩnh nằm trong
+    <code>docs/design/pages/privacy-consent.md</code> §9 — in ở đó chứ không in ở
+    đây, vì một lệnh <code>grep</code> đi tìm thuộc tính nguồn và tiền tố giao
+    thức mà lại in ngay trong file bị quét thì sẽ tự khớp chính nó, và phép kiểm
+    tra sẽ trượt trên chính tài liệu của nó.
+  </p>
+</section>
+
+</body>
+</html>

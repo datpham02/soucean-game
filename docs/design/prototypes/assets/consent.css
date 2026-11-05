@@ -1,0 +1,584 @@
+/* ==========================================================================
+   Soucean Game — M1-09 page stylesheet
+   Privacy policy, the cookie-consent banner, and the consent settings.
+   --------------------------------------------------------------------------
+   Source of truth: docs/design/pages/privacy-consent.md (Task SOU-7,
+   milestone M1-09).
+
+   WHY ONE FILE FOR TWO PROTOTYPES. SOU-7's write set names exactly one
+   stylesheet, `consent.css`, and two prototypes. So this is the M1-09 page
+   stylesheet: privacy.html and cookie-settings.html both link it. The rules
+   are split by subject below so M2 can lift them apart without untangling
+   anything.
+
+   SCOPE RULE — read before editing.
+   There is not ONE raw colour, type size, spacing step, radius or duration
+   in this file. Every such value is read from tokens.css. The only literals
+   are hairline border widths (1px) and `768px` inside the media queries,
+   where CSS cannot read a custom property — the same literal, for the same
+   reason, that tokens.css, base.css, components.css, ads.css and home.css
+   each repeat and each document.
+
+   This file adds NO shared component. Everything here is either
+     (a) the long-form document template, restated — see section 2, or
+     (b) consent-specific page layout, which belongs to a page and not to
+         the library, or
+     (c) sheet furniture (section 4), which is not part of the product, or
+     (d) the band mirror (section 5), which restates what a viewport media
+         query already says so that a fixed-width view shows its own band.
+
+   NO NEW COLOUR PAIR. Every foreground/background combination this file can
+   produce is one DESIGN.md already measured. The consent rows and the
+   category explanations deliberately supply NO fill of their own, so they
+   inherit whichever of `bg` (the privacy page) or `surface` (the dialog)
+   they sit on — and `text`, `text-muted`, `primary` and `border-strong` are
+   each measured against both. See privacy-consent.md section 7.
+   ========================================================================== */
+
+/* The stack, in the order components.md section 7.1 fixes: tokens, base,
+   components. ads.css last — the privacy page carries the header leaderboard
+   slot from 768px up and ad-slots.md section 11 makes ads.css the only owner
+   of `.ad-slot`. All four are relative, same-directory imports. None makes a
+   network request. */
+@import url('tokens.css');
+@import url('base.css');
+@import url('components.css');
+@import url('ads.css');
+
+/* ==========================================================================
+   1. THE STICKY BANNER'S ONE PAGE-LEVEL CONSEQUENCE.
+
+   The banner must never permanently obscure the footer links, and must never
+   cover the control that has keyboard focus (WCAG 2.2 "Focus Not Obscured").
+   Two mechanisms carry that, and only the second one is CSS this Task writes.
+
+   (a) THE BANNER IS STICKY, NOT FIXED — components.css section 15 already
+       chose that, and this is the consequence worth writing down. A sticky
+       box keeps its place in the flow, so at the end of the document it sits
+       AFTER the footer rather than on top of it. Scroll to the bottom and
+       every footer link is above the banner, visible and clickable. A FIXED
+       banner would cover them at every scroll position, including the last
+       one, which is the arrangement the "permanently obscures" rule is
+       about. Nothing below is needed for this; it falls out of `sticky`.
+
+   (b) MID-PAGE, the banner does float over the content behind it, which is
+       the point of it. So when focus moves to something the banner would
+       cover, the browser must scroll that thing clear. `scroll-padding` on
+       the scroll container is what tells it how much room to leave, and the
+       scroll container here is the viewport — the `:root` element — not any
+       box inside the page.
+
+   THE VALUE IS DERIVED, NOT GUESSED. It is the banner's own height at the
+   mobile band, summed from the rules components.css section 15 writes:
+   lg padding top and bottom, two lines of body-sm text, the md gap under
+   that text, three stacked 44px actions and the two sm gaps between them.
+   From 768px up the actions sit in a row and the banner is shorter, so the
+   same figure is a comfortable floor rather than an exact fit — which is the
+   right direction for this error: scroll padding that is too large costs a
+   little empty space, scroll padding that is too small defeats the rule.
+   -------------------------------------------------------------------------- */
+
+:root:has(.consent) {
+  scroll-padding-block-end: calc(
+    2 * var(--space-lg) + 2 * var(--text-body-sm) * var(--leading-body-sm) +
+      var(--space-md) + 3 * var(--target-min) + 2 * var(--space-sm)
+  );
+}
+
+/* ==========================================================================
+   2. THE LONG-FORM DOCUMENT TEMPLATE — the privacy page.
+
+   components.md section 5.16 handed ONE template to Privacy, Terms and
+   About: `.shell--text` capped at the reading measure, an h1, a last-updated
+   line, an in-page contents list of ORDINARY LINKS, then numbered sections.
+   It introduces no new component, and neither does this.
+
+   WHY THESE RULES ARE RESTATED HERE RATHER THAN IMPORTED. The template's
+   CSS lives in `home.css`, which is M1-05's page stylesheet and outside this
+   Task's write set. Linking it from privacy.html would make this page depend
+   on another page Task's file — a change to the home page's hero could then
+   break the privacy policy. So the four template rules are restated, from
+   the same tokens, with the same values. The two files are never loaded
+   together, so the duplicate selectors never meet.
+
+   This is the same trade home.css section 4 made when it restated
+   components.css section 19's sheet furniture rather than borrowing it, and
+   it is reported for M2 in privacy-consent.md section 10: when the stack
+   lands, the template belongs in one place.
+   ========================================================================== */
+
+.doc__updated {
+  margin-block: var(--space-sm) var(--space-2xl);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--color-text-muted);
+}
+
+/* The in-page contents. The container is `.card`, which already exists; the
+   only rules here are the list's own, because base.css styles neither an
+   `ol`'s indent nor a contents link's target size. */
+.doc__toc-list {
+  margin: 0;
+  padding-inline-start: var(--space-xl);
+}
+
+.doc__toc-list li + li {
+  /* DESIGN.md: at least 8px between adjacent targets. */
+  margin-block-start: var(--space-sm);
+}
+
+/* A contents entry is a navigation target, not a link inside a sentence, so
+   it is padded out to the 44px minimum DESIGN.md sets for every interactive
+   target. The visible text does not grow; the hit area does. */
+.doc__toc-list a {
+  display: inline-block;
+  padding-block: var(--space-md);
+}
+
+.doc-section + .doc-section {
+  margin-block-start: var(--space-3xl);
+}
+
+.doc-section__title {
+  margin-block-end: var(--space-lg);
+}
+
+/* ==========================================================================
+   3. THE CONSENT SETTINGS — the only genuinely new layout in this Task.
+
+   ONE DESIGN, TWO PLACES. The same markup is used inline as section 6 of the
+   privacy page (`/privacy#cookies`) and inside the settings dialog opened
+   from the banner. requirements.md section 2 puts the settings link at
+   `/privacy#cookies`, and wireframes.md section 4.6 makes the dialog the
+   surface the banner opens — so both exist, and designing the category list
+   twice would be the way to make them disagree.
+
+   THE ONE THING THE TWO PLACES DO NOT SHARE is what happens after Save. The
+   dialog closes, so its confirmation belongs to the page it leaves behind, at
+   the top of `main`, where focus lands. The inline section does not close and
+   the reader does not move, so its confirmation belongs beside the button
+   they just pressed — `.consent-form__status`, below. Same component, same
+   wording, two placements, because "where the user is" is different.
+
+   WHY NOTHING HERE SETS A BACKGROUND. The inline section sits on `bg`; the
+   dialog sits on `surface`. Every colour these rows use — `text`,
+   `text-muted`, `primary`, `border-strong` — is measured against BOTH in
+   DESIGN.md, so the rows can simply inherit their context and stay inside
+   the measured set either way. Giving them a fill of their own would have
+   introduced a third surface and, with it, a pair nobody measured. That is
+   components.md section 2.1 doing real work, not a styling preference.
+   ========================================================================== */
+
+/* The list of categories. A real <ul> so a screen reader announces how many
+   there are — two — which is itself part of the honesty of this design. */
+.consent-cats {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* One category. The divider is `border`, the DECORATIVE token: it separates
+   two blocks that are already separated by their headings and their spacing,
+   so it carries no information and is not a control boundary. DESIGN.md
+   records it at 1.32:1 light / 1.49:1 dark and permits exactly this use. */
+.consent-cat + .consent-cat {
+  margin-block-start: var(--space-md);
+  padding-block-start: var(--space-md);
+  border-block-start: 1px solid var(--color-border);
+}
+
+/* The "Luôn bật" word beside the Cần thiết label. A WORD, not a lock icon
+   and not a colour: the state of a control that cannot be changed has to
+   survive greyscale and has to be readable by someone who never sees the
+   icon. `label-sm` at `text-muted`, measured on `bg` (6.25 / 7.65) and on
+   `surface` (6.65 / 6.82). */
+.consent-cat__always {
+  font-size: var(--text-label-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+/* The plain-language explanation under each category. It is referenced by
+   the checkbox's aria-describedby, so it is announced with the control
+   rather than only being visible beside it.
+
+   The indent lines it up under the checkbox's LABEL rather than under the
+   checkbox itself: the control is `--icon-md` wide and `.choice` puts an
+   `sm` gap after it, so the sum is exactly where the label text starts.
+   Derived from the two tokens, not measured off a screenshot. */
+.consent-cat__desc {
+  margin: 0;
+  padding-inline-start: calc(var(--icon-md) + var(--space-sm));
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--color-text-muted);
+}
+
+/* The settings actions. Same shape as `.dialog__actions`, restated because
+   the inline section is not inside a dialog and must not borrow a dialog's
+   class to get a row of buttons. */
+.consent-form__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-block-start: var(--space-lg);
+}
+
+/* At 375px the two actions go full width and stack, for the same reason the
+   banner's three do: a Vietnamese verb plus its object does not fit beside
+   another one at 343px. Section 5 puts them back in a row at the switch. */
+.consent-form__actions .btn {
+  inline-size: 100%;
+}
+
+/* The live region that confirms a save IN THE INLINE SECTION — the one at
+   /privacy#cookies, which is where the footer link and the banner's third
+   action both land, and therefore where a player who changes their mind
+   actually presses Save.
+
+   WHY IT IS A REGION AND NOT JUST A NOTICE. A `role="status"` announces what
+   is INSERTED into it; a status element that is itself inserted may be
+   announced late or not at all. So the empty region is part of the resting
+   markup of section 6, and only the `.notice` inside it appears and
+   disappears. That is why the sheet draws the empty container in two renders
+   rather than drawing nothing.
+
+   WHY IT SITS AFTER THE ACTIONS AND NOT ABOVE THEM. The reader who pressed
+   Save is at the Save button, mid-document, with the rest of the policy below
+   — a confirmation at the top of the page or the top of the section would
+   appear somewhere they are not looking. Below the button it is the next
+   thing in both the visual order and the reading order, and nothing above it
+   moves when it appears, so the button under the pointer or under focus stays
+   exactly where it was. Focus is not moved either (privacy-consent.md
+   section 8.3): the region is not a control and takes no tabindex.
+
+   The margin is on the NOTICE, not on the region, so the resting region
+   occupies no space at all and costs nothing when it is empty. */
+.consent-form__status > .notice {
+  margin-block-start: var(--space-md);
+}
+
+/* The category group's own box. base.css already gives a <fieldset> its
+   padding, its `border-strong` edge and its `md` radius; the only thing
+   missing is the legend's type, because base.css styles `label` and not
+   `legend`. */
+.consent-fieldset__legend {
+  padding-inline: var(--space-sm);
+  font-size: var(--text-label-md);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+}
+
+/* ==========================================================================
+   4. SHEET FURNITURE — NOT PART OF THE PRODUCT.
+
+   Everything from here down exists so one file can show one surface at both
+   design widths, in both themes, in every state. No product page uses any of
+   it, and none of it describes a component.
+
+   It is this Task's own furniture rather than components.css section 19's,
+   because that section says in its own first paragraph: "No page mockup
+   should use any of it." home.css section 4 restated the same four classes
+   under an `mk-` prefix for the same reason; this file keeps that prefix so
+   that all five M1 page mockups read identically to a reviewer. The rules
+   are RESTATED, not shared: consent.css and home.css are never loaded
+   together, and neither imports the other.
+
+   THE ONE EXCEPTION, STATED PLAINLY — the same one wireframes.md section 2,
+   components.md section 1.3 and home.css section 4 each recorded. tokens.css
+   section 7 steps five type tokens in a VIEWPORT media query on `:root`. A
+   fixed-width view cannot restate that step without writing type-size
+   literals into this file, which the scope rule at the top forbids and which
+   is exactly the drift that rule exists to prevent. So IN A WINDOW >= 768px
+   WIDE THE 375px VIEWS RENDER `--text-display`, `--text-headline-lg`,
+   `--text-headline-md`, `--text-headline-sm` AND `--text-body-lg` AT THEIR
+   DESKTOP SIZE. It affects headings only; it changes no layout, no region,
+   no state and no reading order. To read a mobile view at its true type
+   scale, narrow the window below 768px. In the product the question never
+   arises, because there the band comes from the viewport.
+   ========================================================================== */
+
+.mk-sheet {
+  max-inline-size: calc(var(--bp-desktop) + 2 * var(--space-3xl));
+  margin-inline: auto;
+  padding-inline: var(--space-lg);
+  padding-block: var(--space-2xl) var(--space-6xl);
+}
+
+.mk-sheet__kicker {
+  font-size: var(--text-label-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+.mk-sheet__lede {
+  max-inline-size: 70ch;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--color-text-muted);
+}
+
+.mk-section {
+  margin-block-start: var(--space-5xl);
+  padding-block-start: var(--space-2xl);
+  border-block-start: 1px solid var(--color-border);
+}
+
+.mk-section > p {
+  max-inline-size: 70ch;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--color-text-muted);
+}
+
+.mk-specs {
+  display: grid;
+  gap: var(--space-2xl);
+  margin-block: var(--space-lg);
+}
+
+/* Two 375px views sit side by side on a wide monitor and wrap on a narrow
+   one, so light and dark can be compared without scrolling between them. */
+.mk-specs--row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.mk-cap {
+  margin-block-end: var(--space-sm);
+  font-size: var(--text-label-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+/* A 1280px view does not fit every reader's window. Scroll the view, never
+   the page, and never scale it — a scaled mockup cannot be measured. */
+.mk-scroll {
+  overflow-x: auto;
+}
+
+/* The view: a fixed-width slice of a real page, at a real design width. The
+   gutter is set here rather than read from `--layout-gutter`, because that
+   token is viewport-dependent and a view's band must be a property of the
+   view. It is set to the SAME spacing tokens DESIGN.md gives each band, so
+   it restates a choice and invents no value. */
+.mk-view {
+  --layout-gutter: var(--space-lg);
+
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  outline: 1px solid var(--color-border-strong);
+}
+
+.mk-view--mobile {
+  inline-size: var(--bp-mobile);
+}
+
+.mk-view--desktop {
+  --layout-gutter: var(--space-2xl);
+
+  inline-size: var(--bp-desktop);
+}
+
+/* The skip link is positioned against the site header and lives off-screen
+   until it is focused. On a sheet it is drawn in its FOCUSED position so a
+   reviewer can see it without tabbing — and so that a translated-away link
+   does not float over the caption above each view. The real behaviour is
+   proved by tabbing in the product, never by this rule. Same trade, same
+   reason, as components.css section 19 and home.css section 4. */
+.mk-view .skip-link {
+  position: static;
+  transform: none;
+}
+
+/* A note under a view: "hover", "focus", "the 768px band". */
+.mk-tag {
+  display: block;
+  margin-block-start: var(--space-xs);
+  font-size: var(--text-label-sm);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+/* Stacked specimens inside one view — three state blocks, say. */
+.mk-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+}
+
+.mk-table {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+}
+
+.mk-table th {
+  font-size: var(--text-label-sm);
+  color: var(--color-text);
+}
+
+.mk-table td {
+  vertical-align: top;
+}
+
+/* ==========================================================================
+   5. THE BAND.
+
+   Section 5.1 is the real media query — the one rule set that ships.
+   Section 5.2 mirrors it onto `.mk-view--mobile` / `.mk-view--desktop`,
+   which is what lets a 375px view show the mobile band inside a 1280px
+   window.
+
+   The mirror restates `display`, `grid-template-columns`, `flex-direction`,
+   `inline-size` and `padding`, and nothing else. It restates no colour and
+   no spacing token choice that is not already stated above or in the
+   library. 768px is M1-01's `switch`; this file introduces no breakpoint of
+   its own and uses `wide` (1024px) nowhere — the side rail belongs to the
+   play page, which is not one of these two.
+   ========================================================================== */
+
+/* --- 5.1 The product rules. ---------------------------------------------- */
+
+@media (min-width: 768px) {
+  .doc-section + .doc-section {
+    margin-block-start: var(--space-4xl);
+  }
+
+  /* Seven contents entries down one column push section 1 below the fold on
+     a laptop. Two columns is the same list read in half the height, and
+     `columns` changes no DOM order, so the tab order stays 1 -> 7. It is the
+     shape components.css already gives its own contents list, so the page
+     and the sheet agree. */
+  .doc__toc-list {
+    columns: 2;
+  }
+
+  /* Above the switch the two settings actions fit on one row. */
+  .consent-form__actions .btn {
+    inline-size: auto;
+  }
+}
+
+/* --- 5.2 The mirror, both directions. -----------------------------------
+
+   Both directions are stated on purpose: a mobile view has to UNDO the media
+   query when the sheet is read on a wide monitor, not merely fail to opt in.
+   The selectors score (0,2,0) or (0,3,0) against the media block's (0,1,0)
+   or (0,2,0), and this file is imported last, so they win on both counts. */
+
+.mk-view--mobile .doc-section + .doc-section {
+  margin-block-start: var(--space-3xl);
+}
+
+.mk-view--mobile .doc__toc-list {
+  columns: auto;
+}
+
+.mk-view--mobile .main {
+  padding-block: var(--space-3xl);
+}
+
+.mk-view--mobile .consent-form__actions .btn {
+  inline-size: 100%;
+}
+
+.mk-view--mobile .consent__actions {
+  flex-direction: column;
+}
+
+.mk-view--mobile .dialog {
+  padding: var(--space-lg);
+}
+
+.mk-view--mobile :is(.card, .game-card) {
+  padding: var(--space-lg);
+}
+
+.mk-view--mobile .site-nav__toggle {
+  display: inline-flex;
+}
+
+.mk-view--mobile .site-nav__toggle[aria-expanded='false'] + .site-nav__list {
+  display: none;
+}
+
+.mk-view--mobile .site-nav__toggle[aria-expanded='true'] + .site-nav__list {
+  display: flex;
+  flex-direction: column;
+  padding-block-end: var(--space-md);
+}
+
+.mk-view--desktop .doc-section + .doc-section {
+  margin-block-start: var(--space-4xl);
+}
+
+.mk-view--desktop .doc__toc-list {
+  columns: 2;
+}
+
+.mk-view--desktop .main {
+  padding-block: var(--space-4xl);
+}
+
+.mk-view--desktop .consent-form__actions .btn {
+  inline-size: auto;
+}
+
+.mk-view--desktop .consent__actions {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.mk-view--desktop .dialog {
+  padding: var(--space-xl);
+}
+
+.mk-view--desktop :is(.card, .game-card) {
+  padding: var(--space-xl);
+}
+
+.mk-view--desktop .site-nav__toggle {
+  display: none;
+}
+
+.mk-view--desktop .site-nav__list {
+  display: flex;
+  flex-direction: row;
+  gap: var(--space-sm);
+  padding-block-end: 0;
+}
+
+/* The one ad slot the privacy page carries: ad-header-leaderboard,
+   728 x 90, in the site header, from 768px up and NOWHERE below it
+   (ad-slots.md section 3). ads.css gates it on the viewport; a fixed-width
+   view has to restate that gate or a 375px view would show a slot the mobile
+   band does not have.
+
+   `flex` is ads.css's "on" value, copied here. The cross-reference can only
+   be one-way — ads.css belongs to M1-02 and this Task does not edit it — so
+   if ads.css ever changes that display type, these two rules keep `flex`
+   silently. The same note home.css section 5.2 and wireframes.md open item 6
+   record, for the same reason. Nothing else about the slot is restated: the
+   size, the margins, `flex: none` and `position: static` all stay in
+   ads.css, which is the sole owner of `.ad-slot`.
+
+   cookie-settings.html carries NO ad slot at all, in either band: the banner
+   and the settings dialog are surfaces, not pages, and ad-slots.md gives a
+   slot to a page. */
+.mk-view--mobile .ad-slot.ad-slot--header-leaderboard {
+  display: none;
+}
+
+.mk-view--desktop .ad-slot.ad-slot--header-leaderboard {
+  display: flex;
+}
