@@ -46,6 +46,9 @@ is fixed now by ADR-021.
 | Unit tests | `npm test` | M2 |
 | Production build | `npm run build` | M2 |
 | End-to-end tests (Playwright) | `npm run test:e2e` | M4 |
+| Start backend stack (local) | `docker compose up -d` | M4 |
+| Stop backend stack (local) | `docker compose down` | M4 |
+| Backend logs (local) | `docker compose logs -f app mysql reverb` | M4 |
 | Backend feature tests | `docker compose run --rm test` | M4 |
 | Apply migrations | `docker compose run --rm app php artisan migrate` | M4 |
 
