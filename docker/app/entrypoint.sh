@@ -19,8 +19,13 @@ else
     if [ -f "$key_file" ] && [ -s "$key_file" ]; then
         key_value="$(cat "$key_file")"
     else
-        key_value="base64:$(php -r 'echo base64_encode(random_bytes(32));')"
-        printf '%s' "$key_value" > "$key_file"
+        # Use a link-based atomic winner to avoid races between app/reverb startup.
+        tmp_key="$key_file.$$"
+        generated_key="base64:$(php -r 'echo base64_encode(random_bytes(32));')"
+        printf '%s' "$generated_key" > "$tmp_key"
+        ln "$tmp_key" "$key_file" 2>/dev/null || true
+        rm -f "$tmp_key"
+        key_value="$(cat "$key_file")"
     fi
 fi
 

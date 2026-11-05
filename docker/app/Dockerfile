@@ -39,8 +39,8 @@ COPY docker/app/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY docker/app/entrypoint.sh /usr/local/bin/entrypoint
 
 RUN chmod +x /usr/local/bin/entrypoint \
-    && mkdir -p /tmp/nginx /var/lib/nginx /var/log/nginx \
-    && chown -R www-data:www-data /tmp/nginx /var/lib/nginx /var/log/nginx /var/www/html
+    && mkdir -p /tmp/nginx /var/lib/nginx /var/log/nginx /var/www/shared \
+    && chown -R www-data:www-data /tmp/nginx /var/lib/nginx /var/log/nginx /var/www/html /var/www/shared
 
 WORKDIR /var/www/html/backend
 USER www-data
