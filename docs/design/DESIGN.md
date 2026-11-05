@@ -746,7 +746,7 @@ outline-offset: var(--focus-ring-offset);
   **9.58:1** on `sunken`. Required: 3:1. Passes everywhere.
 
 **Why the 2px offset is not optional.** The focus blue and the primary teal are
-close in luminance — measured against each other they are **1.01:1**, which is
+close in luminance — measured against each other they are **1.00:1**, which is
 to say invisible. A ring drawn directly on a primary-filled button would
 therefore vanish. The offset pushes the ring onto the page or surface behind the
 control, where the measured ratios above apply. If a design genuinely needs a
