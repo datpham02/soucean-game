@@ -324,8 +324,7 @@ undone — confirmation is there to prevent a mistake, not to discourage the
 choice.
 
 **No player id is printed.** The page shows identity *state* only. Linking
-keeps the same player id, so no score is orphaned (`requirements.md` §3,
-OQ-036).
+keeps the same player id, so no score is orphaned (`requirements.md` §3).
 
 **States.** Profile: loading · saving · moderation error (inline, under the
 field, linked by `aria-describedby`) · saved. Sign-in: linked · not linked ·
