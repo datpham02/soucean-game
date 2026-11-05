@@ -1,0 +1,1830 @@
+<!doctype html>
+<!--
+  Soucean Game — component library specimen sheet
+  Task GAM-25 (M1-04). Documented in ../components.md.
+
+  data-theme="light" is pinned on <html> ON PURPOSE. tokens.css applies dark
+  either from prefers-color-scheme or from data-theme="dark"; pinning light
+  here excludes the media query, so the light panels are light on a reader
+  whose machine is set to dark, and the dark panels are the ones carrying
+  data-theme="dark" explicitly. That is what lets both themes appear side by
+  side on one page, with no script and no reader configuration.
+
+  No build step, no server, no dependency, no network request. Open the file.
+-->
+<html lang="vi" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thư viện thành phần — Soucean Game (M1-04, GAM-25)</title>
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/base.css">
+<link rel="stylesheet" href="assets/components.css">
+</head>
+<body class="sheet">
+
+<!-- ==========================================================================
+     Icon set. Drawn in this Task on a 24x24 grid, single 1.5px stroke from
+     base.css. No third-party asset, no font file, no licence to record.
+     Every <use> below is same-document (#id), so it makes no request.
+     ========================================================================== -->
+<svg class="u-visually-hidden" aria-hidden="true" focusable="false"><defs>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 7.6h.01"/></symbol>
+  <symbol id="i-success" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12.4 2.6 2.6L16 9.6"/></symbol>
+  <symbol id="i-warning" viewBox="0 0 24 24"><path d="M12 4 2.6 20h18.8Z"/><path d="M12 10v4"/><path d="M12 17h.01"/></symbol>
+  <symbol id="i-error" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6"/><path d="m15 9-6 6"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12"/><path d="m18 6-12 12"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-.7 4.3"/><path d="M20 5v6h-6"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2"/><path d="M12 19.5v2"/><path d="m4.5 4.5 1.4 1.4"/><path d="m18.1 18.1 1.4 1.4"/><path d="M2.5 12h2"/><path d="M19.5 12h2"/><path d="m4.5 19.5 1.4-1.4"/><path d="m18.1 5.9 1.4-1.4"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.4A8.5 8.5 0 0 1 9.6 4 8.5 8.5 0 1 0 20 14.4Z"/></symbol>
+  <symbol id="i-empty" viewBox="0 0 24 24"><path d="M5.5 5.5h13l2.5 8v5h-18v-5Z"/><path d="M3 13.5h4.5l1.5 3h6l1.5-3H21"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="m6.5 7 1 13h9l1-13"/><path d="M9.5 7V4.5h5V7"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5Z"/></symbol>
+</defs></svg>
+
+<header>
+  <p class="sheet__kicker">Soucean Game · M1 (Thiết kế) · GAM-25 (M1-04)</p>
+  <h1>Thư viện thành phần, và ba trạng thái dùng chung</h1>
+  <p class="sheet__lede">Mỗi thành phần được dựng <strong>bốn lần</strong>: giao diện
+     <strong>sáng</strong> và <strong>tối</strong>, ở <strong>375 px</strong> và
+     <strong>1280 px</strong> — hai chiều rộng thiết kế mà
+     <a class="link" href="../DESIGN.md">DESIGN.md</a> (M1-01) ấn định. Mỗi thành phần
+     tương tác hiện đủ năm trạng thái: mặc định, hover, <strong>focus bàn phím</strong>,
+     active, disabled.</p>
+  <p class="sheet__lede">Tài liệu đi kèm:
+     <a class="link" href="../components.md">components.md</a> — công dụng, trạng thái,
+     hành vi bàn phím và trang nào dùng từng thành phần, cùng bảng tương phản đã đo.</p>
+  <p class="sheet__lede"><strong>Cách xem.</strong> Mở thẳng tệp này bằng trình duyệt.
+     Không máy chủ, không bước build, không phụ thuộc, không yêu cầu mạng nào. Mỗi tấm là
+     một hộp rộng cố định, nên bạn thấy bố cục 375 px thật trên màn hình desktop.
+     <em>Một ngoại lệ đã biết:</em> năm bậc chữ của <code>tokens.css</code> §7 đổi theo
+     <em>viewport</em>, nên trong cửa sổ rộng ≥ 768 px các tấm 375 px hiển thị năm bậc đó ở
+     cỡ desktop. Thu hẹp cửa sổ xuống dưới 768 px để đọc đúng bậc chữ mobile. Chi tiết:
+     <code>components.css</code> §19.</p>
+  <p class="sheet__lede"><strong>Trạng thái bị ép.</strong> Một trang tĩnh không tự hover
+     được, nên các lớp <code>.is-hover</code>, <code>.is-focus</code>,
+     <code>.is-active</code> đi <em>chung một khối khai báo</em> với
+     <code>:hover</code>, <code>:focus-visible</code> và <code>:active</code> thật. Bạn
+     đang nhìn đúng quy tắc sẽ chạy, không phải bản vẽ lại. Hãy <kbd>Tab</kbd> qua trang
+     để kiểm chứng vòng focus thật.</p>
+  <p class="sheet__lede"><strong>Về landmark trên chính tờ này.</strong> Phần khung trang ở
+     §2 dùng <code>&lt;header&gt;</code> và <code>&lt;footer&gt;</code> lồng trong
+     <code>&lt;section&gt;</code>, nên chúng <em>không</em> trở thành landmark
+     <code>banner</code>/<code>contentinfo</code> — một tài liệu chỉ được có một
+     <code>main</code> và một <code>banner</code>. Cấu trúc landmark thật của một trang
+     nằm ở <a class="link" href="../components.md">components.md</a> §2.3.</p>
+</header>
+
+<nav class="sheet-section sheet__toc" aria-label="Mục lục">
+  <h2>Mục lục</h2>
+  <ol>
+    <li><a class="link" href="#s1">Nền tảng — chữ Việt và vòng focus</a></li>
+    <li><a class="link" href="#s2">Khung trang — skip link, header, điều hướng, footer</a></li>
+    <li><a class="link" href="#s3">Nút và liên kết</a></li>
+    <li><a class="link" href="#s4">Thẻ trò chơi và lưới</a></li>
+    <li><a class="link" href="#s5">Bảng xếp hạng và bộ chọn kỳ</a></li>
+    <li><a class="link" href="#s6">Trường biểu mẫu</a></li>
+    <li><a class="link" href="#s7">Thông báo nội tuyến</a></li>
+    <li><a class="link" href="#s8">Hộp thoại và banner đồng ý</a></li>
+    <li><a class="link" href="#s9">Ba trạng thái: trống · đang tải · lỗi</a></li>
+    <li><a class="link" href="#s10">Trạng thái theo từng trang</a></li>
+  </ol>
+</nav>
+
+
+<!-- ==========================================================================
+     1. NỀN TẢNG
+     ========================================================================== -->
+<section class="sheet-section" id="s1">
+  <h2>1. Nền tảng — chữ Việt và vòng focus</h2>
+  <p>Mẫu chữ bên dưới chứa các dấu chồng (<code>ế ệ ẫ ộ ờ ữ ạ ỉ ỹ đ Đ</code>) ở cỡ
+     <code>display</code> và cỡ <code>caption</code> (12 px) — mục kiểm tra còn mở mà
+     <code>DESIGN.md</code> giao cho M1-04. Cần xác nhận: không có ký tự nào bị thay font
+     (dấu thanh trông khác phần còn lại của từ) và không dấu nào bị cắt.
+     <strong>Xem phần "Chưa kiểm chứng" ở <code>components.md</code> §8</strong> để biết
+     điều gì đã và <em>chưa</em> được xác nhận trong Task này.</p>
+
+  <div class="spec">
+    <section class="spec__cell">
+      <h3 class="spec__cap">Sáng · 375</h3>
+      <div class="pane pane--mobile">
+        <div class="pane__stack">
+          <p class="spec-type--display">Trò chơi ế ệ ẫ ộ</p>
+          <p class="spec-type--caption">Tất cả trò chơi đều miễn phí — ế ệ ẫ ộ ờ ữ ạ ỉ ỹ đ Đ</p>
+          <p class="pane__tag">Vòng focus thật, ép hiện:</p>
+          <button class="btn btn--secondary is-focus" type="button">Nút đang focus</button>
+        </div>
+      </div>
+    </section>
+    <section class="spec__cell">
+      <h3 class="spec__cap">Sáng · 1280</h3>
+      <div class="spec__scroll"><div class="pane pane--desktop">
+        <div class="pane__stack">
+          <p class="spec-type--display">Trò chơi ế ệ ẫ ộ ờ ữ ạ ỉ ỹ đ Đ</p>
+          <p class="spec-type--caption">Tất cả trò chơi đều miễn phí — ế ệ ẫ ộ ờ ữ ạ ỉ ỹ đ Đ</p>
+          <p class="pane__tag">Vòng focus thật, ép hiện:</p>
+          <button class="btn btn--secondary is-focus" type="button">Nút đang focus</button>
+        </div>
+      </div></div>
+    </section>
+    <section class="spec__cell">
+      <h3 class="spec__cap">Tối · 375</h3>
+      <div class="pane pane--mobile" data-theme="dark">
+        <div class="pane__stack">
+          <p class="spec-type--display">Trò chơi ế ệ ẫ ộ</p>
+          <p class="spec-type--caption">Tất cả trò chơi đều miễn phí — ế ệ ẫ ộ ờ ữ ạ ỉ ỹ đ Đ</p>
+          <p class="pane__tag">Vòng focus thật, ép hiện:</p>
+          <button class="btn btn--secondary is-focus" type="button">Nút đang focus</button>
+        </div>
+      </div>
+    </section>
+    <section class="spec__cell">
+      <h3 class="spec__cap">Tối · 1280</h3>
+      <div class="spec__scroll"><div class="pane pane--desktop" data-theme="dark">
+        <div class="pane__stack">
+          <p class="spec-type--display">Trò chơi ế ệ ẫ ộ ờ ữ ạ ỉ ỹ đ Đ</p>
+          <p class="spec-type--caption">Tất cả trò chơi đều miễn phí — ế ệ ẫ ộ ờ ữ ạ ỉ ỹ đ Đ</p>
+          <p class="pane__tag">Vòng focus thật, ép hiện:</p>
+          <button class="btn btn--secondary is-focus" type="button">Nút đang focus</button>
+        </div>
+      </div></div>
+    </section>
+  </div>
+</section>
+
+
+<!-- ==========================================================================
+     2. KHUNG TRANG
+     ========================================================================== -->
+<section class="sheet-section" id="s2">
+  <h2>2. Khung trang — skip link, header, điều hướng, footer</h2>
+  <p>Thứ tự đọc cố định ở M1-03: skip link → header → <code>main</code> → footer. Skip link
+     đứng <strong>trước ô quảng cáo header</strong> để một phím Tab là qua được banner
+     (<code>ad-slots.md</code> §9.4). Ở 375 px điều hướng là một nút disclosure; từ 768 px
+     nó là danh sách nằm ngang và nút biến mất. Trang hiện tại được đánh dấu bằng
+     <strong>đậm + gạch chân + <code>aria-current</code></strong>, không bao giờ chỉ bằng
+     màu. Trên tờ này skip link được vẽ ở vị trí đã focus để nhìn thấy mà không cần Tab.</p>
+
+  <div class="spec">
+    <section class="spec__cell">
+      <h3 class="spec__cap">Sáng · 375 — điều hướng đang mở</h3>
+      <div class="pane pane--mobile pane--flush">
+        <div class="site-header">
+          <a class="skip-link" href="#demo-main-a">Tới nội dung chính</a>
+          <div class="shell site-header__bar">
+            <a class="wordmark" href="#s2">Soucean Game</a>
+            <div class="site-header__actions">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="theme-a" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="theme-a"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+            </div>
+          </div>
+          <nav class="shell" aria-label="Chính">
+            <button class="btn btn--quiet site-nav__toggle" type="button" aria-expanded="true" aria-controls="nav-a"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-menu"/></svg>Menu</button>
+            <ul class="site-nav__list" id="nav-a">
+              <li><a class="site-nav__link" href="#s2" aria-current="page">Trò chơi</a></li>
+              <li><a class="site-nav__link" href="#s2">Bảng xếp hạng</a></li>
+              <li><a class="site-nav__link" href="#s2">Tài khoản</a></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="shell main" id="demo-main-a"><p class="u-flush">Nội dung trang.</p></div>
+        <footer class="site-footer">
+          <div class="shell">
+            <ul class="site-footer__links">
+              <li><a class="link" href="#s2">Giới thiệu</a></li>
+              <li><a class="link" href="#s2">Điều khoản</a></li>
+              <li><a class="link" href="#s2">Quyền riêng tư</a></li>
+              <li><a class="link" href="#s2">Cài đặt cookie</a></li>
+            </ul>
+            <p class="site-footer__fine">© 2026 Soucean Game</p>
+          </div>
+        </footer>
+      </div>
+    </section>
+
+    <section class="spec__cell">
+      <h3 class="spec__cap">Sáng · 1280</h3>
+      <div class="spec__scroll"><div class="pane pane--desktop pane--flush">
+        <div class="site-header">
+          <a class="skip-link" href="#demo-main-b">Tới nội dung chính</a>
+          <div class="shell site-header__bar">
+            <a class="wordmark" href="#s2">Soucean Game</a>
+            <nav aria-label="Chính">
+              <button class="btn btn--quiet site-nav__toggle" type="button" aria-expanded="false" aria-controls="nav-b"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-menu"/></svg>Menu</button>
+              <ul class="site-nav__list" id="nav-b">
+                <li><a class="site-nav__link" href="#s2" aria-current="page">Trò chơi</a></li>
+                <li><a class="site-nav__link" href="#s2">Bảng xếp hạng</a></li>
+                <li><a class="site-nav__link" href="#s2">Tài khoản</a></li>
+              </ul>
+            </nav>
+            <div class="site-header__actions">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="theme-b" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="theme-b"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+        <div class="shell main" id="demo-main-b"><p class="u-flush">Nội dung trang.</p></div>
+        <footer class="site-footer">
+          <div class="shell">
+            <ul class="site-footer__links">
+              <li><a class="link" href="#s2">Giới thiệu</a></li>
+              <li><a class="link" href="#s2">Điều khoản</a></li>
+              <li><a class="link" href="#s2">Quyền riêng tư</a></li>
+              <li><a class="link" href="#s2">Cài đặt cookie</a></li>
+            </ul>
+            <p class="site-footer__fine">© 2026 Soucean Game</p>
+          </div>
+        </footer>
+      </div></div>
+    </section>
+
+    <section class="spec__cell">
+      <h3 class="spec__cap">Tối · 375 — điều hướng đang đóng</h3>
+      <div class="pane pane--mobile pane--flush" data-theme="dark">
+        <div class="site-header">
+          <a class="skip-link" href="#demo-main-c">Tới nội dung chính</a>
+          <div class="shell site-header__bar">
+            <a class="wordmark" href="#s2">Soucean Game</a>
+            <div class="site-header__actions">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="theme-c"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="theme-c" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+            </div>
+          </div>
+          <nav class="shell" aria-label="Chính">
+            <button class="btn btn--quiet site-nav__toggle" type="button" aria-expanded="false" aria-controls="nav-c"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-menu"/></svg>Menu</button>
+            <ul class="site-nav__list" id="nav-c">
+              <li><a class="site-nav__link" href="#s2" aria-current="page">Trò chơi</a></li>
+              <li><a class="site-nav__link" href="#s2">Bảng xếp hạng</a></li>
+              <li><a class="site-nav__link" href="#s2">Tài khoản</a></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="shell main" id="demo-main-c"><p class="u-flush">Nội dung trang.</p></div>
+        <footer class="site-footer">
+          <div class="shell">
+            <ul class="site-footer__links">
+              <li><a class="link" href="#s2">Giới thiệu</a></li>
+              <li><a class="link" href="#s2">Điều khoản</a></li>
+              <li><a class="link" href="#s2">Quyền riêng tư</a></li>
+              <li><a class="link" href="#s2">Cài đặt cookie</a></li>
+            </ul>
+            <p class="site-footer__fine">© 2026 Soucean Game</p>
+          </div>
+        </footer>
+      </div>
+    </section>
+
+    <section class="spec__cell">
+      <h3 class="spec__cap">Tối · 1280</h3>
+      <div class="spec__scroll"><div class="pane pane--desktop pane--flush" data-theme="dark">
+        <div class="site-header">
+          <a class="skip-link" href="#demo-main-d">Tới nội dung chính</a>
+          <div class="shell site-header__bar">
+            <a class="wordmark" href="#s2">Soucean Game</a>
+            <nav aria-label="Chính">
+              <button class="btn btn--quiet site-nav__toggle" type="button" aria-expanded="false" aria-controls="nav-d"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-menu"/></svg>Menu</button>
+              <ul class="site-nav__list" id="nav-d">
+                <li><a class="site-nav__link" href="#s2" aria-current="page">Trò chơi</a></li>
+                <li><a class="site-nav__link" href="#s2">Bảng xếp hạng</a></li>
+                <li><a class="site-nav__link" href="#s2">Tài khoản</a></li>
+              </ul>
+            </nav>
+            <div class="site-header__actions">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="theme-d"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="theme-d" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+        <div class="shell main" id="demo-main-d"><p class="u-flush">Nội dung trang.</p></div>
+        <footer class="site-footer">
+          <div class="shell">
+            <ul class="site-footer__links">
+              <li><a class="link" href="#s2">Giới thiệu</a></li>
+              <li><a class="link" href="#s2">Điều khoản</a></li>
+              <li><a class="link" href="#s2">Quyền riêng tư</a></li>
+              <li><a class="link" href="#s2">Cài đặt cookie</a></li>
+            </ul>
+            <p class="site-footer__fine">© 2026 Soucean Game</p>
+          </div>
+        </footer>
+      </div></div>
+    </section>
+  </div>
+
+  <p>Hai điều khiển trong header được vẽ lại dưới đây theo <strong>cùng một mô hình
+     trạng thái</strong> như nút ở §3 — mặc định, hover, focus bàn phím, active, disabled —
+     thay vì chỉ xuất hiện một lần ở trạng thái mặc định. Với cả hai,
+     <strong>disabled không áp dụng</strong>; lý do được ghi ngay tại chỗ và đầy đủ trong
+     <code>components.md</code> §5.3. Trạng thái bị bỏ qua và trạng thái không tồn tại là
+     hai chuyện khác nhau, nên chỗ này nói rõ là chuyện thứ hai.</p>
+
+  <div class="spec">
+    <section class="spec__cell">
+      <h3 class="spec__cap">Sáng · 375 — năm trạng thái</h3>
+      <div class="pane pane--mobile">
+        <div class="pane__stack">
+          <p class="u-flush"><strong>Liên kết điều hướng</strong></p>
+          <div class="pane__row">
+            <span class="pane__cell"><a class="site-nav__link" href="#s2">Bảng xếp hạng</a><span class="pane__tag">mặc định</span></span>
+            <span class="pane__cell"><a class="site-nav__link is-hover" href="#s2">Bảng xếp hạng</a><span class="pane__tag">hover</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><a class="site-nav__link is-focus" href="#s2">Bảng xếp hạng</a><span class="pane__tag">focus bàn phím</span></span>
+            <span class="pane__cell"><a class="site-nav__link is-active" href="#s2">Bảng xếp hạng</a><span class="pane__tag">active</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><a class="site-nav__link" href="#s2" aria-current="page">Trò chơi</a><span class="pane__tag">trang hiện tại</span></span>
+            <span class="pane__cell"><a class="site-nav__link is-hover" href="#s2" aria-current="page">Trò chơi</a><span class="pane__tag">trang hiện tại · hover</span></span>
+          </div>
+          <p class="pane__tag"><strong>disabled — không áp dụng.</strong> Một tuyến đường
+             hoặc tồn tại, và là liên kết, hoặc không, và bị bỏ khỏi menu.
+             <code>components.md</code> §5.3.</p>
+
+          <p class="u-flush"><strong>Nút chuyển giao diện</strong></p>
+          <div class="pane__row">
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — mặc định</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="ta1" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="ta1"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">mặc định</span>
+            </span>
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — hover</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="ta2" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option is-hover"><input class="u-visually-hidden" type="radio" name="ta2"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">hover — lựa chọn chưa chọn</span>
+            </span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — focus</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="ta3" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option is-focus"><input class="u-visually-hidden" type="radio" name="ta3"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">focus bàn phím</span>
+            </span>
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — active</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="ta4" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option is-active"><input class="u-visually-hidden" type="radio" name="ta4"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">active</span>
+            </span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — hover trên lựa chọn hiện tại</legend>
+                <label class="theme-toggle__option is-hover"><input class="u-visually-hidden" type="radio" name="ta5" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="ta5"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">hover — lựa chọn đang chọn</span>
+            </span>
+          </div>
+          <p class="pane__tag"><strong>disabled — không áp dụng.</strong> Hai giao diện luôn
+             có sẵn và lựa chọn nằm hoàn toàn trong trình duyệt, nên không có gì đang chạy
+             để làm nó tạm thời không dùng được. <code>components.md</code> §5.3.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="spec__cell">
+      <h3 class="spec__cap">Sáng · 1280 — năm trạng thái</h3>
+      <div class="spec__scroll"><div class="pane pane--desktop">
+        <div class="pane__stack">
+          <p class="u-flush"><strong>Liên kết điều hướng</strong></p>
+          <div class="pane__row">
+            <span class="pane__cell"><a class="site-nav__link" href="#s2">Bảng xếp hạng</a><span class="pane__tag">mặc định</span></span>
+            <span class="pane__cell"><a class="site-nav__link is-hover" href="#s2">Bảng xếp hạng</a><span class="pane__tag">hover</span></span>
+            <span class="pane__cell"><a class="site-nav__link is-focus" href="#s2">Bảng xếp hạng</a><span class="pane__tag">focus bàn phím</span></span>
+            <span class="pane__cell"><a class="site-nav__link is-active" href="#s2">Bảng xếp hạng</a><span class="pane__tag">active</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><a class="site-nav__link" href="#s2" aria-current="page">Trò chơi</a><span class="pane__tag">trang hiện tại</span></span>
+            <span class="pane__cell"><a class="site-nav__link is-hover" href="#s2" aria-current="page">Trò chơi</a><span class="pane__tag">trang hiện tại · hover</span></span>
+            <span class="pane__cell"><a class="site-nav__link is-active" href="#s2" aria-current="page">Trò chơi</a><span class="pane__tag">trang hiện tại · active</span></span>
+          </div>
+          <p class="pane__tag"><strong>disabled — không áp dụng.</strong> Một tuyến đường
+             hoặc tồn tại, và là liên kết, hoặc không, và bị bỏ khỏi menu.
+             <code>components.md</code> §5.3.</p>
+
+          <p class="u-flush"><strong>Nút chuyển giao diện</strong></p>
+          <div class="pane__row">
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — mặc định</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="tb1" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="tb1"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">mặc định</span>
+            </span>
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — hover</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="tb2" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option is-hover"><input class="u-visually-hidden" type="radio" name="tb2"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">hover — lựa chọn chưa chọn</span>
+            </span>
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — focus</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="tb3" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option is-focus"><input class="u-visually-hidden" type="radio" name="tb3"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">focus bàn phím</span>
+            </span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — active</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="tb4" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option is-active"><input class="u-visually-hidden" type="radio" name="tb4"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">active</span>
+            </span>
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — hover trên lựa chọn hiện tại</legend>
+                <label class="theme-toggle__option is-hover"><input class="u-visually-hidden" type="radio" name="tb5" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="tb5"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">hover — lựa chọn đang chọn</span>
+            </span>
+          </div>
+          <p class="pane__tag"><strong>disabled — không áp dụng.</strong> Hai giao diện luôn
+             có sẵn và lựa chọn nằm hoàn toàn trong trình duyệt, nên không có gì đang chạy
+             để làm nó tạm thời không dùng được. <code>components.md</code> §5.3.</p>
+        </div>
+      </div></div>
+    </section>
+
+    <section class="spec__cell">
+      <h3 class="spec__cap">Tối · 375 — năm trạng thái</h3>
+      <div class="pane pane--mobile" data-theme="dark">
+        <div class="pane__stack">
+          <p class="u-flush"><strong>Liên kết điều hướng</strong></p>
+          <div class="pane__row">
+            <span class="pane__cell"><a class="site-nav__link" href="#s2">Bảng xếp hạng</a><span class="pane__tag">mặc định</span></span>
+            <span class="pane__cell"><a class="site-nav__link is-hover" href="#s2">Bảng xếp hạng</a><span class="pane__tag">hover</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><a class="site-nav__link is-focus" href="#s2">Bảng xếp hạng</a><span class="pane__tag">focus bàn phím</span></span>
+            <span class="pane__cell"><a class="site-nav__link is-active" href="#s2">Bảng xếp hạng</a><span class="pane__tag">active</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><a class="site-nav__link" href="#s2" aria-current="page">Trò chơi</a><span class="pane__tag">trang hiện tại</span></span>
+            <span class="pane__cell"><a class="site-nav__link is-hover" href="#s2" aria-current="page">Trò chơi</a><span class="pane__tag">trang hiện tại · hover</span></span>
+          </div>
+          <p class="pane__tag"><strong>disabled — không áp dụng.</strong> Một tuyến đường
+             hoặc tồn tại, và là liên kết, hoặc không, và bị bỏ khỏi menu.
+             <code>components.md</code> §5.3.</p>
+
+          <p class="u-flush"><strong>Nút chuyển giao diện</strong></p>
+          <div class="pane__row">
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — mặc định</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="tc1"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="tc1" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">mặc định</span>
+            </span>
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — hover</legend>
+                <label class="theme-toggle__option is-hover"><input class="u-visually-hidden" type="radio" name="tc2"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="tc2" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">hover — lựa chọn chưa chọn</span>
+            </span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — focus</legend>
+                <label class="theme-toggle__option is-focus"><input class="u-visually-hidden" type="radio" name="tc3"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="tc3" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">focus bàn phím</span>
+            </span>
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — active</legend>
+                <label class="theme-toggle__option is-active"><input class="u-visually-hidden" type="radio" name="tc4"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="tc4" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">active</span>
+            </span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — hover trên lựa chọn hiện tại</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="tc5"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option is-hover"><input class="u-visually-hidden" type="radio" name="tc5" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">hover — lựa chọn đang chọn</span>
+            </span>
+          </div>
+          <p class="pane__tag"><strong>disabled — không áp dụng.</strong> Hai giao diện luôn
+             có sẵn và lựa chọn nằm hoàn toàn trong trình duyệt, nên không có gì đang chạy
+             để làm nó tạm thời không dùng được. <code>components.md</code> §5.3.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="spec__cell">
+      <h3 class="spec__cap">Tối · 1280 — năm trạng thái</h3>
+      <div class="spec__scroll"><div class="pane pane--desktop" data-theme="dark">
+        <div class="pane__stack">
+          <p class="u-flush"><strong>Liên kết điều hướng</strong></p>
+          <div class="pane__row">
+            <span class="pane__cell"><a class="site-nav__link" href="#s2">Bảng xếp hạng</a><span class="pane__tag">mặc định</span></span>
+            <span class="pane__cell"><a class="site-nav__link is-hover" href="#s2">Bảng xếp hạng</a><span class="pane__tag">hover</span></span>
+            <span class="pane__cell"><a class="site-nav__link is-focus" href="#s2">Bảng xếp hạng</a><span class="pane__tag">focus bàn phím</span></span>
+            <span class="pane__cell"><a class="site-nav__link is-active" href="#s2">Bảng xếp hạng</a><span class="pane__tag">active</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><a class="site-nav__link" href="#s2" aria-current="page">Trò chơi</a><span class="pane__tag">trang hiện tại</span></span>
+            <span class="pane__cell"><a class="site-nav__link is-hover" href="#s2" aria-current="page">Trò chơi</a><span class="pane__tag">trang hiện tại · hover</span></span>
+            <span class="pane__cell"><a class="site-nav__link is-active" href="#s2" aria-current="page">Trò chơi</a><span class="pane__tag">trang hiện tại · active</span></span>
+          </div>
+          <p class="pane__tag"><strong>disabled — không áp dụng.</strong> Một tuyến đường
+             hoặc tồn tại, và là liên kết, hoặc không, và bị bỏ khỏi menu.
+             <code>components.md</code> §5.3.</p>
+
+          <p class="u-flush"><strong>Nút chuyển giao diện</strong></p>
+          <div class="pane__row">
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — mặc định</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="td1"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="td1" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">mặc định</span>
+            </span>
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — hover</legend>
+                <label class="theme-toggle__option is-hover"><input class="u-visually-hidden" type="radio" name="td2"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="td2" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">hover — lựa chọn chưa chọn</span>
+            </span>
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — focus</legend>
+                <label class="theme-toggle__option is-focus"><input class="u-visually-hidden" type="radio" name="td3"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="td3" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">focus bàn phím</span>
+            </span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — active</legend>
+                <label class="theme-toggle__option is-active"><input class="u-visually-hidden" type="radio" name="td4"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="td4" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">active</span>
+            </span>
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — hover trên lựa chọn hiện tại</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="td5"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option is-hover"><input class="u-visually-hidden" type="radio" name="td5" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">hover — lựa chọn đang chọn</span>
+            </span>
+          </div>
+          <p class="pane__tag"><strong>disabled — không áp dụng.</strong> Hai giao diện luôn
+             có sẵn và lựa chọn nằm hoàn toàn trong trình duyệt, nên không có gì đang chạy
+             để làm nó tạm thời không dùng được. <code>components.md</code> §5.3.</p>
+        </div>
+      </div></div>
+    </section>
+  </div>
+</section>
+
+
+<!-- ==========================================================================
+     3. NÚT VÀ LIÊN KẾT
+     ========================================================================== -->
+<section class="sheet-section" id="s3">
+  <h2>3. Nút và liên kết</h2>
+  <p>Bốn loại nút, một mô hình trạng thái. Nút <strong>primary</strong> là nút tô đặc duy
+     nhất và chỉ xuất hiện <strong>một lần trên mỗi view</strong>. Với nút viền, tín hiệu
+     hover là <strong>cạnh</strong> — không phải nền — nên hover vẫn thấy được dù nút nằm
+     trên <code>bg</code>, trên <code>surface</code> hay trong một khối trạng thái. Nút
+     <strong>destructive</strong> mang sẵn cạnh đôi ngay ở trạng thái mặc định; lý do nằm ở
+     <code>components.md</code> §6.1.</p>
+
+  <div class="spec">
+    <section class="spec__cell">
+      <h3 class="spec__cap">Sáng · 375</h3>
+      <div class="pane pane--mobile">
+        <div class="pane__stack">
+          <div class="pane__row">
+            <span class="pane__cell"><button class="btn btn--primary" type="button">Chơi</button><span class="pane__tag">primary · mặc định</span></span>
+            <span class="pane__cell"><button class="btn btn--primary is-hover" type="button">Chơi</button><span class="pane__tag">hover</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><button class="btn btn--primary is-focus" type="button">Chơi</button><span class="pane__tag">focus bàn phím</span></span>
+            <span class="pane__cell"><button class="btn btn--primary is-active" type="button">Chơi</button><span class="pane__tag">active</span></span>
+            <span class="pane__cell"><button class="btn btn--primary" type="button" disabled>Chơi</button><span class="pane__tag">disabled</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><button class="btn btn--secondary" type="button">Lưu</button><span class="pane__tag">secondary</span></span>
+            <span class="pane__cell"><button class="btn btn--secondary is-hover" type="button">Lưu</button><span class="pane__tag">hover</span></span>
+            <span class="pane__cell"><button class="btn btn--secondary is-focus" type="button">Lưu</button><span class="pane__tag">focus</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><button class="btn btn--secondary is-active" type="button">Lưu</button><span class="pane__tag">active</span></span>
+            <span class="pane__cell"><button class="btn btn--secondary" type="button" disabled>Lưu</button><span class="pane__tag">disabled</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu</button><span class="pane__tag">destructive</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><button class="btn btn--destructive is-hover" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu</button><span class="pane__tag">hover</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><button class="btn btn--destructive is-focus" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu</button><span class="pane__tag">focus</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><button class="btn btn--destructive is-active" type="button">Xóa dữ liệu</button><span class="pane__tag">active</span></span>
+            <span class="pane__cell"><button class="btn btn--destructive" type="button" disabled>Xóa dữ liệu</button><span class="pane__tag">disabled</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><button class="btn btn--quiet" type="button">Hủy</button><span class="pane__tag">quiet</span></span>
+            <span class="pane__cell"><button class="btn btn--quiet is-hover" type="button">Hủy</button><span class="pane__tag">hover</span></span>
+            <span class="pane__cell"><button class="btn btn--quiet is-focus" type="button">Hủy</button><span class="pane__tag">focus</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><button class="btn btn--quiet is-active" type="button">Hủy</button><span class="pane__tag">active</span></span>
+            <span class="pane__cell"><button class="btn btn--quiet" type="button" disabled>Hủy</button><span class="pane__tag">disabled</span></span>
+            <span class="pane__cell"><button class="btn btn--quiet btn--icon" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-close"/></svg><span class="u-visually-hidden">Đóng</span></button><span class="pane__tag">chỉ biểu tượng</span></span>
+          </div>
+          <p class="u-flush">Liên kết:
+            <a class="link" href="#s3">mặc định</a> ·
+            <a class="link is-hover" href="#s3">hover</a> ·
+            <a class="link is-focus" href="#s3">focus</a> ·
+            <a class="link is-active" href="#s3">active</a> ·
+            <a class="link" aria-disabled="true">disabled</a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="spec__cell">
+      <h3 class="spec__cap">Sáng · 1280</h3>
+      <div class="spec__scroll"><div class="pane pane--desktop">
+        <div class="pane__stack">
+          <div class="pane__row">
+            <span class="pane__cell"><button class="btn btn--primary" type="button">Chơi</button><span class="pane__tag">primary · mặc định</span></span>
+            <span class="pane__cell"><button class="btn btn--primary is-hover" type="button">Chơi</button><span class="pane__tag">hover</span></span>
+            <span class="pane__cell"><button class="btn btn--primary is-focus" type="button">Chơi</button><span class="pane__tag">focus bàn phím</span></span>
+            <span class="pane__cell"><button class="btn btn--primary is-active" type="button">Chơi</button><span class="pane__tag">active</span></span>
+            <span class="pane__cell"><button class="btn btn--primary" type="button" disabled>Chơi</button><span class="pane__tag">disabled</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><button class="btn btn--secondary" type="button">Lưu</button><span class="pane__tag">secondary</span></span>
+            <span class="pane__cell"><button class="btn btn--secondary is-hover" type="button">Lưu</button><span class="pane__tag">hover</span></span>
+            <span class="pane__cell"><button class="btn btn--secondary is-focus" type="button">Lưu</button><span class="pane__tag">focus</span></span>
+            <span class="pane__cell"><button class="btn btn--secondary is-active" type="button">Lưu</button><span class="pane__tag">active</span></span>
+            <span class="pane__cell"><button class="btn btn--secondary" type="button" disabled>Lưu</button><span class="pane__tag">disabled</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu của tôi</button><span class="pane__tag">destructive</span></span>
+            <span class="pane__cell"><button class="btn btn--destructive is-hover" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu của tôi</button><span class="pane__tag">hover</span></span>
+            <span class="pane__cell"><button class="btn btn--destructive is-focus" type="button">Xóa dữ liệu của tôi</button><span class="pane__tag">focus</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><button class="btn btn--destructive is-active" type="button">Xóa dữ liệu của tôi</button><span class="pane__tag">active</span></span>
+            <span class="pane__cell"><button class="btn btn--destructive" type="button" disabled>Xóa dữ liệu của tôi</button><span class="pane__tag">disabled</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><button class="btn btn--quiet" type="button">Hủy</button><span class="pane__tag">quiet</span></span>
+            <span class="pane__cell"><button class="btn btn--quiet is-hover" type="button">Hủy</button><span class="pane__tag">hover</span></span>
+            <span class="pane__cell"><button class="btn btn--quiet is-focus" type="button">Hủy</button><span class="pane__tag">focus</span></span>
+            <span class="pane__cell"><button class="btn btn--quiet is-active" type="button">Hủy</button><span class="pane__tag">active</span></span>
+            <span class="pane__cell"><button class="btn btn--quiet" type="button" disabled>Hủy</button><span class="pane__tag">disabled</span></span>
+            <span class="pane__cell"><button class="btn btn--quiet btn--icon" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-close"/></svg><span class="u-visually-hidden">Đóng</span></button><span class="pane__tag">chỉ biểu tượng</span></span>
+          </div>
+          <p class="u-flush">Liên kết:
+            <a class="link" href="#s3">mặc định</a> ·
+            <a class="link is-hover" href="#s3">hover</a> ·
+            <a class="link is-focus" href="#s3">focus</a> ·
+            <a class="link is-active" href="#s3">active</a> ·
+            <a class="link" aria-disabled="true">disabled</a>
+          </p>
+        </div>
+      </div></div>
+    </section>
+
+    <section class="spec__cell">
+      <h3 class="spec__cap">Tối · 375</h3>
+      <div class="pane pane--mobile" data-theme="dark">
+        <div class="pane__stack">
+          <div class="pane__row">
+            <span class="pane__cell"><button class="btn btn--primary" type="button">Chơi</button><span class="pane__tag">primary</span></span>
+            <span class="pane__cell"><button class="btn btn--primary is-hover" type="button">Chơi</button><span class="pane__tag">hover</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><button class="btn btn--primary is-focus" type="button">Chơi</button><span class="pane__tag">focus</span></span>
+            <span class="pane__cell"><button class="btn btn--primary is-active" type="button">Chơi</button><span class="pane__tag">active</span></span>
+            <span class="pane__cell"><button class="btn btn--primary" type="button" disabled>Chơi</button><span class="pane__tag">disabled</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><button class="btn btn--secondary" type="button">Lưu</button><span class="pane__tag">secondary</span></span>
+            <span class="pane__cell"><button class="btn btn--secondary is-hover" type="button">Lưu</button><span class="pane__tag">hover</span></span>
+            <span class="pane__cell"><button class="btn btn--secondary is-focus" type="button">Lưu</button><span class="pane__tag">focus</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><button class="btn btn--secondary is-active" type="button">Lưu</button><span class="pane__tag">active</span></span>
+            <span class="pane__cell"><button class="btn btn--secondary" type="button" disabled>Lưu</button><span class="pane__tag">disabled</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu</button><span class="pane__tag">destructive</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><button class="btn btn--destructive is-hover" type="button">Xóa dữ liệu</button><span class="pane__tag">hover</span></span>
+            <span class="pane__cell"><button class="btn btn--destructive is-focus" type="button">Xóa dữ liệu</button><span class="pane__tag">focus</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><button class="btn btn--destructive is-active" type="button">Xóa dữ liệu</button><span class="pane__tag">active</span></span>
+            <span class="pane__cell"><button class="btn btn--destructive" type="button" disabled>Xóa dữ liệu</button><span class="pane__tag">disabled</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><button class="btn btn--quiet" type="button">Hủy</button><span class="pane__tag">quiet</span></span>
+            <span class="pane__cell"><button class="btn btn--quiet is-hover" type="button">Hủy</button><span class="pane__tag">hover</span></span>
+            <span class="pane__cell"><button class="btn btn--quiet is-focus" type="button">Hủy</button><span class="pane__tag">focus</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><button class="btn btn--quiet is-active" type="button">Hủy</button><span class="pane__tag">active</span></span>
+            <span class="pane__cell"><button class="btn btn--quiet" type="button" disabled>Hủy</button><span class="pane__tag">disabled</span></span>
+            <span class="pane__cell"><button class="btn btn--quiet btn--icon" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-close"/></svg><span class="u-visually-hidden">Đóng</span></button><span class="pane__tag">biểu tượng</span></span>
+          </div>
+          <p class="u-flush">Liên kết:
+            <a class="link" href="#s3">mặc định</a> ·
+            <a class="link is-hover" href="#s3">hover</a> ·
+            <a class="link is-focus" href="#s3">focus</a> ·
+            <a class="link is-active" href="#s3">active</a> ·
+            <a class="link" aria-disabled="true">disabled</a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="spec__cell">
+      <h3 class="spec__cap">Tối · 1280</h3>
+      <div class="spec__scroll"><div class="pane pane--desktop" data-theme="dark">
+        <div class="pane__stack">
+          <div class="pane__row">
+            <span class="pane__cell"><button class="btn btn--primary" type="button">Chơi</button><span class="pane__tag">primary · mặc định</span></span>
+            <span class="pane__cell"><button class="btn btn--primary is-hover" type="button">Chơi</button><span class="pane__tag">hover</span></span>
+            <span class="pane__cell"><button class="btn btn--primary is-focus" type="button">Chơi</button><span class="pane__tag">focus bàn phím</span></span>
+            <span class="pane__cell"><button class="btn btn--primary is-active" type="button">Chơi</button><span class="pane__tag">active</span></span>
+            <span class="pane__cell"><button class="btn btn--primary" type="button" disabled>Chơi</button><span class="pane__tag">disabled</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><button class="btn btn--secondary" type="button">Lưu</button><span class="pane__tag">secondary</span></span>
+            <span class="pane__cell"><button class="btn btn--secondary is-hover" type="button">Lưu</button><span class="pane__tag">hover</span></span>
+            <span class="pane__cell"><button class="btn btn--secondary is-focus" type="button">Lưu</button><span class="pane__tag">focus</span></span>
+            <span class="pane__cell"><button class="btn btn--secondary is-active" type="button">Lưu</button><span class="pane__tag">active</span></span>
+            <span class="pane__cell"><button class="btn btn--secondary" type="button" disabled>Lưu</button><span class="pane__tag">disabled</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu của tôi</button><span class="pane__tag">destructive</span></span>
+            <span class="pane__cell"><button class="btn btn--destructive is-hover" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa dữ liệu của tôi</button><span class="pane__tag">hover</span></span>
+            <span class="pane__cell"><button class="btn btn--destructive is-focus" type="button">Xóa dữ liệu của tôi</button><span class="pane__tag">focus</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><button class="btn btn--destructive is-active" type="button">Xóa dữ liệu của tôi</button><span class="pane__tag">active</span></span>
+            <span class="pane__cell"><button class="btn btn--destructive" type="button" disabled>Xóa dữ liệu của tôi</button><span class="pane__tag">disabled</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><button class="btn btn--quiet" type="button">Hủy</button><span class="pane__tag">quiet</span></span>
+            <span class="pane__cell"><button class="btn btn--quiet is-hover" type="button">Hủy</button><span class="pane__tag">hover</span></span>
+            <span class="pane__cell"><button class="btn btn--quiet is-focus" type="button">Hủy</button><span class="pane__tag">focus</span></span>
+            <span class="pane__cell"><button class="btn btn--quiet is-active" type="button">Hủy</button><span class="pane__tag">active</span></span>
+            <span class="pane__cell"><button class="btn btn--quiet" type="button" disabled>Hủy</button><span class="pane__tag">disabled</span></span>
+            <span class="pane__cell"><button class="btn btn--quiet btn--icon" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-close"/></svg><span class="u-visually-hidden">Đóng</span></button><span class="pane__tag">chỉ biểu tượng</span></span>
+          </div>
+          <p class="u-flush">Liên kết:
+            <a class="link" href="#s3">mặc định</a> ·
+            <a class="link is-hover" href="#s3">hover</a> ·
+            <a class="link is-focus" href="#s3">focus</a> ·
+            <a class="link is-active" href="#s3">active</a> ·
+            <a class="link" aria-disabled="true">disabled</a>
+          </p>
+        </div>
+      </div></div>
+    </section>
+  </div>
+</section>
+
+
+<!-- ==========================================================================
+     4. THẺ TRÒ CHƠI
+     ========================================================================== -->
+<section class="sheet-section" id="s4">
+  <h2>4. Thẻ trò chơi và lưới</h2>
+  <p><strong>Một điểm dừng Tab trên mỗi thẻ.</strong> Nút "Chơi" là điều khiển duy nhất
+     của thẻ, và vùng bấm của nó phủ toàn bộ thẻ — con trỏ bấm đâu cũng được, còn người
+     dùng bàn phím gặp <em>một</em> điều khiển cho mỗi trò chơi thay vì ba. Vòng focus được
+     vẽ quanh <em>cả thẻ</em>, vì cả thẻ mới là thứ sẽ kích hoạt. Nút là
+     <code>.btn--secondary</code>, không phải primary: một lưới toàn những thứ ngang hàng
+     thì không có hành động primary nào cả. Lý do đầy đủ ở <code>components.md</code> §6.2.</p>
+  <p>Dải "top 3" bên trong thẻ là dữ liệu nền tảng chứ không phải manifest, nên nó là phần
+     duy nhất của thẻ có đủ ba trạng thái (§9). Ảnh thu nhỏ giữ sẵn tỉ lệ 16:9 để lưới
+     không nhảy khi ảnh về.</p>
+
+  <div class="spec">
+    <section class="spec__cell">
+      <h3 class="spec__cap">Sáng · 375 — mặc định, hover, focus</h3>
+      <div class="pane pane--mobile">
+        <ul class="game-grid">
+          <li class="game-card">
+            <div class="game-card__art"></div>
+            <h4 class="game-card__title">Xếp gạch cổ điển</h4>
+            <p class="game-card__desc">Xoay và xếp khối rơi cho kín hàng.</p>
+            <p class="game-card__meta">Điều khiển: phím mũi tên · chạm</p>
+            <dl class="game-card__top3">
+              <dt>Top 3 tuần này</dt>
+              <dd><span>1. Minh</span><span>12.480</span></dd>
+              <dd><span>2. Hà</span><span>11.905</span></dd>
+              <dd><span>3. Quân</span><span>10.740</span></dd>
+            </dl>
+            <p class="game-card__action"><a class="btn btn--secondary btn--block" href="#s4"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-play"/></svg>Chơi<span class="u-visually-hidden"> Xếp gạch cổ điển</span></a></p>
+          </li>
+          <li class="game-card">
+            <div class="game-card__art"></div>
+            <h4 class="game-card__title">Đố chữ mỗi ngày</h4>
+            <p class="game-card__desc">Một câu đố mới mỗi sáng.</p>
+            <p class="game-card__meta">Điều khiển: bàn phím</p>
+            <dl class="game-card__top3">
+              <dt>Top 3 tuần này</dt>
+              <dd><span>1. Lan</span><span>980</span></dd>
+              <dd><span>2. Trí</span><span>930</span></dd>
+              <dd><span>3. Vy</span><span>905</span></dd>
+            </dl>
+            <p class="game-card__action"><a class="btn btn--secondary btn--block is-hover" href="#s4">Chơi<span class="u-visually-hidden"> Đố chữ mỗi ngày</span></a></p>
+          </li>
+          <li class="game-card is-focus">
+            <div class="game-card__art"></div>
+            <h4 class="game-card__title">Dò mìn</h4>
+            <p class="game-card__desc">Cẩn thận từng ô một.</p>
+            <p class="game-card__meta">Điều khiển: chuột · chạm</p>
+            <dl class="game-card__top3">
+              <dt>Top 3 tuần này</dt>
+              <dd><span>1. Duy</span><span>640</span></dd>
+              <dd><span>2. Mai</span><span>602</span></dd>
+              <dd><span>3. Sơn</span><span>588</span></dd>
+            </dl>
+            <p class="game-card__action"><a class="btn btn--secondary btn--block" href="#s4">Chơi<span class="u-visually-hidden"> Dò mìn</span></a></p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="spec__cell">
+      <h3 class="spec__cap">Sáng · 1280 — ba cột, khoảng cách 32 px</h3>
+      <div class="spec__scroll"><div class="pane pane--desktop">
+        <ul class="game-grid">
+          <li class="game-card">
+            <div class="game-card__art"></div>
+            <h4 class="game-card__title">Xếp gạch cổ điển</h4>
+            <p class="game-card__desc">Xoay và xếp khối rơi cho kín hàng.</p>
+            <p class="game-card__meta">Điều khiển: phím mũi tên · chạm</p>
+            <dl class="game-card__top3">
+              <dt>Top 3 tuần này</dt>
+              <dd><span>1. Minh</span><span>12.480</span></dd>
+              <dd><span>2. Hà</span><span>11.905</span></dd>
+              <dd><span>3. Quân</span><span>10.740</span></dd>
+            </dl>
+            <p class="game-card__action"><a class="btn btn--secondary btn--block" href="#s4"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-play"/></svg>Chơi<span class="u-visually-hidden"> Xếp gạch cổ điển</span></a></p>
+          </li>
+          <li class="game-card">
+            <div class="game-card__art"></div>
+            <h4 class="game-card__title">Đố chữ mỗi ngày</h4>
+            <p class="game-card__desc">Một câu đố mới mỗi sáng.</p>
+            <p class="game-card__meta">Điều khiển: bàn phím</p>
+            <dl class="game-card__top3">
+              <dt>Top 3 tuần này</dt>
+              <dd><span>1. Lan</span><span>980</span></dd>
+              <dd><span>2. Trí</span><span>930</span></dd>
+              <dd><span>3. Vy</span><span>905</span></dd>
+            </dl>
+            <p class="game-card__action"><a class="btn btn--secondary btn--block is-hover" href="#s4">Chơi<span class="u-visually-hidden"> Đố chữ mỗi ngày</span></a></p>
+          </li>
+          <li class="game-card is-focus">
+            <div class="game-card__art"></div>
+            <h4 class="game-card__title">Dò mìn</h4>
+            <p class="game-card__desc">Cẩn thận từng ô một.</p>
+            <p class="game-card__meta">Điều khiển: chuột · chạm</p>
+            <dl class="game-card__top3">
+              <dt>Top 3 tuần này</dt>
+              <dd><span>1. Duy</span><span>640</span></dd>
+              <dd><span>2. Mai</span><span>602</span></dd>
+              <dd><span>3. Sơn</span><span>588</span></dd>
+            </dl>
+            <p class="game-card__action"><a class="btn btn--secondary btn--block" href="#s4">Chơi<span class="u-visually-hidden"> Dò mìn</span></a></p>
+          </li>
+        </ul>
+      </div></div>
+    </section>
+
+    <section class="spec__cell">
+      <h3 class="spec__cap">Tối · 375</h3>
+      <div class="pane pane--mobile" data-theme="dark">
+        <ul class="game-grid">
+          <li class="game-card">
+            <div class="game-card__art"></div>
+            <h4 class="game-card__title">Xếp gạch cổ điển</h4>
+            <p class="game-card__desc">Xoay và xếp khối rơi cho kín hàng.</p>
+            <p class="game-card__meta">Điều khiển: phím mũi tên · chạm</p>
+            <dl class="game-card__top3">
+              <dt>Top 3 tuần này</dt>
+              <dd><span>1. Minh</span><span>12.480</span></dd>
+              <dd><span>2. Hà</span><span>11.905</span></dd>
+              <dd><span>3. Quân</span><span>10.740</span></dd>
+            </dl>
+            <p class="game-card__action"><a class="btn btn--secondary btn--block" href="#s4"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-play"/></svg>Chơi<span class="u-visually-hidden"> Xếp gạch cổ điển</span></a></p>
+          </li>
+          <li class="game-card is-focus">
+            <div class="game-card__art"></div>
+            <h4 class="game-card__title">Đố chữ mỗi ngày</h4>
+            <p class="game-card__desc">Một câu đố mới mỗi sáng.</p>
+            <p class="game-card__meta">Điều khiển: bàn phím</p>
+            <dl class="game-card__top3">
+              <dt>Top 3 tuần này</dt>
+              <dd><span>1. Lan</span><span>980</span></dd>
+              <dd><span>2. Trí</span><span>930</span></dd>
+              <dd><span>3. Vy</span><span>905</span></dd>
+            </dl>
+            <p class="game-card__action"><a class="btn btn--secondary btn--block" href="#s4">Chơi<span class="u-visually-hidden"> Đố chữ mỗi ngày</span></a></p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="spec__cell">
+      <h3 class="spec__cap">Tối · 1280</h3>
+      <div class="spec__scroll"><div class="pane pane--desktop" data-theme="dark">
+        <ul class="game-grid">
+          <li class="game-card">
+            <div class="game-card__art"></div>
+            <h4 class="game-card__title">Xếp gạch cổ điển</h4>
+            <p class="game-card__desc">Xoay và xếp khối rơi cho kín hàng.</p>
+            <p class="game-card__meta">Điều khiển: phím mũi tên · chạm</p>
+            <dl class="game-card__top3">
+              <dt>Top 3 tuần này</dt>
+              <dd><span>1. Minh</span><span>12.480</span></dd>
+              <dd><span>2. Hà</span><span>11.905</span></dd>
+              <dd><span>3. Quân</span><span>10.740</span></dd>
+            </dl>
+            <p class="game-card__action"><a class="btn btn--secondary btn--block" href="#s4"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-play"/></svg>Chơi<span class="u-visually-hidden"> Xếp gạch cổ điển</span></a></p>
+          </li>
+          <li class="game-card">
+            <div class="game-card__art"></div>
+            <h4 class="game-card__title">Đố chữ mỗi ngày</h4>
+            <p class="game-card__desc">Một câu đố mới mỗi sáng.</p>
+            <p class="game-card__meta">Điều khiển: bàn phím</p>
+            <dl class="game-card__top3">
+              <dt>Top 3 tuần này</dt>
+              <dd><span>1. Lan</span><span>980</span></dd>
+              <dd><span>2. Trí</span><span>930</span></dd>
+              <dd><span>3. Vy</span><span>905</span></dd>
+            </dl>
+            <p class="game-card__action"><a class="btn btn--secondary btn--block is-hover" href="#s4">Chơi<span class="u-visually-hidden"> Đố chữ mỗi ngày</span></a></p>
+          </li>
+          <li class="game-card is-focus">
+            <div class="game-card__art"></div>
+            <h4 class="game-card__title">Dò mìn</h4>
+            <p class="game-card__desc">Cẩn thận từng ô một.</p>
+            <p class="game-card__meta">Điều khiển: chuột · chạm</p>
+            <dl class="game-card__top3">
+              <dt>Top 3 tuần này</dt>
+              <dd><span>1. Duy</span><span>640</span></dd>
+              <dd><span>2. Mai</span><span>602</span></dd>
+              <dd><span>3. Sơn</span><span>588</span></dd>
+            </dl>
+            <p class="game-card__action"><a class="btn btn--secondary btn--block" href="#s4">Chơi<span class="u-visually-hidden"> Dò mìn</span></a></p>
+          </li>
+        </ul>
+      </div></div>
+    </section>
+  </div>
+</section>
+
+
+<!-- ==========================================================================
+     5. BẢNG XẾP HẠNG
+     ========================================================================== -->
+<section class="sheet-section" id="s5">
+  <h2>5. Bảng xếp hạng và bộ chọn kỳ</h2>
+  <p>Hàng của chính người chơi được đánh dấu bằng <strong>bốn</strong> tín hiệu: viền dày
+     hơn, chữ đậm hơn, nền <code>sunken</code>, và <strong>chữ "Bạn"</strong> nằm trong
+     chính hàng đó. Không có tín hiệu nào là màu đơn thuần.</p>
+  <p>Bộ chọn kỳ là <strong>các liên kết tới route thật</strong>, không phải widget tab bằng
+     JavaScript — M1-03 §4.3 nói rõ như vậy. Vì thế Tab đi qua từng mục và <em>không</em>
+     có roving tabindex: đó là mẫu của <code>role="tablist"</code>, mà đây không phải.
+     Một lưu ý về phạm vi nằm ở <code>components.md</code> §6.3.</p>
+
+  <div class="spec">
+    <section class="spec__cell">
+      <h3 class="spec__cap">Sáng · 375</h3>
+      <div class="pane pane--mobile">
+        <div class="pane__stack">
+          <ul class="segmented">
+            <li><a class="segmented__link" href="#s5" aria-current="page">Tuần này</a></li>
+            <li><a class="segmented__link is-hover" href="#s5">Tuần trước</a></li>
+            <li><a class="segmented__link is-focus" href="#s5">Mọi thời</a></li>
+          </ul>
+          <p class="pane__tag">đang chọn · hover · focus — và active/disabled ở tấm 1280</p>
+          <p class="u-flush"><span class="badge">Tuần 45 · từ 03/11</span></p>
+          <table class="board">
+            <caption>Bảng tuần này</caption>
+            <thead><tr><th scope="col">Hạng</th><th scope="col">Người chơi</th><th scope="col" class="board__score">Điểm</th></tr></thead>
+            <tbody>
+              <tr><td class="board__rank">1</td><td>Minh</td><td class="board__score">12.480</td></tr>
+              <tr><td class="board__rank">2</td><td>Hà</td><td class="board__score">11.905</td></tr>
+              <tr class="board__row--own"><td class="board__rank">3</td><td>Quân<span class="board__you">· Bạn</span></td><td class="board__score">10.740</td></tr>
+              <tr><td class="board__rank">4</td><td>Lan</td><td class="board__score">9.880</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="spec__cell">
+      <h3 class="spec__cap">Sáng · 1280</h3>
+      <div class="spec__scroll"><div class="pane pane--desktop">
+        <div class="pane__stack">
+          <ul class="segmented">
+            <li><a class="segmented__link" href="#s5" aria-current="page">Tuần này</a></li>
+            <li><a class="segmented__link" href="#s5">Tuần trước</a></li>
+            <li><a class="segmented__link is-hover" href="#s5">Hover</a></li>
+            <li><a class="segmented__link is-focus" href="#s5">Focus</a></li>
+            <li><a class="segmented__link is-active" href="#s5">Active</a></li>
+            <li><a class="segmented__link" aria-disabled="true">Disabled</a></li>
+          </ul>
+          <p class="u-flush"><span class="badge">Tuần 45 · từ 03/11</span></p>
+          <table class="board">
+            <caption>Bảng tuần này</caption>
+            <thead><tr><th scope="col">Hạng</th><th scope="col">Người chơi</th><th scope="col" class="board__score">Điểm</th></tr></thead>
+            <tbody>
+              <tr><td class="board__rank">1</td><td>Minh</td><td class="board__score">12.480</td></tr>
+              <tr><td class="board__rank">2</td><td>Hà</td><td class="board__score">11.905</td></tr>
+              <tr class="board__row--own"><td class="board__rank">3</td><td>Quân<span class="board__you">· Bạn</span></td><td class="board__score">10.740</td></tr>
+              <tr><td class="board__rank">4</td><td>Lan</td><td class="board__score">9.880</td></tr>
+              <tr><td class="board__rank">5</td><td>Trí</td><td class="board__score">9.410</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div></div>
+    </section>
+
+    <section class="spec__cell">
+      <h3 class="spec__cap">Tối · 375</h3>
+      <div class="pane pane--mobile" data-theme="dark">
+        <div class="pane__stack">
+          <ul class="segmented">
+            <li><a class="segmented__link" href="#s5" aria-current="page">Tuần này</a></li>
+            <li><a class="segmented__link is-hover" href="#s5">Tuần trước</a></li>
+            <li><a class="segmented__link is-focus" href="#s5">Mọi thời</a></li>
+          </ul>
+          <p class="u-flush"><span class="badge">Tuần 45 · từ 03/11</span></p>
+          <table class="board">
+            <caption>Bảng tuần này</caption>
+            <thead><tr><th scope="col">Hạng</th><th scope="col">Người chơi</th><th scope="col" class="board__score">Điểm</th></tr></thead>
+            <tbody>
+              <tr><td class="board__rank">1</td><td>Minh</td><td class="board__score">12.480</td></tr>
+              <tr><td class="board__rank">2</td><td>Hà</td><td class="board__score">11.905</td></tr>
+              <tr class="board__row--own"><td class="board__rank">3</td><td>Quân<span class="board__you">· Bạn</span></td><td class="board__score">10.740</td></tr>
+              <tr><td class="board__rank">4</td><td>Lan</td><td class="board__score">9.880</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="spec__cell">
+      <h3 class="spec__cap">Tối · 1280</h3>
+      <div class="spec__scroll"><div class="pane pane--desktop" data-theme="dark">
+        <div class="pane__stack">
+          <ul class="segmented">
+            <li><a class="segmented__link" href="#s5" aria-current="page">Tuần này</a></li>
+            <li><a class="segmented__link" href="#s5">Tuần trước</a></li>
+            <li><a class="segmented__link is-hover" href="#s5">Hover</a></li>
+            <li><a class="segmented__link is-focus" href="#s5">Focus</a></li>
+            <li><a class="segmented__link is-active" href="#s5">Active</a></li>
+            <li><a class="segmented__link" aria-disabled="true">Disabled</a></li>
+          </ul>
+          <p class="u-flush"><span class="badge">Tuần 45 · từ 03/11</span></p>
+          <table class="board">
+            <caption>Bảng tuần này</caption>
+            <thead><tr><th scope="col">Hạng</th><th scope="col">Người chơi</th><th scope="col" class="board__score">Điểm</th></tr></thead>
+            <tbody>
+              <tr><td class="board__rank">1</td><td>Minh</td><td class="board__score">12.480</td></tr>
+              <tr><td class="board__rank">2</td><td>Hà</td><td class="board__score">11.905</td></tr>
+              <tr class="board__row--own"><td class="board__rank">3</td><td>Quân<span class="board__you">· Bạn</span></td><td class="board__score">10.740</td></tr>
+              <tr><td class="board__rank">4</td><td>Lan</td><td class="board__score">9.880</td></tr>
+              <tr><td class="board__rank">5</td><td>Trí</td><td class="board__score">9.410</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div></div>
+    </section>
+  </div>
+</section>
+
+
+<!-- ==========================================================================
+     6. TRƯỜNG BIỂU MẪU
+     ========================================================================== -->
+<section class="sheet-section" id="s6">
+  <h2>6. Trường biểu mẫu</h2>
+  <p>Nhãn luôn <strong>nhìn thấy được</strong>, không bao giờ chỉ là placeholder. Chữ trợ
+     giúp và chữ lỗi nằm <strong>dưới</strong> ô nhập và cùng được
+     <code>aria-describedby</code> trỏ tới, nên cả hai đều được đọc lên cùng ô. Trạng thái
+     lỗi do <code>aria-invalid</code> điều khiển, nên hình ảnh và lời đọc không thể lệch
+     nhau. Lỗi mang biểu tượng <em>và</em> chữ, không chỉ màu.</p>
+
+  <div class="spec">
+    <section class="spec__cell">
+      <h3 class="spec__cap">Sáng · 375</h3>
+      <div class="pane pane--mobile">
+        <div class="pane__stack pane__stack--fill">
+          <div class="field">
+            <label class="field__label" for="n1">Tên hiển thị <span class="field__opt">(không bắt buộc)</span></label>
+            <input id="n1" name="n1" type="text" value="Quân" aria-describedby="h1t">
+            <p class="field__help" id="h1t">2–20 ký tự. Tên hiển thị được kiểm duyệt.</p>
+          </div>
+          <div class="field">
+            <label class="field__label" for="n2">Tên hiển thị</label>
+            <input id="n2" name="n2" type="text" value="!!!" aria-invalid="true" aria-describedby="h2t e2t">
+            <p class="field__help" id="h2t">2–20 ký tự.</p>
+            <p class="field__error" id="e2t"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-error"/></svg><span><strong>Lỗi:</strong> tên này không được chấp nhận. Hãy dùng chữ và số.</span></p>
+          </div>
+          <div class="field">
+            <label class="field__label" for="n3">Trò chơi</label>
+            <select id="n3" name="n3"><option>Xếp gạch cổ điển</option><option>Đố chữ mỗi ngày</option></select>
+          </div>
+          <div class="field">
+            <label class="field__label" for="n4">Tên hiển thị</label>
+            <input id="n4" name="n4" type="text" value="Đang lưu…" disabled>
+            <p class="field__help">disabled</p>
+          </div>
+          <div class="choice"><input id="c1" type="checkbox" checked disabled><label for="c1">Thiết yếu (luôn bật)</label></div>
+          <div class="choice"><input id="c2" type="checkbox"><label for="c2">Quảng cáo</label></div>
+          <div class="choice"><input id="r1" type="radio" name="r" checked><label for="r1">Giao diện sáng</label></div>
+          <div class="choice"><input id="r2" type="radio" name="r"><label for="r2">Giao diện tối</label></div>
+          <div class="error-summary" tabindex="-1">
+            <h4 class="error-summary__title"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>Có 1 lỗi cần sửa</h4>
+            <ul><li><a class="link" href="#n2">Tên hiển thị: tên này không được chấp nhận.</a></li></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="spec__cell">
+      <h3 class="spec__cap">Sáng · 1280</h3>
+      <div class="spec__scroll"><div class="pane pane--desktop">
+        <div class="pane__stack pane__stack--measure">
+          <div class="field">
+            <label class="field__label" for="n5">Tên hiển thị <span class="field__opt">(không bắt buộc)</span></label>
+            <input id="n5" name="n5" type="text" value="Quân" aria-describedby="h5t">
+            <p class="field__help" id="h5t">2–20 ký tự. Tên hiển thị được kiểm duyệt.</p>
+          </div>
+          <div class="field">
+            <label class="field__label" for="n6">Tên hiển thị</label>
+            <input id="n6" name="n6" type="text" value="!!!" aria-invalid="true" aria-describedby="h6t e6t">
+            <p class="field__help" id="h6t">2–20 ký tự.</p>
+            <p class="field__error" id="e6t"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-error"/></svg><span><strong>Lỗi:</strong> tên này không được chấp nhận. Hãy dùng chữ và số.</span></p>
+          </div>
+          <div class="field">
+            <label class="field__label" for="n7">Trò chơi</label>
+            <select id="n7" name="n7"><option>Xếp gạch cổ điển</option><option>Đố chữ mỗi ngày</option></select>
+          </div>
+          <div class="field">
+            <label class="field__label" for="n8">Tên hiển thị</label>
+            <input id="n8" name="n8" type="text" value="Đang lưu…" disabled>
+            <p class="field__help">disabled</p>
+          </div>
+          <div class="choice"><input id="c3" type="checkbox" checked disabled><label for="c3">Thiết yếu (luôn bật)</label></div>
+          <div class="choice"><input id="c4" type="checkbox"><label for="c4">Quảng cáo</label></div>
+          <div class="choice"><input id="r3" type="radio" name="r2" checked><label for="r3">Giao diện sáng</label></div>
+          <div class="choice"><input id="r4" type="radio" name="r2"><label for="r4">Giao diện tối</label></div>
+          <div class="error-summary" tabindex="-1">
+            <h4 class="error-summary__title"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>Có 1 lỗi cần sửa</h4>
+            <ul><li><a class="link" href="#n6">Tên hiển thị: tên này không được chấp nhận.</a></li></ul>
+          </div>
+        </div>
+      </div></div>
+    </section>
+
+    <section class="spec__cell">
+      <h3 class="spec__cap">Tối · 375</h3>
+      <div class="pane pane--mobile" data-theme="dark">
+        <div class="pane__stack pane__stack--fill">
+          <div class="field">
+            <label class="field__label" for="n9">Tên hiển thị <span class="field__opt">(không bắt buộc)</span></label>
+            <input id="n9" name="n9" type="text" value="Quân" aria-describedby="h9t">
+            <p class="field__help" id="h9t">2–20 ký tự. Tên hiển thị được kiểm duyệt.</p>
+          </div>
+          <div class="field">
+            <label class="field__label" for="n10">Tên hiển thị</label>
+            <input id="n10" name="n10" type="text" value="!!!" aria-invalid="true" aria-describedby="e10t">
+            <p class="field__error" id="e10t"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-error"/></svg><span><strong>Lỗi:</strong> tên này không được chấp nhận.</span></p>
+          </div>
+          <div class="field">
+            <label class="field__label" for="n11">Trò chơi</label>
+            <select id="n11" name="n11"><option>Xếp gạch cổ điển</option><option>Đố chữ mỗi ngày</option></select>
+          </div>
+          <div class="field">
+            <label class="field__label" for="n12">Tên hiển thị</label>
+            <input id="n12" name="n12" type="text" value="Đang lưu…" disabled>
+            <p class="field__help">disabled</p>
+          </div>
+          <div class="choice"><input id="c5" type="checkbox" checked disabled><label for="c5">Thiết yếu (luôn bật)</label></div>
+          <div class="choice"><input id="c6" type="checkbox"><label for="c6">Quảng cáo</label></div>
+          <div class="error-summary" tabindex="-1">
+            <h4 class="error-summary__title"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>Có 1 lỗi cần sửa</h4>
+            <ul><li><a class="link" href="#n10">Tên hiển thị: tên này không được chấp nhận.</a></li></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="spec__cell">
+      <h3 class="spec__cap">Tối · 1280</h3>
+      <div class="spec__scroll"><div class="pane pane--desktop" data-theme="dark">
+        <div class="pane__stack pane__stack--measure">
+          <div class="field">
+            <label class="field__label" for="n13">Tên hiển thị <span class="field__opt">(không bắt buộc)</span></label>
+            <input id="n13" name="n13" type="text" value="Quân" aria-describedby="h13t">
+            <p class="field__help" id="h13t">2–20 ký tự. Tên hiển thị được kiểm duyệt.</p>
+          </div>
+          <div class="field">
+            <label class="field__label" for="n14">Tên hiển thị</label>
+            <input id="n14" name="n14" type="text" value="!!!" aria-invalid="true" aria-describedby="h14t e14t">
+            <p class="field__help" id="h14t">2–20 ký tự.</p>
+            <p class="field__error" id="e14t"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-error"/></svg><span><strong>Lỗi:</strong> tên này không được chấp nhận. Hãy dùng chữ và số.</span></p>
+          </div>
+          <div class="field">
+            <label class="field__label" for="n15">Trò chơi</label>
+            <select id="n15" name="n15"><option>Xếp gạch cổ điển</option><option>Đố chữ mỗi ngày</option></select>
+          </div>
+          <div class="field">
+            <label class="field__label" for="n16">Tên hiển thị</label>
+            <input id="n16" name="n16" type="text" value="Đang lưu…" disabled>
+            <p class="field__help">disabled</p>
+          </div>
+          <div class="choice"><input id="c7" type="checkbox" checked disabled><label for="c7">Thiết yếu (luôn bật)</label></div>
+          <div class="choice"><input id="c8" type="checkbox"><label for="c8">Quảng cáo</label></div>
+          <div class="choice"><input id="r5" type="radio" name="r3" checked><label for="r5">Giao diện sáng</label></div>
+          <div class="choice"><input id="r6" type="radio" name="r3"><label for="r6">Giao diện tối</label></div>
+          <div class="error-summary" tabindex="-1">
+            <h4 class="error-summary__title"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>Có 1 lỗi cần sửa</h4>
+            <ul><li><a class="link" href="#n14">Tên hiển thị: tên này không được chấp nhận.</a></li></ul>
+          </div>
+        </div>
+      </div></div>
+    </section>
+  </div>
+</section>
+
+
+<!-- ==========================================================================
+     7. THÔNG BÁO NỘI TUYẾN
+     ========================================================================== -->
+<section class="sheet-section" id="s7">
+  <h2>7. Thông báo nội tuyến — thông tin, thành công, cảnh báo, lỗi</h2>
+  <p>Một vỏ, bốn ý nghĩa. Vỏ <strong>tự mang nền <code>bg</code> của nó</strong>, kể cả khi
+     nằm trong thẻ — đó là "quy tắc nền" ở đầu <code>components.css</code>: nó giữ mọi cặp
+     màu nằm trong tập mà <code>DESIGN.md</code> đã đo. Mỗi thông báo mang
+     <strong>biểu tượng và một từ</strong> chứ không chỉ màu.</p>
+
+  <div class="spec">
+    <section class="spec__cell">
+      <h3 class="spec__cap">Sáng · 375</h3>
+      <div class="pane pane--mobile">
+        <div class="pane__stack pane__stack--fill">
+          <div class="notice notice--info"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-info"/></svg><div class="notice__body"><p class="notice__title">Thông tin</p><p class="notice__text">Tuần mới bắt đầu lúc 00:00 thứ Hai (UTC+7).</p></div></div>
+          <div class="notice notice--success" role="status"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-success"/></svg><div class="notice__body"><p class="notice__title">Thành công</p><p class="notice__text">Đã lưu tên hiển thị.</p></div></div>
+          <div class="notice notice--warning"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-warning"/></svg><div class="notice__body"><p class="notice__title">Cảnh báo</p><p class="notice__text">Trò chơi này cần JavaScript để chạy.</p></div></div>
+          <div class="notice notice--error" role="alert"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg><div class="notice__body"><p class="notice__title">Lỗi</p><p class="notice__text">Không lưu được. Kiểm tra kết nối rồi thử lại.</p></div></div>
+          <div class="card"><p class="spec__cap">Trong một thẻ:</p><div class="notice notice--success"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-success"/></svg><div class="notice__body"><p class="notice__title">Thành công</p><p class="notice__text">Vỏ vẫn tự mang nền của nó.</p></div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="spec__cell">
+      <h3 class="spec__cap">Sáng · 1280</h3>
+      <div class="spec__scroll"><div class="pane pane--desktop">
+        <div class="pane__stack pane__stack--measure">
+          <div class="notice notice--info"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-info"/></svg><div class="notice__body"><p class="notice__title">Thông tin</p><p class="notice__text">Tuần mới bắt đầu lúc 00:00 thứ Hai (UTC+7).</p></div></div>
+          <div class="notice notice--success" role="status"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-success"/></svg><div class="notice__body"><p class="notice__title">Thành công</p><p class="notice__text">Đã lưu tên hiển thị.</p></div></div>
+          <div class="notice notice--warning"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-warning"/></svg><div class="notice__body"><p class="notice__title">Cảnh báo</p><p class="notice__text">Trò chơi này cần JavaScript để chạy.</p></div></div>
+          <div class="notice notice--error" role="alert"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg><div class="notice__body"><p class="notice__title">Lỗi</p><p class="notice__text">Không lưu được. Kiểm tra kết nối rồi thử lại.</p></div></div>
+          <div class="card"><p class="spec__cap">Trong một thẻ:</p><div class="notice notice--success"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-success"/></svg><div class="notice__body"><p class="notice__title">Thành công</p><p class="notice__text">Vỏ vẫn tự mang nền của nó.</p></div></div></div>
+        </div>
+      </div></div>
+    </section>
+
+    <section class="spec__cell">
+      <h3 class="spec__cap">Tối · 375</h3>
+      <div class="pane pane--mobile" data-theme="dark">
+        <div class="pane__stack pane__stack--fill">
+          <div class="notice notice--info"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-info"/></svg><div class="notice__body"><p class="notice__title">Thông tin</p><p class="notice__text">Tuần mới bắt đầu lúc 00:00 thứ Hai (UTC+7).</p></div></div>
+          <div class="notice notice--success" role="status"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-success"/></svg><div class="notice__body"><p class="notice__title">Thành công</p><p class="notice__text">Đã lưu tên hiển thị.</p></div></div>
+          <div class="notice notice--warning"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-warning"/></svg><div class="notice__body"><p class="notice__title">Cảnh báo</p><p class="notice__text">Trò chơi này cần JavaScript để chạy.</p></div></div>
+          <div class="notice notice--error" role="alert"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg><div class="notice__body"><p class="notice__title">Lỗi</p><p class="notice__text">Không lưu được. Kiểm tra kết nối rồi thử lại.</p></div></div>
+          <div class="card"><p class="spec__cap">Trong một thẻ:</p><div class="notice notice--success"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-success"/></svg><div class="notice__body"><p class="notice__title">Thành công</p><p class="notice__text">Vỏ vẫn tự mang nền của nó.</p></div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="spec__cell">
+      <h3 class="spec__cap">Tối · 1280</h3>
+      <div class="spec__scroll"><div class="pane pane--desktop" data-theme="dark">
+        <div class="pane__stack pane__stack--measure">
+          <div class="notice notice--info"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-info"/></svg><div class="notice__body"><p class="notice__title">Thông tin</p><p class="notice__text">Tuần mới bắt đầu lúc 00:00 thứ Hai (UTC+7).</p></div></div>
+          <div class="notice notice--success" role="status"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-success"/></svg><div class="notice__body"><p class="notice__title">Thành công</p><p class="notice__text">Đã lưu tên hiển thị.</p></div></div>
+          <div class="notice notice--warning"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-warning"/></svg><div class="notice__body"><p class="notice__title">Cảnh báo</p><p class="notice__text">Trò chơi này cần JavaScript để chạy.</p></div></div>
+          <div class="notice notice--error" role="alert"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg><div class="notice__body"><p class="notice__title">Lỗi</p><p class="notice__text">Không lưu được. Kiểm tra kết nối rồi thử lại.</p></div></div>
+          <div class="card"><p class="spec__cap">Trong một thẻ:</p><div class="notice notice--success"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-success"/></svg><div class="notice__body"><p class="notice__title">Thành công</p><p class="notice__text">Vỏ vẫn tự mang nền của nó.</p></div></div></div>
+        </div>
+      </div></div>
+    </section>
+  </div>
+</section>
+
+
+<!-- ==========================================================================
+     8. HỘP THOẠI VÀ BANNER ĐỒNG Ý
+     ========================================================================== -->
+<section class="sheet-section" id="s8">
+  <h2>8. Hộp thoại và banner đồng ý</h2>
+  <p><strong>"Không bẫy bàn phím" không có nghĩa Tab phải thoát ra được.</strong> WCAG 2.1.2
+     đòi người dùng phải <em>ra được</em> bằng bàn phím — Esc, nút Hủy và nút đóng đều làm
+     việc đó, và đều trả focus về đúng điều khiển đã mở hộp thoại. Việc Tab chạy vòng bên
+     trong một modal đang mở là hành vi <em>đúng</em>, không phải vi phạm. Chi tiết ở
+     <code>components.md</code> §5.11.</p>
+  <p>Trong hộp thoại xác nhận một hành động không thể hoàn tác, <strong>lựa chọn an toàn
+     đứng trước trong thứ tự Tab</strong>: thứ đầu tiên người dùng bàn phím chạm tới là lối
+     ra, không phải động từ không thể rút lại.</p>
+  <p><strong>Banner đồng ý ở đây là VỎ.</strong> Nội dung, các nhóm cookie và câu chữ pháp
+     lý là việc của M1-09 (GAM-30). Ba hành động <strong>giống hệt nhau</strong> về kích
+     thước và kiểu dáng — <code>requirements.md</code> §2 coi đây là yêu cầu, nên "Từ chối"
+     không bao giờ nhỏ hơn, mờ hơn hay xa hơn "Chấp nhận". Banner <em>không</em> modal.</p>
+
+  <p><button class="btn btn--secondary" id="open-dialog" type="button">Mở hộp thoại thật để kiểm tra bàn phím</button></p>
+
+  <div class="spec">
+    <section class="spec__cell">
+      <h3 class="spec__cap">Sáng · 375</h3>
+      <div class="pane pane--mobile">
+        <div class="pane__stack pane__stack--fill">
+          <div class="dialog" role="dialog" aria-label="Mẫu tĩnh: xác nhận xóa">
+            <div class="dialog__head">
+              <h4 class="dialog__title">Xóa dữ liệu của bạn?</h4>
+              <button class="btn btn--quiet btn--icon" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-close"/></svg><span class="u-visually-hidden">Đóng</span></button>
+            </div>
+            <div class="dialog__body"><p>Toàn bộ điểm và tên hiển thị của bạn sẽ bị xóa. Không thể hoàn tác.</p></div>
+            <div class="dialog__actions">
+              <button class="btn btn--secondary" type="button">Hủy</button>
+              <button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa vĩnh viễn</button>
+            </div>
+          </div>
+          <div class="consent consent--inplace" aria-label="Cookie">
+            <p class="consent__text">Vỏ banner — nội dung do M1-09 quyết định. <a class="link" href="#s8">Tìm hiểu thêm</a></p>
+            <div class="consent__actions">
+              <button class="btn btn--secondary" type="button">Chấp nhận</button>
+              <button class="btn btn--secondary" type="button">Từ chối</button>
+              <button class="btn btn--secondary" type="button">Cài đặt</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="spec__cell">
+      <h3 class="spec__cap">Sáng · 1280</h3>
+      <div class="spec__scroll"><div class="pane pane--desktop">
+        <div class="pane__stack pane__stack--fill">
+          <div class="dialog" role="dialog" aria-label="Mẫu tĩnh: xác nhận xóa">
+            <div class="dialog__head">
+              <h4 class="dialog__title">Xóa dữ liệu của bạn?</h4>
+              <button class="btn btn--quiet btn--icon" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-close"/></svg><span class="u-visually-hidden">Đóng</span></button>
+            </div>
+            <div class="dialog__body"><p>Toàn bộ điểm và tên hiển thị của bạn sẽ bị xóa. Không thể hoàn tác.</p></div>
+            <div class="dialog__actions">
+              <button class="btn btn--secondary" type="button">Hủy</button>
+              <button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa vĩnh viễn</button>
+            </div>
+          </div>
+          <div class="consent consent--inplace" aria-label="Cookie">
+            <p class="consent__text">Vỏ banner — nội dung do M1-09 quyết định. <a class="link" href="#s8">Tìm hiểu thêm</a></p>
+            <div class="consent__actions">
+              <button class="btn btn--secondary" type="button">Chấp nhận</button>
+              <button class="btn btn--secondary" type="button">Từ chối</button>
+              <button class="btn btn--secondary" type="button">Cài đặt</button>
+            </div>
+          </div>
+        </div>
+      </div></div>
+    </section>
+
+    <section class="spec__cell">
+      <h3 class="spec__cap">Tối · 375</h3>
+      <div class="pane pane--mobile" data-theme="dark">
+        <div class="pane__stack pane__stack--fill">
+          <div class="dialog" role="dialog" aria-label="Mẫu tĩnh: xác nhận xóa">
+            <div class="dialog__head">
+              <h4 class="dialog__title">Xóa dữ liệu của bạn?</h4>
+              <button class="btn btn--quiet btn--icon" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-close"/></svg><span class="u-visually-hidden">Đóng</span></button>
+            </div>
+            <div class="dialog__body"><p>Toàn bộ điểm và tên hiển thị của bạn sẽ bị xóa. Không thể hoàn tác.</p></div>
+            <div class="dialog__actions">
+              <button class="btn btn--secondary" type="button">Hủy</button>
+              <button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa vĩnh viễn</button>
+            </div>
+          </div>
+          <div class="consent consent--inplace" aria-label="Cookie">
+            <p class="consent__text">Vỏ banner — nội dung do M1-09 quyết định. <a class="link" href="#s8">Tìm hiểu thêm</a></p>
+            <div class="consent__actions">
+              <button class="btn btn--secondary" type="button">Chấp nhận</button>
+              <button class="btn btn--secondary" type="button">Từ chối</button>
+              <button class="btn btn--secondary" type="button">Cài đặt</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="spec__cell">
+      <h3 class="spec__cap">Tối · 1280</h3>
+      <div class="spec__scroll"><div class="pane pane--desktop" data-theme="dark">
+        <div class="pane__stack pane__stack--fill">
+          <div class="dialog" role="dialog" aria-label="Mẫu tĩnh: xác nhận xóa">
+            <div class="dialog__head">
+              <h4 class="dialog__title">Xóa dữ liệu của bạn?</h4>
+              <button class="btn btn--quiet btn--icon" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-close"/></svg><span class="u-visually-hidden">Đóng</span></button>
+            </div>
+            <div class="dialog__body"><p>Toàn bộ điểm và tên hiển thị của bạn sẽ bị xóa. Không thể hoàn tác.</p></div>
+            <div class="dialog__actions">
+              <button class="btn btn--secondary" type="button">Hủy</button>
+              <button class="btn btn--destructive" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa vĩnh viễn</button>
+            </div>
+          </div>
+          <div class="consent consent--inplace" aria-label="Cookie">
+            <p class="consent__text">Vỏ banner — nội dung do M1-09 quyết định. <a class="link" href="#s8">Tìm hiểu thêm</a></p>
+            <div class="consent__actions">
+              <button class="btn btn--secondary" type="button">Chấp nhận</button>
+              <button class="btn btn--secondary" type="button">Từ chối</button>
+              <button class="btn btn--secondary" type="button">Cài đặt</button>
+            </div>
+          </div>
+        </div>
+      </div></div>
+    </section>
+  </div>
+</section>
+
+
+<!-- ==========================================================================
+     9. BA TRẠNG THÁI
+     ========================================================================== -->
+<section class="sheet-section" id="s9">
+  <h2>9. Ba trạng thái: trống · đang tải · lỗi</h2>
+  <p><strong>Một vỏ, ba ý nghĩa, một chiều cao đã giữ chỗ.</strong> Cả ba cùng một hộp:
+     cùng padding, cùng viền, cùng bo góc, cùng <code>min-block-size</code>. Đó là thứ giữ
+     cho trang không nhảy — không chỉ khi tải xong, mà cả khi "đang tải" hóa ra là "lỗi",
+     hay khi một bảng trống có điểm đầu tiên. Đổi giữa hai trạng thái bất kỳ không làm
+     dịch chuyển gì cả.</p>
+  <p><strong>Không có gì nhấp nháy.</strong> Các thanh skeleton <em>đứng yên</em>. Mục tiêu
+     cảm xúc của <code>DESIGN.md</code> là "không chớp, không nhấp nháy", và hiệu ứng quét
+     sáng là vi phạm rõ nhất — nó cũng là kiểu loading hay gây khó chịu nhất cho người nhạy
+     cảm với chuyển động. Tín hiệu "đang chạy" nằm ở <strong>vùng live</strong> trong
+     markup, vì một hiệu ứng quét sáng chẳng nói gì với trình đọc màn hình cả.</p>
+  <p><strong>Vai trò ARIA.</strong> Khối đang tải mang <code>role="status"</code> và
+     <code>aria-busy="true"</code> (lịch sự — người dùng đang đọc, đừng cắt ngang). Lỗi
+     <em>tải nền</em> cũng là <code>role="status"</code>; lỗi do <em>chính hành động của
+     người dùng</em> (gửi biểu mẫu) mới là <code>role="alert"</code>. Bảng phân chia đầy đủ
+     ở <code>components.md</code> §4.3.</p>
+
+  <div class="spec">
+    <section class="spec__cell">
+      <h3 class="spec__cap">Sáng · 375</h3>
+      <div class="pane pane--mobile">
+        <div class="pane__stack pane__stack--fill">
+          <div class="state state--empty state--reserve-sm">
+            <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-empty"/></svg>
+            <h4 class="state__title">Chưa có ai ghi điểm tuần này</h4>
+            <p class="state__text">Hãy là người đầu tiên.</p>
+            <p class="u-flush"><a class="btn btn--secondary" href="#s9">Chơi ngay</a></p>
+          </div>
+          <div class="state state--loading state--reserve-sm" role="status" aria-busy="true">
+            <span class="u-visually-hidden">Đang tải bảng xếp hạng…</span>
+            <div class="skeleton" aria-hidden="true">
+              <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--most"></span><span class="skeleton__bar"></span></div>
+              <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--half"></span><span class="skeleton__bar"></span></div>
+              <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--most"></span><span class="skeleton__bar"></span></div>
+            </div>
+          </div>
+          <div class="state state--error state--reserve-sm" role="status">
+            <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+            <p class="state__label u-flush">Lỗi</p>
+            <h4 class="state__title">Không tải được bảng xếp hạng</h4>
+            <p class="state__text">Kiểm tra kết nối rồi thử lại.</p>
+            <p class="u-flush"><button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Thử lại</button></p>
+          </div>
+          <p class="pane__tag">Khối skeleton riêng — ảnh, tiêu đề, dòng chữ:</p>
+          <div class="skeleton" aria-hidden="true">
+            <div class="skeleton__block skeleton__block--media"></div>
+            <span class="skeleton__bar skeleton__bar--title"></span>
+            <span class="skeleton__bar"></span>
+            <span class="skeleton__bar skeleton__bar--most"></span>
+          </div>
+          <p class="pane__tag">Khung trò chơi giữ tỉ lệ 16:9 thay vì chiều cao:</p>
+          <div class="state state--loading state--frame" role="status" aria-busy="true">
+            <span class="u-visually-hidden">Đang tải trò chơi…</span>
+            <div class="skeleton" aria-hidden="true"><div class="skeleton__block skeleton__block--fill"></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="spec__cell">
+      <h3 class="spec__cap">Sáng · 1280</h3>
+      <div class="spec__scroll"><div class="pane pane--desktop">
+        <div class="pane__stack pane__stack--measure">
+          <div class="state state--empty state--reserve-md">
+            <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-empty"/></svg>
+            <h4 class="state__title">Chưa có ai ghi điểm tuần này</h4>
+            <p class="state__text">Hãy là người đầu tiên.</p>
+            <p class="u-flush"><a class="btn btn--secondary" href="#s9">Chơi ngay</a></p>
+          </div>
+          <div class="state state--loading state--reserve-md" role="status" aria-busy="true">
+            <span class="u-visually-hidden">Đang tải bảng xếp hạng…</span>
+            <div class="skeleton" aria-hidden="true">
+              <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--most"></span><span class="skeleton__bar"></span></div>
+              <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--half"></span><span class="skeleton__bar"></span></div>
+              <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--most"></span><span class="skeleton__bar"></span></div>
+              <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--short"></span><span class="skeleton__bar"></span></div>
+            </div>
+          </div>
+          <div class="state state--error state--reserve-md" role="status">
+            <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+            <p class="state__label u-flush">Lỗi</p>
+            <h4 class="state__title">Không tải được bảng xếp hạng</h4>
+            <p class="state__text">Kiểm tra kết nối rồi thử lại.</p>
+            <p class="u-flush"><button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Thử lại</button></p>
+          </div>
+          <p class="pane__tag">Khối skeleton riêng:</p>
+          <div class="skeleton" aria-hidden="true">
+            <div class="skeleton__block skeleton__block--media"></div>
+            <span class="skeleton__bar skeleton__bar--title"></span>
+            <span class="skeleton__bar"></span>
+            <span class="skeleton__bar skeleton__bar--most"></span>
+          </div>
+          <p class="pane__tag">Khung trò chơi, 16:9:</p>
+          <div class="state state--loading state--frame" role="status" aria-busy="true">
+            <span class="u-visually-hidden">Đang tải trò chơi…</span>
+            <div class="skeleton" aria-hidden="true"><div class="skeleton__block skeleton__block--fill"></div></div>
+          </div>
+        </div>
+      </div></div>
+    </section>
+
+    <section class="spec__cell">
+      <h3 class="spec__cap">Tối · 375</h3>
+      <div class="pane pane--mobile" data-theme="dark">
+        <div class="pane__stack pane__stack--fill">
+          <div class="state state--empty state--reserve-sm">
+            <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-empty"/></svg>
+            <h4 class="state__title">Chưa có ai ghi điểm tuần này</h4>
+            <p class="state__text">Hãy là người đầu tiên.</p>
+            <p class="u-flush"><a class="btn btn--secondary" href="#s9">Chơi ngay</a></p>
+          </div>
+          <div class="state state--loading state--reserve-sm" role="status" aria-busy="true">
+            <span class="u-visually-hidden">Đang tải bảng xếp hạng…</span>
+            <div class="skeleton" aria-hidden="true">
+              <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--most"></span><span class="skeleton__bar"></span></div>
+              <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--half"></span><span class="skeleton__bar"></span></div>
+              <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--most"></span><span class="skeleton__bar"></span></div>
+            </div>
+          </div>
+          <div class="state state--error state--reserve-sm" role="status">
+            <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+            <p class="state__label u-flush">Lỗi</p>
+            <h4 class="state__title">Không tải được bảng xếp hạng</h4>
+            <p class="state__text">Kiểm tra kết nối rồi thử lại.</p>
+            <p class="u-flush"><button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Thử lại</button></p>
+          </div>
+          <div class="skeleton" aria-hidden="true">
+            <div class="skeleton__block skeleton__block--media"></div>
+            <span class="skeleton__bar skeleton__bar--title"></span>
+            <span class="skeleton__bar"></span>
+            <span class="skeleton__bar skeleton__bar--most"></span>
+          </div>
+          <div class="state state--loading state--frame" role="status" aria-busy="true">
+            <span class="u-visually-hidden">Đang tải trò chơi…</span>
+            <div class="skeleton" aria-hidden="true"><div class="skeleton__block skeleton__block--fill"></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="spec__cell">
+      <h3 class="spec__cap">Tối · 1280</h3>
+      <div class="spec__scroll"><div class="pane pane--desktop" data-theme="dark">
+        <div class="pane__stack pane__stack--measure">
+          <div class="state state--empty state--reserve-md">
+            <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-empty"/></svg>
+            <h4 class="state__title">Chưa có ai ghi điểm tuần này</h4>
+            <p class="state__text">Hãy là người đầu tiên.</p>
+            <p class="u-flush"><a class="btn btn--secondary" href="#s9">Chơi ngay</a></p>
+          </div>
+          <div class="state state--loading state--reserve-md" role="status" aria-busy="true">
+            <span class="u-visually-hidden">Đang tải bảng xếp hạng…</span>
+            <div class="skeleton" aria-hidden="true">
+              <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--most"></span><span class="skeleton__bar"></span></div>
+              <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--half"></span><span class="skeleton__bar"></span></div>
+              <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--most"></span><span class="skeleton__bar"></span></div>
+              <div class="skeleton__row"><span class="skeleton__bar"></span><span class="skeleton__bar skeleton__bar--short"></span><span class="skeleton__bar"></span></div>
+            </div>
+          </div>
+          <div class="state state--error state--reserve-md" role="status">
+            <svg class="u-icon u-icon--lg state__icon" aria-hidden="true" focusable="false"><use href="#i-error"/></svg>
+            <p class="state__label u-flush">Lỗi</p>
+            <h4 class="state__title">Không tải được bảng xếp hạng</h4>
+            <p class="state__text">Kiểm tra kết nối rồi thử lại.</p>
+            <p class="u-flush"><button class="btn btn--secondary" type="button"><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg>Thử lại</button></p>
+          </div>
+          <div class="skeleton" aria-hidden="true">
+            <div class="skeleton__block skeleton__block--media"></div>
+            <span class="skeleton__bar skeleton__bar--title"></span>
+            <span class="skeleton__bar"></span>
+            <span class="skeleton__bar skeleton__bar--most"></span>
+          </div>
+          <div class="state state--loading state--frame" role="status" aria-busy="true">
+            <span class="u-visually-hidden">Đang tải trò chơi…</span>
+            <div class="skeleton" aria-hidden="true"><div class="skeleton__block skeleton__block--fill"></div></div>
+          </div>
+        </div>
+      </div></div>
+    </section>
+  </div>
+</section>
+
+
+<!-- ==========================================================================
+     10. TRẠNG THÁI THEO TỪNG TRANG
+     ========================================================================== -->
+<section class="sheet-section" id="s10">
+  <h2>10. Trạng thái theo từng trang — mẫu câu chữ</h2>
+  <p>Mỗi trang <strong>điền vào</strong> ba mẫu ở §9 chứ không tự nghĩ ra khối riêng. Đây
+     là bảng điền. Nó cũng là bản sao trong <code>components.md</code> §4.4; bản ở đó là
+     bản chuẩn nếu hai bên có lệch.</p>
+
+  <table class="sheet-table">
+    <caption>Trang nào dùng trạng thái nào, và câu chữ ra sao</caption>
+    <thead>
+      <tr><th scope="col">Trang · vùng</th><th scope="col">Trống</th><th scope="col">Đang tải</th><th scope="col">Lỗi</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">Trang chủ · lưới trò chơi</th>
+        <td>"Chưa có trò chơi nào" — "Danh sách sẽ xuất hiện khi trò chơi đầu tiên được thêm."</td>
+        <td>— (lưới dựng lúc build, không có trạng thái tải)</td>
+        <td>"Không dựng được danh sách trò chơi" · Thử lại</td>
+      </tr>
+      <tr>
+        <th scope="row">Trang chủ · top 3 trong thẻ</th>
+        <td>"Chưa có điểm tuần này"</td>
+        <td>3 dòng skeleton, giữ đúng chiều cao dải</td>
+        <td>"Không tải được bảng tuần" · Thử lại</td>
+      </tr>
+      <tr>
+        <th scope="row">Trang chơi · khung trò chơi</th>
+        <td>—</td>
+        <td>Khối 16:9, "Đang tải trò chơi…"</td>
+        <td>"Không tải được trò chơi" · Thử lại. Thiếu JavaScript dùng <code>notice--warning</code>.</td>
+      </tr>
+      <tr>
+        <th scope="row">Trang chơi · bảng tuần</th>
+        <td>"Chưa có ai ghi điểm tuần này" — "Hãy là người đầu tiên." · Chơi ngay</td>
+        <td>3 dòng skeleton</td>
+        <td>"Không tải được bảng xếp hạng" · Thử lại</td>
+      </tr>
+      <tr>
+        <th scope="row">Bảng xếp hạng · mỗi bảng</th>
+        <td>"Chưa có ai ghi điểm" — "Bảng sẽ mở khi có điểm đầu tiên."</td>
+        <td>10 dòng skeleton</td>
+        <td>"Không tải được bảng xếp hạng" · Thử lại</td>
+      </tr>
+      <tr>
+        <th scope="row">Bảng xếp hạng · kết quả của bạn</th>
+        <td><strong>Trạng thái thứ tư:</strong> "Bạn chưa có điểm nào" — "Chơi một ván để xuất hiện trên bảng." · Chơi ngay</td>
+        <td>1 dòng skeleton</td>
+        <td>"Không tải được kết quả của bạn" · Thử lại</td>
+      </tr>
+      <tr>
+        <th scope="row">Tài khoản · hồ sơ</th>
+        <td>—</td>
+        <td>1 dòng skeleton ở ô tên; khi lưu thì nút ghi "Đang lưu…" và <code>disabled</code></td>
+        <td>Lỗi kiểm duyệt: <code>field__error</code> dưới ô, nối bằng <code>aria-describedby</code>. Lỗi gửi: <code>error-summary</code> + <code>role="alert"</code>.</td>
+      </tr>
+      <tr>
+        <th scope="row">Tài khoản · xóa dữ liệu</th>
+        <td>—</td>
+        <td>Nút ghi "Đang xóa…" và <code>disabled</code></td>
+        <td><code>notice--error</code> trong hộp thoại, <code>role="alert"</code></td>
+      </tr>
+      <tr>
+        <th scope="row">Quyền riêng tư · Điều khoản · Giới thiệu</th>
+        <td>— (nội dung tĩnh)</td>
+        <td>—</td>
+        <td>Chỉ lỗi cấp trang (404/500), do Task của trang đó sở hữu</td>
+      </tr>
+      <tr>
+        <th scope="row">Cookie · lưu lựa chọn</th>
+        <td>—</td>
+        <td>Nút ghi "Đang lưu…" và <code>disabled</code></td>
+        <td><code>notice--error</code> trong hộp thoại cài đặt, <code>role="alert"</code></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+
+<!-- ==========================================================================
+     Hộp thoại thật, để kiểm tra bàn phím.
+
+     Đây là đoạn JavaScript DUY NHẤT trong Task này, và nó ở đây vì một lý do
+     cụ thể: bẫy focus, Esc-để-đóng và trả focus về nút đã mở là những thứ
+     KHÔNG THỂ chứng minh bằng ảnh tĩnh. <dialog>.showModal() của trình duyệt
+     lo toàn bộ phần đó — không có dòng quản lý focus nào tự viết.
+
+     Thuần vanilla, nội tuyến, không phụ thuộc, không yêu cầu mạng. Nếu trình
+     duyệt không có showModal(), đoạn này thoát và trang vẫn đọc được: mẫu
+     tĩnh ở §8 đã mang toàn bộ phần thiết kế rồi.
+     ========================================================================== -->
+<dialog class="dialog" id="live-dialog" aria-labelledby="live-dialog-title">
+  <div class="dialog__head">
+    <h2 class="dialog__title" id="live-dialog-title">Xóa dữ liệu của bạn?</h2>
+    <button class="btn btn--quiet btn--icon" type="button" data-close><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-close"/></svg><span class="u-visually-hidden">Đóng</span></button>
+  </div>
+  <div class="dialog__body">
+    <p>Toàn bộ điểm và tên hiển thị của bạn sẽ bị xóa. Không thể hoàn tác.</p>
+    <p>Hãy thử: <kbd>Tab</kbd> chạy vòng trong hộp thoại · <kbd>Esc</kbd> đóng ·
+       focus quay về đúng nút đã mở nó.</p>
+  </div>
+  <div class="dialog__actions">
+    <button class="btn btn--secondary" type="button" data-close>Hủy</button>
+    <button class="btn btn--destructive" type="button" data-close><svg class="u-icon" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg>Xóa vĩnh viễn</button>
+  </div>
+</dialog>
+
+<script>
+(function () {
+  var opener = document.getElementById('open-dialog');
+  var dlg = document.getElementById('live-dialog');
+  if (!opener || !dlg || typeof dlg.showModal !== 'function') { return; }
+  opener.addEventListener('click', function () { dlg.showModal(); });
+  dlg.addEventListener('close', function () { opener.focus(); });
+  var closers = dlg.querySelectorAll('[data-close]');
+  for (var i = 0; i < closers.length; i++) {
+    closers[i].addEventListener('click', function () { dlg.close(); });
+  }
+})();
+</script>
+
+</body>
+</html>

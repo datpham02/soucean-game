@@ -1,0 +1,1704 @@
+/* ==========================================================================
+   Soucean Game — component library
+   --------------------------------------------------------------------------
+   Source of truth: docs/design/components.md (Task GAM-25, milestone M1-04).
+
+   This is the HIGH-FIDELITY component layer. M1-01 fixed the tokens
+   (tokens.css) and the bare-element defaults (base.css); M1-03 fixed where
+   each region sits (wireframes). This file turns those regions into real,
+   reusable components, once, so M1-05..M1-09 can build five pages in
+   parallel without redesigning the same button five times.
+
+   IMPORT ORDER
+
+     @import on line 1 below pulls tokens.css, so linking this one file is
+     enough to get every custom property it reads. A page should still link
+     the stack explicitly, in M1-01's documented order:
+
+       <link rel="stylesheet" href="assets/tokens.css">
+       <link rel="stylesheet" href="assets/base.css">
+       <link rel="stylesheet" href="assets/components.css">
+
+     Loading tokens.css twice is idempotent — every declaration in it is a
+     custom property on :root with an identical value, so the second copy
+     cannot change a cascade outcome. The @import is there because this Task
+     requires this file to carry its own token dependency; the <link> is
+     there because base.css must sit between the two.
+
+   SCOPE RULE — read before editing.
+
+     * NO RAW VALUES. Not one colour literal, not one type size, not one
+       spacing-scale number. Every such value is read from tokens.css. The
+       only literals here are hairline edges (1px, 2px), ratios (16/9, 50%,
+       100%), opacity numbers, and `0` — none of which belong to a token
+       scale. This is checkable; components.md section 1.4 gives the grep.
+
+     * THE SURFACE RULE — the one rule that shapes everything below.
+       DESIGN.md measured a specific SET of foreground/background pairs, and
+       it forbids using a pair that has not been measured and written down.
+       So this library uses only pairs from that set. In practice:
+
+         - `sunken` carries ONLY `text` (plus the focus ring and a
+           border-strong edge). No muted text, no accent, no meaning colour
+           is ever set on a sunken fill.
+         - `surface` carries `text`, `text-muted`, `primary`, `secondary`,
+           `error`, `focus`, `border-strong` — but NOT `success` and NOT
+           `warning`, which DESIGN.md measured on `bg` only.
+         - Anything that needs a meaning colour or a skeleton bar therefore
+           supplies its OWN `bg` fill. That is why the inline notice and all
+           three state blocks are `bg`-filled wells with a border-strong
+           edge, in every context, even inside a card.
+
+       That is not decoration. It is what keeps every pair in this file
+       inside the set the Board has already accepted, without this Task
+       inventing a colour or publishing a ratio it could not measure.
+
+     * STATUS IS NEVER COLOUR ALONE. Every notice, every state block, the
+       current nav item, the player's own leaderboard row and every form
+       error carries an icon and a word as well as a colour.
+
+     * ONE PRIMARY ACTION PER VIEW. `.btn--primary` is the filled button and
+       appears once. Everything else is `.btn--secondary`, `.btn--quiet` or
+       `.btn--destructive`.
+
+     * AD SLOTS ARE NOT OURS. ads.css (M1-02) fully specifies `.ad-slot`;
+       ad-slots.md section 11 says M1-04 must not restyle it. There is no
+       `.ad-slot` rule in this file.
+
+   THE FORCED-STATE CONVENTION
+
+     A static sheet cannot hover itself. Every interactive state below is
+     written as a pair:
+
+       .btn--primary:hover, .btn--primary.is-hover { ... }
+
+     so the specimen in components.html goes through the SAME declaration
+     block as the real pseudo-class — a reviewer is looking at the real rule,
+     not a hand-drawn imitation of it. `.is-hover`, `.is-focus`, `.is-active`
+     and `.is-disabled` exist for the sheet and must never ship on a page.
+
+   HOW THE SHEET FAKES A BREAKPOINT
+
+     In the product the layout band comes from a viewport media query. On the
+     specimen sheet a 375px panel has to show the mobile band while the
+     reader's window is 1280px wide. So the handful of genuinely responsive
+     rules are written TWICE: once as the real `@media (min-width: 768px)`
+     that ships, and once mirrored against `.pane--mobile` / `.pane--desktop`
+     in section 13. The mirror restates `display`, `grid-template-columns`
+     and padding only — never a size, never a colour. This is the same device
+     wireframe.css section 4 uses, and section 13 says exactly what it costs.
+
+   NO NETWORK. No script, no font file, no image, no third-party or CDN
+   request, in this file or in any sheet that links it. The icons are inline
+   SVG drawn in this Task; see components.md section 5.1.
+   ========================================================================== */
+
+@import url('tokens.css');
+
+/* --------------------------------------------------------------------------
+   1. Utilities.
+   -------------------------------------------------------------------------- */
+
+/* Text for a screen reader only. Used for the accessible name of an icon
+   control and for the "Đang tải" status that the skeleton bars cannot carry.
+   The literals here are reset constants, not spacing-scale values. */
+.u-visually-hidden {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* An icon. base.css already sets fill/stroke/stroke-width on every <svg>;
+   this only fixes the size and stops the icon shrinking in a flex row.
+   Every icon in the product is aria-hidden and focusable="false" — the
+   accessible name comes from the text beside it, or from a visually hidden
+   span when the control is icon-only. */
+.u-icon {
+  flex: none;
+  inline-size: var(--icon-md);
+  block-size: var(--icon-md);
+}
+
+.u-icon--sm {
+  inline-size: var(--icon-sm);
+  block-size: var(--icon-sm);
+}
+
+.u-icon--lg {
+  inline-size: var(--icon-lg);
+  block-size: var(--icon-lg);
+}
+
+/* --------------------------------------------------------------------------
+   2. Focus.
+
+   base.css already draws the ring on :focus-visible for every element. This
+   section adds only the forced-state mirror the specimen sheet needs, with
+   the identical declarations, so the sheet cannot drift from the real ring.
+
+   The 2px offset is load-bearing: DESIGN.md measured the focus blue against
+   the primary teal at 1.01:1, so a ring drawn ON a primary fill would be
+   invisible. The offset puts it on the surface behind, where it measures
+   5.11:1 or better in light and 7.96:1 or better in dark.
+   -------------------------------------------------------------------------- */
+
+.is-focus {
+  outline: var(--focus-ring-width) solid var(--color-focus);
+  outline-offset: var(--focus-ring-offset);
+  border-radius: var(--radius-sm);
+}
+
+/* --------------------------------------------------------------------------
+   3. Page scaffolding.
+
+   Just enough to compose a real page out of the chrome below. The page
+   Tasks own their own layouts; these three classes are the shared shell that
+   M1-03 fixed (skip link -> header -> main -> footer) and nothing more.
+   -------------------------------------------------------------------------- */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  min-block-size: 100%;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+}
+
+.shell {
+  inline-size: 100%;
+  max-inline-size: calc(var(--layout-max-width) + 2 * var(--space-2xl));
+  margin-inline: auto;
+  padding-inline: var(--layout-gutter);
+}
+
+.main {
+  flex: 1;
+  padding-block: var(--space-3xl);
+}
+
+/* A long-form document page — privacy, terms, about. M1-03 section 8 handed
+   M1-04 ONE template for all three; this is it. The cap is on the whole
+   column, not just the paragraphs, because a policy stretched across 1200px
+   is unreadable whatever base.css does to the <p> inside it. */
+.shell--text {
+  max-inline-size: 70ch;
+}
+
+/* --------------------------------------------------------------------------
+   4. Skip link.
+
+   First focusable thing in the document, before the header ad slot, so one
+   keystroke passes the banner (ad-slots.md section 9.4). Off-screen until
+   focused, then a real, visible, 44px target pinned to the top-left.
+   -------------------------------------------------------------------------- */
+
+.skip-link {
+  position: absolute;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  min-block-size: var(--target-min);
+  padding-inline: var(--space-lg);
+  font-size: var(--text-label-md);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-primary);
+  text-decoration: underline;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-start-start-radius: 0;
+  border-end-end-radius: var(--radius-md);
+  /* Hidden until focused — but NEVER display:none, which would take it out
+     of the tab order and defeat the whole point. */
+  transform: translateY(-100%);
+}
+
+.skip-link:focus-visible,
+.skip-link.is-focus {
+  transform: translateY(0);
+}
+
+/* --------------------------------------------------------------------------
+   5. Site header, wordmark, primary navigation, theme toggle.
+   -------------------------------------------------------------------------- */
+
+.site-header {
+  position: relative; /* containing block for the skip link */
+  background-color: var(--color-surface);
+  border-block-end: 1px solid var(--color-border);
+}
+
+.site-header__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  min-block-size: var(--target-min);
+  padding-block: var(--space-md);
+}
+
+/* The brand mark is plain text, set in the product face. DESIGN.md: there is
+   no logo in M1 and inventing one is a Board decision, not a Task decision. */
+.wordmark {
+  font-size: var(--text-headline-md);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--leading-headline);
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.wordmark:hover,
+.wordmark.is-hover {
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.site-header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+/* --- Primary navigation ---------------------------------------------------
+   Below the switch it is a disclosure button over a stacked list; above the
+   switch the list is inline and the button is gone. Section 13 carries both
+   halves of that switch. */
+
+.site-nav__list {
+  display: none; /* mobile default: closed. */
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin: 0;
+  padding: 0 0 var(--space-md);
+  list-style: none;
+}
+
+/* The disclosure sets aria-expanded; CSS follows the attribute rather than a
+   class, so the visual state can never disagree with what is announced. */
+.site-nav__toggle[aria-expanded='true'] + .site-nav__list {
+  display: flex;
+}
+
+.site-nav__link {
+  display: flex;
+  align-items: center;
+  min-block-size: var(--target-min);
+  padding-inline: var(--space-md);
+  font-size: var(--text-label-md);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+}
+
+.site-nav__link:hover,
+.site-nav__link.is-hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+/* Pressed. Both signals of the two conventions this control sits between: the
+   `primary-hover` shift every link makes (section 8) and the 1px nudge every
+   target-sized control makes (`.btn`, `.segmented__link`). A nav link is both,
+   so it does both. Keyboard focus is the shared `.is-focus` ring in section 2
+   plus base.css's `:focus-visible`; there is no nav-specific focus rule and
+   there must not be one.
+
+   There is NO disabled rule here on purpose. A navigation link is never
+   disabled — a route either exists, and is a link, or it does not, and is
+   absent from the menu. components.md section 5.3 states that in full. */
+.site-nav__link:active,
+.site-nav__link.is-active {
+  color: var(--color-primary-hover);
+  transform: translateY(1px);
+}
+
+/* The current page. Marked by WEIGHT and an UNDERLINE as well as colour —
+   DESIGN.md: status is never colour alone. Driven by aria-current so the
+   mark and the announcement cannot drift apart. */
+.site-nav__link[aria-current='page'] {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.18em;
+}
+
+/* The current-page link still has to answer the pointer. Without these two
+   rules it would not: `.site-nav__link[aria-current='page']` and
+   `.site-nav__link.is-hover` carry the same specificity, and the aria-current
+   block is written later, so it would win the cascade and the current page
+   would be the one nav item that looks dead under the cursor. The underline
+   and the weight stay — only the colour moves, exactly as the segmented
+   control's selected item does (section 9). */
+.site-nav__link[aria-current='page']:hover,
+.site-nav__link[aria-current='page'].is-hover {
+  color: var(--color-primary-hover);
+}
+
+.site-nav__link[aria-current='page']:active,
+.site-nav__link[aria-current='page'].is-active {
+  color: var(--color-primary-hover);
+  transform: translateY(1px);
+}
+
+/* --- Theme toggle ---------------------------------------------------------
+   Two mutually exclusive choices, so it is a RADIO GROUP, not a switch: a
+   switch implies an "off" that this control has no concept of.
+
+   It is built from REAL <input type="radio"> elements inside a <fieldset>,
+   not from buttons wearing role="radio". That is not pedantry — the radio
+   role carries a keyboard contract (arrow keys move within the group, Tab
+   enters and leaves it, only the checked option is a tab stop), and native
+   radios honour it with no script. Buttons with role="radio" would need a
+   roving tabindex to keep that promise, which means JavaScript this Task has
+   no reason to ship. The input is visually hidden, not display:none, so it
+   stays focusable and announceable.
+
+   The manual choice beats the system preference (tokens.css section 3). */
+
+.theme-toggle {
+  display: flex;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-full);
+}
+
+.theme-toggle__option {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  min-block-size: var(--target-min);
+  min-inline-size: var(--target-min);
+  padding-inline: var(--space-md);
+  font-size: var(--text-label-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  background-color: transparent;
+  border-radius: var(--radius-full);
+}
+
+.theme-toggle__option:hover,
+.theme-toggle__option.is-hover {
+  color: var(--color-text);
+}
+
+/* The chosen theme. Weight + the filled plate + the word, never colour
+   alone, and the radio's own checked state carries it to a screen reader. */
+.theme-toggle__option:has(input:checked),
+.theme-toggle__option.is-checked {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-on-primary);
+  background-color: var(--color-primary);
+}
+
+/* The chosen option has to answer the pointer too. The plain hover rule above
+   cannot do it: it only moves `color`, and the checked rule outranks it
+   (`:has(input:checked)` takes its argument's specificity, so it is 0-2-1
+   against hover's 0-2-0) — and even if it won, text at `color-text` on a
+   `primary` plate is not a pair this system has measured. So the chosen
+   option hovers the way the segmented control's chosen item does: the PLATE
+   moves to `primary-hover` and the label stays `on-primary`, a pair DESIGN.md
+   measures at 8.55 light / 9.63 dark. Without this, the one option the player
+   is most likely to point at is the one that looks dead. */
+.theme-toggle__option:has(input:checked):hover,
+.theme-toggle__option:has(input:checked).is-hover,
+.theme-toggle__option.is-checked:hover,
+.theme-toggle__option.is-checked.is-hover {
+  color: var(--color-on-primary);
+  background-color: var(--color-primary-hover);
+}
+
+/* Pressed. The same 1px nudge as every other pill-shaped, target-sized
+   control in this library (`.btn`, `.segmented__link`), so a press feels the
+   same wherever it lands. `:active` on the LABEL, not the input: the input is
+   visually hidden, so the label is the thing the finger is on.
+
+   There is NO disabled rule here on purpose. The theme toggle is never
+   disabled — both themes always exist, the choice is local to the browser,
+   and nothing can be in flight that would make it temporarily unavailable.
+   components.md section 5.3 states that in full. */
+.theme-toggle__option:active,
+.theme-toggle__option.is-active {
+  transform: translateY(1px);
+}
+
+/* The real input is visually hidden, so the ring has to be moved to the
+   label the reader can actually see. Without this the group would be
+   keyboard-operable and keyboard-invisible, which is the worse failure. */
+.theme-toggle__option:has(input:focus-visible),
+.theme-toggle__option.is-focus {
+  outline: var(--focus-ring-width) solid var(--color-focus);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* --------------------------------------------------------------------------
+   6. Footer.
+   -------------------------------------------------------------------------- */
+
+.site-footer {
+  margin-block-start: var(--space-5xl);
+  padding-block: var(--space-2xl);
+  background-color: var(--color-surface);
+  border-block-start: 1px solid var(--color-border);
+}
+
+.site-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm) var(--space-lg);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-footer__links a {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--target-min);
+  font-size: var(--text-body-sm);
+}
+
+.site-footer__fine {
+  margin-block-start: var(--space-md);
+  margin-block-end: 0;
+  font-size: var(--text-caption);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+/* --------------------------------------------------------------------------
+   7. Buttons.
+
+   Four kinds. One state model:
+
+     hover     filled -> the -hover fill; outlined -> the edge doubles and
+               takes the variant's own accent. The EDGE is the hover signal
+               on every outlined button, so hover stays visible whether the
+               button sits on `bg`, on `surface` or inside a state block.
+     active    the hover treatment plus a 1px downward shift. A transform,
+               which is one of the two properties DESIGN.md allows to move.
+     focus     base.css's ring, offset 2px onto the surface behind.
+     disabled  base.css's opacity 0.5 and not-allowed cursor. WCAG 1.4.3
+               exempts an inactive control from the contrast minimum; the
+               control is still never the ONLY way to reach a function.
+   -------------------------------------------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  min-block-size: var(--target-min);
+  min-inline-size: var(--target-min);
+  padding: var(--space-md) var(--space-lg);
+  font-size: var(--text-label-md);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  text-align: center;
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  transition:
+    background-color var(--duration-state) var(--ease-out),
+    border-color var(--duration-state) var(--ease-out),
+    box-shadow var(--duration-state) var(--ease-out),
+    color var(--duration-state) var(--ease-out);
+}
+
+.btn--block {
+  display: flex;
+  inline-size: 100%;
+}
+
+/* --- Primary: the one filled button, once per view. ---------------------- */
+
+.btn--primary {
+  color: var(--color-on-primary);
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.btn--primary:hover,
+.btn--primary.is-hover {
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+}
+
+/* --- Secondary: the default action everywhere else. ---------------------- */
+
+.btn--secondary {
+  color: var(--color-primary);
+  background-color: var(--color-surface);
+  border-color: var(--color-border-strong);
+}
+
+/* The doubled edge is an INSET ring, not a wider border: a border-width
+   change would reflow the label by a pixel. It is not an elevation level —
+   the --shadow-* tokens are untouched and still off in dark mode. */
+.btn--secondary:hover,
+.btn--secondary.is-hover {
+  color: var(--color-primary-hover);
+  border-color: var(--color-primary);
+  box-shadow: inset 0 0 0 1px var(--color-primary);
+}
+
+/* --- Destructive. ---------------------------------------------------------
+   M1-03 section 8 left "how a destructive action is expressed" open, because
+   DESIGN.md has no destructive style and the palette's only red is `error`.
+   The decision taken here, and the reasoning, are in components.md section
+   6.1: a destructive action is the SECONDARY geometry wearing `error`, never
+   a filled button. It is deliberately not the loudest thing on the page —
+   it is dangerous, not important — and it is always behind a confirmation
+   dialog. The doubled edge ships in the DEFAULT state, which is what makes
+   it read as "not an ordinary button" before anyone hovers it. */
+
+.btn--destructive {
+  color: var(--color-error);
+  background-color: var(--color-surface);
+  border-color: var(--color-error);
+  box-shadow: inset 0 0 0 1px var(--color-error);
+}
+
+.btn--destructive:hover,
+.btn--destructive.is-hover {
+  box-shadow: inset 0 0 0 2px var(--color-error);
+}
+
+/* --- Quiet: a text action. Cancel, dismiss, a disclosure. ---------------- */
+
+.btn--quiet {
+  color: var(--color-primary);
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.btn--quiet:hover,
+.btn--quiet.is-hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+/* --- Icon-only. Visible glyph may be small; the target never is. --------- */
+
+.btn--icon {
+  padding-inline: var(--space-sm);
+}
+
+/* --- Pressed. One rule for every variant. -------------------------------- */
+
+.btn:active,
+.btn.is-active {
+  transform: translateY(1px);
+}
+
+/* --------------------------------------------------------------------------
+   8. Links.
+
+   A link is underlined by default. Removing the underline and relying on
+   teal alone would make colour the only signal, which this system does not
+   do anywhere else either.
+
+   A link has no disabled state in HTML. Where a page must show one, it is an
+   <a> without href carrying aria-disabled="true" — announced as disabled,
+   not focusable, and visibly muted.
+   -------------------------------------------------------------------------- */
+
+.link {
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+.link:hover,
+.link.is-hover {
+  color: var(--color-primary-hover);
+  text-decoration-thickness: 2px;
+}
+
+.link:active,
+.link.is-active {
+  color: var(--color-primary-hover);
+}
+
+.link[aria-disabled='true'],
+.link.is-disabled {
+  color: var(--color-text-muted);
+  text-decoration: none;
+  cursor: not-allowed;
+}
+
+/* --------------------------------------------------------------------------
+   9. Segmented control — the leaderboard period / scope switch.
+
+   These are LINKS to real routes, not a JS tab widget. M1-03 section 4.3 is
+   explicit about that, and it is the reason there is no roving tabindex
+   here: Tab moves through links, arrow keys do not, and pretending otherwise
+   would break the one thing a link is good at. Nothing here carries
+   role="tab"; see components.md section 5.9.
+   -------------------------------------------------------------------------- */
+
+.segmented {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.segmented__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: var(--target-min);
+  padding-inline: var(--space-lg);
+  font-size: var(--text-label-md);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text);
+  text-decoration: none;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-full);
+}
+
+.segmented__link:hover,
+.segmented__link.is-hover {
+  color: var(--color-primary-hover);
+  border-color: var(--color-primary);
+  box-shadow: inset 0 0 0 1px var(--color-primary);
+}
+
+.segmented__link:active,
+.segmented__link.is-active {
+  transform: translateY(1px);
+}
+
+/* The selected period. Filled plate + weight + aria-current, so the choice
+   survives both greyscale and a screen reader. */
+.segmented__link[aria-current='page'] {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-on-primary);
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.segmented__link[aria-current='page']:hover,
+.segmented__link[aria-current='page'].is-hover {
+  color: var(--color-on-primary);
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+  box-shadow: none;
+}
+
+/* --------------------------------------------------------------------------
+   10. Surfaces — card, well, badge.
+   -------------------------------------------------------------------------- */
+
+.card {
+  padding: var(--space-lg);
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+/* A sunken well for a block of figures inside a card — the top-3 strip, a
+   personal best. `bg` rather than `sunken`, because the SURFACE RULE at the
+   top of this file reserves `sunken` for `text` only, and a well usually
+   holds muted labels too. */
+.well {
+  padding: var(--space-md);
+  background-color: var(--color-bg);
+  border-radius: var(--radius-sm);
+}
+
+/* A non-interactive mark: "mới", a week label, a category. Clay is the one
+   permitted second accent and DESIGN.md forbids it on anything clickable.
+   Nothing in this rule is focusable, by design. */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
+  font-size: var(--text-label-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-secondary);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-full);
+}
+
+/* --------------------------------------------------------------------------
+   11. Game card — the home grid.
+
+   M1-03 section 8 left open how a card's primary action is expressed when a
+   view holds N cards. The decision, and the reasoning, are in components.md
+   section 6.2. In short: ONE tab stop per card. The "Chơi" button is the
+   card's only control, and its hit area is stretched over the whole card, so
+   a pointer user can click anywhere and a keyboard user meets one control
+   per game instead of three. It is `.btn--secondary`, never `.btn--primary`:
+   a grid of equals has no single primary action.
+   -------------------------------------------------------------------------- */
+
+.game-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-2xl);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.game-card {
+  position: relative; /* containing block for the stretched hit area */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-lg);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+/* The thumbnail. 16:9, reserved before the image loads so the grid cannot
+   jump, and the one place on the page where the GAME supplies the colour. */
+.game-card__art {
+  aspect-ratio: 16 / 9;
+  inline-size: 100%;
+  object-fit: cover;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.game-card__title {
+  margin: 0;
+  font-size: var(--text-headline-sm);
+  line-height: var(--leading-headline-sm);
+}
+
+.game-card__desc {
+  margin: 0;
+  max-inline-size: none;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--color-text-muted);
+}
+
+.game-card__meta {
+  margin: 0;
+  max-inline-size: none;
+  font-size: var(--text-caption);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+/* The top-3 strip. The one part of a card that is live platform data rather
+   than manifest data, so it is the one part with its own three states. */
+.game-card__top3 {
+  margin: 0;
+  padding: var(--space-md);
+  background-color: var(--color-bg);
+  border-radius: var(--radius-sm);
+}
+
+.game-card__top3 dt {
+  font-size: var(--text-label-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+.game-card__top3 dd {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The action sits last in the DOM and is pushed to the foot of the card, so
+   every card's button lines up however long the description runs. */
+.game-card__action {
+  margin-block-start: auto;
+  padding-block-start: var(--space-sm);
+}
+
+/* The stretched hit area. The ::after covers the card, so the pointer target
+   is the whole card while the ACCESSIBLE target stays the one button. */
+.game-card__action .btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-lg);
+}
+
+/* With the hit area stretched, a ring around the button alone would describe
+   the wrong thing: the whole card is what will activate. So the ring is
+   drawn around the card and suppressed on the button. */
+.game-card:has(.btn:focus-visible),
+.game-card.is-focus {
+  outline: var(--focus-ring-width) solid var(--color-focus);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.game-card:has(.btn:focus-visible) .btn:focus-visible {
+  outline: none;
+}
+
+/* --------------------------------------------------------------------------
+   12. Leaderboard.
+
+   base.css already gives <table> the tabular figures, the header style and
+   the row rule. This adds only the two things it cannot: the player's own
+   row, and the week badge's place in the caption.
+   -------------------------------------------------------------------------- */
+
+.board {
+  inline-size: 100%;
+}
+
+.board caption {
+  margin-block-end: var(--space-md);
+  font-size: var(--text-label-md);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+  text-align: start;
+}
+
+.board__rank {
+  inline-size: var(--space-4xl);
+  font-variant-numeric: tabular-nums;
+}
+
+.board__score {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The player's own row. A heavier edge, a heavier weight, a sunken plate AND
+   the word "Bạn" in the row itself — four signals, none of them colour.
+   `sunken` carries `text` only here, which is exactly what the surface rule
+   allows. */
+.board__row--own > * {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  background-color: var(--color-sunken);
+  border-block: 2px solid var(--color-border-strong);
+}
+
+.board__row--own > *:first-child {
+  border-inline-start: 2px solid var(--color-border-strong);
+}
+
+.board__row--own > *:last-child {
+  border-inline-end: 2px solid var(--color-border-strong);
+}
+
+/* The "Bạn" marker inside the row. A word, not a colour. */
+.board__you {
+  margin-inline-start: var(--space-sm);
+  font-size: var(--text-label-sm);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text);
+}
+
+/* --------------------------------------------------------------------------
+   13a. Form fields.
+
+   base.css already styles the bare input, select and textarea — the 44px
+   height, the surface fill, the border-strong edge, the radius. What a field
+   adds is the three things base.css cannot: the visible label, the help
+   text, and the error text wired to the control by aria-describedby.
+
+   Rules that are not negotiable here:
+     - a visible label, never placeholder-only;
+     - help text and error text BELOW the control, both referenced from
+       aria-describedby so they are announced with it;
+     - the error carries an icon and a word as well as the colour.
+   -------------------------------------------------------------------------- */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.field__label {
+  color: var(--color-text);
+}
+
+/* The optional/required mark. A word, because an asterisk alone is not a
+   label and is read as "star" by some screen readers. */
+.field__opt {
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-muted);
+}
+
+.field__help {
+  margin: 0;
+  max-inline-size: none;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--color-text-muted);
+}
+
+.field__error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-xs);
+  margin: 0;
+  max-inline-size: none;
+  font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-body-sm);
+  color: var(--color-error);
+}
+
+/* The control in its error state. Driven by aria-invalid, so the visual and
+   the announcement are the same fact. The doubled edge is an inset ring for
+   the same no-reflow reason as the buttons. */
+.field :is(input, select, textarea)[aria-invalid='true'],
+.field .is-invalid {
+  border-color: var(--color-error);
+  box-shadow: inset 0 0 0 1px var(--color-error);
+}
+
+/* A checkbox or radio row: control first, then its label, both inside one
+   44px target. */
+.choice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  min-block-size: var(--target-min);
+}
+
+.choice input {
+  flex: none;
+  inline-size: var(--icon-md);
+  block-size: var(--icon-md);
+  min-block-size: 0;
+  padding: 0;
+  accent-color: var(--color-primary);
+}
+
+.choice label {
+  font-weight: var(--font-weight-regular);
+}
+
+/* The error summary. Appears above the form after a failed submit, takes
+   focus, and lists one link per bad field pointing at that field's id. */
+.error-summary {
+  padding: var(--space-lg);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  border: 2px solid var(--color-error);
+  border-radius: var(--radius-md);
+}
+
+.error-summary__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin: 0 0 var(--space-sm);
+  font-size: var(--text-headline-sm);
+  color: var(--color-error);
+}
+
+.error-summary ul {
+  margin: 0;
+  padding-inline-start: var(--space-xl);
+}
+
+/* --------------------------------------------------------------------------
+   13b. Inline notice — info, success, warning, error.
+
+   One shell, four meanings. The shell supplies its OWN `bg` fill so the
+   meaning colours sit on the background DESIGN.md measured them against,
+   whether the notice is on the page or inside a card. That is the surface
+   rule doing real work; see the header of this file.
+
+   Every notice carries an icon AND a word ("Thông tin", "Thành công",
+   "Cảnh báo", "Lỗi") as well as the colour.
+   -------------------------------------------------------------------------- */
+
+.notice {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border-strong);
+  border-inline-start: var(--space-xs) solid
+    var(--notice-accent, var(--color-border-strong));
+  border-radius: var(--radius-sm);
+}
+
+.notice__icon {
+  color: var(--notice-accent, var(--color-text));
+}
+
+.notice__body {
+  min-inline-size: 0;
+}
+
+.notice__title {
+  margin: 0;
+  font-size: var(--text-body-md);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--leading-headline-sm);
+  color: var(--notice-accent, var(--color-text));
+}
+
+.notice__text {
+  margin: var(--space-xs) 0 0;
+  max-inline-size: none;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--color-text);
+}
+
+.notice--info { --notice-accent: var(--color-primary); }
+.notice--success { --notice-accent: var(--color-success); }
+.notice--warning { --notice-accent: var(--color-warning); }
+.notice--error { --notice-accent: var(--color-error); }
+
+/* --------------------------------------------------------------------------
+   14. Dialog.
+
+   Native <dialog>. The product opens it with showModal(), which gives the
+   focus trap, the inert background, Esc-to-close and the top layer for free,
+   without a line of our own focus-management code.
+
+   "No keyboard trap" (WCAG 2.1.2) does NOT mean Tab must leave the dialog.
+   It means the user must be able to GET OUT by keyboard — which Esc, the
+   Cancel button and the close button all do, each returning focus to the
+   control that opened it. Cycling Tab inside an open modal is the required
+   behaviour, not the violation. components.md section 5.11 spells this out
+   because it is the single most often misread criterion on this list.
+   -------------------------------------------------------------------------- */
+
+.dialog {
+  inline-size: 100%;
+  max-inline-size: 70ch;
+  padding: var(--space-lg);
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+}
+
+.dialog::backdrop {
+  /* Token-derived, not a raw colour: the page's own ink at half strength. */
+  background-color: var(--color-text);
+  opacity: 0.5;
+}
+
+.dialog__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-block-end: var(--space-md);
+}
+
+.dialog__title {
+  margin: 0;
+  font-size: var(--text-headline-sm);
+  line-height: var(--leading-headline-sm);
+}
+
+.dialog__body > * {
+  max-inline-size: none;
+}
+
+/* Actions last in the DOM, and the safe choice first in the tab order: in a
+   destructive confirmation the first thing a keyboard user reaches must be
+   the way out, not the irreversible verb. */
+.dialog__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-block-start: var(--space-lg);
+}
+
+/* --------------------------------------------------------------------------
+   15. Consent banner shell.
+
+   SHELL ONLY. The consent copy, the categories and the legal wording are
+   M1-09's (GAM-30); nothing in this section decides what the banner says.
+
+   Three things this shell does decide, because they are structure:
+     - it is NOT modal. The page behind stays readable and operable.
+     - it is last in <body> and it is the site's ONE sticky surface, which is
+       exactly why ad-slots.md section 7 forbids any sticky ad.
+     - the three actions are IDENTICAL in size and style. requirements.md
+       section 2 makes equal weight a requirement, so "Từ chối" is never
+       smaller, quieter or further away than "Chấp nhận", and neither is
+       filled while the other is bare. All three are .btn--secondary.
+   -------------------------------------------------------------------------- */
+
+.consent {
+  position: sticky;
+  inset-block-end: 0;
+  padding: var(--space-lg);
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  border-block-start: 1px solid var(--color-border-strong);
+  box-shadow: var(--shadow-md);
+}
+
+/* On the specimen sheet the banner is drawn in place at the foot of a panel
+   rather than stuck to the reader's window, so the panel stays measurable —
+   the same device the wireframes used. */
+.consent--inplace {
+  position: static;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+}
+
+.consent__text {
+  margin: 0 0 var(--space-md);
+  max-inline-size: 70ch;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+}
+
+/* Mobile: the three stack full width, because at 343px three Vietnamese
+   labels do not fit on one readable row. Section 17 turns them into a row
+   above the switch — still identical to one another. */
+.consent__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* --------------------------------------------------------------------------
+   16. THE THREE STATE PATTERNS — empty, loading, error.
+
+   The heart of this Task. Designed ONCE, here, as one block with three
+   modifiers, so that eight pages do not invent eight of each.
+
+   ONE SHELL, THREE MEANINGS, ONE RESERVED HEIGHT.
+
+   All three modifiers share `.state`'s box exactly: same padding, same
+   border, same radius, same min-block-size. That is what stops the page
+   jumping — not only when loading finishes, but when loading turns into an
+   error, or when an empty board gains its first score. Switching between any
+   two of the three moves nothing.
+
+   A region reserves its height by setting --state-reserve from the named
+   modifiers below, chosen to match the content the state stands in for.
+   Every one of them is a multiple of a spacing token; there is no pixel
+   literal here.
+
+   THE ROLES LIVE IN THE HTML, NOT HERE. CSS cannot announce anything. Which
+   aria role each state carries, and why loading is polite while a submit
+   error is assertive, is components.md section 4 — and the specimen markup
+   in components.html carries them so a screen-reader pass can check them.
+   -------------------------------------------------------------------------- */
+
+.state {
+  display: grid;
+  gap: var(--space-md);
+  align-content: center;
+  justify-items: center;
+  min-block-size: var(--state-reserve, auto);
+  padding: var(--space-2xl) var(--space-lg);
+  text-align: center;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+}
+
+/* The reserved heights. A page picks the one matching what it replaces. */
+.state--reserve-sm { --state-reserve: calc(var(--space-6xl) * 2); }
+.state--reserve-md { --state-reserve: calc(var(--space-6xl) * 3); }
+.state--reserve-lg { --state-reserve: calc(var(--space-6xl) * 5); }
+
+/* The game frame reserves a RATIO rather than a height, because the frame's
+   height follows its width. ad-slots.md measures every clearance against
+   this box, so it must be exactly 16:9 at every width. */
+.state--frame {
+  aspect-ratio: 16 / 9;
+  min-block-size: 0;
+}
+
+.state__icon {
+  color: var(--color-text-muted);
+}
+
+.state__title {
+  margin: 0;
+  font-size: var(--text-headline-sm);
+  line-height: var(--leading-headline-sm);
+  color: var(--color-text);
+}
+
+.state__text {
+  margin: 0;
+  max-inline-size: 60ch;
+  font-size: var(--text-body-md);
+  line-height: var(--leading-body);
+  color: var(--color-text-muted);
+}
+
+/* `.state--empty` is a SEMANTIC HOOK ONLY and deliberately carries no rules.
+   An empty state is not an error and not a warning: it needs no colour of its
+   own, and giving it one would be the first step towards a page treating
+   "nobody has scored yet" as a fault. The class exists so a page Task can
+   name the state in its markup and a test can assert on it. */
+
+/* --- Error. The only modifier that recolours anything. ------------------- */
+
+.state--error .state__icon,
+.state--error .state__label {
+  color: var(--color-error);
+}
+
+/* The word beside the icon. An error is never colour and a glyph alone. */
+.state__label {
+  font-size: var(--text-label-md);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+}
+
+/* --- Loading. Same box, left-aligned content, skeleton inside. ----------- */
+
+.state--loading {
+  align-content: start;
+  justify-items: stretch;
+  text-align: start;
+}
+
+/* --------------------------------------------------------------------------
+   17. Skeleton / placeholder block.
+
+   NOTHING ANIMATES. DESIGN.md's emotional target is "nothing blinks, nothing
+   pulses, nothing demands attention that has not earned it", and a shimmer
+   sweep is the clearest possible violation of it — it is also the one
+   loading idiom that reliably upsets people with vestibular sensitivity.
+   The bars are therefore static. The "it is working" signal is carried by
+   the live-region text in the markup, which is where a signal belongs,
+   because a shimmer tells a screen-reader user nothing at all.
+
+   The bars are `border` on a `bg` fill — the pair DESIGN.md already records
+   as DECORATIVE at 1.33:1 light and 1.50:1 dark. They carry no information
+   and are aria-hidden, so they are not required to meet 3:1; the information
+   is in the status text beside them. Recorded in components.md section 3.3
+   so a later Task does not mistake a skeleton bar for a boundary.
+   -------------------------------------------------------------------------- */
+
+.skeleton {
+  display: grid;
+  gap: var(--space-sm);
+  inline-size: 100%;
+}
+
+.skeleton__bar {
+  block-size: var(--space-md);
+  background-color: var(--color-border);
+  border-radius: var(--radius-full);
+}
+
+.skeleton__bar--title {
+  block-size: var(--space-lg);
+  inline-size: 50%;
+}
+
+.skeleton__bar--short { inline-size: 33%; }
+.skeleton__bar--half { inline-size: 50%; }
+.skeleton__bar--most { inline-size: 75%; }
+
+/* A block placeholder — a thumbnail, a game frame, an avatar. */
+.skeleton__block {
+  inline-size: 100%;
+  background-color: var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.skeleton__block--media {
+  aspect-ratio: 16 / 9;
+}
+
+/* Fills the block axis of its container — the game frame's placeholder,
+   where the 16:9 is reserved by `.state--frame` and not by the bar. */
+.skeleton__block--fill {
+  block-size: 100%;
+}
+
+/* A skeleton leaderboard row: rank, name, score, at the real row rhythm so
+   the real table drops into the same vertical space. */
+.skeleton__row {
+  display: grid;
+  grid-template-columns: var(--space-4xl) minmax(0, 1fr) var(--space-5xl);
+  gap: var(--space-sm);
+  align-items: center;
+  padding-block: var(--space-md);
+  border-block-end: 1px solid var(--color-border);
+}
+
+/* --------------------------------------------------------------------------
+   18. The band.
+
+   The ONLY responsive rules in this library. Everything above is either
+   intrinsically fluid or identical in both bands — which is deliberate: the
+   fewer rules that depend on a breakpoint, the fewer there are to mirror,
+   and the smaller the chance the sheet and the product drift apart.
+
+   Each rule appears twice:
+     (a) in the real @media (min-width: 768px), which is what ships;
+     (b) mirrored onto .pane--mobile / .pane--desktop in section 19, which is
+         what lets a 375px panel show the mobile band inside a 1280px window.
+
+   The mirror restates display, grid-template-columns, flex-direction and
+   padding. It restates no size, no colour, no spacing token choice that
+   isn't already here. 768px is M1-01's `switch`; this library introduces no
+   breakpoint of its own and uses `wide` (1024px) nowhere — the side rail is
+   the play page's business, not a component's.
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 768px) {
+  /* Nav: the list goes inline and the disclosure disappears. */
+  .site-nav__toggle {
+    display: none;
+  }
+
+  .site-nav__list,
+  .site-nav__toggle[aria-expanded='false'] + .site-nav__list {
+    display: flex;
+    flex-direction: row;
+    gap: var(--space-sm);
+    padding-block-end: 0;
+  }
+
+  /* Three cards across, 32px gap — M1-03 section 4.1. */
+  .game-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .game-card,
+  .card {
+    padding: var(--space-xl);
+  }
+
+  /* Consent: one row, the three actions still identical to one another. */
+  .consent__actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .dialog {
+    padding: var(--space-xl);
+  }
+
+  .main {
+    padding-block: var(--space-4xl);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   19. SPECIMEN SHEET ONLY — not part of the product.
+
+   Everything from here down exists so components.html can show a component
+   at two widths and in two themes on one page. No page mockup should use any
+   of it, and none of it describes a component.
+
+   THE BAND MIRROR, AND WHAT IT COSTS.
+
+   The selectors are `.pane--x .y` (0,2,0), which outranks both the bare
+   rules above and the @media block's (0,1,0) at any window width. Both
+   directions are stated — the mobile pane has to UNDO the media query when
+   the sheet is read on a wide monitor, not merely fail to opt in.
+
+   THE ONE EXCEPTION, STATED PLAINLY. tokens.css section 7 steps five type
+   tokens in a VIEWPORT media query on :root. A pane cannot restate that step
+   without writing type-size literals into this file, which the scope rule at
+   the top forbids — and which is exactly the drift that rule exists to
+   prevent. So in a window >= 768px wide the 375px panels render those five
+   tokens at their DESKTOP size. It affects headings only, changes no layout
+   and no component geometry. To read the mobile panels at their true type
+   scale, narrow the window below 768px; in the product the question does not
+   arise, because there the band comes from the viewport. This is the same
+   trade wireframes.md section 2 recorded, for the same reason.
+   -------------------------------------------------------------------------- */
+
+.sheet {
+  /* The widest panel plus a margin either side, derived so that even the
+     sheet's own furniture carries no size literal. */
+  max-inline-size: calc(var(--bp-desktop) + 2 * var(--space-3xl));
+  margin-inline: auto;
+  padding-inline: var(--space-lg);
+  padding-block: var(--space-2xl) var(--space-6xl);
+}
+
+.sheet__kicker {
+  font-size: var(--text-label-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+.sheet__lede {
+  max-inline-size: 70ch;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--color-text-muted);
+}
+
+.sheet__toc ol {
+  columns: 2;
+  margin: 0;
+  padding-inline-start: var(--space-xl);
+  font-size: var(--text-body-sm);
+}
+
+.sheet-section {
+  margin-block-start: var(--space-5xl);
+  padding-block-start: var(--space-2xl);
+  border-block-start: 1px solid var(--color-border);
+}
+
+.sheet-section > p {
+  max-inline-size: 70ch;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--color-text-muted);
+}
+
+/* A four-cell specimen: light/dark x 375/1280. */
+.spec {
+  display: grid;
+  gap: var(--space-2xl);
+  margin-block: var(--space-lg);
+}
+
+.spec__cap {
+  margin-block-end: var(--space-sm);
+  font-size: var(--text-label-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+/* A 1280px panel does not fit every reader's window. Scroll the panel, never
+   the page, and never scale it — a scaled specimen cannot be measured. */
+.spec__scroll {
+  overflow-x: auto;
+}
+
+/* The panel: a fixed-width slice of a real page, at a real design width. */
+.pane {
+  --layout-gutter: var(--space-lg);
+
+  padding: var(--space-lg);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  outline: 1px solid var(--color-border-strong);
+}
+
+.pane--mobile {
+  inline-size: var(--bp-mobile);
+}
+
+.pane--desktop {
+  --layout-gutter: var(--space-2xl);
+
+  inline-size: var(--bp-desktop);
+}
+
+/* A panel that holds page chrome has no padding of its own — the chrome
+   runs edge to edge, as it does on a real page. */
+.pane--flush {
+  padding: 0;
+}
+
+/* Stacked specimens inside one panel. */
+.pane__stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  align-items: flex-start;
+}
+
+/* A stack whose specimens should take the panel's full width — a form, a
+   notice, a state block. */
+.pane__stack--fill {
+  align-items: stretch;
+}
+
+/* The same, capped at the reading measure, for the 1280px panels where a
+   full-width form field would be absurd. */
+.pane__stack--measure {
+  align-items: stretch;
+  max-inline-size: 70ch;
+}
+
+/* Kill base.css's paragraph margin where a <p> is only a specimen wrapper. */
+.u-flush {
+  margin: 0;
+}
+
+/* Type specimens for the Vietnamese diacritic check in section 1. These read
+   the type tokens; they add no size of their own. */
+.spec-type--display {
+  margin: 0;
+  font-size: var(--text-display);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-tight);
+}
+
+.spec-type--caption {
+  margin: 0;
+  font-size: var(--text-caption);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+}
+
+.pane__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  align-items: center;
+}
+
+/* The label under a forced state: "hover", "focus", "disabled". */
+.pane__tag {
+  display: block;
+  margin-block-start: var(--space-xs);
+  font-size: var(--text-label-sm);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+.pane__cell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* --- The band mirror. Both directions, for the reason stated above. ------ */
+
+.pane--mobile .site-nav__toggle {
+  display: inline-flex;
+}
+
+.pane--mobile .site-nav__toggle[aria-expanded='false'] + .site-nav__list {
+  display: none;
+}
+
+.pane--mobile .site-nav__toggle[aria-expanded='true'] + .site-nav__list {
+  display: flex;
+  flex-direction: column;
+  padding-block-end: var(--space-md);
+}
+
+.pane--mobile .game-grid {
+  grid-template-columns: 1fr;
+}
+
+.pane--mobile :is(.game-card, .card) {
+  padding: var(--space-lg);
+}
+
+.pane--mobile .consent__actions {
+  flex-direction: column;
+}
+
+.pane--mobile .dialog {
+  padding: var(--space-lg);
+}
+
+.pane--desktop .site-nav__toggle {
+  display: none;
+}
+
+.pane--desktop .site-nav__list {
+  display: flex;
+  flex-direction: row;
+  gap: var(--space-sm);
+  padding-block-end: 0;
+}
+
+.pane--desktop .game-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.pane--desktop :is(.game-card, .card) {
+  padding: var(--space-xl);
+}
+
+.pane--desktop .consent__actions {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.pane--desktop .dialog {
+  padding: var(--space-xl);
+}
+
+/* The skip link is absolutely positioned against the header. On the sheet it
+   is shown in its focused position so a reviewer can see it without having
+   to tab; the real one is proven by tabbing, not by this. */
+.pane .skip-link {
+  position: static;
+  transform: none;
+}
+
+/* A reference table on the sheet — the per-page copy patterns in section 10
+   of components.html. */
+.sheet-table {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+}
+
+.sheet-table th {
+  font-size: var(--text-label-sm);
+  color: var(--color-text);
+}
+
+.sheet-table td {
+  vertical-align: top;
+}
