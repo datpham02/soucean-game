@@ -1,0 +1,22 @@
+@import "../../docs/design/prototypes/assets/components.css";
+
+.doc__updated {
+  margin-block: var(--space-sm) var(--space-2xl);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--color-text-muted);
+}
+
+.doc-section + .doc-section {
+  margin-block-start: var(--space-3xl);
+}
+
+.doc-section__title {
+  margin-block-end: var(--space-lg);
+}
+
+@media (min-width: 768px) {
+  .doc-section + .doc-section {
+    margin-block-start: var(--space-4xl);
+  }
+}

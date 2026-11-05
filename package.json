@@ -1,0 +1,14 @@
+{
+  "name": "soucean-game-frontend",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "lint": "astro build --silent",
+    "test": "astro build --silent"
+  },
+  "devDependencies": {
+    "astro": "7.4.6"
+  }
+}

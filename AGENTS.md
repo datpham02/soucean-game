@@ -17,20 +17,18 @@ not two.
 
 ## 1. Stack
 
-Frontend stack is **TBD in M2**. Backend direction is fixed by ADR-021:
-**Laravel + MySQL**, with Laravel as the only database client.
+Frontend stack for M2 is **Astro** with static output and no client-side
+JavaScript by default. Interactive UI is added later with React islands only
+where a task explicitly needs it.
 
-The web framework, and with it the language runtime, the build tool, the test
-runner and the linter, is chosen in milestone M2 and recorded in
-[`docs/architecture.md`](docs/architecture.md). Until that decision is written
-down:
+Backend direction remains fixed by ADR-021: **Laravel + MySQL**, with Laravel as
+the only database client.
 
-- add **no** runtime dependencies;
+Keep the existing constraints:
+
 - add **no** hosting, analytics or ad-network configuration;
-- do not pin a framework in documentation, CI or tooling config, and do not
-  "temporarily" scaffold one to try it out on a task branch that will be merged.
-
-The repository therefore has no package manifest yet. That is deliberate.
+- add only dependencies required by accepted task scope and commit the lockfile;
+- run dependency checks (`npm audit`) for added packages.
 
 ---
 
@@ -42,6 +40,7 @@ is fixed now by ADR-021.
 | Purpose | Command | Available from |
 | --- | --- | --- |
 | Install dependencies | `npm ci` | M2 |
+| Start frontend dev server | `npm run dev` | M2 |
 | Lint | `npm run lint` | M2 |
 | Unit tests | `npm test` | M2 |
 | Production build | `npm run build` | M2 |
