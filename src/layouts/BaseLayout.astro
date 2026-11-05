@@ -16,6 +16,120 @@ const { title, currentPage } = Astro.props;
 <!doctype html>
 <html lang="vi">
   <head>
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        const themeKey = "soucean-theme";
+        const mediaQuery = "(prefers-color-scheme: dark)";
+        const isTheme = (value) => value === "light" || value === "dark";
+        const getSystemTheme = () =>
+          window.matchMedia(mediaQuery).matches ? "dark" : "light";
+        const getStoredTheme = () => {
+          try {
+            const storedTheme = window.localStorage.getItem(themeKey);
+            return isTheme(storedTheme) ? storedTheme : null;
+          } catch {
+            return null;
+          }
+        };
+        const setTheme = (theme, persist) => {
+          if (!isTheme(theme)) return;
+          root.setAttribute("data-theme", theme);
+          if (persist) {
+            try {
+              window.localStorage.setItem(themeKey, theme);
+            } catch {}
+          }
+        };
+        const syncThemeInputs = (theme) => {
+          const themeInputs = document.querySelectorAll("input[name='theme']");
+          for (const input of themeInputs) {
+            if (!(input instanceof HTMLInputElement)) continue;
+            input.checked = input.value === theme;
+          }
+        };
+        const getActiveTheme = () => {
+          const currentTheme = root.getAttribute("data-theme");
+          return isTheme(currentTheme) ? currentTheme : getSystemTheme();
+        };
+
+        root.classList.add("has-js");
+
+        const savedTheme = getStoredTheme();
+        if (savedTheme) {
+          setTheme(savedTheme, false);
+        } else {
+          root.removeAttribute("data-theme");
+        }
+
+        const onReady = () => {
+          const initialTheme = getActiveTheme();
+          setTheme(initialTheme, false);
+          syncThemeInputs(initialTheme);
+
+          const themeInputs = document.querySelectorAll("input[name='theme']");
+          for (const input of themeInputs) {
+            if (!(input instanceof HTMLInputElement)) continue;
+            input.addEventListener("change", () => {
+              if (!input.checked) return;
+              setTheme(input.value, true);
+              syncThemeInputs(input.value);
+            });
+          }
+
+          const systemTheme = window.matchMedia(mediaQuery);
+          const handleSystemThemeChange = () => {
+            if (getStoredTheme()) return;
+            const nextTheme = getSystemTheme();
+            setTheme(nextTheme, false);
+            syncThemeInputs(nextTheme);
+          };
+
+          if (typeof systemTheme.addEventListener === "function") {
+            systemTheme.addEventListener("change", handleSystemThemeChange);
+          } else if (typeof systemTheme.addListener === "function") {
+            systemTheme.addListener(handleSystemThemeChange);
+          }
+
+          const menuToggle = document.querySelector(".site-nav__toggle");
+          if (!(menuToggle instanceof HTMLButtonElement)) return;
+
+          const navListId = menuToggle.getAttribute("aria-controls");
+          const navList = navListId ? document.getElementById(navListId) : null;
+          if (!navList) return;
+
+          const closeMenu = () => menuToggle.setAttribute("aria-expanded", "false");
+          closeMenu();
+
+          menuToggle.addEventListener("click", () => {
+            const expanded = menuToggle.getAttribute("aria-expanded") === "true";
+            menuToggle.setAttribute("aria-expanded", expanded ? "false" : "true");
+          });
+
+          const navLinks = navList.querySelectorAll("a");
+          for (const navLink of navLinks) {
+            navLink.addEventListener("click", closeMenu);
+          }
+
+          const desktopQuery = window.matchMedia("(min-width: 768px)");
+          const handleDesktopChange = () => {
+            if (desktopQuery.matches) closeMenu();
+          };
+
+          if (typeof desktopQuery.addEventListener === "function") {
+            desktopQuery.addEventListener("change", handleDesktopChange);
+          } else if (typeof desktopQuery.addListener === "function") {
+            desktopQuery.addListener(handleDesktopChange);
+          }
+        };
+
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", onReady, { once: true });
+        } else {
+          onReady();
+        }
+      })();
+    </script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>

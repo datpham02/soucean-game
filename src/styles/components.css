@@ -1,5 +1,47 @@
 @import "../../docs/design/prototypes/assets/components.css";
 
+/* Progressive enhancement shell behavior:
+   - No JavaScript: nav links stay visible and usable, theme follows system.
+   - JavaScript: menu becomes collapsible on mobile and theme toggle is enabled. */
+.site-nav__toggle {
+  display: none;
+}
+
+.site-nav__list {
+  display: flex;
+}
+
+.theme-toggle {
+  display: none;
+}
+
+.has-js .site-nav__toggle {
+  display: inline-flex;
+}
+
+.has-js .site-nav__list {
+  display: none;
+}
+
+.has-js .site-nav__toggle[aria-expanded='true'] + .site-nav__list {
+  display: flex;
+}
+
+.has-js .theme-toggle {
+  display: flex;
+}
+
+@media (min-width: 768px) {
+  .has-js .site-nav__toggle {
+    display: none;
+  }
+
+  .has-js .site-nav__list,
+  .has-js .site-nav__toggle[aria-expanded='false'] + .site-nav__list {
+    display: flex;
+  }
+}
+
 .doc__updated {
   margin-block: var(--space-sm) var(--space-2xl);
   font-size: var(--text-body-sm);

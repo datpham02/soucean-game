@@ -10,7 +10,7 @@ import SkipLink from "./SkipLink.astro";
       <button
         class="btn btn--quiet site-nav__toggle"
         type="button"
-        aria-expanded="true"
+        aria-expanded="false"
         aria-controls="site-nav-list"
       >
         <svg class="u-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
@@ -30,7 +30,13 @@ import SkipLink from "./SkipLink.astro";
       <fieldset class="theme-toggle">
         <legend class="u-visually-hidden">Giao diện</legend>
         <label class="theme-toggle__option">
-          <input class="u-visually-hidden" type="radio" name="theme" checked />
+          <input
+            class="u-visually-hidden"
+            type="radio"
+            name="theme"
+            value="light"
+            id="theme-light"
+          />
           <svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
             <circle cx="12" cy="12" r="4"></circle>
             <path d="M12 2.5v2"></path>
@@ -45,7 +51,13 @@ import SkipLink from "./SkipLink.astro";
           Sáng
         </label>
         <label class="theme-toggle__option">
-          <input class="u-visually-hidden" type="radio" name="theme" />
+          <input
+            class="u-visually-hidden"
+            type="radio"
+            name="theme"
+            value="dark"
+            id="theme-dark"
+          />
           <svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
             <path d="M20 14.4A8.5 8.5 0 0 1 9.6 4 8.5 8.5 0 1 0 20 14.4Z"></path>
           </svg>
