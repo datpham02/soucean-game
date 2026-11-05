@@ -11,11 +11,12 @@
 <!-- ==========================================================================
      Icon set — copied from components.html, not referenced. Every <use> below
      is same-document, so nothing here makes a request. This Task draws NO new
-     icon: components.md §5.1 fixes the set at twelve, and the eight copied here
-     are eight of those twelve.
+     icon: components.md §5.1 fixes the set at twelve, and the nine copied here
+     are nine of those twelve.
      ========================================================================== -->
 <svg class="u-visually-hidden" aria-hidden="true" focusable="false"><defs>
   <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 7.6h.01"/></symbol>
+  <symbol id="i-success" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12.4 2.6 2.6L16 9.6"/></symbol>
   <symbol id="i-warning" viewBox="0 0 24 24"><path d="M12 4 2.6 20h18.8Z"/><path d="M12 10v4"/><path d="M12 17h.01"/></symbol>
   <symbol id="i-error" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6"/><path d="m15 9-6 6"/></symbol>
   <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></symbol>
@@ -43,8 +44,12 @@
     (<code>wireframes.md</code> §4.5). Mỗi bản dựng mang một
     <code>notice--warning</code> nói đúng điều đó.
     <strong>Bảng “chúng tôi lưu gì” thì không phải văn bản mẫu</strong> — nó là
-    danh sách trường của <code>requirements.md</code> §4.1 và phải khớp với trang
-    Tài khoản (M1-08). Xem <code>privacy-consent.md</code> §5.
+    danh sách trường của <code>requirements.md</code> §4.1 cộng với quyết định
+    của Board ngày 5 tháng 11, 2026 về email, và phải khớp với trang Tài khoản
+    (M1-08). Mục 1 nói thẳng rằng email chỉ tồn tại khi người chơi tự liên kết,
+    chỉ dùng để đăng nhập, không bao giờ hiện công khai và bị xóa cùng dữ liệu;
+    mục 5 liệt kê quyền tải một bản sao dữ liệu ngay cạnh quyền xóa. Xem
+    <code>privacy-consent.md</code> §5.
   </p>
   <p class="mk-sheet__lede">
     Không có script, không iframe, không file font, không yêu cầu mạng, không
@@ -71,6 +76,14 @@
     nhật lần cuối”. Ở 375 px mục lục là một cột; từ 768 px trở lên nó là hai cột.
     Mục 6 mang nguyên màn hình cài đặt cookie — hai nhóm, hai lời giải thích bằng
     tiếng người, một nút lưu.
+  </p>
+  <p>
+    <strong>Mỗi giao diện được dựng hai lần: một bản nghỉ và một bản vừa bấm
+    Lưu.</strong> Sáng 375 và tối 1280 là trạng thái nghỉ — vùng
+    <code>role="status"</code> có mặt trong DOM nhưng rỗng. Tối 375 và sáng 1280
+    là ngay sau khi lưu, với hai lựa chọn ngược nhau. Vùng thông báo nằm
+    <em>dưới</em> nút Lưu, nên lời xác nhận hiện ra mà không đẩy nút đi đâu cả,
+    và tiêu điểm ở nguyên trên nút (<code>privacy-consent.md</code> §8.3).
   </p>
 
   <div class="mk-specs mk-specs--row">
@@ -132,10 +145,12 @@
                 <tr><td>Tên hiển thị</td><td>Hiện trên bảng xếp hạng</td><td>Đến khi bạn xóa</td></tr>
                 <tr><td>Ngày tạo</td><td>Xử lý lạm dụng</td><td>Đến khi bạn xóa</td></tr>
                 <tr><td>Điểm theo tuần</td><td>Xếp hạng và kỷ lục</td><td>Đến khi bạn xóa</td></tr>
+                <tr><td>Địa chỉ email — chỉ khi bạn tự liên kết</td><td>Để bạn đăng nhập lại trên thiết bị khác</td><td>Đến khi bạn xóa</td></tr>
               </tbody>
             </table>
             <p>Mỗi lần ghi điểm còn kèm vài giá trị kỹ thuật để máy chủ kiểm tra điểm có hợp lệ không: trò chơi, tuần, thời gian sống sót, seed và phiên bản trò chơi.</p>
-            <p><strong>Không lưu:</strong> bản sao email của bạn, địa chỉ IP, và bất kỳ dữ liệu đo đạc nào.</p>
+            <p><strong>Về địa chỉ email.</strong> Chúng tôi chỉ lưu email nếu chính bạn liên kết một địa chỉ, và chỉ dùng nó để bạn đăng nhập. Nó nằm ở hệ thống đăng nhập chứ không nằm trong hồ sơ của bạn, không bao giờ hiển thị công khai — bảng xếp hạng và hồ sơ không in email ra — và nó bị xóa cùng với dữ liệu của bạn khi bạn xóa. Không liên kết thì chúng tôi không có địa chỉ email nào của bạn.</p>
+            <p><strong>Không lưu:</strong> địa chỉ IP, và bất kỳ dữ liệu đo đạc nào.</p>
             <p>Trang <a class="link" href="#s1">Tài khoản</a> liệt kê đúng những mục này.</p>
           </section>
 
@@ -156,7 +171,7 @@
 
           <section class="doc-section" id="pa-5">
             <h5 class="doc-section__title">5. Quyền của bạn</h5>
-            <p>Bạn xem được mọi thứ đã lưu về mình, sửa tên hiển thị, và xóa tất cả. Ba việc đó nằm ở <a class="link" href="#s1">Tài khoản → Dữ liệu của tôi</a>.</p>
+            <p>Bạn xem được mọi thứ đã lưu về mình, <strong>tải một bản sao dữ liệu của mình</strong>, sửa tên hiển thị, và xóa tất cả. Bốn việc đó nằm ở <a class="link" href="#s1">Tài khoản → Dữ liệu của tôi</a>: nút <em>Tải bản sao dữ liệu của tôi</em> đứng ngay cạnh nút xóa, nên muốn giữ một bản trước khi xóa thì không phải đi hỏi ai.</p>
           </section>
 
           <section class="doc-section" id="pa-6">
@@ -179,13 +194,16 @@
                     <input id="pa-c2" type="checkbox" aria-describedby="pa-d2">
                     <label for="pa-c2">Quảng cáo</label>
                   </div>
-                  <p class="consent-cat__desc" id="pa-d2">Cho phép mạng quảng cáo đặt cookie cho quảng cáo trên trang web. Mặc định tắt. Khi tắt, ô quảng cáo vẫn giữ đúng chỗ và để trống, nên trang không xê dịch.</p>
+                  <p class="consent-cat__desc" id="pa-d2">Cho phép mạng quảng cáo đặt cookie cho quảng cáo trên trang web. Mặc định tắt. Khi tắt, trang không tải quảng cáo nào, và bố cục trang không thay đổi vì lựa chọn này.</p>
                 </li>
               </ul>
             </fieldset>
             <div class="consent-form__actions">
               <button class="btn btn--primary" type="button">Lưu lựa chọn</button>
             </div>
+            <!-- Vùng thông báo sống, CÓ MẶT ngay cả khi rỗng: một role="status"
+                 chỉ đọc được nội dung chèn vào nếu nó đã nằm sẵn trong DOM. -->
+            <div class="consent-form__status" role="status"></div>
           </section>
 
           <section class="doc-section" id="pa-7">
@@ -267,10 +285,12 @@
                 <tr><td>Tên hiển thị</td><td>Hiện trên bảng xếp hạng</td><td>Đến khi bạn xóa</td></tr>
                 <tr><td>Ngày tạo</td><td>Xử lý lạm dụng</td><td>Đến khi bạn xóa</td></tr>
                 <tr><td>Điểm theo tuần</td><td>Xếp hạng và kỷ lục</td><td>Đến khi bạn xóa</td></tr>
+                <tr><td>Địa chỉ email — chỉ khi bạn tự liên kết</td><td>Để bạn đăng nhập lại trên thiết bị khác</td><td>Đến khi bạn xóa</td></tr>
               </tbody>
             </table>
             <p>Mỗi lần ghi điểm còn kèm vài giá trị kỹ thuật để máy chủ kiểm tra điểm có hợp lệ không: trò chơi, tuần, thời gian sống sót, seed và phiên bản trò chơi.</p>
-            <p><strong>Không lưu:</strong> bản sao email của bạn, địa chỉ IP, và bất kỳ dữ liệu đo đạc nào.</p>
+            <p><strong>Về địa chỉ email.</strong> Chúng tôi chỉ lưu email nếu chính bạn liên kết một địa chỉ, và chỉ dùng nó để bạn đăng nhập. Nó nằm ở hệ thống đăng nhập chứ không nằm trong hồ sơ của bạn, không bao giờ hiển thị công khai — bảng xếp hạng và hồ sơ không in email ra — và nó bị xóa cùng với dữ liệu của bạn khi bạn xóa. Không liên kết thì chúng tôi không có địa chỉ email nào của bạn.</p>
+            <p><strong>Không lưu:</strong> địa chỉ IP, và bất kỳ dữ liệu đo đạc nào.</p>
             <p>Trang <a class="link" href="#s1">Tài khoản</a> liệt kê đúng những mục này.</p>
           </section>
 
@@ -291,7 +311,7 @@
 
           <section class="doc-section" id="pb-5">
             <h5 class="doc-section__title">5. Quyền của bạn</h5>
-            <p>Bạn xem được mọi thứ đã lưu về mình, sửa tên hiển thị, và xóa tất cả. Ba việc đó nằm ở <a class="link" href="#s1">Tài khoản → Dữ liệu của tôi</a>.</p>
+            <p>Bạn xem được mọi thứ đã lưu về mình, <strong>tải một bản sao dữ liệu của mình</strong>, sửa tên hiển thị, và xóa tất cả. Bốn việc đó nằm ở <a class="link" href="#s1">Tài khoản → Dữ liệu của tôi</a>: nút <em>Tải bản sao dữ liệu của tôi</em> đứng ngay cạnh nút xóa, nên muốn giữ một bản trước khi xóa thì không phải đi hỏi ai.</p>
           </section>
 
           <section class="doc-section" id="pb-6">
@@ -314,13 +334,16 @@
                     <input id="pb-c2" type="checkbox" checked aria-describedby="pb-d2">
                     <label for="pb-c2">Quảng cáo</label>
                   </div>
-                  <p class="consent-cat__desc" id="pb-d2">Cho phép mạng quảng cáo đặt cookie cho quảng cáo trên trang web. Mặc định tắt. Khi tắt, ô quảng cáo vẫn giữ đúng chỗ và để trống, nên trang không xê dịch.</p>
+                  <p class="consent-cat__desc" id="pb-d2">Cho phép mạng quảng cáo đặt cookie cho quảng cáo trên trang web. Mặc định tắt. Khi tắt, trang không tải quảng cáo nào, và bố cục trang không thay đổi vì lựa chọn này.</p>
                 </li>
               </ul>
             </fieldset>
             <div class="consent-form__actions">
-              <button class="btn btn--primary" type="button">Lưu lựa chọn</button>
+              <button class="btn btn--primary is-focus" type="button">Lưu lựa chọn</button>
             </div>
+            <!-- ĐÃ LƯU. Tiêu điểm vẫn ở trên nút Lưu — không có gì bị giật đi
+                 chỗ khác — và lời xác nhận hiện ngay bên dưới nút đó. -->
+            <div class="consent-form__status" role="status"><div class="notice notice--success"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-success"/></svg><div class="notice__body"><p class="notice__title">Thành công</p><p class="notice__text">Đã lưu lựa chọn của bạn: cần thiết và quảng cáo. Đổi ý lúc nào cũng được, ngay tại mục này.</p></div></div></div>
           </section>
 
           <section class="doc-section" id="pb-7">
@@ -341,7 +364,7 @@
           </div>
         </footer>
       </div>
-      <span class="mk-tag">Bản dựng này cho thấy ô “Quảng cáo” <strong>đã được bật bởi người chơi</strong> (menu cũng đang mở). Nó không bao giờ được tick sẵn khi trang mới mở — bản dựng sáng ở bên trái là trạng thái mặc định.</span>
+      <span class="mk-tag">Bản dựng này cho thấy ô “Quảng cáo” <strong>đã được bật bởi người chơi</strong> (menu cũng đang mở). Nó không bao giờ được tick sẵn khi trang mới mở — bản dựng sáng ở bên trái là trạng thái mặc định. Mục 6 ở đây là <strong>ngay sau khi bấm Lưu</strong>: tiêu điểm vẫn nằm trên nút Lưu (vòng <code>.is-focus</code>) và <code>notice--success</code> mang <code>role="status"</code> hiện ngay dưới nút. Không có gì ở trên nút bị đẩy đi, nên chỗ người đọc đang đứng không xê dịch.</span>
     </section>
   </div>
 
@@ -404,10 +427,12 @@
                 <tr><td>Tên hiển thị</td><td>Hiện trên bảng xếp hạng</td><td>Đến khi bạn xóa</td></tr>
                 <tr><td>Ngày tạo</td><td>Xử lý lạm dụng</td><td>Đến khi bạn xóa</td></tr>
                 <tr><td>Điểm theo tuần</td><td>Xếp hạng và kỷ lục</td><td>Đến khi bạn xóa</td></tr>
+                <tr><td>Địa chỉ email — chỉ khi bạn tự liên kết</td><td>Để bạn đăng nhập lại trên thiết bị khác</td><td>Đến khi bạn xóa</td></tr>
               </tbody>
             </table>
             <p>Mỗi lần ghi điểm còn kèm vài giá trị kỹ thuật để máy chủ kiểm tra điểm có hợp lệ không: trò chơi, tuần, thời gian sống sót, seed và phiên bản trò chơi.</p>
-            <p><strong>Không lưu:</strong> bản sao email của bạn, địa chỉ IP, và bất kỳ dữ liệu đo đạc nào.</p>
+            <p><strong>Về địa chỉ email.</strong> Chúng tôi chỉ lưu email nếu chính bạn liên kết một địa chỉ, và chỉ dùng nó để bạn đăng nhập. Nó nằm ở hệ thống đăng nhập chứ không nằm trong hồ sơ của bạn, không bao giờ hiển thị công khai — bảng xếp hạng và hồ sơ không in email ra — và nó bị xóa cùng với dữ liệu của bạn khi bạn xóa. Không liên kết thì chúng tôi không có địa chỉ email nào của bạn.</p>
+            <p><strong>Không lưu:</strong> địa chỉ IP, và bất kỳ dữ liệu đo đạc nào.</p>
             <p>Trang <a class="link" href="#s1">Tài khoản</a> liệt kê đúng những mục này.</p>
           </section>
 
@@ -428,7 +453,7 @@
 
           <section class="doc-section" id="pc-5">
             <h5 class="doc-section__title">5. Quyền của bạn</h5>
-            <p>Bạn xem được mọi thứ đã lưu về mình, sửa tên hiển thị, và xóa tất cả. Ba việc đó nằm ở <a class="link" href="#s1">Tài khoản → Dữ liệu của tôi</a>.</p>
+            <p>Bạn xem được mọi thứ đã lưu về mình, <strong>tải một bản sao dữ liệu của mình</strong>, sửa tên hiển thị, và xóa tất cả. Bốn việc đó nằm ở <a class="link" href="#s1">Tài khoản → Dữ liệu của tôi</a>: nút <em>Tải bản sao dữ liệu của tôi</em> đứng ngay cạnh nút xóa, nên muốn giữ một bản trước khi xóa thì không phải đi hỏi ai.</p>
           </section>
 
           <section class="doc-section" id="pc-6">
@@ -451,13 +476,16 @@
                     <input id="pc-c2" type="checkbox" aria-describedby="pc-d2">
                     <label for="pc-c2">Quảng cáo</label>
                   </div>
-                  <p class="consent-cat__desc" id="pc-d2">Cho phép mạng quảng cáo đặt cookie cho quảng cáo trên trang web. Mặc định tắt. Khi tắt, ô quảng cáo vẫn giữ đúng chỗ và để trống, nên trang không xê dịch.</p>
+                  <p class="consent-cat__desc" id="pc-d2">Cho phép mạng quảng cáo đặt cookie cho quảng cáo trên trang web. Mặc định tắt. Khi tắt, trang không tải quảng cáo nào, và bố cục trang không thay đổi vì lựa chọn này.</p>
                 </li>
               </ul>
             </fieldset>
             <div class="consent-form__actions">
-              <button class="btn btn--primary" type="button">Lưu lựa chọn</button>
+              <button class="btn btn--primary is-focus" type="button">Lưu lựa chọn</button>
             </div>
+            <!-- ĐÃ LƯU, lựa chọn ngược lại với bản tối ở trên: cùng một khối,
+                 cùng một chỗ, chỉ khác đúng một câu. -->
+            <div class="consent-form__status" role="status"><div class="notice notice--success"><svg class="u-icon notice__icon" aria-hidden="true" focusable="false"><use href="#i-success"/></svg><div class="notice__body"><p class="notice__title">Thành công</p><p class="notice__text">Đã lưu lựa chọn của bạn: chỉ cookie cần thiết. Đổi ý lúc nào cũng được, ngay tại mục này.</p></div></div></div>
           </section>
 
           <section class="doc-section" id="pc-7">
@@ -478,7 +506,7 @@
           </div>
         </footer>
       </div></div>
-      <span class="mk-tag">Cột chữ dừng ở <code>70ch</code>, không phải 1200 px — và tiêu đề dừng theo, không chỉ đoạn văn (<code>.shell--text</code>). Header, ô quảng cáo và chân trang vẫn chạy hết chiều ngang. Mục lục hai cột, thứ tự DOM vẫn 1→7.</span>
+      <span class="mk-tag">Cột chữ dừng ở <code>70ch</code>, không phải 1200 px — và tiêu đề dừng theo, không chỉ đoạn văn (<code>.shell--text</code>). Header, ô quảng cáo và chân trang vẫn chạy hết chiều ngang. Mục lục hai cột, thứ tự DOM vẫn 1→7. Mục 6 cũng ở trạng thái <strong>vừa lưu xong</strong>, với lựa chọn ngược lại bản tối 375: hai câu xác nhận khác nhau đúng một mệnh đề, khối thì y hệt.</span>
     </section>
 
     <section>
@@ -539,10 +567,12 @@
                 <tr><td>Tên hiển thị</td><td>Hiện trên bảng xếp hạng</td><td>Đến khi bạn xóa</td></tr>
                 <tr><td>Ngày tạo</td><td>Xử lý lạm dụng</td><td>Đến khi bạn xóa</td></tr>
                 <tr><td>Điểm theo tuần</td><td>Xếp hạng và kỷ lục</td><td>Đến khi bạn xóa</td></tr>
+                <tr><td>Địa chỉ email — chỉ khi bạn tự liên kết</td><td>Để bạn đăng nhập lại trên thiết bị khác</td><td>Đến khi bạn xóa</td></tr>
               </tbody>
             </table>
             <p>Mỗi lần ghi điểm còn kèm vài giá trị kỹ thuật để máy chủ kiểm tra điểm có hợp lệ không: trò chơi, tuần, thời gian sống sót, seed và phiên bản trò chơi.</p>
-            <p><strong>Không lưu:</strong> bản sao email của bạn, địa chỉ IP, và bất kỳ dữ liệu đo đạc nào.</p>
+            <p><strong>Về địa chỉ email.</strong> Chúng tôi chỉ lưu email nếu chính bạn liên kết một địa chỉ, và chỉ dùng nó để bạn đăng nhập. Nó nằm ở hệ thống đăng nhập chứ không nằm trong hồ sơ của bạn, không bao giờ hiển thị công khai — bảng xếp hạng và hồ sơ không in email ra — và nó bị xóa cùng với dữ liệu của bạn khi bạn xóa. Không liên kết thì chúng tôi không có địa chỉ email nào của bạn.</p>
+            <p><strong>Không lưu:</strong> địa chỉ IP, và bất kỳ dữ liệu đo đạc nào.</p>
             <p>Trang <a class="link" href="#s1">Tài khoản</a> liệt kê đúng những mục này.</p>
           </section>
 
@@ -563,7 +593,7 @@
 
           <section class="doc-section" id="pd-5">
             <h5 class="doc-section__title">5. Quyền của bạn</h5>
-            <p>Bạn xem được mọi thứ đã lưu về mình, sửa tên hiển thị, và xóa tất cả. Ba việc đó nằm ở <a class="link" href="#s1">Tài khoản → Dữ liệu của tôi</a>.</p>
+            <p>Bạn xem được mọi thứ đã lưu về mình, <strong>tải một bản sao dữ liệu của mình</strong>, sửa tên hiển thị, và xóa tất cả. Bốn việc đó nằm ở <a class="link" href="#s1">Tài khoản → Dữ liệu của tôi</a>: nút <em>Tải bản sao dữ liệu của tôi</em> đứng ngay cạnh nút xóa, nên muốn giữ một bản trước khi xóa thì không phải đi hỏi ai.</p>
           </section>
 
           <section class="doc-section" id="pd-6">
@@ -586,13 +616,15 @@
                     <input id="pd-c2" type="checkbox" aria-describedby="pd-d2">
                     <label for="pd-c2">Quảng cáo</label>
                   </div>
-                  <p class="consent-cat__desc" id="pd-d2">Cho phép mạng quảng cáo đặt cookie cho quảng cáo trên trang web. Mặc định tắt. Khi tắt, ô quảng cáo vẫn giữ đúng chỗ và để trống, nên trang không xê dịch.</p>
+                  <p class="consent-cat__desc" id="pd-d2">Cho phép mạng quảng cáo đặt cookie cho quảng cáo trên trang web. Mặc định tắt. Khi tắt, trang không tải quảng cáo nào, và bố cục trang không thay đổi vì lựa chọn này.</p>
                 </li>
               </ul>
             </fieldset>
             <div class="consent-form__actions">
               <button class="btn btn--primary" type="button">Lưu lựa chọn</button>
             </div>
+            <!-- Vùng thông báo sống, rỗng ở trạng thái nghỉ — xem bản sáng 375. -->
+            <div class="consent-form__status" role="status"></div>
           </section>
 
           <section class="doc-section" id="pd-7">
@@ -910,7 +942,7 @@
     <li>Wordmark; nút Menu (chỉ dưới 768 px); ba liên kết nav; hai radio giao diện.</li>
     <li>Bảy mục trong mục lục, theo đúng thứ tự 1→7 — <code>columns: 2</code> chỉ đổi cách bày, không đổi DOM.</li>
     <li>Liên kết trong thân bài, theo thứ tự chúng xuất hiện trong câu.</li>
-    <li>Mục 6: ô “Quảng cáo”, rồi nút <em>Lưu lựa chọn</em>. Ô “Cần thiết” là <code>disabled</code> nên không nhận Tab — nó vẫn được đọc khi duyệt nội dung, và chữ “Luôn bật” nói rõ vì sao.</li>
+    <li>Mục 6: ô “Quảng cáo”, rồi nút <em>Lưu lựa chọn</em>. Ô “Cần thiết” là <code>disabled</code> nên không nhận Tab — nó vẫn được đọc khi duyệt nội dung, và chữ “Luôn bật” nói rõ vì sao. Vùng <code>role="status"</code> ngay sau nút Lưu <strong>không</strong> nhận Tab: nó là chỗ để thông báo, không phải một điều khiển. Vì vậy thứ tự bàn phím của mục 6 giống hệt nhau ở bản nghỉ và bản vừa lưu.</li>
     <li>Bốn liên kết chân trang, mỗi liên kết là một đích 44 px.</li>
   </ol>
   <p>
@@ -944,6 +976,7 @@
     <li><strong>Tab qua một bản dựng.</strong> Vòng tiêu điểm luôn thấy được và thứ tự khớp thứ tự nhìn.</li>
     <li><strong>Bấm một mục trong mục lục.</strong> Tiêu đề đích không dán sát mép trên (<code>:target</code> có <code>scroll-margin</code>).</li>
     <li><strong>Hai nhóm cookie, không phải ba.</strong> Không có công tắc “phân tích”. Nếu bạn thấy một cái, đó là lỗi.</li>
+    <li><strong>So hai bản nghỉ với hai bản vừa lưu.</strong> Đặt bản sáng 375 cạnh bản tối 375: mọi thứ từ nút Lưu trở lên nằm đúng một chỗ, phần thêm vào chỉ ở bên dưới.</li>
     <li><strong>Không có ô nào được tick sẵn</strong> ngoài “Cần thiết”, và “Cần thiết” nói rõ nó luôn bật.</li>
     <li><strong>Không có gì chuyển động.</strong> Bật <code>prefers-reduced-motion: reduce</code> và không có gì đổi, vì không có gì từng động.</li>
     <li><strong>Chuyển thang xám.</strong> Mọi trạng thái vẫn đọc được.</li>

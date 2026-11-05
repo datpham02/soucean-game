@@ -153,6 +153,13 @@
    surface the banner opens — so both exist, and designing the category list
    twice would be the way to make them disagree.
 
+   THE ONE THING THE TWO PLACES DO NOT SHARE is what happens after Save. The
+   dialog closes, so its confirmation belongs to the page it leaves behind, at
+   the top of `main`, where focus lands. The inline section does not close and
+   the reader does not move, so its confirmation belongs beside the button
+   they just pressed — `.consent-form__status`, below. Same component, same
+   wording, two placements, because "where the user is" is different.
+
    WHY NOTHING HERE SETS A BACKGROUND. The inline section sits on `bg`; the
    dialog sits on `surface`. Every colour these rows use — `text`,
    `text-muted`, `primary`, `border-strong` — is measured against BOTH in
@@ -224,6 +231,33 @@
    another one at 343px. Section 5 puts them back in a row at the switch. */
 .consent-form__actions .btn {
   inline-size: 100%;
+}
+
+/* The live region that confirms a save IN THE INLINE SECTION — the one at
+   /privacy#cookies, which is where the footer link and the banner's third
+   action both land, and therefore where a player who changes their mind
+   actually presses Save.
+
+   WHY IT IS A REGION AND NOT JUST A NOTICE. A `role="status"` announces what
+   is INSERTED into it; a status element that is itself inserted may be
+   announced late or not at all. So the empty region is part of the resting
+   markup of section 6, and only the `.notice` inside it appears and
+   disappears. That is why the sheet draws the empty container in two renders
+   rather than drawing nothing.
+
+   WHY IT SITS AFTER THE ACTIONS AND NOT ABOVE THEM. The reader who pressed
+   Save is at the Save button, mid-document, with the rest of the policy below
+   — a confirmation at the top of the page or the top of the section would
+   appear somewhere they are not looking. Below the button it is the next
+   thing in both the visual order and the reading order, and nothing above it
+   moves when it appears, so the button under the pointer or under focus stays
+   exactly where it was. Focus is not moved either (privacy-consent.md
+   section 8.3): the region is not a control and takes no tabindex.
+
+   The margin is on the NOTICE, not on the region, so the resting region
+   occupies no space at all and costs nothing when it is empty. */
+.consent-form__status > .notice {
+  margin-block-start: var(--space-md);
 }
 
 /* The category group's own box. base.css already gives a <fieldset> its
