@@ -174,7 +174,9 @@ shows four copies of each. So on the sheet:
   plain `div` is never a landmark;
 - the footer **is** a `<footer>` element, but nested inside `<section>`, which
   demotes it out of `contentinfo` by the HTML spec's own rule;
-- `main` is a `<div class="shell main">`, not a `<main>` element;
+- `main` is a `<div class="shell main" tabindex="-1">`, not a `<main>` element —
+  demoted out of the landmark, but it still has to answer the skip link, so it
+  keeps the `tabindex` the real element carries (see the bullet below);
 - each pane's `<nav>` is a real `<nav>` and stays one — several labelled
   navigation landmarks in a document are valid, and keeping them real is what
   lets the nav component be reviewed as a landmark at all.
@@ -301,6 +303,11 @@ signal, and it is never the only one: a disabled control also carries the
 `disabled` attribute (announced as "dimmed"/"unavailable"), a `not-allowed`
 cursor, and in every case in this library a visible label saying what is
 happening — "Đang lưu…", not a greyed-out "Lưu" with no explanation.
+
+The same paragraph covers a button carrying **`aria-disabled="true"`**, which
+gets the identical treatment by an explicit rule in `components.css` §7 — see
+§5.5. The exemption applies for the same reason: the control is inactive, and
+the dimming is a signal rather than text the user must read.
 
 ---
 
@@ -470,6 +477,13 @@ icon-only. **No icon is ever the only label.**
 ad.
 **States:** off-screen; visible and pinned top-left on focus. Never
 `display: none` — that would remove it from the tab order and defeat it.
+**Focus ring:** this is the **one control in the library whose ring is drawn
+inside its own edge** (`outline-offset` negated). Pinned flush to the viewport
+corner, the shared ring — 3 px at a +2 px offset — would be painted 2–5 px
+off-screen on two of its four sides. The inset version is the same width, the
+same colour and the same pair (`focus` on `surface`); it is simply all visible.
+Nothing else may copy this: everywhere else the offset is what keeps the ring
+off a primary fill.
 **Keyboard:** the **first** focusable element in the document, before the header
 ad slot (`ad-slots.md` §9.4). Enter follows it to `#main`.
 **Pages:** all eight.
@@ -564,6 +578,19 @@ every state block's action and all three consent actions. Destructive — accoun
 (Xóa dữ liệu của tôi) and its confirmation dialog. Quiet — nav disclosure,
 dialog Hủy, icon close.
 
+**`aria-disabled` is drawn, not only announced — required.** A button carrying
+`aria-disabled="true"` **must** render at `opacity: 0.5` with a `not-allowed`
+cursor, the same treatment `base.css` gives `:disabled`, and it must not take
+the 1 px press shift. `components.css` §7 ships that as
+`.btn[aria-disabled="true"]`; a page must not re-style it and must not omit it.
+The reason is the rule this system keeps everywhere else, read backwards:
+`:disabled` is a CSS pseudo-class and `aria-disabled` is an attribute, so
+`base.css`'s selector does not match it, and an unavailable button would be
+pixel-identical to an available one — the state announced to a screen reader
+and invisible to everyone else, including the sighted keyboard user the
+attribute exists to serve. Focus is **not** suppressed: staying focusable is
+the whole reason the attribute is used instead of the property.
+
 ### 5.6 `link`
 
 **For:** navigation inside running text.
@@ -625,6 +652,17 @@ and receives focus on a failed submit; each item links to its field's `id`.
 both named in `aria-describedby` so both are announced with it. The required/
 optional mark is a **word**, not an asterisk — an asterisk alone is not a label
 and is read as "star" by some screen readers.
+**Target:** on a `.choice` the target is the **row**, not the box. A native
+checkbox paints at `--icon-md` (20 px) because that is the size of a glyph; the
+44 px of `--target-min` comes from the row, where the `<label for>` stretches to
+the row's full height, takes a 44 px floor on its own width, and reaches back
+over the flex gap so its box starts at the checkbox's own edge. **Nothing
+moves** — the negative start margin is cancelled by an equal start padding —
+but the dead strip between control and label, where a near-miss tap used to land
+on nothing, is gone, and a short word like "Cần thiết" no longer decides how big
+the control is. A page must not shrink the row or set the label to
+`display: inline`, which would hand the target size back to the length of the
+word.
 
 ### 5.11 `dialog`
 
@@ -639,6 +677,15 @@ button so the keyboard behaviour can actually be tested.
 > the close button all do that, and all three return focus to the control that
 > opened it. **Tab cycling inside an open modal is the required behaviour**
 > (WCAG 2.4.3 and the ARIA dialog pattern), not the violation.
+
+**The backdrop is dark in both themes.** `.dialog::backdrop` reads
+`--dialog-scrim`, declared in `components.css` §14 as the dark ramp's
+`--slate-900` — a primitive, so it is the same colour under light and dark. It
+deliberately does **not** follow the theme. The earlier version reused
+`--color-text` on the reasoning "the page's own ink at half strength", which is
+true only in light; in dark `--color-text` is a near-white, so opening a dialog
+washed the page out instead of dimming it. A scrim has one job, and that job is
+the same in both themes.
 
 Native `<dialog>.showModal()` provides the cycle, the inert background, Esc and
 the top layer, so the product writes **no focus-management code of its own**.

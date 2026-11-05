@@ -1022,7 +1022,7 @@ linked stylesheets. No script, no iframe, no network request.
   </div>
 </header>
 
-<main id="main" class="page-main">
+<main id="main" class="page-main" tabindex="-1">
   <div class="shell">
     <h1 class="page-title">Tên trò chơi</h1>
 

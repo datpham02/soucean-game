@@ -190,9 +190,9 @@ The criteria, verbatim from
 3. **SOU-22 applied all three** and is merged to `main` (commit `55deda2`,
    PR #18): the `:not(:has(.state .btn))` guard on the three
    `components.css` §11 rules (A-01 + A-13), `tabindex="-1"` on `<main id="main">`
-   in all six page docs and all 48 sheet stand-ins (A-02), and the persistent
+   in all six page docs and all 44 sheet stand-ins (A-02), and the persistent
    sibling live region replacing `role="status"` inside the `aria-busy` block in
-   all 38 loading blocks (A-03).
+   all 36 loading blocks (A-03).
 4. **The audit has not been re-issued.** `accessibility-report.md` is SOU-8's
    document and SOU-22 did not edit it, correctly — a fix Task does not rewrite
    the auditor's verdict. So the published verdict in this repository still reads
