@@ -47,7 +47,7 @@ From the plan, §2. Routes are **proposed** there; M2 confirms them. Items marke
 | Home / game list | `/` | A card per game, built from **each game's manifest** **[GAM-16]**: thumbnail, title, short description, controls, a "Play" button, and this week's top 3 | The list is generated from the manifests at build time. Adding a game is adding its manifest and building — no hand-edited list. |
 | Play page | `/games/<game_id>` | The game frame (mounted or iframe **[GAM-16]**), title, controls, a weekly leaderboard beside or below it, and the ad slots of §5 | The game fills its container and letterboxes. The page never overlaps the frame. |
 | Leaderboards | `/leaderboards`, `/leaderboards/<game_id>` | This week's board per game, last week's final board, and the player's own rank and personal best | The week starts **Monday 00:00 UTC+7** (GAM-16 recommends this; GAM-16 confirms it). |
-| Account and profile | `/account` | Display name (editable, moderated), the anonymous id state, "Link Google or email" to keep scores across devices, sign out, and delete my data | Linking keeps the same player id. Delete removes the scores and the profile. |
+| Account and profile | `/account` | Display name (editable, moderated), the anonymous id state, "Link Google or email" to keep scores across devices, sign out, get a copy of my data, and delete my data | Linking keeps the same player id. Get a copy returns the player's own stored data. Delete removes the scores and the profile. |
 | Privacy policy | `/privacy` | What is stored, why, for how long, who processes it (backend, hosting, ad network), the player's rights, and contact | Written with legal input (OQ-039). Covers Decree 13/2023, and GDPR if EU players are expected. |
 | About | `/about` | Studio info and contact | Ad networks usually expect this page (OQ-038). |
 | Terms | `/terms` | Terms of use | Ad networks usually expect this page (OQ-038). |
@@ -81,8 +81,8 @@ Requirements that apply to **every** page, plan or no plan:
 - A player signs in before anything is stored against them.
 - Session handling, sign-in and sign-out live in server-side code. Paths under
   `AGENTS.md` §4 are security-sensitive.
-- A player can see everything stored about them, and can delete their account and
-  the data listed in §4.
+- A player can see everything stored about them, get a copy of it, and delete
+  their account and the data listed in §4.
 
 **Sign-in methods** (plan §3):
 
@@ -98,6 +98,8 @@ than creating a second one, so no score is orphaned.
 The backend provider is settled by ADR-021: Laravel issues the player token and
 handles account linking. The behaviour above is what the Laravel backend must
 deliver once M4 starts (§6).
+M4 server scope also includes a data-export endpoint for the signed-in player's
+own data; this path is security-sensitive under `AGENTS.md` §4.
 
 ---
 
@@ -117,6 +119,7 @@ schema follows GAM-16; no table is created before M4 (§6).
 | Field | Why it is needed | Retention |
 | --- | --- | --- |
 | `id` | The auth user id. Ties scores to a player. | Until the player deletes their account. |
+| `email` | Sign-in only, and only if the player links an email. Stored with the linked auth account and never shown publicly. | Until the player deletes their data or unlinks the email. |
 | `display_name` | Shown on the leaderboards. Editable, moderated. | Until the player deletes their account. |
 | `created_at` | Account age, for moderation and abuse handling. | Until the player deletes their account. |
 
@@ -139,8 +142,6 @@ stored copies.
 
 **Explicitly not stored** (plan §3):
 
-- No copy of the player's email. The auth provider holds it, and only if the
-  player links an email.
 - No IP addresses in any table.
 - No analytics or telemetry of any kind.
 
