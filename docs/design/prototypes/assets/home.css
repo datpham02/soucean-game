@@ -1,0 +1,523 @@
+/* ==========================================================================
+   Soucean Game — M1-05 page stylesheet
+   Home / game list, About, Terms.
+   --------------------------------------------------------------------------
+   Source of truth: docs/design/pages/home.md and
+   docs/design/pages/about-terms.md (Task SOU-3, milestone M1-05).
+
+   WHY ONE FILE FOR THREE PAGES. SOU-3's write set names exactly one
+   stylesheet, `home.css`, and three prototypes. So this file is the M1-05
+   page stylesheet, not "the home page's stylesheet": about.html and
+   terms.html link it too. The product rules below are split by page so M2
+   can lift them apart without untangling anything.
+
+   SCOPE RULE — read before editing.
+   There is not ONE raw colour, type size, spacing step, radius or duration
+   in this file. Every such value is read from tokens.css. The only literals
+   are hairline border widths (1px) and `768px` inside the media queries,
+   where CSS cannot read a custom property — the same literal, for the same
+   reason, that tokens.css, base.css, components.css and ads.css each repeat
+   and each document.
+
+   This file adds NO shared component. Everything here is either
+     (a) page layout, which belongs to a page and not to the library, or
+     (b) sheet furniture (section 3), which is not part of the product, or
+     (c) the band mirror (section 4), which restates what a viewport media
+         query already says so that a fixed-width view shows its own band.
+   One composition on top of `.skeleton` is reported rather than promoted —
+   see section 2.4 and home.md section 7.
+   ========================================================================== */
+
+/* The stack, in the order components.md section 7.1 fixes: tokens, base,
+   components. ads.css last — the pages carry the header leaderboard slot and
+   ad-slots.md section 11 makes ads.css the only owner of `.ad-slot`.
+   All four are relative, same-directory imports. None makes a request. */
+@import url('tokens.css');
+@import url('base.css');
+@import url('components.css');
+@import url('ads.css');
+
+/* ==========================================================================
+   1. SHARED PAGE LAYOUT — all three pages.
+   ========================================================================== */
+
+/* The vertical rhythm between major sections, from DESIGN.md -> "Containers
+   and gutters": 3xl on mobile, 4xl from the switch up. Applied as an adjacent
+   margin so the first section sits flush against `.main`'s own padding. */
+.page-section + .page-section {
+  margin-block-start: var(--space-3xl);
+}
+
+.page-section__title {
+  margin-block-end: var(--space-lg);
+}
+
+/* ==========================================================================
+   2. THE HOME PAGE.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   2.1 Hero.
+
+   DESIGN.md allocates two tokens to this block and to nothing else on the
+   site: `--text-display` ("Page hero, home page only") and `--radius-xl`
+   ("The hero block on the home page"). Both are spent here, which is why the
+   hero is a raised plate rather than bare text — the `xl` radius needs an
+   edge to be a radius of.
+
+   It is a page region, not a component: wireframes.md section 4.1 lists the
+   hero with no component against it, and nothing else on the site reuses it.
+
+   Pairs used, both already measured in DESIGN.md: `text` on `surface`
+   (15.58 light / 12.66 dark) and `text-muted` on `surface` (6.65 / 6.83).
+   No new pair.
+   -------------------------------------------------------------------------- */
+
+.hero {
+  padding: var(--space-xl);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+.hero__title {
+  margin: 0;
+  font-size: var(--text-display);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-tight);
+}
+
+.hero__lede {
+  /* DESIGN.md asks for 35-60 characters on mobile, 60-75 on desktop. The lede
+     is one sentence at body-lg, so it is capped tighter than base.css's 70ch
+     default for running text. */
+  max-inline-size: 60ch;
+  margin-block: var(--space-md) 0;
+  font-size: var(--text-body-lg);
+  line-height: var(--leading-body);
+  color: var(--color-text-muted);
+}
+
+/* --------------------------------------------------------------------------
+   2.2 The game grid's own region.
+
+   `.game-grid` and `.game-card` are components.css's — this Task does not
+   restyle either, and nothing below touches them. The only thing a page owns
+   here is where the grid's region states sit.
+   -------------------------------------------------------------------------- */
+
+/* The grid's empty and error states replace the whole grid, so they take the
+   grid's place in the flow and reserve its height with `.state--reserve-lg`
+   (components.md section 4.1 names reserve-lg as "the home game grid"). This
+   rule adds nothing but the cap: a 1200px-wide centred state block would put
+   its one sentence across the whole page. */
+.grid-state {
+  max-inline-size: 70ch;
+  margin-inline: auto;
+}
+
+/* --------------------------------------------------------------------------
+   2.3 The loading grid — skeleton cards that reserve the final card size.
+
+   SOU-3 asks for a loading state whose "skeleton cards reserve the final card
+   size so the grid does not jump". That is a stronger requirement than a
+   `.state` block can meet: a single centred block reserves ONE height, and
+   what must not move here is the grid's column geometry and each card's box.
+
+   So the loading grid is the REAL `.game-grid` holding REAL `.game-card`
+   shells, with a `.skeleton` child standing in for each of the card's six
+   slots. The grid therefore has the same columns, the same 32px gap, the same
+   card padding and the same card radius whether it is loading or loaded —
+   there is nothing for a media query or a breakpoint to get wrong, because it
+   is the same two components in both states.
+
+   NOTE a conflict, recorded rather than resolved silently: components.md
+   section 4.4 gives the home grid NO loading state, because the grid is built
+   from the manifests at build time. SOU-3's acceptance criteria ask for one
+   explicitly. This file implements SOU-3's instruction; home.md section 7
+   raises the contradiction for the reviewer and the Board.
+   -------------------------------------------------------------------------- */
+
+/* --------------------------------------------------------------------------
+   2.4 Reserving a line box exactly.
+
+   Each class below reserves the height of the real element it stands in for,
+   computed from the SAME type tokens that element reads. That is what makes
+   the reservation exact rather than approximate, and it is why these are
+   calc() expressions and not heights: a height would be a literal, and a
+   literal would drift from the type scale the moment the scale moved.
+
+   They are page-level compositions ON TOP of `.skeleton__block`, not variants
+   OF it. components.md section 7.1 forbids a page adding a variant to the
+   shared library, so the thing that is arguably missing from that library — a
+   skeleton block that reserves a named element's line box — is reported on
+   the Task (home.md section 7) instead of being promoted here.
+   -------------------------------------------------------------------------- */
+
+/* Stands in for `.game-card__title`, an h3 at headline-sm. */
+.sk-reserve--title {
+  block-size: calc(var(--text-headline-sm) * var(--leading-headline-sm));
+}
+
+/* Stands in for one line of `.game-card__desc`, at body-sm. */
+.sk-reserve--line {
+  block-size: calc(var(--text-body-sm) * var(--leading-body-sm));
+}
+
+/* Stands in for `.game-card__meta`, at caption. */
+.sk-reserve--meta {
+  block-size: calc(var(--text-caption) * var(--leading-label));
+}
+
+/* Stands in for the whole `.game-card__top3` strip: its md padding on both
+   sides, its dt at label-sm, and its three dd rows at body-sm. */
+.sk-reserve--top3 {
+  block-size: calc(
+    2 * var(--space-md) + var(--text-label-sm) * var(--leading-label) + 3 *
+      var(--text-body-sm) * var(--leading-body-sm)
+  );
+}
+
+/* Stands in for the card's action row. `.btn` is exactly --target-min tall. */
+.sk-reserve--action {
+  block-size: var(--target-min);
+}
+
+/* Stands in for one line of document body text, at body-md. Used by the
+   About and Terms loading state. */
+.sk-reserve--body {
+  block-size: calc(var(--text-body-md) * var(--leading-body));
+}
+
+/* ==========================================================================
+   3. THE ABOUT AND TERMS PAGES — the long-form document template.
+
+   components.md section 5.16 handed M1-05 ONE template for these two pages
+   (and for Privacy, which is M1-07's): `.shell--text` capped at the reading
+   measure, an h1, a last-updated line, an in-page contents list of ORDINARY
+   LINKS, then numbered h2 sections. It introduces no new component, and
+   neither does this.
+   ========================================================================== */
+
+.doc__updated {
+  margin-block: var(--space-sm) var(--space-2xl);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--color-text-muted);
+}
+
+/* The in-page contents. The container is `.card`, which already exists; the
+   only rules here are the list's own, because base.css styles neither an
+   `ol`'s indent nor a contents link's target size. */
+.doc__toc-list {
+  margin: 0;
+  padding-inline-start: var(--space-xl);
+}
+
+.doc__toc-list li + li {
+  /* DESIGN.md: at least 8px between adjacent targets. */
+  margin-block-start: var(--space-sm);
+}
+
+/* A contents entry is a navigation target, not a link inside a sentence, so
+   it is padded out to the 44px minimum DESIGN.md sets for every interactive
+   target. The visible text does not grow; the hit area does. */
+.doc__toc-list a {
+  display: inline-block;
+  padding-block: var(--space-md);
+}
+
+.doc-section + .doc-section {
+  margin-block-start: var(--space-3xl);
+}
+
+.doc-section__title {
+  margin-block-end: var(--space-lg);
+}
+
+/* ==========================================================================
+   4. SHEET FURNITURE — NOT PART OF THE PRODUCT.
+
+   Everything from here down exists so one file can show one page at both
+   design widths, in both themes, in every state. No product page uses any of
+   it, and none of it describes a component.
+
+   It is this Task's own furniture rather than components.css section 19's,
+   because that section says in its own first paragraph: "No page mockup
+   should use any of it." So the four classes a mockup genuinely needs — a
+   sheet, a caption, a scroller and a fixed-width view — are restated here
+   under an `mk-` prefix, and nothing is borrowed.
+
+   THE ONE EXCEPTION, STATED PLAINLY — the same one wireframes.md section 2
+   and components.md section 1.3 each recorded. tokens.css section 7 steps
+   five type tokens in a VIEWPORT media query on `:root`. A fixed-width view
+   cannot restate that step without writing type-size literals into this file,
+   which the scope rule at the top forbids and which is exactly the drift that
+   rule exists to prevent. So IN A WINDOW >= 768px WIDE THE 375px VIEWS RENDER
+   `--text-display`, `--text-headline-lg`, `--text-headline-md`,
+   `--text-headline-sm` AND `--text-body-lg` AT THEIR DESKTOP SIZE. It affects
+   headings only; it changes no layout, no region, no state and no reading
+   order. To read a mobile view at its true type scale, narrow the window
+   below 768px. In the product the question never arises, because there the
+   band comes from the viewport.
+   ========================================================================== */
+
+.mk-sheet {
+  max-inline-size: calc(var(--bp-desktop) + 2 * var(--space-3xl));
+  margin-inline: auto;
+  padding-inline: var(--space-lg);
+  padding-block: var(--space-2xl) var(--space-6xl);
+}
+
+.mk-sheet__kicker {
+  font-size: var(--text-label-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+.mk-sheet__lede {
+  max-inline-size: 70ch;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--color-text-muted);
+}
+
+.mk-section {
+  margin-block-start: var(--space-5xl);
+  padding-block-start: var(--space-2xl);
+  border-block-start: 1px solid var(--color-border);
+}
+
+.mk-section > p {
+  max-inline-size: 70ch;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--color-text-muted);
+}
+
+.mk-specs {
+  display: grid;
+  gap: var(--space-2xl);
+  margin-block: var(--space-lg);
+}
+
+/* Two 375px views sit side by side on a wide monitor and wrap on a narrow
+   one, so light and dark can be compared without scrolling between them. */
+.mk-specs--row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.mk-cap {
+  margin-block-end: var(--space-sm);
+  font-size: var(--text-label-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+/* A 1280px view does not fit every reader's window. Scroll the view, never
+   the page, and never scale it — a scaled mockup cannot be measured. */
+.mk-scroll {
+  overflow-x: auto;
+}
+
+/* The view: a fixed-width slice of a real page, at a real design width. The
+   gutter is set here rather than read from `--layout-gutter`, because that
+   token is viewport-dependent and a view's band must be a property of the
+   view. It is set to the SAME spacing tokens DESIGN.md gives each band, so it
+   restates a choice and invents no value. */
+.mk-view {
+  --layout-gutter: var(--space-lg);
+
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  outline: 1px solid var(--color-border-strong);
+}
+
+.mk-view--mobile {
+  inline-size: var(--bp-mobile);
+}
+
+.mk-view--desktop {
+  --layout-gutter: var(--space-2xl);
+
+  inline-size: var(--bp-desktop);
+}
+
+/* The skip link is positioned against the site header and lives off-screen
+   until it is focused. On a sheet it is drawn in its FOCUSED position so a
+   reviewer can see it without tabbing — and so that a translated-away link
+   does not float over the caption above each view. The real behaviour is
+   proved by tabbing in the product, never by this rule. Same trade, same
+   reason, as components.css section 19. */
+.mk-view .skip-link {
+  position: static;
+  transform: none;
+}
+
+/* A note under a view: "hover", "focus", "the 768px band". */
+.mk-tag {
+  display: block;
+  margin-block-start: var(--space-xs);
+  font-size: var(--text-label-sm);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+/* Stacked specimens inside one view — three state blocks, say. */
+.mk-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+}
+
+.mk-table {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+}
+
+.mk-table th {
+  font-size: var(--text-label-sm);
+  color: var(--color-text);
+}
+
+.mk-table td {
+  vertical-align: top;
+}
+
+/* ==========================================================================
+   5. THE BAND.
+
+   Section 5.1 is the real media query — the one rule set that ships.
+   Section 5.2 mirrors it onto `.mk-view--mobile` / `.mk-view--desktop`, which
+   is what lets a 375px view show the mobile band inside a 1280px window.
+
+   The mirror restates `display`, `grid-template-columns`, `flex-direction`
+   and `padding`, and nothing else. It restates no size, no colour and no
+   spacing token choice that is not already stated above or in the library.
+   768px is M1-01's `switch`; this file introduces no breakpoint of its own
+   and uses `wide` (1024px) nowhere — the side rail belongs to the play page,
+   which is not one of these three.
+   ========================================================================== */
+
+/* --- 5.1 The product rules. ---------------------------------------------- */
+
+@media (min-width: 768px) {
+  .page-section + .page-section {
+    margin-block-start: var(--space-4xl);
+  }
+
+  .doc-section + .doc-section {
+    margin-block-start: var(--space-4xl);
+  }
+
+  /* Seven contents entries down one column push the first section below the
+     fold on a desktop monitor. Two columns is the same list, read in half the
+     height; it is the shape components.css already gives its own contents
+     list, so the page and the sheet agree. */
+  .doc__toc-list {
+    columns: 2;
+  }
+}
+
+/* --- 5.2 The mirror, both directions. -----------------------------------
+
+   Both directions are stated on purpose: a mobile view has to UNDO the media
+   query when the sheet is read on a wide monitor, not merely fail to opt in.
+   The selectors score (0,2,0) or (0,3,0) against the media block's (0,1,0) or
+   (0,2,0), and this file is imported last, so they win on both counts. */
+
+.mk-view--mobile .page-section + .page-section,
+.mk-view--mobile .doc-section + .doc-section {
+  margin-block-start: var(--space-3xl);
+}
+
+.mk-view--mobile .doc__toc-list {
+  columns: auto;
+}
+
+.mk-view--mobile .main {
+  padding-block: var(--space-3xl);
+}
+
+.mk-view--mobile .game-grid {
+  grid-template-columns: 1fr;
+}
+
+.mk-view--mobile :is(.game-card, .card) {
+  padding: var(--space-lg);
+}
+
+.mk-view--mobile .site-nav__toggle {
+  display: inline-flex;
+}
+
+.mk-view--mobile .site-nav__toggle[aria-expanded='false'] + .site-nav__list {
+  display: none;
+}
+
+.mk-view--mobile .site-nav__toggle[aria-expanded='true'] + .site-nav__list {
+  display: flex;
+  flex-direction: column;
+  padding-block-end: var(--space-md);
+}
+
+.mk-view--desktop .page-section + .page-section,
+.mk-view--desktop .doc-section + .doc-section {
+  margin-block-start: var(--space-4xl);
+}
+
+.mk-view--desktop .doc__toc-list {
+  columns: 2;
+}
+
+.mk-view--desktop .main {
+  padding-block: var(--space-4xl);
+}
+
+.mk-view--desktop .game-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.mk-view--desktop :is(.game-card, .card) {
+  padding: var(--space-xl);
+}
+
+.mk-view--desktop .site-nav__toggle {
+  display: none;
+}
+
+.mk-view--desktop .site-nav__list {
+  display: flex;
+  flex-direction: row;
+  gap: var(--space-sm);
+  padding-block-end: 0;
+}
+
+/* The one ad slot these three pages carry: ad-header-leaderboard, 728 x 90,
+   in the site header, from 768px up and NOWHERE below it (ad-slots.md
+   section 3). ads.css gates it on the viewport; a fixed-width view has to
+   restate that gate or a 375px view would show a slot the mobile band does
+   not have.
+
+   `flex` is ads.css's "on" value, copied here. The cross-reference can only
+   be one-way — ads.css belongs to M1-02 and this Task does not edit it — so
+   if ads.css ever changes that display type, these two rules keep `flex`
+   silently. The same note wireframes.md open item 6 records for the same
+   reason. Nothing else about the slot is restated: the size, the margins,
+   `flex: none` and `position: static` all stay in ads.css. */
+.mk-view--mobile .ad-slot.ad-slot--header-leaderboard {
+  display: none;
+}
+
+.mk-view--desktop .ad-slot.ad-slot--header-leaderboard {
+  display: flex;
+}
