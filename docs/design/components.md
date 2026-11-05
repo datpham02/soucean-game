@@ -478,12 +478,14 @@ ad.
 **States:** off-screen; visible and pinned top-left on focus. Never
 `display: none` — that would remove it from the tab order and defeat it.
 **Focus ring:** this is the **one control in the library whose ring is drawn
-inside its own edge** (`outline-offset` negated). Pinned flush to the viewport
-corner, the shared ring — 3 px at a +2 px offset — would be painted 2–5 px
-off-screen on two of its four sides. The inset version is the same width, the
-same colour and the same pair (`focus` on `surface`); it is simply all visible.
-Nothing else may copy this: everywhere else the offset is what keeps the ring
-off a primary fill.
+inside its own edge** (`outline-offset` set to the negative of the ring's
+*width*, −3 px). Pinned flush to the viewport corner, the shared ring — 3 px at
+a +2 px offset — would be painted 2–5 px off-screen on two of its four sides.
+Negating the *offset* instead would not be enough: the ring is painted outward
+from the outline edge, so at −2 px its last 1 px would still fall outside the
+border box. At −3 px it is flush inside that edge — same width, same colour,
+same pair (`focus` on `surface`), and all four sides visible. Nothing else may
+copy this: everywhere else the offset is what keeps the ring off a primary fill.
 **Keyboard:** the **first** focusable element in the document, before the header
 ad slot (`ad-slots.md` §9.4). Enter follows it to `#main`.
 **Pages:** all eight.

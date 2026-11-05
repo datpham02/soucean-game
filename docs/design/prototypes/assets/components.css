@@ -236,16 +236,21 @@
    ever focuses on this site was showing half its designed area. Accessibility
    report A-11.
 
-   A negative offset of the same magnitude puts all four sides on-screen
-   without moving the control, without resizing the ring, and without a new
-   colour pair: the ring now lands on this element's own `surface` fill, the
-   same pair it lands on when it is drawn outside. The padding is
-   var(--space-lg), so 5px of inset does not reach the label. */
+   The offset here is the negative of the ring's WIDTH, not of the shared
+   offset. `outline-offset` moves the outline edge relative to the border box
+   and the ring is painted outward from that edge, so negating the 2px offset
+   would still leave 1px of a 3px ring outside the border box — still
+   off-screen on those two sides. Negating the width instead lands the ring
+   flush inside the border edge: all four sides on-screen, the control does
+   not move, the ring is not resized, and there is no new colour pair — it
+   sits on this element's own `surface` fill, the same pair it lands on when
+   it is drawn outside. The padding is var(--space-lg) = 16px, so 3px of
+   inset does not reach the label. */
 .skip-link:focus-visible,
 .skip-link.is-focus {
   transform: translateY(0);
   outline: var(--focus-ring-width) solid var(--color-focus);
-  outline-offset: calc(var(--focus-ring-offset) * -1);
+  outline-offset: calc(var(--focus-ring-width) * -1);
 }
 
 /* --------------------------------------------------------------------------
@@ -664,7 +669,8 @@
 /* The press is a claim that the button did something. It did not. */
 .btn[aria-disabled='true']:active,
 .btn[aria-disabled='true'].is-active,
-.btn.is-disabled:active {
+.btn.is-disabled:active,
+.btn.is-disabled.is-active {
   transform: none;
 }
 
