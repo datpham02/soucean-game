@@ -211,11 +211,16 @@ A **real page** uses the elements, not the demoted stand-ins:
 
 ### 3.1 Method, and what it is not
 
-**Every ratio below is quoted from `DESIGN.md` → "Measured contrast".** None was
-produced by this Task. That is deliberate: this Task had no way to measure a new
-pair (§8.1), so instead of estimating one it designed within the set that was
-already measured and accepted. The **source column** says where each figure
-comes from, so a reviewer can check it against `DESIGN.md` without re-measuring.
+Ratios in §3.2 are quoted from `DESIGN.md` → "Measured contrast". Ratios in
+§3.4 are measured in this Task from the token hex values in
+`prototypes/assets/tokens.css`, using the same WCAG 2.1 formula:
+
+- convert sRGB channels to linear light;
+- compute relative luminance `L = 0.2126R + 0.7152G + 0.0722B`;
+- compute contrast as `(L_lighter + 0.05) / (L_darker + 0.05)`.
+
+Values are shown to 2 decimals by truncation to match `DESIGN.md`'s display
+style.
 
 Requirements applied: **4.5:1** for body text, **3:1** for large text (≥ 24 px
 regular or ≥ 19 px semibold) and for non-text UI boundaries and the focus
@@ -261,29 +266,20 @@ mistake a skeleton bar for a boundary.
 | `border` on `bg` | 1.33 | 1.50 | **The skeleton bar.** It carries no information and is `aria-hidden`; the "it is loading" signal is the live-region text beside it. WCAG 1.4.11 exempts pure decoration. Also the decorative divider and the card edge. |
 | `surface` on `bg` | 1.06 | 1.12 | Surface separation is carried by the border and the radius, never by the fill. A `.btn--secondary` inside a `bg`-filled state block is delimited by its `border-strong` edge (3.48 / 3.58), not by its fill. |
 
-### 3.4 One pair that is bounded rather than measured
+### 3.4 Measured `primary-hover` pairs
 
-`primary-hover` on `bg` and on `surface` is used for a hovered link and a
-hovered secondary button. `DESIGN.md` measured `primary-hover` only against
-`on-primary`, so these two are **not** in the measured set.
+`primary-hover` on `bg` and on `surface` is used for hovered links and hovered
+secondary buttons. `DESIGN.md` publishes `primary-hover` only against
+`on-primary`, so these four uses are measured here with the method in §3.1.
 
-They are nonetheless provably above the requirement, by channel dominance
-rather than by measurement — relative luminance is monotonic in each channel:
+| Pair | Exact ratio | Reported (2dp, truncated) | Needs | Result |
+| --- | --- | --- | --- | --- |
+| Light: `primary-hover` `#175347` on `bg` `#F3F3F0` | 7.98801646 | 7.98 | 4.5 | PASS |
+| Light: `primary-hover` `#175347` on `surface` `#FAFAF8` | 8.49762230 | 8.49 | 4.5 | PASS |
+| Dark: `primary-hover` `#7FD7C5` on `bg` `#181B1C` | 10.25159729 | 10.25 | 4.5 | PASS |
+| Dark: `primary-hover` `#7FD7C5` on `surface` `#212527` | 9.14832303 | 9.14 | 4.5 | PASS |
 
-- **Light:** `primary-hover` `#175347` is **darker than or equal to** `primary`
-  `#1F6B5C` in every channel (17 ≤ 1F, 53 ≤ 6B, 47 ≤ 5C). Lower luminance
-  against a lighter background can only raise the ratio, so the pair is
-  **≥ 5.69:1 on `bg`** and **≥ 6.05:1 on `surface`**.
-- **Dark:** `primary-hover` `#7FD7C5` is **lighter than or equal to** `primary`
-  `#5FC9B4` in every channel (7F ≥ 5F, D7 ≥ C9, C5 ≥ B4). Higher luminance
-  against a darker background can only raise the ratio, so the pair is
-  **≥ 8.65:1 on `bg`** and **≥ 7.72:1 on `surface`**.
-
-These are **bounds, not measurements**, and they are labelled as such. The gap
-is inherited: `base.css` already sets `a:hover { color: var(--color-primary-hover) }`,
-so this pair has been in the product since M1-01 without a published figure.
-Recorded as an open item in §8.2 so M1-01 can publish the exact ratio when the
-Board next amends `DESIGN.md`.
+All four are comfortably above AA.
 
 ### 3.5 Disabled controls
 
@@ -759,12 +755,10 @@ states (measure the block's height in all three — it is the same number).
 
 ### 7.3 To the Board
 
-Two things want a decision rather than silent acceptance:
+One thing wants a decision rather than silent acceptance:
 
 1. **The destructive-button styling extends `error` beyond the role
    `DESIGN.md` gives it** (§6.1).
-2. **`primary-hover` on `bg`/`surface` is bounded, not measured** (§3.4) — a gap
-   inherited from `base.css`, not introduced here.
 
 ---
 
@@ -773,17 +767,13 @@ Two things want a decision rather than silent acceptance:
 Recorded plainly, because an unverified claim presented as verified is worse
 than a gap.
 
-### 8.1 No contrast measurement was performed
+### 8.1 No full-table contrast audit was performed
 
-The environment this Task ran in **could not execute an interpreter**, so no
-ratio could be computed and the `design.md` CLI could not be run. Rather than
-estimate a figure and call it measured, the library was **designed to use only
-pairs `DESIGN.md` had already measured** (§2.1, §3.1). Every ratio in §3.2 is
-quoted with its source; the single pair outside that set is labelled a **bound**
-with the proof shown (§3.4).
-
-A reviewer who can run the tool should spot-check §3.2 against
-`design.md lint docs/design/DESIGN.md` and publish the exact figure for §3.4.
+This Task measured the four `primary-hover` pairs in §3.4 directly with the
+WCAG 2.1 formula from token hex values. It did **not** rerun or re-audit all
+`DESIGN.md` contrast rows in this environment. Ratios in §3.2 are therefore
+quoted from `DESIGN.md` with source attribution, and only §3.4 is newly
+computed in this Task.
 
 ### 8.2 No rendered visual check
 
@@ -821,14 +811,12 @@ substituted for either.
 ## 9. Open items
 
 1. **The destructive-button token role** (§6.1) — for the Board.
-2. **`primary-hover` contrast is bounded, not measured** (§3.4) — for M1-01's
-   next amendment.
-3. **The Vietnamese font check remains open** (§8.3) — the specimen exists; the
+2. **The Vietnamese font check remains open** (§8.3) — the specimen exists; the
    three-platform pass does not.
-4. **The segmented control vs the two-boards-at-once layout** (§6.3) — not a
+3. **The segmented control vs the two-boards-at-once layout** (§6.3) — not a
    conflict today, but the first page Task that wants the control to replace a
    board must amend `wireframes.md` first.
-5. **Nothing in this library is sticky except the consent banner**, and it is
+4. **Nothing in this library is sticky except the consent banner**, and it is
    the only focus trap on the site along with the two dialogs. If a later Task
    needs a second sticky surface, `ad-slots.md` §7 has to be revisited, not this
    document.
