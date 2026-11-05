@@ -6,7 +6,7 @@
 widths, in both themes.
 
 This Task **is** the M1 exit criterion *"contrast and keyboard checks pass"*.
-The verdict is in §9. It is a **FAIL**, on three Major findings, none of which
+The verdict is in §9. It is a **FAIL**, on four Major findings, none of which
 requires a palette change, a component redesign or a new breakpoint. §9 states
 exactly what turns it into a pass.
 
@@ -16,15 +16,17 @@ exactly what turns it into a pass.
 
 **Contrast passes.** Every foreground/background pair the designs actually use
 meets its AA threshold, with margin; the tightest pair measures 3.15:1 against a
-3:1 requirement. No colour has to change. **Keyboard traversal passes** —
-reachability, visible focus, tab order, no trap, working skip link, on all eight
-pages. **Focus management and live regions do not pass.** The documented
-focus-return target (`#main`) cannot receive focus as specified (A-02), and the
-loading live region is marked in a way that suppresses the announcement it
-exists to make (A-03). Both are named explicitly in this Task's acceptance
-criteria, and both are small, local fixes. A third Major finding (A-01) is a
-pointer-input defect found during the audit: a retry button that cannot be
-clicked.
+3:1 requirement. No colour has to change. **Keyboard traversal passes with one
+exception** — reachability, tab order, no trap and a working skip link hold on
+all eight pages, and the focus indicator is visible everywhere; but in one state
+it describes the wrong control (A-13, the Home top-3 error card). **Focus
+management and live regions do not pass.** The documented focus-return target
+(`#main`) cannot receive focus as specified (A-02), and the loading live region
+is marked in a way that suppresses the announcement it exists to make (A-03).
+Both are named explicitly in this Task's acceptance criteria, and both are
+small, local fixes. Two further Major findings (A-01 and A-13) sit on the same
+component: a retry button that cannot be clicked, and a focus ring that cannot
+be told apart from its neighbour's.
 
 ---
 
@@ -87,8 +89,15 @@ Static source analysis of every prototype and of the canonical page HTML in
   (confirmed: zero occurrences);
 - `display:none` / `[hidden]` correctly removes closed disclosures from the
   tab ring;
-- the focus ring is never suppressed without replacement;
+- the focus ring is never suppressed without replacement, **and where a
+  replacement ring is drawn on an ancestor, no two tab stops inside that
+  ancestor can produce the same ring**;
 - focus-return targets exist and are focusable.
+
+That second clause was added after review. Worded as "never suppressed without
+replacement" alone, the check passes `components.css:878` — a ring *is* drawn,
+just on the card — and that is exactly how **A-13** survived the first pass.
+Anyone repeating this audit should apply the clause as written.
 
 The one live keyboard check that a static sheet can carry is in
 `prototypes/components.html` §14: a real `<dialog>` opened with `showModal()`,
@@ -235,7 +244,7 @@ published figures, not contrast.
 | Every interactive element reachable | **pass** | All controls are native elements; the one `tabindex="0"` is the game frame (`play.html:127`), deliberate and named. |
 | No positive `tabindex` | **pass** | Zero occurrences across all prototypes and page docs. |
 | Tab order matches reading order | **pass** | Zero uses of CSS `order`. The one visual/DOM divergence — the play page's side rail coming last at ≥1024 px — is the correct pattern for supplementary content and is declared at `play.html:1117`. |
-| Visible focus indicator | **pass** | `base.css:160-164`, 3 px ring, 2 px offset, measured 5.11:1 or better light and 7.94:1 or better dark. The offset is load-bearing: focus blue on primary teal measures 1.01:1, so the offset moves the ring onto the surface behind. |
+| Visible focus indicator | **pass, with A-13** | `base.css:160-164`, 3 px ring, 2 px offset, measured 5.11:1 or better light and 7.94:1 or better dark. The offset is load-bearing: focus blue on primary teal measures 1.01:1, so the offset moves the ring onto the surface behind. A ring is always *drawn* — but in one state it is drawn around the wrong element: see **A-13**. |
 | No keyboard trap | **pass** | No sticky surface traps focus; the consent banner is explicitly non-modal (`cookie-settings.html:876-884`). Tab cycling *inside* an open `showModal()` dialog is the required behaviour of WCAG 2.1.2, not a violation, and Esc / Cancel / close all exit. |
 | Skip to content | **pass, with A-02** | First focusable element in the document, before the header ad slot, on all eight pages. Never `display:none`. Lands on `#main` — but see A-02 for what `#main` is missing. |
 | Focus moves **into** the consent banner | **pass** | `tabindex="-1"` on the `<aside>`, not on "Chấp nhận" — so no answer is pre-selected for an inertial Enter (`cookie-settings.html:865-874`, `privacy-consent.md:574`). Correct and well reasoned. |
@@ -304,6 +313,10 @@ control. **Minor** — real defect, no user is blocked. **Advisory** — not a W
 Page / state / breakpoint / theme are given per finding; "all" means the finding
 does not vary along that axis.
 
+Findings are ordered by severity, not by ID. **A-13** was raised in review after
+A-01 … A-12 were published; its ID is kept stable and it is filed with the other
+Majors, next to A-01, which it shares a fix with.
+
 ---
 
 ### A-01 · Major · The retry button inside a game card cannot be clicked
@@ -341,6 +354,69 @@ This also contradicts two documented claims:
 **Suggested direction (the fix is the owning Task's call):** scope the stretched
 hit area so it does not cover a nested state block, or drop the stretch on any
 card that contains a second control.
+
+**The fix must cover three rules, not one.** `components.css:862` is only the
+pointer half of this defect. The same "the card is the control" assumption is
+encoded again in the focus rules at `components.css:872` and `:878`, and that
+half is **A-13**. Scoping the `::after` alone fixes the pointer bug and ships
+the keyboard one. Whatever condition the owning Task uses to disable the stretch
+— a modifier class, or a `:has()` test for a nested state block — must gate all
+three rules together, so that a card with a second control gets no stretched hit
+area, no card-level ring, and no suppression of the ring on its own buttons.
+
+---
+
+### A-13 · Major · In the error state the focus ring describes the wrong control
+
+- **Page:** Home (and any page placing a state block inside `.game-card`)
+- **State:** top-3 strip, error · **Breakpoint:** both · **Theme:** both
+- **Fix owner:** M1-04 component library (`components.css`), with SOU-3 (M1-05)
+  as the consumer — **same fix as A-01**
+
+Found in review of this report, not in the original pass; numbered A-13 because
+the earlier IDs were already published, and placed here with the other Majors.
+Same card, same file and same root cause as A-01 — that assumption's pointer
+half is A-01, and this is its keyboard half.
+
+```css
+.game-card:has(.btn:focus-visible),
+.game-card.is-focus {
+  outline: var(--focus-ring-width) solid var(--color-focus);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.game-card:has(.btn:focus-visible) .btn:focus-visible {
+  outline: none;
+}
+```
+
+`components.css:872-880`. The "Thử lại" button (`home.html:677`) is a `.btn`
+inside `.game-card`, so `:has(.btn:focus-visible)` matches when it is focused:
+the ring is drawn around the **whole card**, and the second rule then **removes
+it from the button itself**. No rule restores it — the only `:focus-visible`
+rules in the stylesheet set are `base.css:160`, `base.css:167`,
+`components.css:224`, `:447`, `:872` and `:878`.
+
+**Failure scenario:** a keyboard user on Home, top-3 strip in its error state.
+Tab lands on "Thử lại" — the whole card rings. Tab again lands on "Chơi" — the
+whole card rings identically. Two consecutive tab stops, one pixel-identical
+indicator, and no way to tell which control is focused or what Enter will do.
+Unlike A-01 this one is keyboard-only: a pointer user sees hover and the cursor.
+
+The CSS comment at `components.css:869-871` states the rule's own premise —
+*"the whole card is what will activate"* — which is true of "Chơi" and false of
+"Thử lại". The premise, not the implementation, is what fails here, which is why
+it is the same defect as A-01 wearing different clothes.
+
+This does **not** fail WCAG 2.4.7 (a visible indicator is present) and it is not
+a 2.4.11 failure under 2.1, which has no such criterion. It is a Major because
+it defeats what the indicator is *for*: §5.1 of this report accepts the focus
+ring as the evidence that keyboard users can tell where they are, and in this
+state it is not evidence of that.
+
+**Suggested direction:** gate both rules on the same condition as A-01's
+`::after`, so that a card containing a second control falls back to `base.css`'s
+per-element ring, which is already correct for this case.
 
 ---
 
@@ -721,7 +797,7 @@ Stated plainly, and with its parts separated so the Board can see what is solid:
 | Component of the criterion | Verdict |
 | --- | --- |
 | **Contrast** — every pair measured, every pair against AA | **PASS** |
-| **Keyboard traversal** — reachability, visible focus, tab order, no trap, skip link | **PASS** |
+| **Keyboard traversal** — reachability, visible focus, tab order, no trap, skip link | **PASS** (one state's focus ring names the wrong control, A-13) |
 | **Not colour alone** | **PASS** |
 | **Semantics** — landmarks, heading order, labels, table headers | **PASS** (one mockup-sheet defect, A-09) |
 | **Live regions** for loading and error | **FAIL** — A-03 |
@@ -730,25 +806,30 @@ Stated plainly, and with its parts separated so the Board can see what is solid:
 The criterion is a conjunction, so two failing parts make the whole criterion
 fail. This is **not** a verdict against the design. The palette is sound, the
 component library is unusually disciplined, the contrast work is genuinely done,
-and the keyboard model — one tab stop per card, native radios for the theme
-toggle, links rather than a JS tab widget, `showModal()` rather than hand-rolled
-focus trapping, a consent banner that takes focus without pre-selecting an answer
-— is better than most shipped products.
+and the keyboard model — one tab stop per card in every state but one, native
+radios for the theme toggle, links rather than a JS tab widget, `showModal()`
+rather than hand-rolled focus trapping, a consent banner that takes focus
+without pre-selecting an answer — is better than most shipped products.
 
-What fails is three specific, local things.
+What fails is four Major findings across three specific, local things — A-01 and
+A-13 are the pointer and keyboard halves of a single wrong assumption in one
+component.
 
 ### What turns this into a PASS
 
-Fix the three Major findings. They are small and none of them touches a token, a
-breakpoint or a layout:
+Three fixes clear all four Major findings — A-01 and A-13 are one defect seen
+from two input methods and are cleared together. None of the three touches a
+token, a breakpoint or a layout:
 
 1. **A-02** — add `tabindex="-1"` to `<main id="main">` in all six page docs.
    One attribute, six files.
 2. **A-03** — move `role="status"` and its text out of the `aria-busy` block into
    a persistent sibling live region. One pattern change in `components.md` §4.3
    plus the copies in each page.
-3. **A-01** — stop the card's stretched hit area from covering a nested state
-   block. One selector in `components.css`.
+3. **A-01 and A-13** — stop treating the whole card as the control when the card
+   holds a second one. Three rules in `components.css`, gated on one condition:
+   the stretched hit area at `:862`, the card-level focus ring at `:872`, and
+   the ring suppression at `:878`. Fixing only `:862` leaves A-13 shipped.
 
 The Minor and Advisory findings should be raised as their own Tasks and are not
 gating. **A-06** should be done before the Board relies on any published ratio,
