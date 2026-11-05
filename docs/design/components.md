@@ -438,6 +438,47 @@ CSS follows the attribute, so the mark and the announcement cannot disagree.
 **Keyboard:** Tab order is wordmark → nav toggle → nav links → theme toggle.
 The disclosure is a `<button>` with `aria-expanded`; Enter/Space toggles it.
 
+#### The two interactive controls, state by state
+
+`components.html` §2 renders the header once as composed chrome and then again
+as a **five-state grid**, in both themes at both widths, so these two controls
+are held to the same standard as the buttons in §5.5 rather than being shown
+only at rest. Where a state does not exist, it is named and its absence is
+justified — an omitted state and an impossible state are different claims, and
+only the second one is being made here.
+
+| State | `site-nav__link` | `theme-toggle__option` |
+| --- | --- | --- |
+| default | `text`, no underline; the current page carries weight + 2 px underline + `primary` | `text-muted` on transparent; the chosen option is `on-primary` on a `primary` plate, with weight |
+| hover | `primary-hover` + underline | unchosen → `text`; **chosen → the plate moves to `primary-hover`**, label stays `on-primary` |
+| keyboard focus | the shared ring: `focus` at the system width and offset, drawn by `base.css` on `:focus-visible`. No nav-specific focus rule exists, and none should | the same ring, moved onto the **visible label** — the real `<input>` is visually hidden, so a ring on the input would be a ring on nothing |
+| active | `primary-hover` **and** a 1 px `translateY` — a nav link is both a link (§5.6's colour shift) and a target-sized control (§5.5's press nudge), so it does both | the 1 px `translateY`, the same press every pill-shaped control in this library makes |
+| disabled | **does not apply** — see below | **does not apply** — see below |
+
+**Why a nav link has no disabled state.** A route either exists, in which case
+it is a link, or it does not, in which case it is absent from the menu. There
+is no third condition in which the destination is real but temporarily
+unreachable, so there is nothing for a disabled nav link to mean. The Account
+link is the case worth naming explicitly: a signed-out player still follows it
+— to sign in — so it is never dimmed. If a later milestone does find a route
+that must be visible and unusable, that is an `aria-disabled="true"` anchor
+**without `href`** per §5.6, and it needs a Task, not a local override here.
+
+**Why the theme toggle has no disabled state.** Both themes always exist, the
+choice is entirely local to the browser, and nothing is ever in flight that
+could make it briefly unavailable. HTML would happily let the radios carry
+`disabled`; this design says they never do.
+
+**One cascade fix this grid forced out.** Drawing the current-page link in
+hover exposed that it had none: `.site-nav__link[aria-current='page']` and
+`.site-nav__link.is-hover` carry identical specificity (0-2-0) and the
+`aria-current` block is written later, so it won and the current page was the
+one nav item that did not answer the pointer. The same held for the chosen
+theme option, where `:has(input:checked)` scores 0-2-1 against hover's 0-2-0.
+Both now have explicit hover rules, and both land on `primary-hover` — the
+pair `DESIGN.md` measures at **8.55:1** light and **9.63:1** dark against
+`on-primary` (§3.2), so the fix does not spend any contrast.
+
 The theme toggle is a **`<fieldset>` of two real `<input type="radio">`** — two
 mutually exclusive choices, not a switch, because a switch implies an "off" this
 control has no concept of. Using real radios rather than buttons wearing

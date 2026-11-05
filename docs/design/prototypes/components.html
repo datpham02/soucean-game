@@ -323,6 +323,309 @@
       </div></div>
     </section>
   </div>
+
+  <p>Hai điều khiển trong header được vẽ lại dưới đây theo <strong>cùng một mô hình
+     trạng thái</strong> như nút ở §3 — mặc định, hover, focus bàn phím, active, disabled —
+     thay vì chỉ xuất hiện một lần ở trạng thái mặc định. Với cả hai,
+     <strong>disabled không áp dụng</strong>; lý do được ghi ngay tại chỗ và đầy đủ trong
+     <code>components.md</code> §5.3. Trạng thái bị bỏ qua và trạng thái không tồn tại là
+     hai chuyện khác nhau, nên chỗ này nói rõ là chuyện thứ hai.</p>
+
+  <div class="spec">
+    <section class="spec__cell">
+      <h3 class="spec__cap">Sáng · 375 — năm trạng thái</h3>
+      <div class="pane pane--mobile">
+        <div class="pane__stack">
+          <p class="u-flush"><strong>Liên kết điều hướng</strong></p>
+          <div class="pane__row">
+            <span class="pane__cell"><a class="site-nav__link" href="#s2">Bảng xếp hạng</a><span class="pane__tag">mặc định</span></span>
+            <span class="pane__cell"><a class="site-nav__link is-hover" href="#s2">Bảng xếp hạng</a><span class="pane__tag">hover</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><a class="site-nav__link is-focus" href="#s2">Bảng xếp hạng</a><span class="pane__tag">focus bàn phím</span></span>
+            <span class="pane__cell"><a class="site-nav__link is-active" href="#s2">Bảng xếp hạng</a><span class="pane__tag">active</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><a class="site-nav__link" href="#s2" aria-current="page">Trò chơi</a><span class="pane__tag">trang hiện tại</span></span>
+            <span class="pane__cell"><a class="site-nav__link is-hover" href="#s2" aria-current="page">Trò chơi</a><span class="pane__tag">trang hiện tại · hover</span></span>
+          </div>
+          <p class="pane__tag"><strong>disabled — không áp dụng.</strong> Một tuyến đường
+             hoặc tồn tại, và là liên kết, hoặc không, và bị bỏ khỏi menu.
+             <code>components.md</code> §5.3.</p>
+
+          <p class="u-flush"><strong>Nút chuyển giao diện</strong></p>
+          <div class="pane__row">
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — mặc định</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="ta1" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="ta1"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">mặc định</span>
+            </span>
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — hover</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="ta2" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option is-hover"><input class="u-visually-hidden" type="radio" name="ta2"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">hover — lựa chọn chưa chọn</span>
+            </span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — focus</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="ta3" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option is-focus"><input class="u-visually-hidden" type="radio" name="ta3"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">focus bàn phím</span>
+            </span>
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — active</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="ta4" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option is-active"><input class="u-visually-hidden" type="radio" name="ta4"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">active</span>
+            </span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — hover trên lựa chọn hiện tại</legend>
+                <label class="theme-toggle__option is-hover"><input class="u-visually-hidden" type="radio" name="ta5" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="ta5"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">hover — lựa chọn đang chọn</span>
+            </span>
+          </div>
+          <p class="pane__tag"><strong>disabled — không áp dụng.</strong> Hai giao diện luôn
+             có sẵn và lựa chọn nằm hoàn toàn trong trình duyệt, nên không có gì đang chạy
+             để làm nó tạm thời không dùng được. <code>components.md</code> §5.3.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="spec__cell">
+      <h3 class="spec__cap">Sáng · 1280 — năm trạng thái</h3>
+      <div class="spec__scroll"><div class="pane pane--desktop">
+        <div class="pane__stack">
+          <p class="u-flush"><strong>Liên kết điều hướng</strong></p>
+          <div class="pane__row">
+            <span class="pane__cell"><a class="site-nav__link" href="#s2">Bảng xếp hạng</a><span class="pane__tag">mặc định</span></span>
+            <span class="pane__cell"><a class="site-nav__link is-hover" href="#s2">Bảng xếp hạng</a><span class="pane__tag">hover</span></span>
+            <span class="pane__cell"><a class="site-nav__link is-focus" href="#s2">Bảng xếp hạng</a><span class="pane__tag">focus bàn phím</span></span>
+            <span class="pane__cell"><a class="site-nav__link is-active" href="#s2">Bảng xếp hạng</a><span class="pane__tag">active</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><a class="site-nav__link" href="#s2" aria-current="page">Trò chơi</a><span class="pane__tag">trang hiện tại</span></span>
+            <span class="pane__cell"><a class="site-nav__link is-hover" href="#s2" aria-current="page">Trò chơi</a><span class="pane__tag">trang hiện tại · hover</span></span>
+            <span class="pane__cell"><a class="site-nav__link is-active" href="#s2" aria-current="page">Trò chơi</a><span class="pane__tag">trang hiện tại · active</span></span>
+          </div>
+          <p class="pane__tag"><strong>disabled — không áp dụng.</strong> Một tuyến đường
+             hoặc tồn tại, và là liên kết, hoặc không, và bị bỏ khỏi menu.
+             <code>components.md</code> §5.3.</p>
+
+          <p class="u-flush"><strong>Nút chuyển giao diện</strong></p>
+          <div class="pane__row">
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — mặc định</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="tb1" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="tb1"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">mặc định</span>
+            </span>
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — hover</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="tb2" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option is-hover"><input class="u-visually-hidden" type="radio" name="tb2"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">hover — lựa chọn chưa chọn</span>
+            </span>
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — focus</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="tb3" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option is-focus"><input class="u-visually-hidden" type="radio" name="tb3"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">focus bàn phím</span>
+            </span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — active</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="tb4" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option is-active"><input class="u-visually-hidden" type="radio" name="tb4"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">active</span>
+            </span>
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — hover trên lựa chọn hiện tại</legend>
+                <label class="theme-toggle__option is-hover"><input class="u-visually-hidden" type="radio" name="tb5" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="tb5"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">hover — lựa chọn đang chọn</span>
+            </span>
+          </div>
+          <p class="pane__tag"><strong>disabled — không áp dụng.</strong> Hai giao diện luôn
+             có sẵn và lựa chọn nằm hoàn toàn trong trình duyệt, nên không có gì đang chạy
+             để làm nó tạm thời không dùng được. <code>components.md</code> §5.3.</p>
+        </div>
+      </div></div>
+    </section>
+
+    <section class="spec__cell">
+      <h3 class="spec__cap">Tối · 375 — năm trạng thái</h3>
+      <div class="pane pane--mobile" data-theme="dark">
+        <div class="pane__stack">
+          <p class="u-flush"><strong>Liên kết điều hướng</strong></p>
+          <div class="pane__row">
+            <span class="pane__cell"><a class="site-nav__link" href="#s2">Bảng xếp hạng</a><span class="pane__tag">mặc định</span></span>
+            <span class="pane__cell"><a class="site-nav__link is-hover" href="#s2">Bảng xếp hạng</a><span class="pane__tag">hover</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><a class="site-nav__link is-focus" href="#s2">Bảng xếp hạng</a><span class="pane__tag">focus bàn phím</span></span>
+            <span class="pane__cell"><a class="site-nav__link is-active" href="#s2">Bảng xếp hạng</a><span class="pane__tag">active</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><a class="site-nav__link" href="#s2" aria-current="page">Trò chơi</a><span class="pane__tag">trang hiện tại</span></span>
+            <span class="pane__cell"><a class="site-nav__link is-hover" href="#s2" aria-current="page">Trò chơi</a><span class="pane__tag">trang hiện tại · hover</span></span>
+          </div>
+          <p class="pane__tag"><strong>disabled — không áp dụng.</strong> Một tuyến đường
+             hoặc tồn tại, và là liên kết, hoặc không, và bị bỏ khỏi menu.
+             <code>components.md</code> §5.3.</p>
+
+          <p class="u-flush"><strong>Nút chuyển giao diện</strong></p>
+          <div class="pane__row">
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — mặc định</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="tc1"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="tc1" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">mặc định</span>
+            </span>
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — hover</legend>
+                <label class="theme-toggle__option is-hover"><input class="u-visually-hidden" type="radio" name="tc2"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="tc2" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">hover — lựa chọn chưa chọn</span>
+            </span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — focus</legend>
+                <label class="theme-toggle__option is-focus"><input class="u-visually-hidden" type="radio" name="tc3"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="tc3" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">focus bàn phím</span>
+            </span>
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — active</legend>
+                <label class="theme-toggle__option is-active"><input class="u-visually-hidden" type="radio" name="tc4"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="tc4" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">active</span>
+            </span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — hover trên lựa chọn hiện tại</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="tc5"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option is-hover"><input class="u-visually-hidden" type="radio" name="tc5" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">hover — lựa chọn đang chọn</span>
+            </span>
+          </div>
+          <p class="pane__tag"><strong>disabled — không áp dụng.</strong> Hai giao diện luôn
+             có sẵn và lựa chọn nằm hoàn toàn trong trình duyệt, nên không có gì đang chạy
+             để làm nó tạm thời không dùng được. <code>components.md</code> §5.3.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="spec__cell">
+      <h3 class="spec__cap">Tối · 1280 — năm trạng thái</h3>
+      <div class="spec__scroll"><div class="pane pane--desktop" data-theme="dark">
+        <div class="pane__stack">
+          <p class="u-flush"><strong>Liên kết điều hướng</strong></p>
+          <div class="pane__row">
+            <span class="pane__cell"><a class="site-nav__link" href="#s2">Bảng xếp hạng</a><span class="pane__tag">mặc định</span></span>
+            <span class="pane__cell"><a class="site-nav__link is-hover" href="#s2">Bảng xếp hạng</a><span class="pane__tag">hover</span></span>
+            <span class="pane__cell"><a class="site-nav__link is-focus" href="#s2">Bảng xếp hạng</a><span class="pane__tag">focus bàn phím</span></span>
+            <span class="pane__cell"><a class="site-nav__link is-active" href="#s2">Bảng xếp hạng</a><span class="pane__tag">active</span></span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell"><a class="site-nav__link" href="#s2" aria-current="page">Trò chơi</a><span class="pane__tag">trang hiện tại</span></span>
+            <span class="pane__cell"><a class="site-nav__link is-hover" href="#s2" aria-current="page">Trò chơi</a><span class="pane__tag">trang hiện tại · hover</span></span>
+            <span class="pane__cell"><a class="site-nav__link is-active" href="#s2" aria-current="page">Trò chơi</a><span class="pane__tag">trang hiện tại · active</span></span>
+          </div>
+          <p class="pane__tag"><strong>disabled — không áp dụng.</strong> Một tuyến đường
+             hoặc tồn tại, và là liên kết, hoặc không, và bị bỏ khỏi menu.
+             <code>components.md</code> §5.3.</p>
+
+          <p class="u-flush"><strong>Nút chuyển giao diện</strong></p>
+          <div class="pane__row">
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — mặc định</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="td1"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="td1" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">mặc định</span>
+            </span>
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — hover</legend>
+                <label class="theme-toggle__option is-hover"><input class="u-visually-hidden" type="radio" name="td2"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="td2" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">hover — lựa chọn chưa chọn</span>
+            </span>
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — focus</legend>
+                <label class="theme-toggle__option is-focus"><input class="u-visually-hidden" type="radio" name="td3"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="td3" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">focus bàn phím</span>
+            </span>
+          </div>
+          <div class="pane__row">
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — active</legend>
+                <label class="theme-toggle__option is-active"><input class="u-visually-hidden" type="radio" name="td4"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="td4" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">active</span>
+            </span>
+            <span class="pane__cell">
+              <fieldset class="theme-toggle">
+                <legend class="u-visually-hidden">Giao diện — hover trên lựa chọn hiện tại</legend>
+                <label class="theme-toggle__option"><input class="u-visually-hidden" type="radio" name="td5"><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>Sáng</label>
+                <label class="theme-toggle__option is-hover"><input class="u-visually-hidden" type="radio" name="td5" checked><svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>Tối</label>
+              </fieldset>
+              <span class="pane__tag">hover — lựa chọn đang chọn</span>
+            </span>
+          </div>
+          <p class="pane__tag"><strong>disabled — không áp dụng.</strong> Hai giao diện luôn
+             có sẵn và lựa chọn nằm hoàn toàn trong trình duyệt, nên không có gì đang chạy
+             để làm nó tạm thời không dùng được. <code>components.md</code> §5.3.</p>
+        </div>
+      </div></div>
+    </section>
+  </div>
 </section>
 
 

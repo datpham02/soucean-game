@@ -309,6 +309,22 @@
   text-underline-offset: 0.18em;
 }
 
+/* Pressed. Both signals of the two conventions this control sits between: the
+   `primary-hover` shift every link makes (section 8) and the 1px nudge every
+   target-sized control makes (`.btn`, `.segmented__link`). A nav link is both,
+   so it does both. Keyboard focus is the shared `.is-focus` ring in section 2
+   plus base.css's `:focus-visible`; there is no nav-specific focus rule and
+   there must not be one.
+
+   There is NO disabled rule here on purpose. A navigation link is never
+   disabled — a route either exists, and is a link, or it does not, and is
+   absent from the menu. components.md section 5.3 states that in full. */
+.site-nav__link:active,
+.site-nav__link.is-active {
+  color: var(--color-primary-hover);
+  transform: translateY(1px);
+}
+
 /* The current page. Marked by WEIGHT and an UNDERLINE as well as colour —
    DESIGN.md: status is never colour alone. Driven by aria-current so the
    mark and the announcement cannot drift apart. */
@@ -318,6 +334,24 @@
   text-decoration: underline;
   text-decoration-thickness: 2px;
   text-underline-offset: 0.18em;
+}
+
+/* The current-page link still has to answer the pointer. Without these two
+   rules it would not: `.site-nav__link[aria-current='page']` and
+   `.site-nav__link.is-hover` carry the same specificity, and the aria-current
+   block is written later, so it would win the cascade and the current page
+   would be the one nav item that looks dead under the cursor. The underline
+   and the weight stay — only the colour moves, exactly as the segmented
+   control's selected item does (section 9). */
+.site-nav__link[aria-current='page']:hover,
+.site-nav__link[aria-current='page'].is-hover {
+  color: var(--color-primary-hover);
+}
+
+.site-nav__link[aria-current='page']:active,
+.site-nav__link[aria-current='page'].is-active {
+  color: var(--color-primary-hover);
+  transform: translateY(1px);
 }
 
 /* --- Theme toggle ---------------------------------------------------------
@@ -374,6 +408,37 @@
   font-weight: var(--font-weight-semibold);
   color: var(--color-on-primary);
   background-color: var(--color-primary);
+}
+
+/* The chosen option has to answer the pointer too. The plain hover rule above
+   cannot do it: it only moves `color`, and the checked rule outranks it
+   (`:has(input:checked)` takes its argument's specificity, so it is 0-2-1
+   against hover's 0-2-0) — and even if it won, text at `color-text` on a
+   `primary` plate is not a pair this system has measured. So the chosen
+   option hovers the way the segmented control's chosen item does: the PLATE
+   moves to `primary-hover` and the label stays `on-primary`, a pair DESIGN.md
+   measures at 8.55 light / 9.63 dark. Without this, the one option the player
+   is most likely to point at is the one that looks dead. */
+.theme-toggle__option:has(input:checked):hover,
+.theme-toggle__option:has(input:checked).is-hover,
+.theme-toggle__option.is-checked:hover,
+.theme-toggle__option.is-checked.is-hover {
+  color: var(--color-on-primary);
+  background-color: var(--color-primary-hover);
+}
+
+/* Pressed. The same 1px nudge as every other pill-shaped, target-sized
+   control in this library (`.btn`, `.segmented__link`), so a press feels the
+   same wherever it lands. `:active` on the LABEL, not the input: the input is
+   visually hidden, so the label is the thing the finger is on.
+
+   There is NO disabled rule here on purpose. The theme toggle is never
+   disabled — both themes always exist, the choice is local to the browser,
+   and nothing can be in flight that would make it temporarily unavailable.
+   components.md section 5.3 states that in full. */
+.theme-toggle__option:active,
+.theme-toggle__option.is-active {
+  transform: translateY(1px);
 }
 
 /* The real input is visually hidden, so the ring has to be moved to the
