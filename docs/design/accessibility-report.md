@@ -854,3 +854,60 @@ Task that owns the file; GAM-21 raises the fix Tasks.
 `docs/design/` — `DESIGN.md`, `components.md`, `ad-slots.md`, `wireframes.md`,
 `pages/home.md`, `pages/play.md`, `pages/leaderboards.md`, `pages/account.md`,
 `pages/privacy-consent.md`, `pages/about-terms.md`
+
+---
+
+## 11. Addendum — re-verification after SOU-22
+
+**Date:** 2026-11-05 · **Task:** SOU-26 · **Author:** `qa-engineer`
+
+Added after §10 so that nothing above it moves. §1 … §10 are the audit as it was
+published, and are left exactly as they were: the **FAIL** in §9 is the verdict
+of that audit, against the code as it stood then, and it is not rewritten here.
+This section records what changed afterwards.
+
+**The four Major findings are fixed.** A-01, A-13, A-02 and A-03 were fixed by
+SOU-22 (commit `55deda2`, PR #18) and re-verified by this auditor in the SOU-22
+review. §9 "What turns this into a PASS" lists three fixes; all three landed, and
+each was checked against the finding that asked for it:
+
+| Finding | Fix as landed at `55deda2` | Re-verified |
+| --- | --- | --- |
+| **A-01** · stretched hit area covers the retry button | `components.css` §11's stretched `::after` now carries the guard `:not(:has(.state .btn))` | yes |
+| **A-13** · card-level focus ring names the wrong control | the same guard on the card-level ring and on the suppression of the button's own ring, so all three rules switch off together | yes |
+| **A-02** · `#main` cannot receive focus | `tabindex="-1"` on `<main id="main">` in all six page docs and in `components.md`'s canonical shell, and on every `.shell.main` stand-in in the sheets | yes |
+| **A-03** · live region marked so it will not announce | no element carries `role="status"` and `aria-busy="true"` together any more; the status text sits in a persistent sibling live region, per `components.md` §4.3 note 3 | yes |
+
+**Method: static, same as §2 — not a browser or screen-reader pass.** The
+re-verification was selector-to-markup matching plus exhaustive `grep` over the
+prototypes and page docs: that the three `components.css` rules carry the same
+guard and that no `.game-card` with a nested state-block button is left with a
+stretched hit area; that within A-02's scope — the six `pages/*.md`,
+`components.md`'s canonical shell, and the `.shell.main` stand-ins in the hi-fi
+sheets — no `<main>` is missing `tabindex="-1"` (the grep was not exhaustive
+over every audited file; see the third bullet below); and that no element
+combines `role="status"` with `aria-busy="true"`. No browser was opened and no
+screen reader was run, for the same tooling reasons §2.1 and §2.3 record.
+
+**What is still owed, and when.** Three things carry over to M2 and are not
+discharged by this addendum — the two checks a static pass cannot make, and one
+gap the static pass found outside A-02's scope:
+
+- a **browser click-through of `home.html` §4** (top-3 strip, error state),
+  confirming by pointer that "Thử lại" is clickable and that the two tab stops
+  draw distinguishable rings;
+- an **NVDA and VoiceOver pass** over the loading and error live regions,
+  confirming the announcement A-03 exists to make actually fires;
+- **`ad-slots.md:1025`** — the full page skeleton there still reads
+  `<main id="main" class="page-main">` with no `tabindex="-1"`, while carrying a
+  `<a class="skip-link" href="#main">` at `:1013`. The file is listed in §10
+  "Files audited" but sits outside A-02's stated scope, so SOU-22 correctly left
+  it alone. It matters because that skeleton is a copy source: a page Task that
+  builds from it in M2 reintroduces A-02. Owed to the ad-slots Task in M2.
+
+Until the first two run, the fixes for A-01, A-13 and A-03 are verified at the
+level of markup and selectors only. §2.3's limits still apply to them.
+
+**Minor and Advisory findings are unchanged by this.** A-04 … A-12 were out of
+SOU-22's scope and are tracked as their own Tasks; §9's note stands, in
+particular that **A-06** needs an environment that can run a script.
