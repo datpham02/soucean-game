@@ -1,7 +1,7 @@
 # AGENTS.md — soucean-game
 
 **Status:** Seed (milestone M0). Owner: the Board, through `project-manager`.
-Last updated: 2026-11-04.
+Last updated: 2026-11-05.
 
 Soucean Game is the studio's multi-game website: one site that lists the studio's
 games and hosts them. It is a **platform project** in the sense of ADR-014 of the
@@ -17,7 +17,8 @@ not two.
 
 ## 1. Stack
 
-**TBD in M2.**
+Frontend stack is **TBD in M2**. Backend direction is fixed by ADR-021:
+**Laravel + MySQL**, with Laravel as the only database client.
 
 The web framework, and with it the language runtime, the build tool, the test
 runner and the linter, is chosen in milestone M2 and recorded in
@@ -25,7 +26,7 @@ runner and the linter, is chosen in milestone M2 and recorded in
 down:
 
 - add **no** runtime dependencies;
-- add **no** backend, hosting, analytics or ad-network configuration;
+- add **no** hosting, analytics or ad-network configuration;
 - do not pin a framework in documentation, CI or tooling config, and do not
   "temporarily" scaffold one to try it out on a task branch that will be merged.
 
@@ -35,10 +36,8 @@ The repository therefore has no package manifest yet. That is deliberate.
 
 ## 2. Commands
 
-The real commands arrive with the stack in M2. The names below are reserved now
-so CI, docs and task descriptions can refer to them before they exist. Implement
-them as `package.json` scripts, or the chosen stack's equivalent, when the stack
-lands.
+The frontend commands arrive with the stack in M2. The backend test command below
+is fixed now by ADR-021.
 
 | Purpose | Command | Available from |
 | --- | --- | --- |
@@ -47,7 +46,7 @@ lands.
 | Unit tests | `npm test` | M2 |
 | Production build | `npm run build` | M2 |
 | End-to-end tests (Playwright) | `npm run test:e2e` | M4 |
-| Row-level-security policy tests | `npm run test:rls` | M4 |
+| Backend feature tests | `docker compose run --rm test` | M4 |
 | Apply migrations — **dev project only** | `npm run db:migrate` | M4 |
 
 CI ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) runs install, lint and
@@ -59,6 +58,11 @@ cause or report it.
 Run the build and the tests before you ask for review, and put the results in the
 pull-request comment.
 
+Backend run policy:
+
+- Agents run backend checks with `docker compose run --rm test` only.
+- Agents do **not** start long-running containers in their runs.
+
 ---
 
 ## 3. Environments
@@ -68,7 +72,7 @@ This is the rule that matters most in this repository.
 | Milestone | Backend | Who may act |
 | --- | --- | --- |
 | **M0 – M3** | **None.** There is no backend, no database and no hosting configuration. | agents, in this repository only |
-| **M4 onward** | **Dev project only**, through the backend provider's CLI. | agents, against dev |
+| **M4 onward** | **Local Docker only** (`app`, `mysql`, `reverb`, `test`). | agents, in this repository only |
 | **Any** | **Production** — database, hosting, DNS, ad network, payments. | **the Board Operator, and nobody else** |
 
 Rules that do not change with the milestone:
@@ -106,15 +110,17 @@ Everything else says `Security-sensitive: no`.
 
 | Path (planned) | Why it is sensitive |
 | --- | --- |
-| `supabase/migrations/**`, `db/migrations/**` | schema and row-level-security policy changes |
-| `**/policies/**.sql`, `**/*.policy.sql` | row-level-security policies |
-| `src/server/auth/**`, `src/lib/auth/**`, `**/auth/**` | authentication and session handling |
-| `supabase/functions/**`, `src/server/**` | server functions that grant scores, rewards or entitlements |
-| `src/**/leaderboard/**`, `src/**/entitlements/**`, `src/**/rewards/**` | score, reward and entitlement grants |
+| `database/migrations/**`, `db/migrations/**` | schema changes |
+| `app/Policies/**`, `**/Policies/**` | authorization policy rules |
+| `app/Http/Middleware/**`, `**/middleware.*`, `**/*csp*`, `**/*cors*` | request, CSP and CORS boundary |
+| `app/Providers/RouteServiceProvider.php`, `routes/**` | route binding and API exposure |
+| `app/Http/Controllers/**`, `app/Jobs/**` | score submission and entitlement/reward execution paths |
+| `app/Models/**/Leaderboard*`, `app/**/Leaderboard/**`, `app/**/Entitlements/**`, `app/**/Rewards/**` | score, reward and entitlement grants |
+| `app/Providers/**`, `app/Support/**RateLimit*`, `routes/api.php` | rate limiters and API throttling |
+| `app/**/Auth/**`, `config/auth.php`, `config/sanctum.php` | authentication and session/token handling |
 | `**/payments/**`, `**/billing/**` | payment code |
 | `.github/workflows/**`, `.github/CODEOWNERS` | CI and review configuration (supply chain, §11) |
-| `**/middleware.*`, `**/*csp*`, `**/*cors*` | CSP, CORS and request middleware |
-| `.env.example`, `**/config/secrets*` | secret configuration shape |
+| `.env*`, `config/**` | secret and security configuration shape |
 | `AGENTS.md`, this section | the rules themselves |
 
 ---
@@ -127,8 +133,8 @@ Everything else says `Security-sensitive: no`.
   Minimal by default; if a field is not listed there, do not store it.
 - No analytics, no tracking, no third-party scripts unless a task **and** the
   cookie-consent design allow them.
-- Every table that holds player data has row-level security enabled, and its
-  policies are covered by tests.
+- Every player-data read and write path is protected by server-side rules, and
+  those rules are covered by automated tests.
 - Database changes are **versioned migrations**, committed to this repository.
   Never a manual change in a provider dashboard.
 
@@ -172,9 +178,8 @@ repository-relative.
 - Work on the task branch; never commit to `main`, never merge, never force-push.
 - Small, logical commits. Push the task branch and open a pull request linked to
   the task.
-- Add automated tests for the behaviour you change: unit tests, row-level-security
-  policy tests, and Playwright end-to-end tests where the change is visible on a
-  page.
+- Add automated tests for the behaviour you change: unit tests, backend feature
+  tests, and Playwright end-to-end tests where the change is visible on a page.
 - Bring a branch up to date with `git fetch origin` then `git merge origin/main`.
   Do not rebase.
 - Keep accessibility in the acceptance criteria, not as a follow-up: semantic

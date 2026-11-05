@@ -2,8 +2,9 @@
 
 - **Status:** `PROPOSED` checklist for the Board Operator. Every step is a Board action (ADR-014 §6). Agents do not run these steps.
 - **Plan:** [soucean-game-plan.md](soucean-game-plan.md) §5 (M0) and §7.
+- **Supabase was dropped on 2026-11-05 (ADR-021): Laravel + MySQL.**
 - **No backend, hosting or domain account in M0** (Board, 2026-11-04). Those steps are under "Later steps".
-- Steps on external websites describe their UI as of writing (`UNVERIFIED`, OQ-036 and OQ-037). Follow the provider's current screens if they differ.
+- Steps on external websites describe their UI as of writing (`UNVERIFIED`, OQ-037). Follow the provider's current screens if they differ.
 
 Do the steps in order. After each step, tell the studio session what you did, but **never paste a key or password into chat, an issue or a file**.
 
@@ -72,7 +73,7 @@ Follow [agent-onboarding.md](https://github.com/datpham02/game-studio/blob/main/
    - the `workspace-write` profile (security-architecture §4), including the task-branch push and merge-from-main rules;
    - reports to `project-manager`.
 3. **GitHub token:** a fine-grained token for **`datpham02/soucean-game` only**, with Contents read/write and Pull requests read/write. Bind it as `GH_TOKEN`.
-4. **Supabase dev credentials:** none at M0. Bind them at the start of M4. Never bind production credentials.
+4. **Backend credentials:** none at M0. Keep production credentials unbound to agents at every milestone.
 5. Set a budget.
 6. Run Paperclip's "Test Environment" for the agent.
 
@@ -99,8 +100,7 @@ When you say yes, a studio session creates the Paperclip issue "Seed soucean-gam
 ## Later steps (not M0)
 
 The Board decided on 2026-11-04 to design and build first and host last. The backend and hosting steps are kept below for when they are due:
-- Supabase dev: start of M4.
-- Supabase prod: M6.
+- Laravel + MySQL + Reverb local stack: start of M4.
 - Google OAuth client: M4.
 - Hosting, domain and ad network: M6.
 - Lawyer: before M6.
@@ -108,19 +108,20 @@ The Board decided on 2026-11-04 to design and build first and host last. The bac
 
 See the plan, §7.
 
-### Supabase (Board, start of M4 for dev; M6 for prod)
+### Backend local runtime (Board, start of M4)
 
-1. Create a Supabase account with a studio-owned email.
-2. Create the project **`soucean-game-dev`**:
-   - region: the one closest to Vietnam (for example Singapore);
-   - store the database password in your password manager.
-3. In the dev project's Auth settings, enable **anonymous sign-ins** (OQ-036).
-4. Give agents dev access by binding these Paperclip secrets to `web-engineer` and `qa` only:
-   - the project URL;
-   - the anon (publishable) key;
-   - the **dev database connection string**, for migrations with `supabase db push --db-url`.
-5. **Do not create or bind a Supabase personal access token for agents.** A personal access token belongs to your user account and may reach every project you own, including production (`UNVERIFIED`, OQ-036). If a token is ever needed, first create a separate Supabase organization or account that contains only dev projects.
-6. Create **`soucean-game-prod`** at M6, when the first real data is needed. Use a separate organization, or at least never put its credentials anywhere an agent can read. Only you hold its keys and apply its migrations (security-architecture §10).
+1. Confirm the repository has a Docker Compose stack with services:
+   - `app` (Laravel application with PHP-FPM);
+   - `mysql` (database);
+   - `reverb` (WebSocket runtime for realtime features);
+   - `test` (automated test runner using SQLite in memory).
+2. Confirm agent operation rule:
+   - agents run tests with `docker compose run --rm test`;
+   - agents do not start long-running containers in their runs.
+3. Confirm anonymous identity is Laravel-issued and scoped to player actions:
+   - token is created on first score submission;
+   - linking Google or email keeps the same player id.
+4. Keep all database credentials server-side only. The browser receives the backend URL and its own player token, never a database credential.
 
 ### Cloudflare Pages (Board, M6)
 
@@ -130,7 +131,7 @@ See the plan, §7.
    - production branch `main`;
    - preview deploys for other branches.
 2. Environment variables:
-   - **Preview:** the dev Supabase URL and anon key.
-   - **Production:** at M6, the prod Supabase URL and anon key. Set them yourself.
-   - Never put a service-role key in Pages variables used by the frontend.
+   - **Preview:** backend URL and non-secret frontend values only.
+   - **Production:** set by the Board at M6 after hosting is chosen.
+   - Never put a database credential or server-side secret into frontend variables.
 3. Do not create a Cloudflare API token for agents (security-architecture §10.2).

@@ -1,11 +1,13 @@
 # Architecture — Soucean Game
 
-**Status:** Seed (M0), complete. The stack is **not chosen** — that happens in M2,
-so §2 records the plan's *recommendations* and nothing is pinned. The
+**Status:** Seed (M0), complete. The frontend stack is **not chosen** — that
+happens in M2, while ADR-021 already fixes the backend direction. So §2 records
+the plan's frontend *recommendations* and the Board-approved backend boundary.
+Nothing is installed yet. The
 plan-derived sections are filled from
 [`plans/soucean-game-plan.md`](plans/soucean-game-plan.md), moved into this
 repository by task GAM-20 (deliverable 5). Owner: the Board, through
-`project-manager`. Last updated: 2026-11-04.
+`project-manager`. Last updated: 2026-11-05.
 
 This document says **how** the platform is built.
 [`requirements.md`](requirements.md) says **what** it must do; where the two
@@ -30,7 +32,7 @@ its own repository, loaded through the contract.
 
 ---
 
-## 2. Stack
+## 2. Stack and runtime boundary
 
 **TBD in M2.**
 
@@ -43,7 +45,7 @@ Until that entry exists:
 - no backend, hosting, analytics or ad-network configuration is added;
 - no framework is pinned in documentation, CI or tooling config.
 
-### 2.1 Recommendations from the plan (not decisions)
+### 2.1 Frontend recommendations from the plan (not decisions)
 
 The plan, §3, recommends the following. **None of it is chosen, pinned or
 installed.** M2 decides, may depart from any row, and records the outcome in §8.
@@ -52,29 +54,41 @@ Rows marked `UNVERIFIED` rest on an open question that is still open.
 | Layer | Recommendation | Alternative |
 | --- | --- | --- |
 | Frontend | TypeScript, static-first — e.g. **Astro** with small interactive islands, or Vite + React | Next.js (static export) |
-| Identity | **Supabase Auth** — anonymous sign-in, optional Google or email magic-link linking (`UNVERIFIED`, OQ-036) | Firebase Auth |
-| Data | **Supabase Postgres**, row-level security on every table | Firebase Firestore |
-| Server logic | **Supabase Edge Functions** or Postgres functions, for `submit_score` | — |
+| Identity in the browser | Player token flow integrated into frontend pages | — |
+| Data access from the browser | Through the Laravel API only | — |
+| Server logic | Laravel API endpoints and jobs for identity and score submission | — |
 | Hosting (M6) | **Cloudflare Pages**, preview deploys per branch (`UNVERIFIED`, OQ-037) | GitHub Pages (no previews), Netlify, Vercel |
 | Ads (M6) | Google AdSense, evaluated against alternatives (`UNVERIFIED`, OQ-038) | Ezoic, Media.net, game-portal networks |
-| Tests | Vitest (unit), pgTAP or SQL tests for RLS, Playwright end-to-end | — |
+| Tests | Unit and feature tests in Laravel, plus Playwright end-to-end | — |
 
 The reasoning: static pages are fast, help SEO and ease ad approval, and the game
-page needs only one interactive island. RLS is the main security boundary, so it
-gets its own tests.
+page needs only one interactive island.
 
-### 2.2 Already fixed, independent of the framework choice
+### 2.2 Backend decision fixed by ADR-021 (2026-11-05)
 
 | Concern | Choice | Why |
 | --- | --- | --- |
-| Database | Postgres, with row-level security | required by the data rules (`requirements.md` §4) |
+| Backend runtime | One Laravel application | single security boundary for validation, policies and rate limits |
+| Database | MySQL, reachable only by Laravel | browser never receives any database credential |
+| Identity | Laravel-issued player token (for example Sanctum) | no sign-up to play; keeps one player id when linked |
+| Realtime | Laravel Reverb | live leaderboards, lobbies, presence, chat and turn-based game updates |
 | Schema changes | versioned migrations in this repository | no manual dashboard changes |
 | End-to-end tests | Playwright | studio standard |
 | Review gate | GitHub pull request + CI | `.github/workflows/ci.yml` |
 
+### 2.3 Local runtime in this repository
+
+The backend is local-first and Docker-based:
+
+- `docker compose` defines `app`, `mysql`, `reverb` and `test`.
+- `test` runs automated checks with SQLite in memory.
+- Agents run tests with `docker compose run --rm test`.
+- No production or preview environment exists yet; hosting is a later Board
+  decision and must not be assumed in code or docs.
+
 ---
 
-## 3. Data model
+## 3. Data model and server enforcement
 
 The tables and fields are listed in [`requirements.md`](requirements.md) §4.1 —
 that list is authoritative and this section does not repeat it. The plan's sketch
@@ -90,7 +104,7 @@ is two tables:
 The final schema follows GAM-16. Nothing is created before M4 (§5).
 
 **Score submission.** A client never writes to `scores`. Submission goes through
-one server function, `submit_score`, which applies *moderate* anti-cheat:
+the Laravel API, which applies *moderate* anti-cheat:
 
 | Check | What it does |
 | --- | --- |
@@ -103,12 +117,14 @@ anti-cheat over a perfect one.
 
 Rules the model must satisfy when it lands:
 
-- Every table that holds player data has **row-level security enabled**, with
-  policies that let a player reach their own rows and nothing else.
-- Every policy has an automated test. A policy without a test does not ship.
+- Access rules run in Laravel validation, authorization policies and rate
+  limiters. A request failing those checks never reaches a write.
+- Every rule has an automated Laravel feature test. A rule without a test does
+  not ship.
 - Every schema change, including a policy change, is a numbered migration file
   committed here. Migrations are forward-only and reviewed.
-- Service-role access is used only by server-side code, never by the browser.
+- Database credentials stay server-side. The browser gets only the backend URL
+  and its own player token.
 
 ---
 
@@ -161,19 +177,16 @@ review in addition to `qa`.
 | Milestone | Backend | Who may act |
 | --- | --- | --- |
 | **M0 – M3** | none at all | agents, in this repository only |
-| **M4 onward** | the **dev project only** | agents, via the provider CLI against dev |
+| **M4 onward** | local Docker runtime only (`app`, `mysql`, `reverb`, `test`) | agents, in this repository only |
 | **any** | **production** | the **Board Operator** only |
 
-From the plan, §3, once M4 creates them:
+From ADR-021 and the plan update:
 
-- **`soucean-game-dev`** — a backend project holding **fake data only**. Its keys
-  are bound to `web-engineer` and `qa`, and to nobody else.
-- **Preview deploys** use the dev project. A preview never touches production.
-- **Production** is a *separate* project. The Board Operator alone holds its
-  keys, applies its migrations and controls its deploys.
-- No personal access token belonging to a human's provider account is ever bound
-  to an agent — such a token can reach every project that account owns, including
-  production (`UNVERIFIED`, OQ-036).
+- The backend in scope is local only in this repository until a hosting decision
+  exists.
+- Hosting is pending and provider-agnostic; no environment may rely on a specific
+  hosting feature before that Board decision.
+- Production remains separate and Board-operated only.
 
 - Dev configuration never points at production.
 - An agent never asks for, reads, stores or uses a production credential, and
@@ -228,6 +241,7 @@ from here.
 | Date | Decision | Where |
 | --- | --- | --- |
 | _(M2)_ | Web framework and toolchain | pending |
+| 2026-11-05 | ADR-021: backend direction is Laravel + MySQL, with Laravel as the only database client and Reverb for realtime | Board ADR-021 |
 | 2026-11-04 | Design and build the website first; hosting, the production backend and the domain come last (M6) | plan §5, Board revision |
 | 2026-11-04 | The approved plan and the M0 checklist live in this repository, not the framework | [`plans/`](plans/), task GAM-20 |
 | 2026-11-04 | Soucean Game is a platform project | framework `docs/decisions/ADR-014-platform-project-type.md` |
