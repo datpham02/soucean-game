@@ -448,7 +448,7 @@
           </div>
         </div>
       </div>
-      <span class="mk-tag">Thanh xương là <code>border</code> trên <code>bg</code> — cặp <code>DESIGN.md</code> ghi là <strong>trang trí</strong>, 1.33 sáng / 1.50 tối, <code>aria-hidden</code>. Tín hiệu thật là dòng chữ trong vùng live. Không gì chuyển động.</span>
+      <span class="mk-tag">Thanh xương là <code>border</code> trên <code>bg</code> — cặp <code>DESIGN.md</code> ghi là <strong>trang trí</strong>, 1.32 sáng / 1.49 tối, <code>aria-hidden</code>. Tín hiệu thật là dòng chữ trong vùng live. Không gì chuyển động.</span>
     </section>
   </div>
 
@@ -555,34 +555,38 @@
 
   <h3>4.3 Tương phản</h3>
   <p>
-    <strong>Trang này không tạo ra cặp màu mới nào.</strong> Nó dùng đúng bảy cặp,
-    tất cả đã đo và ghi trong <code>DESIGN.md</code> → “Measured contrast”, trừ hai
-    cặp <code>primary-hover</code> lấy từ <code>components.md</code> §3.4.
+    <strong>Trang này không tạo ra cặp màu mới nào.</strong> Nó dùng đúng tám cặp,
+    tất cả đã đo và ghi trong <code>DESIGN.md</code> → “Measured contrast”, trừ
+    cặp <code>primary-hover</code> trên <code>bg</code> lấy từ
+    <code>components.md</code> §3.4. Mọi con số dưới đây là con số
+    <code>DESIGN.md</code> công bố, chép nguyên văn; tờ này không tự đo gì.
   </p>
   <table class="mk-table">
     <thead><tr><th scope="col">Dùng ở đâu</th><th scope="col">Chữ</th><th scope="col">Nền</th><th scope="col">Sáng</th><th scope="col">Tối</th><th scope="col">Cần</th><th scope="col">Nguồn</th></tr></thead>
     <tbody>
-      <tr><td>Thân bài, mọi tiêu đề mục</td><td><code>text</code></td><td><code>bg</code></td><td>14.65</td><td>14.19</td><td>4.5</td><td>DESIGN.md</td></tr>
-      <tr><td>Dòng “cập nhật lần cuối”</td><td><code>text-muted</code></td><td><code>bg</code></td><td>6.25</td><td>7.66</td><td>4.5</td><td>DESIGN.md</td></tr>
-      <tr><td>Liên kết trong câu, liên kết chân trang</td><td><code>primary</code></td><td><code>bg</code></td><td>5.69</td><td>8.65</td><td>4.5</td><td>DESIGN.md</td></tr>
+      <tr><td>Thân bài, mọi tiêu đề mục</td><td><code>text</code></td><td><code>bg</code></td><td>14.64</td><td>14.19</td><td>4.5</td><td>DESIGN.md</td></tr>
+      <tr><td>Dòng “cập nhật lần cuối”</td><td><code>text-muted</code></td><td><code>bg</code></td><td>6.25</td><td>7.65</td><td>4.5</td><td>DESIGN.md</td></tr>
+      <tr><td>Liên kết trong câu, liên kết chân trang</td><td><code>primary</code></td><td><code>bg</code></td><td>5.69</td><td>8.66</td><td>4.5</td><td>DESIGN.md</td></tr>
       <tr><td>Liên kết khi hover</td><td><code>primary-hover</code></td><td><code>bg</code></td><td>7.98</td><td>10.25</td><td>4.5</td><td>components.md §3.4</td></tr>
       <tr><td>Chữ trong header và chân trang</td><td><code>text</code></td><td><code>surface</code></td><td>15.58</td><td>12.66</td><td>4.5</td><td>DESIGN.md</td></tr>
-      <tr><td>Biểu tượng và chữ “Lỗi”</td><td><code>error</code></td><td><code>bg</code></td><td>6.31</td><td>7.46</td><td>4.5</td><td>DESIGN.md</td></tr>
-      <tr><td>Vòng tiêu điểm</td><td><code>focus</code></td><td><code>bg</code></td><td>5.65</td><td>8.92</td><td>3</td><td>DESIGN.md</td></tr>
-      <tr><td>Viền khối trạng thái và nút phụ</td><td><code>border-strong</code></td><td><code>bg</code></td><td>3.48</td><td>3.58</td><td>3</td><td>DESIGN.md</td></tr>
-      <tr><td>Nhãn ô quảng cáo</td><td><code>text-muted</code></td><td><code>sunken</code></td><td colspan="2">xem ghi chú</td><td>4.5</td><td>ads.css</td></tr>
+      <tr><td>Biểu tượng và chữ “Lỗi”</td><td><code>error</code></td><td><code>bg</code></td><td>6.30</td><td>7.45</td><td>4.5</td><td>DESIGN.md</td></tr>
+      <tr><td>Vòng tiêu điểm</td><td><code>focus</code></td><td><code>bg</code></td><td>5.65</td><td>8.90</td><td>3</td><td>DESIGN.md</td></tr>
+      <tr><td>Viền khối trạng thái và nút phụ</td><td><code>border-strong</code></td><td><code>bg</code></td><td>3.48</td><td>3.57</td><td>3</td><td>DESIGN.md</td></tr>
+      <tr><td>Nhãn ô quảng cáo (<code>.ad-slot__label</code>)</td><td><code>text-muted</code></td><td><code>sunken</code></td><td>5.65</td><td>8.23</td><td>4.5</td><td>DESIGN.md</td></tr>
     </tbody>
   </table>
   <p>
-    <strong>Ghi chú về dòng cuối.</strong> Nhãn ô quảng cáo là
-    <code>text-muted</code> trên <code>sunken</code>, do <code>ads.css</code> đặt
-    chứ không phải Task này. <code>DESIGN.md</code> <em>không</em> công bố cặp đó,
-    và <code>components.md</code> §2.1 còn ghi rõ “<code>sunken</code> chỉ mang
-    <code>text</code>”. Task này không tạo kiểu lại <code>.ad-slot</code>
-    (<code>ad-slots.md</code> §11 cấm) nên không sửa được, và cũng không có công cụ
-    đo trong môi trường này để tự công bố một tỉ lệ. <strong>Nó được nêu ra như một
-    hạng mục cho người duyệt</strong> — xem
-    <a class="link" href="../pages/about-terms.md">about-terms.md</a> §6.
+    <strong>Ghi chú về dòng cuối — hạng mục này đã đóng.</strong> Nhãn ô quảng cáo
+    là <code>text-muted</code> trên <code>sunken</code>, do <code>ads.css</code>
+    đặt. Khi tờ này được viết, <code>DESIGN.md</code> chưa công bố cặp đó và
+    <code>components.md</code> §2.1 còn ghi “<code>sunken</code> chỉ mang
+    <code>text</code>”, nên ô “Sáng / Tối” phải để trống. Ngày 2026-11-05 Board đã
+    đo cặp này và <code>DESIGN.md</code> → “Measured contrast” nay ghi
+    <strong>5.65</strong> sáng / <strong>8.23</strong> tối, cần 4.5 — đạt ở cả hai
+    giao diện. Quy tắc bề mặt cũng đã được sửa đổi để nhận đúng cặp này, và chỉ
+    cặp này (<code>DESIGN.md</code>, “The surface rule, and the one pair it now
+    admits”). Hai con số trong bảng trên vì thế được <em>trích</em> từ
+    <code>DESIGN.md</code>, không phải do tờ này tự đo.
   </p>
 </section>
 

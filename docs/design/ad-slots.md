@@ -645,6 +645,13 @@ page's own content and never traps keyboard focus. Concretely:
   `#main`, so a keyboard user passes the header banner in one keystroke.
 - **Not colour alone.** The slot is identified by its visible label, not by its
   `sunken` fill.
+- **The label is legible in both themes.** `.ad-slot__label` is `text-muted` on
+  the slot's `sunken` fill. `DESIGN.md` → "Measured contrast" publishes that
+  pair; it needs 4.5 and it passes in both themes. Read the ratio there rather
+  than from this document — `DESIGN.md` is the only place a contrast figure is
+  published (SOU-24, A-06). The surface rule was amended on 2026-11-05 to admit
+  this one pair, so the label stays `text-muted`; see `DESIGN.md`, "The surface
+  rule, and the one pair it now admits".
 - **Nothing moves.** No animation, no auto-rotation, no carousel in a slot — so
   the WAI pause/stop requirement never applies.
 - **At integration (M6)** the creative `<iframe>` carries a `title`, stays
