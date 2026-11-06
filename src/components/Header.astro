@@ -1,0 +1,69 @@
+---
+import SkipLink from "./SkipLink.astro";
+---
+
+<header class="site-header">
+  <SkipLink targetId="main" />
+  <div class="shell site-header__bar">
+    <a class="wordmark" href="/">Soucean Game</a>
+    <nav aria-label="Chính">
+      <button
+        class="btn btn--quiet site-nav__toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="site-nav-list"
+      >
+        <svg class="u-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+          <path d="M4 7h16"></path>
+          <path d="M4 12h16"></path>
+          <path d="M4 17h16"></path>
+        </svg>
+        Menu
+      </button>
+      <ul class="site-nav__list" id="site-nav-list">
+        <li><a class="site-nav__link" href="/">Trò chơi</a></li>
+        <li><a class="site-nav__link" href="/">Bảng xếp hạng</a></li>
+        <li><a class="site-nav__link" href="/">Tài khoản</a></li>
+      </ul>
+    </nav>
+    <div class="site-header__actions">
+      <fieldset class="theme-toggle">
+        <legend class="u-visually-hidden">Giao diện</legend>
+        <label class="theme-toggle__option">
+          <input
+            class="u-visually-hidden"
+            type="radio"
+            name="theme"
+            value="light"
+            id="theme-light"
+          />
+          <svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2.5v2"></path>
+            <path d="M12 19.5v2"></path>
+            <path d="m4.5 4.5 1.4 1.4"></path>
+            <path d="m18.1 18.1 1.4 1.4"></path>
+            <path d="M2.5 12h2"></path>
+            <path d="M19.5 12h2"></path>
+            <path d="m4.5 19.5 1.4-1.4"></path>
+            <path d="m18.1 5.9 1.4-1.4"></path>
+          </svg>
+          Sáng
+        </label>
+        <label class="theme-toggle__option">
+          <input
+            class="u-visually-hidden"
+            type="radio"
+            name="theme"
+            value="dark"
+            id="theme-dark"
+          />
+          <svg class="u-icon u-icon--sm" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+            <path d="M20 14.4A8.5 8.5 0 0 1 9.6 4 8.5 8.5 0 1 0 20 14.4Z"></path>
+          </svg>
+          Tối
+        </label>
+      </fieldset>
+    </div>
+  </div>
+</header>

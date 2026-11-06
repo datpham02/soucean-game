@@ -1,0 +1,23 @@
+---
+interface Props {
+  currentPage?: "about";
+}
+
+const { currentPage } = Astro.props;
+---
+
+<footer class="site-footer">
+  <div class="shell">
+    <ul class="site-footer__links">
+      <li>
+        <a class="link" href="/about" aria-current={currentPage === "about" ? "page" : undefined}>
+          Giới thiệu
+        </a>
+      </li>
+      <li><a class="link" href="/">Điều khoản</a></li>
+      <li><a class="link" href="/">Quyền riêng tư</a></li>
+      <li><a class="link" href="/">Cài đặt cookie</a></li>
+    </ul>
+    <p class="site-footer__fine">© 2026 Soucean Game</p>
+  </div>
+</footer>

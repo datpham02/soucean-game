@@ -30,6 +30,7 @@ lerna-debug.log*
 dist/
 build/
 out/
+.astro/
 coverage/
 .cache/
 .turbo/

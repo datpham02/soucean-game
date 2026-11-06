@@ -1,0 +1,57 @@
+---
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/tokens.css";
+import "../styles/base.css";
+import "../styles/components.css";
+
+interface Props {
+  title: string;
+  currentPage?: "about";
+}
+
+const { title, currentPage } = Astro.props;
+---
+
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>
+      (() => {
+        const d = document.documentElement, k = "soucean-theme", m = matchMedia("(prefers-color-scheme: dark)");
+        const r = () => { try { const v = localStorage.getItem(k); return v === "light" || v === "dark" ? v : ""; } catch { return ""; } };
+        const s = (v, p) => { if (v !== "light" && v !== "dark") return; d.dataset.theme = v; if (p) try { localStorage.setItem(k, v); } catch {} };
+        const u = (v) => document.querySelectorAll("input[name='theme']").forEach((i) => { if (i instanceof HTMLInputElement) i.checked = i.value === v; });
+        d.classList.add("has-js");
+        const v = r();
+        if (v) s(v, 0); else d.removeAttribute("data-theme");
+        const f = () => {
+          u(v || (m.matches ? "dark" : "light"));
+          d.classList.add("theme-ready");
+          document.querySelectorAll("input[name='theme']").forEach((i) => {
+            if (!(i instanceof HTMLInputElement)) return;
+            i.addEventListener("change", () => i.checked && (s(i.value, 1), u(i.value)));
+          });
+          const b = document.querySelector(".site-nav__toggle");
+          if (!(b instanceof HTMLButtonElement)) return;
+          const c = () => b.setAttribute("aria-expanded", "false");
+          c();
+          b.addEventListener("click", () => b.setAttribute("aria-expanded", b.getAttribute("aria-expanded") === "true" ? "false" : "true"));
+          const n = document.getElementById(b.getAttribute("aria-controls") || "");
+          n && n.querySelectorAll("a").forEach((a) => a.addEventListener("click", c));
+          const q = matchMedia("(min-width: 768px)"), h = () => q.matches && c();
+          q.addEventListener ? q.addEventListener("change", h) : q.addListener(h);
+        };
+        document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", f, { once: true }) : f();
+      })();
+    </script>
+    <title>{title}</title>
+  </head>
+  <body class="page">
+    <Header />
+    <slot />
+    <Footer currentPage={currentPage} />
+  </body>
+</html>

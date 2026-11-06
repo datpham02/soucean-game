@@ -1,9 +1,8 @@
 # Architecture — Soucean Game
 
-**Status:** Seed (M0), complete. The frontend stack is **not chosen** — that
-happens in M2, while ADR-021 already fixes the backend direction. So §2 records
-the plan's frontend *recommendations* and the Board-approved backend boundary.
-Nothing is installed yet. The
+**Status:** M2 frontend baseline chosen. The frontend stack is Astro with static
+output, while ADR-021 already fixes the backend direction. Section §2 records the
+current frontend decision and backend boundary. The
 plan-derived sections are filled from
 [`plans/soucean-game-plan.md`](plans/soucean-game-plan.md), moved into this
 repository by task GAM-20 (deliverable 5). Owner: the Board, through
@@ -34,22 +33,25 @@ its own repository, loaded through the contract.
 
 ## 2. Stack and runtime boundary
 
-**TBD in M2.**
+Milestone M2 chooses the frontend stack as Astro with static output.
+This repository runs a static-first frontend with no client-side JavaScript by
+default, and React islands only where future tasks explicitly require them.
 
-The web framework, language runtime, build tool, test runner and linter are chosen
-in milestone M2 and recorded here, with the reasoning, as the first entry in §8.
+### 2.1 Frontend decision (M2)
 
-Until that entry exists:
+| Concern | Choice | Why |
+| --- | --- | --- |
+| Frontend framework | Astro | static-first pages, minimal runtime surface |
+| Build output | static HTML/CSS (`dist/`) | no backend dependency in M2 |
+| Runtime model | no client-side JavaScript by default | accessibility and performance baseline first |
+| Lint/test baseline | build validation via `npm run lint` and `npm test` (both run Astro build in M2 baseline) | keeps CI contract active with approved task dependencies only |
+| Interactive strategy (future) | React islands only where needed | constrains JS to explicitly interactive features |
 
-- no runtime dependency is added;
-- no hosting, analytics or ad-network configuration is added;
-- no framework is pinned in documentation, CI or tooling config.
+### 2.2 Frontend recommendations from the plan (non-binding beyond chosen stack)
 
-### 2.1 Frontend recommendations from the plan (not decisions)
-
-The plan, §3, recommends the following. **None of it is chosen, pinned or
-installed.** M2 decides, may depart from any row, and records the outcome in §8.
-Rows marked `UNVERIFIED` rest on an open question that is still open.
+The plan, §3, recorded alternatives and future hosting/ads options. M2 selected
+Astro for the current milestone and left hosting and ad-network choices as Board
+decisions in later milestones.
 
 | Layer | Recommendation | Alternative |
 | --- | --- | --- |
@@ -64,7 +66,7 @@ Rows marked `UNVERIFIED` rest on an open question that is still open.
 The reasoning: static pages are fast, help SEO and ease ad approval, and the game
 page needs only one interactive island.
 
-### 2.2 Backend decision fixed by ADR-021 (2026-11-05)
+### 2.3 Backend decision fixed by ADR-021 (2026-11-05)
 
 | Concern | Choice | Why |
 | --- | --- | --- |
@@ -76,7 +78,7 @@ page needs only one interactive island.
 | End-to-end tests | Playwright | studio standard |
 | Review gate | GitHub pull request + CI | `.github/workflows/ci.yml` |
 
-### 2.3 Local runtime in this repository
+### 2.4 Local runtime in this repository
 
 The backend is local-first and Docker-based:
 
@@ -227,7 +229,16 @@ docs/
   plans/                   the approved plan and the M0 checklist
 ```
 
-Application source layout is decided with the stack in M2.
+Application source layout for M2:
+
+```
+src/
+  components/              shared shell components (header, footer, skip link)
+  layouts/                 Astro page layouts
+  pages/                   route entry points (starting with /about)
+  styles/                  token/base/component style layers
+public/                    static files, if required
+```
 
 ---
 
@@ -240,7 +251,7 @@ from here.
 
 | Date | Decision | Where |
 | --- | --- | --- |
-| _(M2)_ | Web framework and toolchain | pending |
+| 2026-11-05 | Frontend stack chosen for M2: Astro static output, no client-side JavaScript by default, React islands only for future interactive needs | this document §2.1 |
 | 2026-11-05 | ADR-021: backend direction is Laravel + MySQL, with Laravel as the only database client and Reverb for realtime | Board ADR-021 |
 | 2026-11-04 | Design and build the website first; hosting, the production backend and the domain come last (M6) | plan §5, Board revision |
 | 2026-11-04 | The approved plan and the M0 checklist live in this repository, not the framework | [`plans/`](plans/), task GAM-20 |
