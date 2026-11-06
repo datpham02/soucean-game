@@ -1,0 +1,123 @@
+---
+/*
+ * /terms — ported from docs/design/prototypes/terms.html, which is the
+ * approved M1 mockup (Task SOU-3, M1-05). The markup below is the real-page
+ * markup about-terms.md section 3 publishes: one <h1>, then one <h2> per
+ * numbered section, with the real landmarks rather than the mockup's demoted
+ * chrome. The copy is the fullest of the mockup's four renders (light,
+ * 1280px); the shorter renders exist only to exercise the layout.
+ *
+ * The section number lives in the heading's text, not in a CSS counter, so a
+ * screen reader reads it and the contents list can match it.
+ *
+ * The `id` slugs are M2's to choose (about-terms.md section 10). These are
+ * `dieu-khoan-1` .. `dieu-khoan-7`, the scheme section 3 sketches.
+ *
+ * The placeholder warning notice is NOT decoration and must not be dropped:
+ * the legal text comes from OQ-039 and does not exist yet, so every word
+ * below is placeholder written to exercise the layout. about-terms.md
+ * section 8.2 check 8 makes keeping it the one thing this page cannot lose.
+ */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import "../styles/consent.css";
+---
+
+<BaseLayout title="Soucean Game - Điều khoản sử dụng">
+  <main id="main" class="shell shell--text main" tabindex="-1">
+    <h1>Điều khoản sử dụng</h1>
+    <p class="doc__updated">Cập nhật lần cuối: 5 tháng 11, 2026</p>
+
+    <div class="notice notice--warning">
+      <svg class="u-icon notice__icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+        <path d="M12 4 2.6 20h18.8Z"></path>
+        <path d="M12 10v4"></path>
+        <path d="M12 17h.01"></path>
+      </svg>
+      <div class="notice__body">
+        <p class="notice__title">Cảnh báo</p>
+        <p class="notice__text">
+          Văn bản mẫu, không phải điều khoản thật. Nội dung pháp lý đến từ OQ-039.
+        </p>
+      </div>
+    </div>
+
+    <nav class="card" aria-label="Mục lục điều khoản">
+      <ol class="doc__toc-list">
+        <li><a class="link" href="#dieu-khoan-1">Chấp nhận điều khoản</a></li>
+        <li><a class="link" href="#dieu-khoan-2">Tài khoản và tên hiển thị</a></li>
+        <li><a class="link" href="#dieu-khoan-3">Chơi công bằng và điểm số</a></li>
+        <li><a class="link" href="#dieu-khoan-4">Quảng cáo</a></li>
+        <li><a class="link" href="#dieu-khoan-5">Nội dung và quyền sở hữu</a></li>
+        <li><a class="link" href="#dieu-khoan-6">Trách nhiệm</a></li>
+        <li><a class="link" href="#dieu-khoan-7">Thay đổi và liên hệ</a></li>
+      </ol>
+    </nav>
+
+    <section class="doc-section" id="dieu-khoan-1">
+      <h2 class="doc-section__title">1. Chấp nhận điều khoản</h2>
+      <p>
+        Khi bạn mở và chơi trên website này, bạn đồng ý với các điều khoản dưới đây.
+        Nếu có điểm nào bạn không đồng ý, xin đừng dùng dịch vụ. Điều khoản này áp
+        dụng cho mọi trò chơi đặt trên website, kể cả những trò được thêm vào sau
+        ngày ghi ở trên.
+      </p>
+    </section>
+
+    <section class="doc-section" id="dieu-khoan-2">
+      <h2 class="doc-section__title">2. Tài khoản và tên hiển thị</h2>
+      <p>
+        Bạn chơi được mà không cần tài khoản. Nếu bạn đặt một tên hiển thị để xuất
+        hiện trên bảng xếp hạng, tên đó sẽ được kiểm duyệt, và chúng tôi có thể yêu
+        cầu bạn đổi một cái tên không phù hợp. Bạn xem và xoá dữ liệu của mình ở
+        <a class="link" href="/">trang Tài khoản</a> bất cứ lúc nào.
+      </p>
+    </section>
+
+    <section class="doc-section" id="dieu-khoan-3">
+      <h2 class="doc-section__title">3. Chơi công bằng và điểm số</h2>
+      <p>
+        Điểm số do máy chủ cấp, sau khi máy chủ kiểm tra. Một điểm số do trình duyệt
+        gửi lên là một <em>yêu cầu</em>, không phải một sự thật — máy chủ mới là bên
+        quyết định. Chúng tôi có thể từ chối hoặc gỡ bỏ một điểm số nếu nó không vượt
+        được kiểm tra, và có thể chặn truy cập nếu việc đó lặp lại.
+      </p>
+    </section>
+
+    <section class="doc-section" id="dieu-khoan-4">
+      <h2 class="doc-section__title">4. Quảng cáo</h2>
+      <p>
+        Website hiển thị quảng cáo ở những vị trí cố định trên trang web, và
+        <strong>không bao giờ bên trong hay chồng lên một trò chơi</strong>. Không có
+        mã quảng cáo nào chạy trước khi bạn đồng ý. Bạn đổi ý bất cứ lúc nào tại
+        <a class="link" href="/privacy#cookies">cài đặt cookie</a>.
+      </p>
+    </section>
+
+    <section class="doc-section" id="dieu-khoan-5">
+      <h2 class="doc-section__title">5. Nội dung và quyền sở hữu</h2>
+      <p>
+        Các trò chơi, hình ảnh, âm thanh và văn bản trên website thuộc về studio hoặc
+        về bên đã cấp phép cho studio. Bạn được chơi và chia sẻ đường dẫn; bạn không
+        được sao chép hay phân phối lại nội dung như của mình.
+      </p>
+    </section>
+
+    <section class="doc-section" id="dieu-khoan-6">
+      <h2 class="doc-section__title">6. Trách nhiệm</h2>
+      <p>
+        Dịch vụ được cung cấp ở hiện trạng. Chúng tôi cố gắng giữ cho mọi thứ chạy
+        được, nhưng không cam kết website luôn sẵn sàng, luôn không có lỗi, hay điểm
+        số luôn được giữ nguyên vẹn qua mọi sự cố kỹ thuật.
+      </p>
+    </section>
+
+    <section class="doc-section" id="dieu-khoan-7">
+      <h2 class="doc-section__title">7. Thay đổi và liên hệ</h2>
+      <p>
+        Khi điều khoản thay đổi, ngày ở dòng “cập nhật lần cuối” phía trên sẽ đổi
+        theo, và bản mới có hiệu lực kể từ ngày đó. Mọi câu hỏi xin gửi tới địa chỉ
+        liên hệ ghi ở <a class="link" href="/about">trang Giới thiệu</a>.
+      </p>
+    </section>
+  </main>
+</BaseLayout>
