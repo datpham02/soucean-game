@@ -27,7 +27,7 @@
   display: flex;
 }
 
-.has-js .theme-toggle {
+.has-js.theme-ready .theme-toggle {
   display: flex;
 }
 
