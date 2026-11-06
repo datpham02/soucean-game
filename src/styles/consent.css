@@ -1,0 +1,229 @@
+/* ==========================================================================
+   Soucean Game — M2-03 page stylesheet for /terms and /privacy.
+
+   Ported from `docs/design/prototypes/assets/consent.css` (M1-09, Task SOU-7).
+   It is the page stylesheet both long-form pages link, and it holds exactly
+   three things:
+
+     1. the long-form contents list — prototype consent.css section 2, the
+        part SOU-27 did not need for /about and therefore did not port;
+     2. the vertical rhythm between the long-form furniture (see section 2
+        below, which is a port FIX and is reported on the Task);
+     3. the consent settings layout — prototype consent.css section 3 — which
+        /privacy section 6 needs even though M2 renders it inert.
+
+   WHAT IS DELIBERATELY NOT PORTED.
+   - Prototype section 1, `:root:has(.consent)` scroll padding. It exists for
+     the sticky cookie banner, and the banner is M5.
+   - Prototype section 4, the `mk-` sheet furniture. Mockup scaffolding; no
+     product page ever used it.
+   - Prototype section 5.2, the band mirror. It exists so one mockup file can
+     show a 375px view inside a 1280px window. The product reads its band from
+     the viewport, so only section 5.1 ships — see section 4 below.
+   - Prototype section 2's `.doc__updated`, `.doc-section + .doc-section` and
+     `.doc-section__title`. SOU-27 already ported those into
+     `src/styles/components.css` for /about. Restating them here is how the
+     two copies drift apart, so they are left where they are.
+
+   SCOPE RULE, inherited from the prototype and unchanged. There is not one
+   raw colour, type size, spacing step, radius or duration in this file. Every
+   value is read from tokens.css. The only literal is `768px` in the media
+   query, where CSS cannot read a custom property — the same literal, for the
+   same reason, that every stylesheet in this project repeats.
+
+   NO NEW COMPONENT, no new colour pair. `.card`, `.choice`, `.notice` and
+   `.btn` all already exist in components.css; this file adds their layout on
+   these two pages and nothing else.
+
+   ON THE NAME. `/terms` links this file too, which reads oddly for a file
+   called `consent.css` — Terms has no consent anything. The Task's write set
+   names exactly one page stylesheet, and sections 1 and 2 below are the
+   long-form document template, which all three long-form pages share.
+   privacy-consent.md section 11.3 asks M2 to consolidate that template into
+   one place; that place is `components.css`, which belongs to SOU-27 and is
+   outside this Task's write set. Reported on the Task.
+   ========================================================================== */
+
+/* ==========================================================================
+   1. THE IN-PAGE CONTENTS LIST — prototype consent.css section 2.
+
+   A labelled <nav class="card"> wrapping an <ol> of ORDINARY LINKS, exactly
+   as components.md section 5.16 specifies. The container is `.card`, which
+   already exists; the only rules here are the list's own, because base.css
+   styles neither an <ol>'s indent nor a contents link's target size.
+   ========================================================================== */
+
+.doc__toc-list {
+  margin: 0;
+  padding-inline-start: var(--space-xl);
+}
+
+.doc__toc-list li + li {
+  /* DESIGN.md: at least 8px between adjacent targets. */
+  margin-block-start: var(--space-sm);
+}
+
+/* A contents entry is a navigation target, not a link inside a sentence, so
+   it is padded out to the 44px minimum DESIGN.md sets for every interactive
+   target. The visible text does not grow; the hit area does. */
+.doc__toc-list a {
+  display: inline-block;
+  padding-block: var(--space-md);
+}
+
+/* ==========================================================================
+   2. THE RHYTHM BETWEEN THE LONG-FORM FURNITURE.
+
+   NOT A PORT — A PORT FIX, and the one place this file departs from the
+   mockup. Reported on the Task and in the pull request.
+
+   base.css zeroes every margin (`* { margin: 0 }`) and gives one back only to
+   p, ul, ol, dl, blockquote, figure and table. The warning notice is a <div>
+   and the contents list is a <nav>, so neither gets one. Ported literally,
+   the mockup therefore renders the last-updated line, the warning notice, the
+   contents card and section 1 flush against one another with no gap at all.
+
+   about-terms.md section 9 records why nobody caught this: "No rendered
+   visual check. No browser was available in this environment, so the sheets
+   have not been opened and looked at." These are the two rules that close it.
+
+   They invent no value. `2xl` is the step `.doc__updated` already puts below
+   the last-updated line, so the furniture above section 1 keeps one rhythm;
+   `lg` is the step base.css puts below every paragraph, so a notice inside a
+   section sits in the paragraph flow it interrupts.
+   ========================================================================== */
+
+.main > .notice,
+.main > .card {
+  margin-block-end: var(--space-2xl);
+}
+
+.doc-section .notice {
+  margin-block: var(--space-lg);
+}
+
+/* ==========================================================================
+   3. THE CONSENT SETTINGS — prototype consent.css section 3.
+
+   /privacy section 6 is the settings SCREEN, not a paragraph about cookies
+   (privacy-consent.md section 11.5). In M2 it renders inert — every control
+   disabled, with a notice saying the settings work from M5 — but it renders
+   in full, because `#cookies` is the published address of these settings
+   (requirements.md section 2) and an address that lands on a placeholder
+   heading is a broken promise. The layout is therefore ported now; M5 enables
+   the controls and adds the script, and changes no rule below.
+
+   WHY NOTHING HERE SETS A BACKGROUND. The inline section sits on `bg`; the
+   M5 dialog will sit on `surface`. Every colour these rows use — `text`,
+   `text-muted`, `primary`, `border-strong` — is measured against BOTH in
+   DESIGN.md, so the rows inherit their context and stay inside the measured
+   set either way. Giving them a fill of their own would introduce a third
+   surface and, with it, a pair nobody measured.
+   ========================================================================== */
+
+/* The list of categories. A real <ul> so a screen reader announces how many
+   there are — two — which is itself part of the honesty of this design. */
+.consent-cats {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* One category. The divider is `border`, the DECORATIVE token: it separates
+   two blocks that are already separated by their labels and their spacing, so
+   it carries no information and is not a control boundary. DESIGN.md records
+   it at 1.32:1 light / 1.49:1 dark and permits exactly this use. */
+.consent-cat + .consent-cat {
+  margin-block-start: var(--space-md);
+  padding-block-start: var(--space-md);
+  border-block-start: 1px solid var(--color-border);
+}
+
+/* The "Luôn bật" word beside the Cần thiết label. A WORD, not a lock icon and
+   not a colour: the state of a control that cannot be changed has to survive
+   greyscale and has to be readable by someone who never sees the icon. */
+.consent-cat__always {
+  font-size: var(--text-label-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+/* The plain-language explanation under each category. It is referenced by the
+   checkbox's aria-describedby, so it is announced with the control rather
+   than only being visible beside it.
+
+   The indent lines it up under the checkbox's LABEL rather than under the
+   checkbox itself: the control is `--icon-md` wide and `.choice` puts an `sm`
+   gap after it, so the sum is exactly where the label text starts. Derived
+   from the two tokens, not measured off a screenshot. */
+.consent-cat__desc {
+  margin: 0;
+  padding-inline-start: calc(var(--icon-md) + var(--space-sm));
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--color-text-muted);
+}
+
+/* The settings actions. Same shape as `.dialog__actions`, restated because
+   the inline section is not inside a dialog and must not borrow a dialog's
+   class to get a row of buttons. */
+.consent-form__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-block-start: var(--space-lg);
+}
+
+/* At 375px the actions go full width and stack, for the same reason the M5
+   banner's three will: a Vietnamese verb plus its object does not fit beside
+   another one at 343px. Section 4 puts them back in a row at the switch. */
+.consent-form__actions .btn {
+  inline-size: 100%;
+}
+
+/* The live region that confirms a save. It is EMPTY at rest and still present
+   in the DOM: a `role="status"` announces what is INSERTED into it, and a
+   status element that is itself inserted may be announced late or not at all.
+   M2 never inserts anything — there is no script — but the resting region is
+   part of the markup so M5 adds behaviour and not structure.
+
+   The margin is on the NOTICE, not on the region, so the resting region
+   occupies no space at all and costs nothing while it is empty. */
+.consent-form__status > .notice {
+  margin-block-start: var(--space-md);
+}
+
+/* The category group's own box. base.css already gives a <fieldset> its
+   padding, its `border-strong` edge and its `md` radius; the only thing
+   missing is the legend's type, because base.css styles `label` and not
+   `legend`. */
+.consent-fieldset__legend {
+  padding-inline: var(--space-sm);
+  font-size: var(--text-label-md);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-wide);
+}
+
+/* ==========================================================================
+   4. THE BAND — prototype consent.css section 5.1, the rules that ship.
+
+   768px is M1-01's `switch`. This file introduces no breakpoint of its own
+   and uses `wide` (1024px) nowhere.
+   ========================================================================== */
+
+@media (min-width: 768px) {
+  /* Seven contents entries down one column push section 1 below the fold on a
+     laptop. Two columns is the same list read in half the height, and
+     `columns` changes no DOM order, so the tab order stays 1 -> 7. */
+  .doc__toc-list {
+    columns: 2;
+  }
+
+  /* Above the switch the settings actions fit on one row. */
+  .consent-form__actions .btn {
+    inline-size: auto;
+  }
+}

@@ -1,0 +1,260 @@
+---
+/*
+ * /privacy — ported from docs/design/prototypes/privacy.html, the approved
+ * M1 mockup (Task SOU-7, M1-09). The markup below is the real-page markup
+ * privacy-consent.md section 3 publishes: one <h1>, then one <h2> per
+ * numbered section, with the real landmarks rather than the mockup's demoted
+ * chrome, and including the <form> element the sheets deliberately omit.
+ *
+ * THE `id` SLUGS. Mine to choose, with one exception: `#cookies` is fixed,
+ * because requirements.md section 2 publishes `/privacy#cookies` as the
+ * address of the cookie settings. That is why section 6 breaks the
+ * `quyen-rieng-tu-N` pattern the other six follow.
+ *
+ * SECTION 6 IS INERT IN M2. It is the settings SCREEN, not a paragraph about
+ * cookies (privacy-consent.md section 11.5), so it is rendered in full —
+ * `#cookies` is a published address and landing it on a placeholder heading
+ * would be a broken promise. But working consent needs script and storage,
+ * and both are M5. So every control carries `disabled` and a notice says so
+ * in as many words. M5 removes that one notice, drops the `disabled`
+ * attributes and adds the script; it changes no other markup and no CSS.
+ *
+ * THE PLACEHOLDER WARNING is not decoration. The legal prose comes from
+ * OQ-039 and does not exist yet. The table in section 1 is the exception and
+ * is NOT placeholder: it is requirements.md section 4.1 plus the Board's
+ * email decision of 2026-11-05, and it must keep agreeing with the account
+ * page (privacy-consent.md sections 5.1, 11.5).
+ */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import "../styles/consent.css";
+---
+
+<BaseLayout title="Soucean Game - Chính sách quyền riêng tư">
+  <main id="main" class="shell shell--text main" tabindex="-1">
+    <h1>Chính sách quyền riêng tư</h1>
+    <p class="doc__updated">Cập nhật lần cuối: 5 tháng 11, 2026</p>
+
+    <div class="notice notice--warning">
+      <svg class="u-icon notice__icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+        <path d="M12 4 2.6 20h18.8Z"></path>
+        <path d="M12 10v4"></path>
+        <path d="M12 17h.01"></path>
+      </svg>
+      <div class="notice__body">
+        <p class="notice__title">Cảnh báo</p>
+        <p class="notice__text">
+          Văn bản mẫu, không phải chính sách thật. Nội dung pháp lý đến từ OQ-039.
+        </p>
+      </div>
+    </div>
+
+    <nav class="card" aria-label="Mục lục chính sách">
+      <ol class="doc__toc-list">
+        <li><a class="link" href="#quyen-rieng-tu-1">Chúng tôi lưu gì</a></li>
+        <li><a class="link" href="#quyen-rieng-tu-2">Vì sao cần những dữ liệu đó</a></li>
+        <li><a class="link" href="#quyen-rieng-tu-3">Lưu trong bao lâu</a></li>
+        <li><a class="link" href="#quyen-rieng-tu-4">Ai xử lý dữ liệu</a></li>
+        <li><a class="link" href="#quyen-rieng-tu-5">Quyền của bạn</a></li>
+        <li><a class="link" href="#cookies">Cookie</a></li>
+        <li><a class="link" href="#quyen-rieng-tu-7">Liên hệ</a></li>
+      </ol>
+    </nav>
+
+    <section class="doc-section" id="quyen-rieng-tu-1">
+      <h2 class="doc-section__title">1. Chúng tôi lưu gì</h2>
+      <table>
+        <caption>Toàn bộ dữ liệu được lưu về một người chơi.</caption>
+        <thead>
+          <tr>
+            <th scope="col">Dữ liệu</th>
+            <th scope="col">Vì sao cần</th>
+            <th scope="col">Giữ đến khi nào</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Mã người chơi</td>
+            <td>Gắn điểm số với bạn</td>
+            <td>Đến khi bạn xóa</td>
+          </tr>
+          <tr>
+            <td>Tên hiển thị</td>
+            <td>Hiện trên bảng xếp hạng</td>
+            <td>Đến khi bạn xóa</td>
+          </tr>
+          <tr>
+            <td>Ngày tạo</td>
+            <td>Xử lý lạm dụng</td>
+            <td>Đến khi bạn xóa</td>
+          </tr>
+          <tr>
+            <td>Điểm theo tuần</td>
+            <td>Xếp hạng và kỷ lục</td>
+            <td>Đến khi bạn xóa</td>
+          </tr>
+          <tr>
+            <td>Địa chỉ email — chỉ khi bạn tự liên kết</td>
+            <td>Để bạn đăng nhập lại trên thiết bị khác</td>
+            <td>Đến khi bạn xóa</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>
+        Mỗi lần ghi điểm còn kèm vài giá trị kỹ thuật để máy chủ kiểm tra điểm có hợp
+        lệ không: trò chơi, tuần, thời gian sống sót, seed và phiên bản trò chơi.
+      </p>
+      <p>
+        <strong>Về địa chỉ email.</strong> Chúng tôi chỉ lưu email nếu chính bạn liên
+        kết một địa chỉ, và chỉ dùng nó để bạn đăng nhập. Nó nằm ở hệ thống đăng nhập
+        chứ không nằm trong hồ sơ của bạn, không bao giờ hiển thị công khai — bảng xếp
+        hạng và hồ sơ không in email ra — và nó bị xóa cùng với dữ liệu của bạn khi bạn
+        xóa. Không liên kết thì chúng tôi không có địa chỉ email nào của bạn.
+      </p>
+      <p><strong>Không lưu:</strong> địa chỉ IP, và bất kỳ dữ liệu đo đạc nào.</p>
+      <p>
+        Trang <a class="link" href="/">Tài khoản</a> liệt kê những trường trong hồ sơ
+        của bạn — bốn dòng đầu của bảng trên. Email không nằm trong bảng đó vì nó ở hệ
+        thống đăng nhập, như đoạn trên đã nói.
+      </p>
+    </section>
+
+    <section class="doc-section" id="quyen-rieng-tu-2">
+      <h2 class="doc-section__title">2. Vì sao cần những dữ liệu đó</h2>
+      <p>
+        Để điểm của bạn thuộc về bạn, để bảng xếp hạng gọi đúng tên, và để máy chủ nhận
+        ra một điểm số không có thật. Không có mục đích nào khác.
+      </p>
+    </section>
+
+    <section class="doc-section" id="quyen-rieng-tu-3">
+      <h2 class="doc-section__title">3. Lưu trong bao lâu</h2>
+      <p>
+        Đến khi bạn xóa. Không có mốc thời gian cố định nào khác. Khi bạn xóa dữ liệu,
+        hồ sơ và toàn bộ điểm của bạn biến mất.
+      </p>
+    </section>
+
+    <section class="doc-section" id="quyen-rieng-tu-4">
+      <h2 class="doc-section__title">4. Ai xử lý dữ liệu</h2>
+      <p>
+        Máy chủ của chúng tôi và nhà cung cấp hạ tầng chạy nó. Mạng quảng cáo chỉ nhận
+        được gì khi bạn đã đồng ý cookie quảng cáo ở mục 6 — trước đó không có script
+        quảng cáo nào chạy.
+      </p>
+    </section>
+
+    <section class="doc-section" id="quyen-rieng-tu-5">
+      <h2 class="doc-section__title">5. Quyền của bạn</h2>
+      <p>
+        Bạn xem được mọi thứ đã lưu về mình, <strong>tải một bản sao dữ liệu của
+        mình</strong>, sửa tên hiển thị, và xóa tất cả. Bốn việc đó nằm ở
+        <a class="link" href="/">Tài khoản → Dữ liệu của tôi</a>: nút
+        <em>Tải bản sao dữ liệu của tôi</em> đứng ngay cạnh nút xóa, nên muốn giữ một
+        bản trước khi xóa thì không phải đi hỏi ai.
+      </p>
+    </section>
+
+    <section class="doc-section" id="cookies">
+      <h2 class="doc-section__title">6. Cookie</h2>
+
+      {/*
+        M2 ONLY. This notice is the whole of the "settings do not work yet"
+        story, and it is deleted in M5 together with the `disabled`
+        attributes below. It comes before the paragraph that promises a
+        reader they can change their mind here, because that promise is the
+        thing it qualifies.
+      */}
+      <div class="notice notice--info">
+        <svg class="u-icon notice__icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="9"></circle>
+          <path d="M12 11v5"></path>
+          <path d="M12 7.6h.01"></path>
+        </svg>
+        <div class="notice__body">
+          <p class="notice__title">Thông tin</p>
+          <p class="notice__text">
+            Màn hình dưới đây hiển thị đúng các nhóm cookie, nhưng chưa bấm được:
+            cài đặt sẽ hoạt động từ M5. Hiện tại website chưa chạy bất kỳ script
+            quảng cáo nào, nên lựa chọn đang có hiệu lực là “chỉ cookie cần thiết”.
+          </p>
+        </div>
+      </div>
+
+      <p>
+        Bạn đổi ý lúc nào cũng được, ngay tại đây. Lựa chọn áp dụng cho trình duyệt
+        này.
+      </p>
+
+      <div class="notice notice--info">
+        <svg class="u-icon notice__icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="9"></circle>
+          <path d="M12 11v5"></path>
+          <path d="M12 7.6h.01"></path>
+        </svg>
+        <div class="notice__body">
+          <p class="notice__title">Thông tin</p>
+          <p class="notice__text">
+            Chỉ có hai nhóm. Soucean Game không dùng công cụ phân tích và không có
+            trình theo dõi nào, nên không có nút bật/tắt cho những thứ đó.
+          </p>
+        </div>
+      </div>
+
+      <form>
+        <fieldset>
+          <legend class="consent-fieldset__legend">Nhóm cookie</legend>
+          <ul class="consent-cats">
+            <li class="consent-cat">
+              <div class="choice">
+                <input
+                  id="cookie-essential"
+                  type="checkbox"
+                  checked
+                  disabled
+                  aria-describedby="cookie-essential-desc"
+                />
+                <label for="cookie-essential">Cần thiết</label>
+                <span class="consent-cat__always">Luôn bật</span>
+              </div>
+              <p class="consent-cat__desc" id="cookie-essential-desc">
+                Giữ phiên của bạn, nhớ chính lựa chọn cookie này, và nhớ bạn chọn giao
+                diện sáng hay tối. Không có nhóm này thì trang không chạy được, nên
+                không tắt được.
+              </p>
+            </li>
+            <li class="consent-cat">
+              <div class="choice">
+                <input id="cookie-ads" type="checkbox" disabled aria-describedby="cookie-ads-desc" />
+                <label for="cookie-ads">Quảng cáo</label>
+              </div>
+              <p class="consent-cat__desc" id="cookie-ads-desc">
+                Cho phép mạng quảng cáo đặt cookie cho quảng cáo trên trang web. Mặc
+                định tắt. Khi tắt, trang không tải quảng cáo nào, và bố cục trang không
+                thay đổi vì lựa chọn này.
+              </p>
+            </li>
+          </ul>
+        </fieldset>
+        <div class="consent-form__actions">
+          <button class="btn btn--primary" type="submit" disabled>Lưu lựa chọn</button>
+        </div>
+        {/*
+          Present and EMPTY at rest, in M2 as in the mockup. A role="status"
+          announces what is put INTO it; one that is itself inserted may be
+          announced late or not at all. M2 never inserts anything — there is
+          no script — so this region exists purely so that M5 adds behaviour
+          and not structure.
+        */}
+        <div class="consent-form__status" role="status"></div>
+      </form>
+    </section>
+
+    <section class="doc-section" id="quyen-rieng-tu-7">
+      <h2 class="doc-section__title">7. Liên hệ</h2>
+      <p>
+        Câu hỏi về dữ liệu của bạn xin gửi tới địa chỉ ghi ở
+        <a class="link" href="/about">trang Giới thiệu</a>.
+      </p>
+    </section>
+  </main>
+</BaseLayout>
