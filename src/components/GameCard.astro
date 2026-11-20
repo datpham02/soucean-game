@@ -1,0 +1,34 @@
+---
+import type { Game } from "../data/games";
+
+interface Props {
+  game: Game;
+}
+
+const { game } = Astro.props;
+---
+
+<li class="game-card">
+  <img
+    class="game-card__art"
+    src={game.cover}
+    alt=""
+    width="640"
+    height="360"
+    loading="lazy"
+    decoding="async"
+  />
+  <h3 class="game-card__title">{game.title}</h3>
+  <p class="game-card__desc">{game.shortDescription}</p>
+  <p class="game-card__meta">{game.controls}</p>
+  <div class="state state--empty state--reserve-sm">
+    <p class="state__title">Chưa có điểm tuần này</p>
+    <p class="state__text">Hãy là người đầu tiên.</p>
+  </div>
+  <p class="game-card__action">
+    <a class="btn btn--secondary btn--block" href={game.playLink}>
+      Chơi
+      <span class="u-visually-hidden"> {game.title}</span>
+    </a>
+  </p>
+</li>

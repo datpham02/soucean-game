@@ -1,0 +1,13 @@
+---
+interface Props {
+  variant: "header-leaderboard";
+  label?: string;
+}
+
+const { variant, label = "Quảng cáo" } = Astro.props;
+const className = `ad-slot ad-slot--${variant}`;
+---
+
+<aside class={className} aria-label={label}>
+  <span class="ad-slot__label">{label}</span>
+</aside>

@@ -1,0 +1,26 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import GameCard from "../components/GameCard.astro";
+import { games } from "../data/games";
+import "../styles/ads.css";
+import "../styles/home.css";
+---
+
+<BaseLayout title="Soucean Game - Trò chơi">
+  <main id="main" class="shell main" tabindex="-1">
+    <section class="page-section hero">
+      <h1 class="hero__title">Soucean Game</h1>
+      <p class="hero__lede">
+        Những trò chơi nhỏ để chơi lúc rảnh. Không cần tải về, không cần tài khoản — mở lên là
+        chơi.
+      </p>
+    </section>
+
+    <section class="page-section">
+      <h2 class="page-section__title">Trò chơi</h2>
+      <ul class="game-grid">
+        {games.map((game) => <GameCard game={game} />)}
+      </ul>
+    </section>
+  </main>
+</BaseLayout>
